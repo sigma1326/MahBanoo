@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="month_view_month_text_size">14sp</dimen>
+    <dimen name="month_view_day_of_week_text_size">14sp</dimen>
+    <dimen name="month_view_day_text_size">16sp</dimen>
+    <dimen name="month_view_month_height">56dp</dimen>
+    <dimen name="month_view_day_of_week_height">36dp</dimen>
+    <dimen name="month_view_day_height">40dp</dimen>
+    <dimen name="month_view_day_width">44dp</dimen>
+    <dimen name="month_view_day_selector_radius">16dp</dimen>
+</resources>

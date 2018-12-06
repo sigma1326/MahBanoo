@@ -9,8 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 
-import com.simorgh.simorghdatepicker.R;
-import com.simorgh.simorghdatepicker.model.CalendarType;
+import com.simorgh.cluecalendar.R;
+import com.simorgh.cluecalendar.model.CalendarType;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -102,22 +102,15 @@ public class Utils {
         return drawable;
     }
 
-    public static Typeface getTypeFace(Context context, int calendarType, boolean bold) {
+    public static Typeface getTypeFace(Context context, int calendarType) {
         AssetManager assetManager = context.getAssets();
 
         switch (calendarType) {
             case CalendarType.PERSIAN:
-                if (bold) {
-                    return Typeface.createFromAsset(assetManager, "fonts/Vazir-Bold-FD.ttf");
-                } else {
-                    return Typeface.createFromAsset(assetManager, "fonts/Vazir-Medium-FD.ttf");
-                }
+                return Typeface.createFromAsset(assetManager, "fonts/vazir_medium.ttf");
             case CalendarType.ARABIC:
-                if (bold) {
-                    return Typeface.createFromAsset(assetManager, "fonts/Vazir-Bold-FD.ttf");
-                } else {
-                    return Typeface.createFromAsset(assetManager, "fonts/Vazir-Medium-FD.ttf");
-                }
+                return Typeface.createFromAsset(assetManager, "fonts/vazir_medium.ttf");
+
             case CalendarType.GREGORIAN:
                 return Typeface.createFromAsset(assetManager, "fonts/rmedium.ttf");
             default:

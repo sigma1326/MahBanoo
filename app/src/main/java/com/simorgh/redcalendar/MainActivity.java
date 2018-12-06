@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.simorgh.cluecalendar.view.MonthView;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
 
@@ -15,15 +16,18 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ClueView c = findViewById(R.id.clue_view);
-        c.setOnDayChangedListener(this);
-        c.setOnButtonClickListener(this);
-        try {
-            c.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        c.setClueData(new ClueView.ClueData(6,26));
+//        ClueView c = findViewById(R.id.clue_view);
+//        c.setOnDayChangedListener(this);
+//        c.setOnButtonClickListener(this);
+//        try {
+//            c.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        c.setClueData(new ClueView.ClueData(6,26));
+
+        MonthView monthView = findViewById(R.id.month_view);
+        monthView.setMonthParams(5, 8, 1397, 3, 1, 31, 1);
     }
 
     @Override

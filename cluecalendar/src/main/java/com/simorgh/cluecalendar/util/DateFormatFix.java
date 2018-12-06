@@ -4,7 +4,8 @@ import android.content.Context;
 import android.os.Build;
 import android.text.format.DateFormat;
 
-import com.simorgh.simorghdatepicker.R;
+
+import com.simorgh.cluecalendar.R;
 
 import java.util.Locale;
 
