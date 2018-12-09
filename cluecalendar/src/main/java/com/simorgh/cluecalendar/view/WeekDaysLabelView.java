@@ -15,6 +15,7 @@ import android.view.View;
 import com.simorgh.cluecalendar.R;
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
 
 import java.util.Calendar;
@@ -33,11 +34,8 @@ public class WeekDaysLabelView extends View {
     private Locale mLocale;
 
     // Desired dimensions.
-    private int mDesiredMonthHeight;
     private int mDesiredDayOfWeekHeight;
-    private int mDesiredDayHeight;
     private int mDesiredCellWidth;
-    private int mDesiredDaySelectorRadius;
 
 
     // Dimensions as laid out.
@@ -73,9 +71,11 @@ public class WeekDaysLabelView extends View {
     private void init() {
         final Resources res = getResources();
 
+        calendarType = 1;
+
         mLocale = res.getConfiguration().locale;
 
-        mDesiredDayOfWeekHeight = res.getDimensionPixelSize(R.dimen.month_view_day_of_week_height);
+        mDesiredDayOfWeekHeight = (int) dp2px(40);
 
         updateDayOfWeekLabels();
 
@@ -93,6 +93,8 @@ public class WeekDaysLabelView extends View {
         mDayOfWeekPaint.setTextSize(dayOfWeekTextSize);
         mDayOfWeekPaint.setTypeface(dayOfWeekTypeface);
         mDayOfWeekPaint.setTextAlign(Paint.Align.CENTER);
+        mDayOfWeekPaint.setColor(Color.parseColor("#00819b"));
+        mDayOfWeekPaint.setFakeBoldText(true);
         mDayOfWeekPaint.setStyle(Paint.Style.FILL);
     }
 
@@ -141,10 +143,13 @@ public class WeekDaysLabelView extends View {
         mCellWidth = cellWidth;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDraw(Canvas canvas) {
         drawDaysOfWeek(canvas);
 
+        setBackgroundColor(Color.WHITE);
+        setElevation(10);
     }
 
     private void drawDaysOfWeek(Canvas canvas) {
@@ -168,8 +173,7 @@ public class WeekDaysLabelView extends View {
             }
 
             final String label = mDayOfWeekLabels[col];
-            p.setColor(Color.WHITE);
-            canvas.drawText(label, colCenterRtl, rowCenter - halfLineHeight, p);
+            canvas.drawText(label, colCenterRtl, getHeight() / 2.2f + p.getFontMetrics().descent, p);
         }
     }
 
@@ -229,4 +233,15 @@ public class WeekDaysLabelView extends View {
         return false;
     }
 
+    private float dp2px(float dp) {
+        return SizeConverter.dpToPx(getContext(), dp);
+    }
+
+    private float px2dp(float px) {
+        return SizeConverter.pxToDp(getContext(), px);
+    }
+
+    private float sp2px(float sp) {
+        return SizeConverter.spToPx(getContext(), sp);
+    }
 }

@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //        c.setClueData(new ClueView.ClueData(6,26));
 
         MonthView monthView = findViewById(R.id.month_view);
-        monthView.setMonthParams(5, 8, 1397, 3, 1, 31, 1);
+        monthView.setMonthParams(5, 8, 1397, 1, 1, 31, 1);
     }
 
     @Override

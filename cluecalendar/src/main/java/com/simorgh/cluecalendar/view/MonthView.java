@@ -3,13 +3,18 @@ package com.simorgh.cluecalendar.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.simorgh.cluecalendar.R;
@@ -18,7 +23,7 @@ import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.util.CalendarTool;
-import com.simorgh.cluecalendar.util.StateSet;
+import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
 
 import java.text.NumberFormat;
@@ -29,7 +34,9 @@ import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 
 public class MonthView extends View {
+    public static final String TAG = "monthView";
     private int calendarType;
+    private int MonthViewType;
     private static final int DAYS_IN_WEEK = 7;
     private static final int MAX_WEEKS_IN_MONTH = 6;
 
@@ -37,23 +44,51 @@ public class MonthView extends View {
     private static final int DEFAULT_WEEK_START = Calendar.SUNDAY;
 
     private TextPaint mMonthPaint;
-    private TextPaint mDayPaint;
+    private TextPaint dayTextPaint;
+    private Paint dayBkgPaint;
     private Paint mDaySelectorPaint;
 
     private NumberFormat mDayFormatter;
 
+    private final int MonthViewTypeShowCalendar = 0;
+    private final int MonthViewTypeChangeDays = 1;
+
+    public static final int TYPE_RED = 0;
+    public static final int TYPE_GREEN = 1;
+    public static final int TYPE_GREEN2 = 2;
+    public static final int TYPE_GRAY = 3;
+    public static final int TYPE_YELLOW = 4;
+    public static final int TYPE_NOTE = 5;
+
+    //rectangle colors
+    private Paint rectTypeRedPaint;
+    private Paint rectTypeGrayPaint;
+    private Paint rectTypeGreenPaint;
+    private Paint rectTypeGreen2Paint;
+    private Paint rectTypeYellowPaint;
+    private Paint rectTypeMarkedPaint;
+    private int rectTypeRedColor;
+    private int rectTypeGrayColor;
+    private int rectTypeGreenColor;
+    private int rectTypeGreen2Color;
+    private int rectTypeYellowColor;
+    private int rectTypeMarkedColor;
+    private int tvMonthDayNumberTextColorWhite;
+    private int tvMonthDayNumberTextColorBlack;
+
+    //Marked Triangle
+    private Path markedPath;
 
     // Desired dimensions.
     private int mDesiredMonthHeight;
     private int mDesiredDayHeight;
     private int mDesiredCellWidth;
-    private int mDesiredDaySelectorRadius;
+    private int mDesiredCellLength;
 
     // Dimensions as laid out.
     private int mMonthHeight;
     private int mDayHeight;
     private int mCellWidth;
-    private int mDaySelectorRadius;
 
     private int mPaddedWidth;
     private int mPaddedHeight;
@@ -82,32 +117,182 @@ public class MonthView extends View {
 
     private Calendar mCalendar;
     private PersianCalendar persianCalendar;
-    private Locale mLocale;
-    private PersianDate persianDate;
-    private UmmalquraCalendar hijriDate;
     private UmmalquraCalendar hijriCalendar;
+    private PersianDate persianDate;
+    private Locale mLocale;
 
     private OnDayClickListener mOnDayClickListener;
+    private ClueData clueData;
+    private int WEEKS_IN_MONTH = MAX_WEEKS_IN_MONTH;
 
+    private final float CELL_LENGTH_RATIO = 8.2f;
+    private final float CELL_MARGIN_RATIO = 7.5f;
+    private final float MONTH_NAME_HEIGHT_RATIO = 8.8f;
+    private final float BOTTOM_MARGIN_RATIO = 24f;
+    private final int MIN_WIDTH = 360;
+    private int bottom_margin = -1;
+
+    public static class ClueData {
+        private static final int DEFAULT_RED_COUNT = 4;
+        private static final int DEFAULT_GRAY_COUNT = 24;
+        private static final int DEFAULT_GREEN_COUNT = 3;
+        private static final int DEFAULT_YELLOW_COUNT = 2;
+        private static final int DEFAULT_GREEN2_INDEX = 7;
+
+        private int redCount = DEFAULT_RED_COUNT;
+        private int grayCount = DEFAULT_GRAY_COUNT;
+        private int greenStartIndex = DEFAULT_GREEN2_INDEX - 1;
+        private int greenEndIndex = DEFAULT_GREEN2_INDEX + 1;
+        private int yellowCount = DEFAULT_YELLOW_COUNT;
+        private int yellowStartIndex = -1;
+        private int yellowEndIndex = -1;
+        private int green2Index = DEFAULT_GREEN2_INDEX;
+        private int totalDays = 0;
+
+        public ClueData(int redCount, int grayCount, int yellowCount) {
+            this.redCount = redCount;
+            this.grayCount = grayCount;
+            this.yellowCount = yellowCount;
+            this.totalDays = redCount + grayCount;
+            switch (grayCount) {
+                case 21:
+                    green2Index = redCount + 7;
+                    break;
+                case 22:
+                    green2Index = redCount + 8;
+                    break;
+                case 23:
+                    green2Index = redCount + 9;
+                    break;
+                case 24:
+                    green2Index = redCount + 10;
+                    break;
+                case 25:
+                    green2Index = redCount + 11;
+                    break;
+                case 26:
+                    green2Index = redCount + 12;
+                    break;
+                case 27:
+                    green2Index = redCount + 13;
+                    break;
+                case 28:
+                    green2Index = redCount + 14;
+                    break;
+                default:
+                    Log.d(TAG, "ClueData: invalid cycle length ");
+            }
+            greenStartIndex = green2Index - 1;
+            greenEndIndex = green2Index + 1;
+            yellowStartIndex = totalDays - yellowCount + 1;
+            yellowEndIndex = totalDays;
+        }
+
+        public ClueData(int redCount, int grayCount) {
+            this.redCount = redCount;
+            this.grayCount = grayCount;
+            this.yellowCount = DEFAULT_YELLOW_COUNT;
+            this.totalDays = redCount + grayCount;
+            switch (grayCount) {
+                case 21:
+                    green2Index = redCount + 7;
+                    break;
+                case 22:
+                    green2Index = redCount + 8;
+                    break;
+                case 23:
+                    green2Index = redCount + 9;
+                    break;
+                case 24:
+                    green2Index = redCount + 10;
+                    break;
+                case 25:
+                    green2Index = redCount + 11;
+                    break;
+                case 26:
+                    green2Index = redCount + 12;
+                    break;
+                case 27:
+                    green2Index = redCount + 13;
+                    break;
+                case 28:
+                    green2Index = redCount + 14;
+                    break;
+                default:
+                    Log.d(TAG, "ClueData: invalid cycle length ");
+            }
+            greenStartIndex = green2Index - 1;
+            greenEndIndex = green2Index + 1;
+            yellowStartIndex = totalDays - yellowCount + 1;
+            yellowEndIndex = totalDays;
+        }
+
+        public ClueData() {
+        }
+
+        public int getRedCount() {
+            return redCount;
+        }
+
+        public void setRedCount(int redCount) {
+            this.redCount = redCount;
+        }
+
+        public int getGrayCount() {
+            return grayCount;
+        }
+
+        public void setGrayCount(int grayCount) {
+            this.grayCount = grayCount;
+        }
+
+        public int getYellowCount() {
+            return yellowCount;
+        }
+
+        public void setYellowCount(int yellowCount) {
+            this.yellowCount = yellowCount;
+        }
+
+        public int getGreen2Index() {
+            return green2Index;
+        }
+
+        public void setGreen2Index(int green2Index) {
+            this.green2Index = green2Index;
+        }
+
+        public int getTotalDays() {
+            return totalDays;
+        }
+
+        public void setTotalDays(int totalDays) {
+            this.totalDays = totalDays;
+        }
+    }
 
     public MonthView(Context context) {
         super(context);
+        initAttrs(context, null);
         init();
     }
 
     public MonthView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initAttrs(context, attrs);
         init();
     }
 
     public MonthView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initAttrs(context, attrs);
         init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public MonthView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        initAttrs(context, attrs);
         init();
     }
 
@@ -122,17 +307,44 @@ public class MonthView extends View {
         mYearPersian = persianCalendar.getPersianYear();
         mWeekStart = PersianCalendar.SATURDAY;
         mDayOfWeekStart = PersianCalendar.MONDAY;
+        clueData = new ClueData(3, 26, 1);
+        MonthViewType = MonthViewTypeShowCalendar;
+    }
+
+    private void initAttrs(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MonthView);
+        Resources resources = getResources();
+
+        //circle colors
+        rectTypeRedColor = typedArray.getColor(R.styleable.MonthView_rect_color_type1, resources.getColor(R.color.type_red));
+        rectTypeGreenColor = typedArray.getColor(R.styleable.MonthView_rect_color_type2, resources.getColor(R.color.type_green));
+        rectTypeGreen2Color = typedArray.getColor(R.styleable.MonthView_rect_color_type2, resources.getColor(R.color.type_green));
+        rectTypeGrayColor = typedArray.getColor(R.styleable.MonthView_rect_color_type3, resources.getColor(R.color.type_gray));
+        rectTypeYellowColor = typedArray.getColor(R.styleable.MonthView_rect_color_type4, resources.getColor(R.color.type_yellow));
+        rectTypeMarkedColor = resources.getColor(R.color.type_marked);
+
+
+        mDesiredMonthHeight = resources.getDimensionPixelSize(R.dimen.month_view_month_height);
+        mDesiredDayHeight = resources.getDimensionPixelSize(R.dimen.month_view_day_height);
+        mDesiredCellWidth = resources.getDimensionPixelSize(R.dimen.month_view_day_width);
+//        mDesiredMonthHeight = (int) dp2px(30);
+//        mDesiredDayHeight = (int) dp2px(44);
+//        mDesiredCellWidth = (int) dp2px(44);
+        mDesiredCellLength = resources.getDimensionPixelSize(R.dimen.month_view_cell_length);
+        mLocale = resources.getConfiguration().locale;
+
+
+        //main day number textView
+        tvMonthDayNumberTextColorWhite = resources.getColor(R.color.white);
+        tvMonthDayNumberTextColorBlack = resources.getColor(R.color.black);
+
+        typedArray.recycle();
     }
 
     private void init() {
         final Resources res = getResources();
-        mDesiredMonthHeight = res.getDimensionPixelSize(R.dimen.month_view_month_height);
-        mDesiredDayHeight = res.getDimensionPixelSize(R.dimen.month_view_day_height);
-        mDesiredCellWidth = res.getDimensionPixelSize(R.dimen.month_view_day_width);
-        mDesiredDaySelectorRadius = res.getDimensionPixelSize(R.dimen.month_view_day_selector_radius);
 
 
-        mLocale = res.getConfiguration().locale;
         mCalendar = Calendar.getInstance(mLocale);
         persianCalendar = new PersianCalendar(mCalendar.getTimeInMillis());
         hijriCalendar = new UmmalquraCalendar();
@@ -141,6 +353,7 @@ public class MonthView extends View {
 
         mDayFormatter = NumberFormat.getIntegerInstance(mLocale);
 
+        markedPath = new Path();
 
         updateMonthYearLabel();
 
@@ -161,22 +374,58 @@ public class MonthView extends View {
         mMonthPaint.setTextAlign(Paint.Align.CENTER);
         mMonthPaint.setFakeBoldText(true);
         mMonthPaint.setStyle(Paint.Style.FILL);
-        mMonthPaint.setColor(Color.WHITE);
+        mMonthPaint.setColor(tvMonthDayNumberTextColorBlack);
 
 
         mDaySelectorPaint = new Paint();
         mDaySelectorPaint.setAntiAlias(true);
-        mDaySelectorPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mDaySelectorPaint.setStyle(Paint.Style.FILL);
         mDaySelectorPaint.setStrokeWidth(3);
         mDaySelectorPaint.setColor(Color.WHITE);
 
-        mDayPaint = new TextPaint();
-        mDayPaint.setAntiAlias(true);
-        mDayPaint.setTextSize(dayTextSize);
-        mDayPaint.setFakeBoldText(true);
-        mDayPaint.setTypeface(dayTypeface);
-        mDayPaint.setTextAlign(Paint.Align.CENTER);
-        mDayPaint.setStyle(Paint.Style.STROKE);
+        dayTextPaint = new TextPaint();
+        dayTextPaint.setAntiAlias(true);
+        dayTextPaint.setTextSize(dayTextSize);
+        dayTextPaint.setFakeBoldText(true);
+        dayTextPaint.setTypeface(dayTypeface);
+        dayTextPaint.setTextAlign(Paint.Align.CENTER);
+        dayTextPaint.setStyle(Paint.Style.FILL);
+        dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
+
+        dayBkgPaint = new Paint();
+        dayBkgPaint.setAntiAlias(true);
+        dayBkgPaint.setStyle(Paint.Style.FILL);
+
+        rectTypeRedPaint = new Paint();
+        rectTypeRedPaint.setAntiAlias(true);
+        rectTypeRedPaint.setStyle(Paint.Style.FILL);
+        rectTypeRedPaint.setColor(rectTypeRedColor);
+
+        rectTypeGrayPaint = new Paint();
+        rectTypeGrayPaint.setAntiAlias(true);
+        rectTypeGrayPaint.setStyle(Paint.Style.FILL);
+        rectTypeGrayPaint.setColor(rectTypeGrayColor);
+        rectTypeGrayPaint.setColor(Color.parseColor("#e6e6e6"));
+
+        rectTypeGreenPaint = new Paint();
+        rectTypeGreenPaint.setAntiAlias(true);
+        rectTypeGreenPaint.setStyle(Paint.Style.FILL);
+        rectTypeGreenPaint.setColor(rectTypeGreenColor);
+
+        rectTypeGreen2Paint = new Paint();
+        rectTypeGreen2Paint.setAntiAlias(true);
+        rectTypeGreen2Paint.setStyle(Paint.Style.FILL);
+        rectTypeGreen2Paint.setColor(rectTypeGreen2Color);
+
+        rectTypeYellowPaint = new Paint();
+        rectTypeYellowPaint.setAntiAlias(true);
+        rectTypeYellowPaint.setStyle(Paint.Style.FILL);
+        rectTypeYellowPaint.setColor(rectTypeYellowColor);
+
+        rectTypeMarkedPaint = new Paint();
+        rectTypeMarkedPaint.setAntiAlias(true);
+        rectTypeMarkedPaint.setStyle(Paint.Style.FILL);
+        rectTypeMarkedPaint.setColor(rectTypeMarkedColor);
 
     }
 
@@ -185,10 +434,13 @@ public class MonthView extends View {
         int padStart = ViewCompat.getPaddingStart(this);
         int padEnd = ViewCompat.getPaddingEnd(this);
 
-        final int preferredHeight = mDesiredDayHeight * MAX_WEEKS_IN_MONTH + mDesiredMonthHeight + getPaddingTop() + getPaddingBottom();
+
+        final int preferredHeight = (mDesiredDayHeight * WEEKS_IN_MONTH + 2 * mDesiredMonthHeight
+                + getPaddingTop() + getPaddingBottom());
         final int preferredWidth = mDesiredCellWidth * DAYS_IN_WEEK + padStart + padEnd;
         final int resolvedWidth = resolveSize(preferredWidth, widthMeasureSpec);
         final int resolvedHeight = resolveSize(preferredHeight, heightMeasureSpec);
+
         setMeasuredDimension(resolvedWidth, resolvedHeight);
     }
 
@@ -225,13 +477,7 @@ public class MonthView extends View {
         mMonthHeight = monthHeight;
         mDayHeight = (int) (mDesiredDayHeight * scaleH);
         mCellWidth = cellWidth;
-
-        // Compute the largest day selector radius that's still within the clip
-        // bounds and desired selector radius.
-        final int maxSelectorWidth = cellWidth / 2 + Math.min(paddingLeft, paddingRight);
-        final int maxSelectorHeight = mDayHeight / 2 + paddingBottom;
-        mDaySelectorRadius = Math.min(mDesiredDaySelectorRadius, Math.min(maxSelectorWidth, maxSelectorHeight));
-
+        Log.d(TAG, "onLayout: " + cellWidth + " ::: " + mDayHeight);
     }
 
     @Override
@@ -239,10 +485,13 @@ public class MonthView extends View {
         final int paddingLeft = getPaddingLeft();
         final int paddingTop = getPaddingTop();
         canvas.translate(paddingLeft, paddingTop);
+
         drawMonth(canvas);
         drawDays(canvas);
 
         canvas.translate(-paddingLeft, -paddingTop);
+
+        setBackgroundColor(Color.WHITE);
 
     }
 
@@ -251,80 +500,81 @@ public class MonthView extends View {
 
         // Vertically centered within the month header height.
         final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight - lineHeight) / 2f;
+        final float y = (mMonthHeight + lineHeight) * 2.5f;
 
-        //TODO month label color
-        mMonthPaint.setColor(Color.WHITE);
+        mMonthPaint.setColor(Color.parseColor("#5b5b5b"));
         canvas.drawText(mMonthYearLabel, x, y, mMonthPaint);
     }
 
     private void drawDays(Canvas canvas) {
-        final TextPaint p = mDayPaint;
+        final TextPaint p = dayTextPaint;
         final int headerHeight = mMonthHeight;
         final int rowHeight = mDayHeight;
         final int colWidth = mCellWidth;
 
-        // Text is vertically centered within the row height.
-        final float halfLineHeight = (p.ascent() + p.descent()) / 2f;
-        int rowCenter = headerHeight + rowHeight / 2;
+        // Vertically centered within the month header height.
+        final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
+        final float y = (mMonthHeight + lineHeight) * 2.5f + dp2px(8);
+
+        int rowCenter = (int) (y + rowHeight / 2);
+        int left;
+        int right;
+        int top;
+        int bottom;
 
         for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
             final int colCenter = colWidth * col + colWidth / 2;
             final int colCenterRtl;
-            //TODO rtl
             if (shouldBeRTL()) {
                 colCenterRtl = mPaddedWidth - colCenter;
             } else {
                 colCenterRtl = colCenter;
             }
 
-            int stateMask = 0;
 
             final boolean isDayEnabled = isDayEnabled(day);
-            if (isDayEnabled) {
-                stateMask |= StateSet.VIEW_STATE_ENABLED;
-            }
-
             final boolean isDayActivated = mActivatedDay == day;
-            if (isDayActivated) {
-                stateMask |= StateSet.VIEW_STATE_ACTIVATED;
-
-                // Adjust the circle to be centered on the row.
-                final Paint paint = mDaySelectorPaint;
-                canvas.drawCircle(colCenterRtl, rowCenter, mDaySelectorRadius, paint);
-            }
-
             final boolean isDayToday = mToday == day;
-            final int dayTextColor;
-            if (isDayToday && !isDayActivated) {
-//                dayTextColor = mDaySelectorPaint.getColor();
-                dayTextColor = Color.WHITE;
-//                dayTextColor = Color.parseColor("#009688");
-                mDaySelectorPaint.setStyle(Paint.Style.STROKE);
-                mDaySelectorPaint.setColor(Color.parseColor("#F65824"));
-                canvas.drawCircle(colCenterRtl, rowCenter, mDaySelectorRadius, mDaySelectorPaint);
-                mDaySelectorPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-                mDaySelectorPaint.setColor(Color.WHITE);
-            } else if (isDayToday) {
-                dayTextColor = Color.parseColor("#F65824");
 
+            top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
+            bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
+            left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
+            right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
+            if (isDayEnabled) {
+
+            }
+            if (isDayActivated) {
+
+            }
+            if (isDayToday && !isDayActivated) {
+            } else if (isDayToday) {
             } else {
-                final int[] stateSet = StateSet.get(stateMask);
-//                dayTextColor = mDayTextColor.getColorForState(stateSet, 0);
                 if (isDayEnabled && isDayActivated) {
-                    dayTextColor = Color.parseColor("#009688");
                 } else {
-                    dayTextColor = Color.WHITE;
                 }
             }
-            p.setColor(dayTextColor);
-            //TODO day number text color
-//            p.setColor(Color.WHITE);
+            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
+            if (getDayType(day) == TYPE_GRAY) {
+                dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
+            } else {
+                dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
+            }
+            canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
+                    bottom - p.getFontMetrics().bottom, p);
 
-            canvas.drawText(mDayFormatter.format(day), colCenterRtl, rowCenter - halfLineHeight, p);
+            if (isDayMarked(day)) {
+                markedPath.moveTo(left, top);
+                markedPath.lineTo(left + dp2px(14), top);
+                markedPath.lineTo(left, top + dp2px(14));
+                markedPath.lineTo(left, top);
+                canvas.drawPath(markedPath, rectTypeMarkedPaint);
+            }
 
+            if (getDayType(day) == TYPE_GREEN2) {
+                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+                canvas.drawBitmap(icon, left + dp2px(7), top + dp2px(7), rectTypeGreenPaint);
+            }
             col++;
-
             if (col == DAYS_IN_WEEK) {
                 col = 0;
                 rowCenter += rowHeight;
@@ -332,9 +582,22 @@ public class MonthView extends View {
         }
     }
 
+    private boolean isDayMarked(int day) {
+        //todo is day marked
+        if (day % 5 == 0) {
+            return true;
+        }
+        return false;
+    }
+
     public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType) {
         mActivatedDay = selectedDay;
         this.calendarType = calendarType;
+        if (weekStart < 6) {
+            WEEKS_IN_MONTH = 5;
+            requestLayout();
+            invalidate();
+        }
 
         switch (calendarType) {
             case CalendarType.PERSIAN:
@@ -454,6 +717,49 @@ public class MonthView extends View {
         return offset;
     }
 
+    private int getDayType(int day) {
+        if (day == -1) {
+            return TYPE_RED;
+        }
+        if (clueData == null) {
+            return TYPE_RED;
+        }
+        if (day <= clueData.redCount) {
+            return TYPE_RED;
+        } else if (day <= clueData.totalDays) {
+            if (day >= clueData.greenStartIndex && day <= clueData.greenEndIndex) {
+                if (day == clueData.green2Index) {
+                    return TYPE_GREEN2;
+                }
+                return TYPE_GREEN;
+            } else if (day >= clueData.yellowStartIndex && day <= clueData.yellowEndIndex) {
+                return TYPE_YELLOW;
+            }
+        }
+        return TYPE_GRAY;
+    }
+
+    private Paint getDayPaint(int day) {
+        if (day == -1) {
+            return rectTypeRedPaint;
+        }
+        if (clueData == null) {
+            return rectTypeRedPaint;
+        }
+        if (day <= clueData.redCount) {
+            return rectTypeRedPaint;
+        } else if (day <= clueData.totalDays) {
+            if (day >= clueData.greenStartIndex && day <= clueData.greenEndIndex) {
+                if (day == clueData.green2Index) {
+                    return rectTypeGreenPaint;
+                }
+                return rectTypeGreenPaint;
+            } else if (day >= clueData.yellowStartIndex && day <= clueData.yellowEndIndex) {
+                return rectTypeYellowPaint;
+            }
+        }
+        return rectTypeGrayPaint;
+    }
 
     private void updateMonthYearLabel() {
         int month = 0;
@@ -472,7 +778,7 @@ public class MonthView extends View {
                 year = mYear;
                 break;
         }
-        mMonthYearLabel = CalendarTool.getMonthName(month, calendarType) + "    " + year;
+        mMonthYearLabel = CalendarTool.getMonthName(month, calendarType) + " " + year;
     }
 
     private boolean shouldBeRTL() {
@@ -503,5 +809,17 @@ public class MonthView extends View {
      */
     public interface OnDayClickListener {
         void onDayClick(MonthView view, Calendar day);
+    }
+
+    private float dp2px(float dp) {
+        return SizeConverter.dpToPx(getContext(), dp);
+    }
+
+    private float px2dp(float px) {
+        return SizeConverter.pxToDp(getContext(), px);
+    }
+
+    private float sp2px(float sp) {
+        return SizeConverter.spToPx(getContext(), sp);
     }
 }
