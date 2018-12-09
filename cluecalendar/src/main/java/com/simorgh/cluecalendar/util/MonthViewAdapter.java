@@ -18,32 +18,22 @@ package com.simorgh.cluecalendar.util;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
-import android.os.Build;
 import android.util.Log;
-import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
+import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.MonthView;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 
 
 /**
@@ -247,7 +237,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     private final MonthView.OnDayClickListener mOnDayClickListener = new MonthView.OnDayClickListener() {
         @Override
-        public void onDayClick(MonthView view, Calendar day) {
+        public void onDayClick(BaseMonthView view, Calendar day) {
             if (day != null) {
                 if (mOnDaySelectedListener != null) {
                     mOnDaySelectedListener.onDaySelected(MonthViewAdapter.this, day);

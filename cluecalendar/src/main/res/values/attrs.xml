@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="MonthView">
+    <declare-styleable name="BaseMonthView">
         <attr name="rect_color_type1" format="color" />
         <attr name="rect_color_type2" format="color" />
         <attr name="rect_color_type3" format="color" />

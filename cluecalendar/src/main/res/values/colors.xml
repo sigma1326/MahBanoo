@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="type_red">#f84d60</color>
-    <color name="type_gray">#e6e6e6</color>
+    <color name="my_type_gray">#e6e6e6</color>
     <color name="type_green">#669933</color>
     <color name="type_yellow">#ffb533</color>
     <color name="type_marked">#00819b</color>
