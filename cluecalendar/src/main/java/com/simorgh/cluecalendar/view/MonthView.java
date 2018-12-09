@@ -437,7 +437,7 @@ public class MonthView extends View {
 
         final int preferredHeight = (int) (mDesiredDayHeight * MAX_WEEKS_IN_MONTH + 2f * mDesiredMonthHeight
                 + getPaddingTop() + getPaddingBottom());
-        final int preferredWidth = mDesiredCellWidth * DAYS_IN_WEEK + padStart + padEnd + 210;
+        final int preferredWidth = mDesiredCellWidth * DAYS_IN_WEEK + padStart + padEnd +0;
         final int resolvedWidth = resolveSize(preferredWidth, widthMeasureSpec);
         final int resolvedHeight = resolveSize(preferredHeight, heightMeasureSpec);
 

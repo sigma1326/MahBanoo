@@ -267,7 +267,10 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     @NonNull
     @Override
     public MonthViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        MonthViewHolder holder = new MonthViewHolder(-1, parent, new MonthView(parent.getContext()));
+        MonthView v = new MonthView(parent.getContext());
+        v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+        v.setPadding(4, 0, 4, 0);
+        MonthViewHolder holder = new MonthViewHolder(-1, parent, v);
         mItems.add(holder);
         return holder;
     }
