@@ -435,9 +435,9 @@ public class MonthView extends View {
         int padEnd = ViewCompat.getPaddingEnd(this);
 
 
-        final int preferredHeight = (mDesiredDayHeight * WEEKS_IN_MONTH + 2 * mDesiredMonthHeight
+        final int preferredHeight = (int) (mDesiredDayHeight * MAX_WEEKS_IN_MONTH + 2f * mDesiredMonthHeight
                 + getPaddingTop() + getPaddingBottom());
-        final int preferredWidth = mDesiredCellWidth * DAYS_IN_WEEK + padStart + padEnd;
+        final int preferredWidth = mDesiredCellWidth * DAYS_IN_WEEK + padStart + padEnd + 210;
         final int resolvedWidth = resolveSize(preferredWidth, widthMeasureSpec);
         final int resolvedHeight = resolveSize(preferredHeight, heightMeasureSpec);
 
@@ -477,7 +477,7 @@ public class MonthView extends View {
         mMonthHeight = monthHeight;
         mDayHeight = (int) (mDesiredDayHeight * scaleH);
         mCellWidth = cellWidth;
-        Log.d(TAG, "onLayout: " + cellWidth + " ::: " + mDayHeight);
+//        Log.d(TAG, "onLayout: " + cellWidth + " ::: " + mDayHeight);
     }
 
     @Override
@@ -502,7 +502,6 @@ public class MonthView extends View {
         final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
         final float y = (mMonthHeight + lineHeight) * 2.5f;
 
-        mMonthPaint.setColor(Color.parseColor("#5b5b5b"));
         canvas.drawText(mMonthYearLabel, x, y, mMonthPaint);
     }
 
@@ -514,13 +513,15 @@ public class MonthView extends View {
 
         // Vertically centered within the month header height.
         final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight + lineHeight) * 2.5f + dp2px(8);
+        final float y = (mMonthHeight + lineHeight) * 2.5f + dp2px(16);
 
         int rowCenter = (int) (y + rowHeight / 2);
         int left;
         int right;
         int top;
         int bottom;
+
+        Log.d(TAG, "drawDays: " + findDayOffset());
 
         for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
             final int colCenter = colWidth * col + colWidth / 2;
@@ -583,10 +584,13 @@ public class MonthView extends View {
     }
 
     private boolean isDayMarked(int day) {
-        //todo is day marked
-        if (day % 5 == 0) {
-            return true;
+        if (!isValidDayOfMonth(day)) {
+            return false;
         }
+        //todo is day marked
+//        if (day % 5 == 0) {
+//            return true;
+//        }
         return false;
     }
 
@@ -607,6 +611,7 @@ public class MonthView extends View {
                 PersianDate persianDate = new PersianDate();
                 persianDate.setShDate(mYearPersian, mMonthPersian + 1, 1);
                 mDayOfWeekStart = persianDate.dayOfWeek();
+                Log.d(TAG, "setMonthParams: " + mDayOfWeekStart + "======" + persianDate);
                 break;
             case CalendarType.ARABIC:
                 mYearHijri = year;
@@ -630,7 +635,7 @@ public class MonthView extends View {
         if (isValidDayOfWeek(weekStart)) {
             mWeekStart = weekStart;
         } else {
-            mWeekStart = mCalendar.getFirstDayOfWeek();
+            mWeekStart = Calendar.SATURDAY;
         }
 
         // Figure out what day today is.
@@ -780,6 +785,20 @@ public class MonthView extends View {
         }
         mMonthYearLabel = CalendarTool.getMonthName(month, calendarType) + " " + year;
     }
+
+    public void setFirstDayOfWeek(int weekStart) {
+        if (isValidDayOfWeek(weekStart)) {
+            mWeekStart = weekStart;
+        } else {
+            mWeekStart = mCalendar.getFirstDayOfWeek();
+        }
+        invalidate();
+    }
+
+    public void setOnDayClickListener(OnDayClickListener listener) {
+        mOnDayClickListener = listener;
+    }
+
 
     private boolean shouldBeRTL() {
         boolean isRTLLanguage;

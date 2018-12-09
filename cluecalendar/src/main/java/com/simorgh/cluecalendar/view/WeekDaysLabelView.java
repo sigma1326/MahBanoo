@@ -178,7 +178,7 @@ public class WeekDaysLabelView extends View {
     }
 
 
-    private void updateDayOfWeekLabels() {
+    public void updateDayOfWeekLabels() {
         // Use tiny (e.g. single-character) weekday names. The indices
         // for this list correspond to Calendar days, e.g. SATURDAY is index 1.
 
@@ -204,11 +204,48 @@ public class WeekDaysLabelView extends View {
             }
         }
 
+        switch (calendarType) {
+            case CalendarType.GREGORIAN:
+                mWeekStart = Calendar.SUNDAY;
+                break;
+            case CalendarType.PERSIAN:
+                mWeekStart = Calendar.SATURDAY;
+                break;
+            case CalendarType.ARABIC:
+                mWeekStart = Calendar.SATURDAY;
+                break;
+            default:
+        }
 
         for (int i = 0; i < DAYS_IN_WEEK; i++) {
             mDayOfWeekLabels[i] = tinyWeekdayNames[(mWeekStart + i - 1) % DAYS_IN_WEEK];
         }
-//        Log.d("d13", "updateDayOfWeekLabels: " + Arrays.toString(mDayOfWeekLabels));
+    }
+
+    public int getCalendarType() {
+        return calendarType;
+    }
+
+    public void setFirstDayOfWeek(int weekStart) {
+        if (isValidDayOfWeek(weekStart)) {
+            mWeekStart = weekStart;
+        } else {
+            mWeekStart = Calendar.SUNDAY;
+        }
+
+        updateDayOfWeekLabels();
+
+        invalidate();
+    }
+
+    private static boolean isValidDayOfWeek(int day) {
+        return day >= Calendar.SUNDAY && day <= Calendar.SATURDAY;
+    }
+
+    public void setCalendarType(int calendarType) {
+        this.calendarType = calendarType;
+        updateDayOfWeekLabels();
+        invalidate();
     }
 
     private boolean shouldBeRTL() {
