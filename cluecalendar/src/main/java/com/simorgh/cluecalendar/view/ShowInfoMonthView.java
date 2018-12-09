@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import androidx.annotation.Nullable;
 
-public class MonthView extends BaseMonthView {
+public class ShowInfoMonthView extends BaseMonthView {
     public static final String TAG = "monthView";
     private Paint dayBkgPaint;
     private Paint mDaySelectorPaint;
@@ -197,26 +197,26 @@ public class MonthView extends BaseMonthView {
         }
     }
 
-    public MonthView(Context context) {
+    public ShowInfoMonthView(Context context) {
         super(context);
         initAttrs(context, null);
         init();
     }
 
-    public MonthView(Context context, @Nullable AttributeSet attrs) {
+    public ShowInfoMonthView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initAttrs(context, attrs);
         init();
     }
 
-    public MonthView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ShowInfoMonthView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttrs(context, attrs);
         init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public MonthView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ShowInfoMonthView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initAttrs(context, attrs);
         init();
@@ -310,7 +310,7 @@ public class MonthView extends BaseMonthView {
 
         // Vertically centered within the month header height.
         final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight + lineHeight) * 2.5f + dp2px(16);
+        final float y = (mMonthHeight + lineHeight) * 3f + dp2px(20);
 
         int rowCenter = (int) (y + rowHeight / 2);
         int left;

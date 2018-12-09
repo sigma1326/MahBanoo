@@ -438,7 +438,9 @@ public class BaseMonthView extends View {
 
         // We may have been laid out smaller than our preferred size. If so,
         // scale all dimensions to fit.
-        final int measuredPaddedHeight = getMeasuredHeight() - paddingTop - paddingBottom;
+        final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
+        final float y = (mMonthHeight + lineHeight) * 2f;
+        final int measuredPaddedHeight = (int) (getMeasuredHeight() - paddingTop - paddingBottom-y);
         final float scaleH = paddedHeight / (float) measuredPaddedHeight;
         final int monthHeight = (int) (mDesiredMonthHeight * scaleH);
         final int cellWidth = mPaddedWidth / DAYS_IN_WEEK;
@@ -467,7 +469,7 @@ public class BaseMonthView extends View {
 
         // Vertically centered within the month header height.
         final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight + lineHeight) * 2.5f;
+        final float y = (mMonthHeight + lineHeight) * 3f;
 
         canvas.drawText(mMonthYearLabel, x, y, mMonthPaint);
     }
@@ -480,7 +482,7 @@ public class BaseMonthView extends View {
 
         // Vertically centered within the month header height.
         final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight + lineHeight) * 2.5f + dp2px(16);
+        final float y = (mMonthHeight + lineHeight) * 3f + dp2px(20);
 
         int rowCenter = (int) (y + rowHeight / 2);
         int left;

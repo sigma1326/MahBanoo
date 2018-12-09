@@ -1,6 +1,7 @@
 package com.simorgh.redcalendar;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.simorgh.cluecalendar.model.CalendarType;
@@ -12,6 +13,8 @@ import com.simorgh.clueview.OnViewDataChangedListener;
 import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +51,11 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
         recyclerView.setLayoutManager(layoutManager);
         MonthViewAdapter adapter = new MonthViewAdapter(this, CalendarType.PERSIAN);
 //        adapter.setRange(minDate,maxDate);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setHasFixedSize(false);
+        recyclerView.setItemViewCacheSize(0);
+        recyclerView.setDrawingCacheEnabled(false);
         recyclerView.setAdapter(adapter);
     }
 

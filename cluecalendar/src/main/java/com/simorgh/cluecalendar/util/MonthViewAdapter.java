@@ -26,7 +26,7 @@ import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.view.BaseMonthView;
-import com.simorgh.cluecalendar.view.MonthView;
+import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
- * An adapter for a list of {@link com.simorgh.cluecalendar.view.MonthView} items.
+ * An adapter for a list of {@link com.simorgh.cluecalendar.view.ShowInfoMonthView} items.
  */
 public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.MonthViewHolder> {
     private static final int MONTHS_IN_YEAR = 12;
@@ -139,8 +139,8 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         // Update displayed views.
         final int count = mItems.size();
         for (int i = 0; i < count; i++) {
-            final MonthView monthView = mItems.get(i).monthView;
-            monthView.setFirstDayOfWeek(weekStart);
+            final ShowInfoMonthView showInfoMonthView = mItems.get(i).showInfoMonthView;
+            showInfoMonthView.setFirstDayOfWeek(weekStart);
         }
     }
 
@@ -227,15 +227,15 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     }
 
 
-    MonthView getView(Object object) {
+    ShowInfoMonthView getView(Object object) {
         if (object == null) {
             return null;
         }
         final ViewHolder holder = (ViewHolder) object;
-        return holder.monthView;
+        return holder.showInfoMonthView;
     }
 
-    private final MonthView.OnDayClickListener mOnDayClickListener = new MonthView.OnDayClickListener() {
+    private final ShowInfoMonthView.OnDayClickListener mOnDayClickListener = new ShowInfoMonthView.OnDayClickListener() {
         @Override
         public void onDayClick(BaseMonthView view, Calendar day) {
             if (day != null) {
@@ -257,9 +257,9 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     @NonNull
     @Override
     public MonthViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        MonthView v = new MonthView(parent.getContext());
+        ShowInfoMonthView v = new ShowInfoMonthView(parent.getContext());
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-        v.setPadding(4, 0, 4, 0);
+        v.setPadding(4, 4, 4, 4);
         MonthViewHolder holder = new MonthViewHolder(-1, parent, v);
         mItems.add(holder);
         return holder;
@@ -271,7 +271,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         if (position >= mItems.size()) {
             return;
         }
-        final MonthView v = mItems.get(position).monthView;
+        final ShowInfoMonthView v = mItems.get(position).showInfoMonthView;
         v.setOnDayClickListener(mOnDayClickListener);
         final int month = getMonthForPosition(position);
         final int year = getYearForPosition(position);
@@ -365,7 +365,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         super.onViewAttachedToWindow(holder);
         final int month = getMonthForPosition(position);
         final int year = getYearForPosition(position);
-        holder.monthView.setMonthParams(-1, month, year, mFirstDayOfWeek, 1, 31, calendarType);
+        holder.showInfoMonthView.setMonthParams(-1, month, year, mFirstDayOfWeek, 1, 31, calendarType);
 
         Log.d("d13", "onViewAttachedToWindow: " + position + " = " + month + " :: " + year);
 
@@ -387,12 +387,12 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private static class ViewHolder {
         public final int position;
         public final View container;
-        public final MonthView monthView;
+        public final ShowInfoMonthView showInfoMonthView;
 
-        public ViewHolder(int position, View container, MonthView monthView) {
+        public ViewHolder(int position, View container, ShowInfoMonthView showInfoMonthView) {
             this.position = position;
             this.container = container;
-            this.monthView = monthView;
+            this.showInfoMonthView = showInfoMonthView;
         }
     }
 
@@ -403,13 +403,13 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     public class MonthViewHolder extends RecyclerView.ViewHolder {
         public int position;
         public final View container;
-        public final MonthView monthView;
+        public final ShowInfoMonthView showInfoMonthView;
 
-        public MonthViewHolder(int position, View container, MonthView monthView) {
-            super(monthView);
+        public MonthViewHolder(int position, View container, ShowInfoMonthView showInfoMonthView) {
+            super(showInfoMonthView);
             this.position = position;
             this.container = container;
-            this.monthView = monthView;
+            this.showInfoMonthView = showInfoMonthView;
         }
     }
 }
