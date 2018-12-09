@@ -300,86 +300,86 @@ public class ShowInfoMonthView extends BaseMonthView {
 
     }
 
-    @Override
-    protected void drawDays(Canvas canvas) {
+//    @Override
+//    protected void drawDays(Canvas canvas) {
 //        super.drawDays(canvas);
-        final TextPaint p = dayTextPaint;
-        final int headerHeight = mMonthHeight;
-        final int rowHeight = mDayHeight;
-        final int colWidth = mCellWidth;
-
-        // Vertically centered within the month header height.
-        final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight + lineHeight) * 3f + dp2px(20);
-
-        int rowCenter = (int) (y + rowHeight / 2);
-        int left;
-        int right;
-        int top;
-        int bottom;
-
-        Log.d(TAG, "drawDays: " + findDayOffset());
-
-        for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
-            final int colCenter = colWidth * col + colWidth / 2;
-            final int colCenterRtl;
-            if (shouldBeRTL()) {
-                colCenterRtl = mPaddedWidth - colCenter;
-            } else {
-                colCenterRtl = colCenter;
-            }
-
-
-            final boolean isDayEnabled = isDayEnabled(day);
-            final boolean isDayActivated = mActivatedDay == day;
-            final boolean isDayToday = mToday == day;
-
-            top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
-            bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
-            left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
-            right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
-            if (isDayEnabled) {
-
-            }
-            if (isDayActivated) {
-
-            }
-            if (isDayToday && !isDayActivated) {
-            } else if (isDayToday) {
-            } else {
-                if (isDayEnabled && isDayActivated) {
-                } else {
-                }
-            }
-            Log.d(TAG, "drawDays: " + getDayType(day));
-            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
-            if (getDayType(day) == TYPE_GRAY) {
-                dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
-            } else {
-                dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
-            }
-            canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
-                    bottom - p.getFontMetrics().bottom, p);
-
-            if (isDayMarked(day)) {
-                markedPath.moveTo(left, top);
-                markedPath.lineTo(left + dp2px(14), top);
-                markedPath.lineTo(left, top + dp2px(14));
-                markedPath.lineTo(left, top);
-                canvas.drawPath(markedPath, rectTypeMarkedPaint);
-            }
-
-            if (getDayType(day) == TYPE_GREEN2) {
-                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-                canvas.drawBitmap(icon, left + dp2px(7), top + dp2px(7), rectTypeGreenPaint);
-            }
-            col++;
-            if (col == DAYS_IN_WEEK) {
-                col = 0;
-                rowCenter += rowHeight;
-            }
-        }
-    }
+//        final TextPaint p = dayTextPaint;
+//        final int headerHeight = mMonthHeight;
+//        final int rowHeight = mDayHeight;
+//        final int colWidth = mCellWidth;
+//
+//        // Vertically centered within the month header height.
+//        final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
+//        final float y = (mMonthHeight + lineHeight) * 3f + dp2px(20);
+//
+//        int rowCenter = (int) (y + rowHeight / 2);
+//        int left;
+//        int right;
+//        int top;
+//        int bottom;
+//
+//        Log.d(TAG, "drawDays: " + findDayOffset());
+//
+//        for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
+//            final int colCenter = colWidth * col + colWidth / 2;
+//            final int colCenterRtl;
+//            if (shouldBeRTL()) {
+//                colCenterRtl = mPaddedWidth - colCenter;
+//            } else {
+//                colCenterRtl = colCenter;
+//            }
+//
+//
+//            final boolean isDayEnabled = isDayEnabled(day);
+//            final boolean isDayActivated = mActivatedDay == day;
+//            final boolean isDayToday = mToday == day;
+//
+//            top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
+//            bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
+//            left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
+//            right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
+//            if (isDayEnabled) {
+//
+//            }
+//            if (isDayActivated) {
+//
+//            }
+//            if (isDayToday && !isDayActivated) {
+//            } else if (isDayToday) {
+//            } else {
+//                if (isDayEnabled && isDayActivated) {
+//                } else {
+//                }
+//            }
+//            Log.d(TAG, "drawDays: " + getDayType(day));
+//            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
+//            if (getDayType(day) == TYPE_GRAY) {
+//                dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
+//            } else {
+//                dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
+//            }
+//            canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
+//                    bottom - p.getFontMetrics().bottom, p);
+//
+//            if (isDayMarked(day)) {
+//                markedPath.moveTo(left, top);
+//                markedPath.lineTo(left + dp2px(14), top);
+//                markedPath.lineTo(left, top + dp2px(14));
+//                markedPath.lineTo(left, top);
+//                canvas.drawPath(markedPath, rectTypeMarkedPaint);
+//            }
+//
+//            if (getDayType(day) == TYPE_GREEN2) {
+//                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+//                canvas.drawBitmap(icon, left + dp2px(7), top + dp2px(7), rectTypeGreenPaint);
+//            }
+//            col++;
+//            if (col == DAYS_IN_WEEK) {
+//                col = 0;
+//                rowCenter += rowHeight;
+//            }
+//        }
+//    }
 
     private boolean isDayMarked(int day) {
         if (!isValidDayOfMonth(day)) {
@@ -392,80 +392,13 @@ public class ShowInfoMonthView extends BaseMonthView {
         return false;
     }
 
-    @Override
-    public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType) {
-        super.setMonthParams(selectedDay, month, year, weekStart, enabledDayStart, enabledDayEnd, calendarType);
-
-        mActivatedDay = selectedDay;
-        this.calendarType = calendarType;
-//        if (weekStart < 6) {
-//            WEEKS_IN_MONTH = 5;
-//            requestLayout();
-//            invalidate();
-//        }
-
-        switch (calendarType) {
-            case CalendarType.PERSIAN:
-                mMonthPersian = month;
-                mYearPersian = year;
-                persianCalendar.setPersianDate(mYearPersian, mMonthPersian + 1, 1);
-                PersianDate persianDate = new PersianDate();
-                persianDate.setShDate(mYearPersian, mMonthPersian + 1, 1);
-                mDayOfWeekStart = persianDate.dayOfWeek();
-//                Log.d(TAG, "setMonthParams: " + mDayOfWeekStart + "======" + persianDate);
-                break;
-            case CalendarType.ARABIC:
-                mYearHijri = year;
-                mMonthHijri = month;
-                hijriCalendar.set(UmmalquraCalendar.MONTH, mMonthHijri);
-                hijriCalendar.set(UmmalquraCalendar.YEAR, mYearHijri);
-                hijriCalendar.set(UmmalquraCalendar.DAY_OF_MONTH, 1);
-                mDayOfWeekStart = hijriCalendar.get(Calendar.DAY_OF_WEEK);
-                break;
-            case CalendarType.GREGORIAN:
-                if (isValidMonth(month)) {
-                    mMonth = month;
-                }
-                mYear = year;
-                mCalendar.set(Calendar.MONTH, mMonth);
-                mCalendar.set(Calendar.YEAR, mYear);
-                mCalendar.set(Calendar.DAY_OF_MONTH, 1);
-                mDayOfWeekStart = mCalendar.get(Calendar.DAY_OF_WEEK);
-                break;
-        }
-        if (isValidDayOfWeek(weekStart)) {
-            mWeekStart = weekStart;
-        } else {
-            mWeekStart = Calendar.SATURDAY;
-        }
-
-        // Figure out what day today is.
-        final Calendar today = Calendar.getInstance();
-        mToday = -1;
-        mDaysInMonth = CalendarTool.getDaysInMonth(month, year, calendarType);
-        for (int i = 0; i < mDaysInMonth; i++) {
-            final int day = i + 1;
-            if (sameDay(day, today)) {
-                mToday = day;
-            }
-        }
-
-        initPaints();
-
-        mEnabledDayStart = mathConstrain(enabledDayStart, 1, mDaysInMonth);
-        mEnabledDayEnd = mathConstrain(enabledDayEnd, mEnabledDayStart, mDaysInMonth);
-
-        updateMonthYearLabel();
-
-        invalidate();
-    }
-
 
     public static int mathConstrain(int amount, int low, int high) {
         return amount < low ? low : (amount > high ? high : amount);
     }
 
-    private Paint getDayPaint(int day) {
+    @Override
+    protected Paint getDayPaint(int day) {
         if (day == -1) {
             return rectTypeGrayPaint;
         }

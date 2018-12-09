@@ -74,7 +74,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
         final Calendar minDate = Calendar.getInstance();
         final Calendar maxDate = Calendar.getInstance();
-        minDate.set(Calendar.YEAR, 2016);
+        minDate.set(Calendar.YEAR, 2018);
         maxDate.set(Calendar.YEAR, 2030);
         mMinDate.setTimeInMillis(minDate.getTimeInMillis());
         mMaxDate.setTimeInMillis(maxDate.getTimeInMillis());
@@ -271,8 +271,23 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         if (position >= mItems.size()) {
             return;
         }
-        final ShowInfoMonthView v = mItems.get(position).showInfoMonthView;
-        v.setOnDayClickListener(mOnDayClickListener);
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull MonthViewHolder holder) {
+        if (holder.position < mItems.size())
+            mItems.remove(holder.position);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull MonthViewHolder holder) {
+//        Log.d("d13", "onViewAttachedToWindow: " + holder.position);
+//        mItems.add(holder);
+        int position = holder.position;
+
+//        super.onViewAttachedToWindow(holder);
+        holder.showInfoMonthView.setOnDayClickListener(mOnDayClickListener);
+
         final int month = getMonthForPosition(position);
         final int year = getYearForPosition(position);
 //        Log.d("d13", "onBindViewHolder: " + position + " = " + month + " :: " + year);
@@ -346,36 +361,17 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
                 }
                 break;
         }
+        Log.d("d13", "onViewAttachedToWindow: " + position + " = " + month + " :: " + year+ " :: "+enabledDayRangeStart+ " :: "+enabledDayRangeEnd);
 
-        v.setMonthParams(selectedDay, month, year, mFirstDayOfWeek, enabledDayRangeStart, enabledDayRangeEnd, calendarType);
-//        v.setFirstDayOfWeek(Calendar.SATURDAY);
-    }
-
-    @Override
-    public void onViewRecycled(@NonNull MonthViewHolder holder) {
-        if (holder.position < mItems.size())
-            mItems.remove(holder.position);
-    }
-
-    @Override
-    public void onViewAttachedToWindow(@NonNull MonthViewHolder holder) {
-//        Log.d("d13", "onViewAttachedToWindow: " + holder.position);
-//        mItems.add(holder);
-        int position = holder.position;
-        super.onViewAttachedToWindow(holder);
-        final int month = getMonthForPosition(position);
-        final int year = getYearForPosition(position);
-        holder.showInfoMonthView.setMonthParams(-1, month, year, mFirstDayOfWeek, 1, 31, calendarType);
-
-        Log.d("d13", "onViewAttachedToWindow: " + position + " = " + month + " :: " + year);
-
+        holder.showInfoMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek, enabledDayRangeStart, enabledDayRangeEnd, calendarType);
+        onViewDetachedFromWindow(holder);
     }
 
     @Override
     public void onViewDetachedFromWindow(@NonNull MonthViewHolder holder) {
 //        Log.d("d13", "onViewDetachedFromWindow: " + holder.position);
-//        if (holder.position < mItems.size())
-//            mItems.remove(holder.position);
+        if (holder.position < mItems.size())
+            mItems.remove(holder.position);
         super.onViewDetachedFromWindow(holder);
     }
 

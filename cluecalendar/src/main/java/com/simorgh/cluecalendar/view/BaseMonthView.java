@@ -1,5 +1,6 @@
 package com.simorgh.cluecalendar.view;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
@@ -15,7 +16,10 @@ import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import com.simorgh.cluecalendar.R;
 import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
@@ -101,10 +105,10 @@ public class BaseMonthView extends View {
     protected int mMonthHijri;
 
 
-    protected Calendar mCalendar;
-    protected PersianCalendar persianCalendar;
-    protected UmmalquraCalendar hijriCalendar;
-    protected PersianDate persianDate;
+    protected Calendar mCalendar = Calendar.getInstance();
+    protected PersianCalendar persianCalendar = new PersianCalendar();
+    protected UmmalquraCalendar hijriCalendar = new UmmalquraCalendar();
+    protected PersianDate persianDate = new PersianDate();
     protected Locale mLocale;
 
     protected OnDayClickListener mOnDayClickListener;
@@ -403,11 +407,11 @@ public class BaseMonthView extends View {
         int padEnd = ViewCompat.getPaddingEnd(this);
 
 
-        final int preferredHeight = (int) (mDesiredDayHeight * MAX_WEEKS_IN_MONTH + 2f * mDesiredMonthHeight
-                + getPaddingTop() + getPaddingBottom());
+        int preferredHeight = (int) ((mDesiredDayHeight * WEEKS_IN_MONTH + mDesiredMonthHeight
+                + getPaddingTop() + getPaddingBottom()) + dp2px(8));
         final int preferredWidth = mDesiredCellWidth * DAYS_IN_WEEK + padStart + padEnd;
         final int resolvedWidth = resolveSize(preferredWidth, widthMeasureSpec);
-        final int resolvedHeight = resolveSize(preferredHeight, heightMeasureSpec);
+        int resolvedHeight = resolveSize(preferredHeight, heightMeasureSpec);
 
         setMeasuredDimension(resolvedWidth, resolvedHeight);
     }
@@ -438,10 +442,8 @@ public class BaseMonthView extends View {
 
         // We may have been laid out smaller than our preferred size. If so,
         // scale all dimensions to fit.
-        final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight + lineHeight) * 2f;
-        final int measuredPaddedHeight = (int) (getMeasuredHeight() - paddingTop - paddingBottom-y);
-        final float scaleH = paddedHeight / (float) measuredPaddedHeight;
+        final int measuredPaddedHeight = (int) (getMeasuredHeight() - paddingTop - paddingBottom);
+        final float scaleH = paddedHeight / (float) (measuredPaddedHeight + dp2px(8));
         final int monthHeight = (int) (mDesiredMonthHeight * scaleH);
         final int cellWidth = mPaddedWidth / DAYS_IN_WEEK;
         mMonthHeight = monthHeight;
@@ -469,7 +471,7 @@ public class BaseMonthView extends View {
 
         // Vertically centered within the month header height.
         final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight + lineHeight) * 3f;
+        final float y = (mMonthHeight + lineHeight);
 
         canvas.drawText(mMonthYearLabel, x, y, mMonthPaint);
     }
@@ -480,11 +482,7 @@ public class BaseMonthView extends View {
         final int rowHeight = mDayHeight;
         final int colWidth = mCellWidth;
 
-        // Vertically centered within the month header height.
-        final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-        final float y = (mMonthHeight + lineHeight) * 3f + dp2px(20);
-
-        int rowCenter = (int) (y + rowHeight / 2);
+        int rowCenter = (int) (headerHeight + dp2px(8) + rowHeight / 2f);
         int left;
         int right;
         int top;
@@ -503,7 +501,7 @@ public class BaseMonthView extends View {
             bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
             left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
             right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
-            canvas.drawRect(left, top, right, bottom, rectTypeGrayPaint);
+            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
             if (getDayType(day) == TYPE_GRAY) {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
             } else {
@@ -521,8 +519,13 @@ public class BaseMonthView extends View {
         }
     }
 
+    protected Paint getDayPaint(int day) {
+        return rectTypeGrayPaint;
+    }
 
-    protected void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType) {
+    private int WEEKS_IN_MONTH = MAX_WEEKS_IN_MONTH;
+
+    public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType) {
         mActivatedDay = selectedDay;
         this.calendarType = calendarType;
         switch (calendarType) {
@@ -576,7 +579,36 @@ public class BaseMonthView extends View {
         mEnabledDayEnd = mathConstrain(enabledDayEnd, mEnabledDayStart, mDaysInMonth);
 
         updateMonthYearLabel();
-
+        if (CalendarTool.getDaysInMonth(month, year, calendarType) <= 30) {
+            switch (mDayOfWeekStart) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    WEEKS_IN_MONTH = 5;
+                    break;
+                case 6:
+                    WEEKS_IN_MONTH = 6;
+                    break;
+            }
+        } else if (CalendarTool.getDaysInMonth(month, year, calendarType) == 31) {
+            switch (mDayOfWeekStart) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    WEEKS_IN_MONTH = 5;
+                    break;
+                case 5:
+                case 6:
+                    WEEKS_IN_MONTH = 6;
+                    break;
+            }
+        }
+//        requestLayout();
         invalidate();
     }
 
@@ -612,6 +644,97 @@ public class BaseMonthView extends View {
                 break;
         }
         return compYear == todayYear && compMonth == todayMonth && day == todayDay;
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int x = (int) (event.getX() + 0.5f);
+        final int y = (int) (event.getY() + 0.5f);
+
+        final int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+                final int touchedItem = getDayAtLocation(x, y);
+                if (action == MotionEvent.ACTION_DOWN && touchedItem < 0) {
+                    // Touch something that's not an item, reject event.
+                    return false;
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                final int clickedDay = getDayAtLocation(x, y);
+                onDayClicked(clickedDay);
+                // Fall through.
+            case MotionEvent.ACTION_CANCEL:
+                // Reset touched day on stream end.
+                invalidate();
+                break;
+        }
+        return true;
+    }
+
+    protected int getDayAtLocation(int x, int y) {
+        final int paddedX = x - getPaddingLeft();
+        if (paddedX < 0 || paddedX >= mPaddedWidth) {
+            return -1;
+        }
+
+        final int headerHeight = mMonthHeight;
+        final int paddedY = y - getPaddingTop();
+        if (paddedY < headerHeight || paddedY >= mPaddedHeight) {
+            return -1;
+        }
+
+        // Adjust for RTL after applying padding.
+        final int paddedXRtl;
+        //TODO isLayoutRTL
+        if (shouldBeRTL()) {
+            paddedXRtl = mPaddedWidth - paddedX;
+        } else {
+            paddedXRtl = paddedX;
+        }
+
+        final int row = (paddedY - headerHeight) / mDayHeight;
+        final int col = (paddedXRtl * DAYS_IN_WEEK) / mPaddedWidth;
+        final int index = col + row * DAYS_IN_WEEK;
+        final int day = index + 1 - findDayOffset();
+        if (!isValidDayOfMonth(day)) {
+            return -1;
+        }
+        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
+        return day;
+    }
+
+    protected boolean onDayClicked(int day) {
+        if (!isValidDayOfMonth(day) || !isDayEnabled(day)) {
+            return false;
+        }
+
+        if (mOnDayClickListener != null) {
+            Calendar date = Calendar.getInstance();
+            switch (calendarType) {
+                case CalendarType.PERSIAN:
+                    persianDate.setShYear(mYearPersian);
+                    persianDate.setShMonth(mMonthPersian + 1);
+                    persianDate.setShDay(day);
+                    date = CalendarTool.PersianToGregorian(persianDate);
+                    break;
+                case CalendarType.ARABIC:
+                    hijriCalendar.set(UmmalquraCalendar.YEAR, mYearHijri);
+                    hijriCalendar.set(UmmalquraCalendar.MONTH, mMonthHijri);
+                    hijriCalendar.set(UmmalquraCalendar.DAY_OF_MONTH, day);
+                    date = CalendarTool.HijriToGregorian(hijriCalendar);
+                    break;
+                case CalendarType.GREGORIAN:
+                    date.set(mYear, mMonth, day);
+                    break;
+            }
+            mOnDayClickListener.onDayClick(this, date);
+        }
+        return true;
     }
 
 
