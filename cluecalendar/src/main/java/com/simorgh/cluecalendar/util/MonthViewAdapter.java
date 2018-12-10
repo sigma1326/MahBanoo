@@ -17,7 +17,6 @@
 package com.simorgh.cluecalendar.util;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +47,8 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private ArrayList<MonthViewHolder> mItems = new ArrayList<>();
 
     private int calendarType;
+    private int monthViewType;
+
 
     private Calendar mSelectedDay = Calendar.getInstance();
     private PersianCalendar persianCalendar;
@@ -65,12 +66,13 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private int mCount;
     private int mFirstDayOfWeek;
 
-    private ColorStateList fixedDayTextColors;
     private Context mContext;
 
-    public MonthViewAdapter(@NonNull Context context, int calendarType) {
+
+    public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
         this.mContext = context;
         this.calendarType = calendarType;
+        this.monthViewType = monthViewType;
 
         final Calendar minDate = Calendar.getInstance();
         final Calendar maxDate = Calendar.getInstance();
@@ -128,18 +130,12 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         notifyDataSetChanged();
     }
 
-    /**
-     * Sets the first day of the week.
-     *
-     * @param weekStart which day the week should start on, valid values are
-     *                  {@link Calendar#SUNDAY} through {@link Calendar#SATURDAY}
-     */
     public void setFirstDayOfWeek(int weekStart) {
         mFirstDayOfWeek = weekStart;
         // Update displayed views.
         final int count = mItems.size();
         for (int i = 0; i < count; i++) {
-            final ShowInfoMonthView showInfoMonthView = mItems.get(i).showInfoMonthView;
+            final ShowInfoMonthView showInfoMonthView = (ShowInfoMonthView) mItems.get(i).showInfoMonthView;
             showInfoMonthView.setFirstDayOfWeek(weekStart);
         }
     }
@@ -248,19 +244,42 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     public void setCalendarType(int calendarType) {
         this.calendarType = calendarType;
+        notifyDataSetChanged();
     }
 
     public int getCalendarType() {
         return calendarType;
     }
 
+    public int getMonthViewType() {
+        return monthViewType;
+    }
+
+    public void setMonthViewType(int monthViewType) {
+        this.monthViewType = monthViewType;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public MonthViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ShowInfoMonthView v = new ShowInfoMonthView(parent.getContext());
+        BaseMonthView v;
+        switch (monthViewType) {
+            case BaseMonthView.MonthViewTypeChangeDays:
+                v = new ShowInfoMonthView(parent.getContext());
+                break;
+            case BaseMonthView.MonthViewTypeShowCalendar:
+                v = new ShowInfoMonthView(parent.getContext());
+                break;
+            case BaseMonthView.MonthViewTypesetStartDay:
+                v = new ShowInfoMonthView(parent.getContext());
+                break;
+            default:
+                v = new ShowInfoMonthView(parent.getContext());
+        }
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setPadding(4, 4, 4, 4);
-        MonthViewHolder holder = new MonthViewHolder(-1, parent, v);
+        MonthViewHolder holder = new MonthViewHolder(-1, parent, (ShowInfoMonthView) v);
         mItems.add(holder);
         return holder;
     }
@@ -281,16 +300,12 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     @Override
     public void onViewAttachedToWindow(@NonNull MonthViewHolder holder) {
-//        Log.d("d13", "onViewAttachedToWindow: " + holder.position);
-//        mItems.add(holder);
         int position = holder.position;
 
-//        super.onViewAttachedToWindow(holder);
         holder.showInfoMonthView.setOnDayClickListener(mOnDayClickListener);
 
         final int month = getMonthForPosition(position);
         final int year = getYearForPosition(position);
-//        Log.d("d13", "onBindViewHolder: " + position + " = " + month + " :: " + year);
 
         int selectedDay = 0;
         int enabledDayRangeStart = 0;
@@ -361,7 +376,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
                 }
                 break;
         }
-        Log.d("d13", "onViewAttachedToWindow: " + position + " = " + month + " :: " + year+ " :: "+enabledDayRangeStart+ " :: "+enabledDayRangeEnd);
+        Log.d("d13", "onViewAttachedToWindow: " + position + " = " + month + " :: " + year + " :: " + enabledDayRangeStart + " :: " + enabledDayRangeEnd);
 
         holder.showInfoMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek, enabledDayRangeStart, enabledDayRangeEnd, calendarType);
         onViewDetachedFromWindow(holder);
@@ -399,9 +414,9 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     public class MonthViewHolder extends RecyclerView.ViewHolder {
         public int position;
         public final View container;
-        public final ShowInfoMonthView showInfoMonthView;
+        public final BaseMonthView showInfoMonthView;
 
-        public MonthViewHolder(int position, View container, ShowInfoMonthView showInfoMonthView) {
+        public MonthViewHolder(int position, View container, BaseMonthView showInfoMonthView) {
             super(showInfoMonthView);
             this.position = position;
             this.container = container;

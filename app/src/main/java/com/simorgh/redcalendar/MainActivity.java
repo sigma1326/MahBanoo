@@ -4,18 +4,11 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.util.MonthViewAdapter;
-import com.simorgh.cluecalendar.view.WeekDaysLabelView;
+import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
 
-import java.util.Calendar;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener {
 
@@ -33,30 +26,10 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //            e.printStackTrace();
 //        }
 //        c.setClueData(new ClueView.ClueData(6,26));
-
-//        MonthView monthView = findViewById(R.id.month_view);
-//        monthView.setMonthParams(5, 8, 1397, 1, 1, 31, 1);
-
-        WeekDaysLabelView labelView = findViewById(R.id.weekDaysLabelView);
-        labelView.setCalendarType(CalendarType.PERSIAN);
-
-        final Calendar minDate = Calendar.getInstance();
-        final Calendar maxDate = Calendar.getInstance();
-        minDate.set(Calendar.YEAR, 2018);
-        maxDate.set(Calendar.YEAR, 2019);
-
-        RecyclerView recyclerView = findViewById(R.id.rv);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        MonthViewAdapter adapter = new MonthViewAdapter(this, CalendarType.PERSIAN);
-//        adapter.setRange(minDate,maxDate);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setItemViewCacheSize(0);
-        recyclerView.setDrawingCacheEnabled(false);
-        recyclerView.setAdapter(adapter);
+        CalendarView calendarView = findViewById(R.id.calendarView);
+//        calendarView.setCalendarType(CalendarType.GREGORIAN);
     }
+
 
     @Override
     public void onDayChanged(int day, int dayType, OnViewDataChangedListener listener) {

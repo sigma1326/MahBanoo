@@ -52,8 +52,9 @@ public class BaseMonthView extends View {
 
     protected NumberFormat mDayFormatter;
 
-    protected final int MonthViewTypeShowCalendar = 0;
-    protected final int MonthViewTypeChangeDays = 1;
+    public static final int MonthViewTypeShowCalendar = 0;
+    public static final int MonthViewTypeChangeDays = 1;
+    public static final int MonthViewTypesetStartDay = 2;
 
     public static final int TYPE_RED = 0;
     public static final int TYPE_GREEN = 1;
