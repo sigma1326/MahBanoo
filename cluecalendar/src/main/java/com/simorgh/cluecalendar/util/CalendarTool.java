@@ -77,13 +77,14 @@ public class CalendarTool {
         return "";
     }
 
+    private static Calendar calendar = Calendar.getInstance();
+
     public static Calendar PersianToGregorian(PersianCalendar p) {
-        PersianDate persianDate = new PersianDate();
-        persianDate.setShDay(p.getPersianDay());
-        persianDate.setShMonth(p.getPersianMonth() + 1);
-        persianDate.setShYear(p.getPersianYear());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(persianDate.getTime());
+        try {
+            calendar.setTimeInMillis(p.getTimeInMillis());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return calendar;
     }
 
@@ -345,5 +346,23 @@ public class CalendarTool {
         }
         return "";
     }
+
+    private static Calendar inputGrg;
+
+    public static long getDaysFromDiff(PersianCalendar input, Calendar startDate) {
+        long diffDays = -1;
+        inputGrg = CalendarTool.PersianToGregorian(input);
+        input.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH), 12, 0);
+        startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH), 12, 0);
+        if (input.getTimeInMillis() < startDate.getTimeInMillis()) {
+            return diffDays;
+        }
+        diffDays = (inputGrg.getTimeInMillis() - startDate.getTimeInMillis()) / (60 * 60 * 24 * 1000);
+        if (diffDays < 0) {
+            return diffDays;
+        }
+        return diffDays;
+    }
+
 
 }

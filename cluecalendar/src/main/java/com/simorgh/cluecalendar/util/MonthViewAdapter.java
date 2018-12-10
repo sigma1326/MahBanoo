@@ -18,6 +18,7 @@ package com.simorgh.cluecalendar.util;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,6 +30,8 @@ import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
+import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,7 +47,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private final Calendar mMinDate = Calendar.getInstance();
     private final Calendar mMaxDate = Calendar.getInstance();
 
-    private ArrayList<MonthViewHolder> mItems = new ArrayList<>();
+    private SparseArray<MonthViewHolder> mItems = new SparseArray<>();
 
     private int calendarType;
     private int monthViewType;
@@ -280,7 +283,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setPadding(4, 4, 4, 4);
         MonthViewHolder holder = new MonthViewHolder(-1, parent, (ShowInfoMonthView) v);
-        mItems.add(holder);
+        mItems.append(new Random().nextInt(), holder);
         return holder;
     }
 

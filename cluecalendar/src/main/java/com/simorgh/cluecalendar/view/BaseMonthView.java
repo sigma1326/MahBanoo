@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.simorgh.cluecalendar.R;
 import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
+import com.simorgh.cluecalendar.model.YearMonthDay;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.util.CalendarTool;
@@ -127,7 +128,7 @@ public class BaseMonthView extends View {
         private static final int DEFAULT_RED_COUNT = 4;
         private static final int DEFAULT_GRAY_COUNT = 24;
         private static final int DEFAULT_GREEN_COUNT = 3;
-        private static final int DEFAULT_YELLOW_COUNT = 2;
+        private static final int DEFAULT_YELLOW_COUNT = 5;
         private static final int DEFAULT_GREEN2_INDEX = 7;
 
         private int redCount = DEFAULT_RED_COUNT;
@@ -139,8 +140,10 @@ public class BaseMonthView extends View {
         private int yellowEndIndex = -1;
         private int green2Index = DEFAULT_GREEN2_INDEX;
         private int totalDays = 0;
+        private Calendar startDate;
 
-        public ClueData(int redCount, int grayCount, int yellowCount) {
+        public ClueData(int redCount, int grayCount, int yellowCount, Calendar startDate) {
+            this.startDate = startDate;
             this.redCount = redCount;
             this.grayCount = grayCount;
             this.yellowCount = yellowCount;
@@ -179,7 +182,7 @@ public class BaseMonthView extends View {
             yellowEndIndex = totalDays;
         }
 
-        public ClueData(int redCount, int grayCount) {
+        public ClueData(int redCount, int grayCount, Calendar startDate) {
             this.redCount = redCount;
             this.grayCount = grayCount;
             this.yellowCount = DEFAULT_YELLOW_COUNT;
@@ -292,6 +295,14 @@ public class BaseMonthView extends View {
         public void setYellowEndIndex(int yellowEndIndex) {
             this.yellowEndIndex = yellowEndIndex;
         }
+
+        public Calendar getStartDate() {
+            return startDate;
+        }
+
+        public void setStartDate(Calendar startDate) {
+            this.startDate = startDate;
+        }
     }
 
     public BaseMonthView(Context context) {
@@ -330,7 +341,7 @@ public class BaseMonthView extends View {
         mYearPersian = persianCalendar.getPersianYear();
         mWeekStart = PersianCalendar.SATURDAY;
         mDayOfWeekStart = PersianCalendar.MONDAY;
-        clueData = new ClueData(3, 26, 1);
+        clueData = new ClueData(3, 26, 1, Calendar.getInstance());
         MonthViewType = MonthViewTypeShowCalendar;
     }
 
@@ -443,8 +454,8 @@ public class BaseMonthView extends View {
 
         // We may have been laid out smaller than our preferred size. If so,
         // scale all dimensions to fit.
-        final int measuredPaddedHeight = (int) (getMeasuredHeight() - paddingTop - paddingBottom);
-        final float scaleH = paddedHeight / (float) (measuredPaddedHeight + dp2px(8));
+        final int measuredPaddedHeight = (getMeasuredHeight() - paddingTop - paddingBottom);
+        final float scaleH = paddedHeight / (measuredPaddedHeight + dp2px(8));
         final int monthHeight = (int) (mDesiredMonthHeight * scaleH);
         final int cellWidth = mPaddedWidth / DAYS_IN_WEEK;
         mMonthHeight = monthHeight;
@@ -477,6 +488,9 @@ public class BaseMonthView extends View {
         canvas.drawText(mMonthYearLabel, x, y, mMonthPaint);
     }
 
+    private int[] dayTypes = new int[31];
+    private boolean isFirst = true;
+
     protected void drawDays(Canvas canvas) {
         final TextPaint p = dayTextPaint;
         final int headerHeight = mMonthHeight;
@@ -503,10 +517,23 @@ public class BaseMonthView extends View {
             left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
             right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
             canvas.drawRect(left, top, right, bottom, getDayPaint(day));
+            int dayType;
+//            if (isFirst) {
+//                dayType = getDayType(day);
+//                dayTypes[day - 1] = dayType;
+//                if (day == mEnabledDayEnd) {
+//                    isFirst = false;
+//                }
+//            } else {
+//                dayType = dayTypes[day - 1];
+//            }
             if (getDayType(day) == TYPE_GRAY) {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
             } else {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
+            }
+            if (mMonthPersian == 8 && mYearPersian == 1409) {
+//                Log.d(TAG, "drawDays: " + day + " ::: " + dayType + " ::: " + getDayType(day));
             }
             canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
                     bottom - p.getFontMetrics().bottom, p);
@@ -609,8 +636,10 @@ public class BaseMonthView extends View {
                     break;
             }
         }
+        dayTypes = new int[31];
+        isFirst = true;
 //        requestLayout();
-        invalidate();
+        postInvalidate();
     }
 
     protected boolean sameDay(int day, Calendar today) {
@@ -671,7 +700,7 @@ public class BaseMonthView extends View {
                 // Fall through.
             case MotionEvent.ACTION_CANCEL:
                 // Reset touched day on stream end.
-                invalidate();
+                postInvalidate();
                 break;
         }
         return true;
@@ -767,6 +796,7 @@ public class BaseMonthView extends View {
         return offset;
     }
 
+    PersianCalendar p = new PersianCalendar();
     protected int getDayType(int day) {
         if (day == -1) {
             return TYPE_RED;
@@ -774,6 +804,24 @@ public class BaseMonthView extends View {
         if (clueData == null) {
             return TYPE_RED;
         }
+        long days = 0L;
+        switch (calendarType) {
+            case CalendarType.PERSIAN:
+                p.setPersianDate(persianCalendar.getPersianYear(), persianCalendar.getPersianMonth() + 1, day);
+                days = CalendarTool.getDaysFromDiff(p, clueData.startDate);
+                break;
+            case CalendarType.GREGORIAN:
+                break;
+            case CalendarType.ARABIC:
+                break;
+        }
+        int oldDay = day;
+        if (days >= 0) {
+            day = (int) ((days) % clueData.totalDays) + 1;
+        } else {
+            return TYPE_GRAY;
+        }
+//        Log.d(TAG, "getDayType: " + oldDay + " ::: " + days + " ::: " + ((int) ((days) % clueData.totalDays)+1) + " || " + mMonthPersian + " : " + mYearPersian);
         if (day <= clueData.redCount) {
             return TYPE_RED;
         } else if (day <= clueData.totalDays) {
@@ -815,7 +863,7 @@ public class BaseMonthView extends View {
         } else {
             mWeekStart = mCalendar.getFirstDayOfWeek();
         }
-        invalidate();
+        postInvalidate();
     }
 
     public void setOnDayClickListener(OnDayClickListener listener) {

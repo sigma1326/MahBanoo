@@ -18,6 +18,7 @@ import android.util.Log;
 import com.simorgh.cluecalendar.R;
 import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
+import com.simorgh.cluecalendar.model.YearMonthDay;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.util.CalendarTool;
@@ -26,6 +27,8 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import androidx.annotation.Nullable;
+
+import static com.simorgh.cluecalendar.view.BaseMonthView.TAG;
 
 public class ShowInfoMonthView extends BaseMonthView {
     public static final String TAG = "monthView";
@@ -225,7 +228,7 @@ public class ShowInfoMonthView extends BaseMonthView {
     @Override
     protected void init() {
         super.init();
-        clueData = new BaseMonthView.ClueData(3, 25,2);
+        clueData = new BaseMonthView.ClueData(5, 27, 3, Calendar.getInstance());
     }
 
     @Override
@@ -240,7 +243,6 @@ public class ShowInfoMonthView extends BaseMonthView {
         rectTypeGreen2Color = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type2, resources.getColor(R.color.type_green));
         rectTypeYellowColor = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type4, resources.getColor(R.color.type_yellow));
         rectTypeMarkedColor = resources.getColor(R.color.type_marked);
-
 
 
         //main day number textView
@@ -385,10 +387,9 @@ public class ShowInfoMonthView extends BaseMonthView {
         if (!isValidDayOfMonth(day)) {
             return false;
         }
-        //todo is day marked
-//        if (day % 5 == 0) {
-//            return true;
-//        }
+        if (day % 5 == 0) {
+            return true;
+        }
         return false;
     }
 
@@ -403,7 +404,24 @@ public class ShowInfoMonthView extends BaseMonthView {
             return rectTypeGrayPaint;
         }
         if (clueData == null) {
-            return rectTypeRedPaint;
+            return rectTypeGrayPaint;
+        }
+        long days = 0L;
+        switch (calendarType) {
+            case CalendarType.PERSIAN:
+                PersianCalendar p = new PersianCalendar();
+                p.setPersianDate(persianCalendar.getPersianYear(), persianCalendar.getPersianMonth() + 1, day);
+                days = CalendarTool.getDaysFromDiff(p, clueData.getStartDate());
+                break;
+            case CalendarType.GREGORIAN:
+                break;
+            case CalendarType.ARABIC:
+                break;
+        }
+        if (days >= 0) {
+            day = (int) ((days) % clueData.getTotalDays()) + 1;
+        } else {
+            return rectTypeGrayPaint;
         }
         if (day <= clueData.getRedCount()) {
             return rectTypeRedPaint;

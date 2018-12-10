@@ -64,10 +64,10 @@ public class CalendarView extends LinearLayout {
         adapter = new MonthViewAdapter(getContext(), CalendarType.PERSIAN, BaseMonthView.MonthViewTypeShowCalendar);
 //        adapter.setRange(minDate,maxDate);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setItemViewCacheSize(0);
-        recyclerView.setDrawingCacheEnabled(false);
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setHasFixedSize(true);
+//        recyclerView.setItemViewCacheSize(0);
+//        recyclerView.setDrawingCacheEnabled(false);
         recyclerView.setAdapter(adapter);
     }
 
