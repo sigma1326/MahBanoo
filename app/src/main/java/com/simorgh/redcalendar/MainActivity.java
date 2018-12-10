@@ -3,7 +3,6 @@ package com.simorgh.redcalendar;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //        calendarView.setCalendarType(CalendarType.GREGORIAN);
     }
 
-
+    void test(){}
     @Override
     public void onDayChanged(int day, int dayType, OnViewDataChangedListener listener) {
         String dayS;
