@@ -115,14 +115,7 @@ public class BaseMonthView extends View {
 
     protected OnDayClickListener mOnDayClickListener;
     protected ClueData clueData;
-//    private int WEEKS_IN_MONTH = MAX_WEEKS_IN_MONTH;
-
-    protected final float CELL_LENGTH_RATIO = 8.2f;
-    protected final float CELL_MARGIN_RATIO = 7.5f;
-    protected final float MONTH_NAME_HEIGHT_RATIO = 8.8f;
-    protected final float BOTTOM_MARGIN_RATIO = 24f;
-    protected final int MIN_WIDTH = 360;
-    protected int bottom_margin = -1;
+    private int WEEKS_IN_MONTH = MAX_WEEKS_IN_MONTH;
 
     protected static class ClueData {
         private static final int DEFAULT_RED_COUNT = 4;
@@ -488,9 +481,6 @@ public class BaseMonthView extends View {
         canvas.drawText(mMonthYearLabel, x, y, mMonthPaint);
     }
 
-    private int[] dayTypes = new int[31];
-    private boolean isFirst = true;
-
     protected void drawDays(Canvas canvas) {
         final TextPaint p = dayTextPaint;
         final int headerHeight = mMonthHeight;
@@ -517,27 +507,13 @@ public class BaseMonthView extends View {
             left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
             right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
             canvas.drawRect(left, top, right, bottom, getDayPaint(day));
-            int dayType;
-//            if (isFirst) {
-//                dayType = getDayType(day);
-//                dayTypes[day - 1] = dayType;
-//                if (day == mEnabledDayEnd) {
-//                    isFirst = false;
-//                }
-//            } else {
-//                dayType = dayTypes[day - 1];
-//            }
             if (getDayType(day) == TYPE_GRAY) {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
             } else {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
             }
-            if (mMonthPersian == 8 && mYearPersian == 1409) {
-//                Log.d(TAG, "drawDays: " + day + " ::: " + dayType + " ::: " + getDayType(day));
-            }
             canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
                     bottom - p.getFontMetrics().bottom, p);
-
 
             col++;
             if (col == DAYS_IN_WEEK) {
@@ -551,7 +527,6 @@ public class BaseMonthView extends View {
         return rectTypeGrayPaint;
     }
 
-    private int WEEKS_IN_MONTH = MAX_WEEKS_IN_MONTH;
 
     public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType) {
         mActivatedDay = selectedDay;
@@ -636,8 +611,6 @@ public class BaseMonthView extends View {
                     break;
             }
         }
-        dayTypes = new int[31];
-        isFirst = true;
 //        requestLayout();
         postInvalidate();
     }
@@ -797,6 +770,7 @@ public class BaseMonthView extends View {
     }
 
     PersianCalendar p = new PersianCalendar();
+
     protected int getDayType(int day) {
         if (day == -1) {
             return TYPE_RED;
@@ -815,13 +789,11 @@ public class BaseMonthView extends View {
             case CalendarType.ARABIC:
                 break;
         }
-        int oldDay = day;
         if (days >= 0) {
             day = (int) ((days) % clueData.totalDays) + 1;
         } else {
             return TYPE_GRAY;
         }
-//        Log.d(TAG, "getDayType: " + oldDay + " ::: " + days + " ::: " + ((int) ((days) % clueData.totalDays)+1) + " || " + mMonthPersian + " : " + mYearPersian);
         if (day <= clueData.redCount) {
             return TYPE_RED;
         } else if (day <= clueData.totalDays) {

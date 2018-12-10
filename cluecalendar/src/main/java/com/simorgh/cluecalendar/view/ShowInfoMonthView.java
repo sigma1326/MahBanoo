@@ -47,8 +47,6 @@ public class ShowInfoMonthView extends BaseMonthView {
     private int rectTypeGreen2Color;
     private int rectTypeYellowColor;
     private int rectTypeMarkedColor;
-    private int tvMonthDayNumberTextColorWhite;
-    private int tvMonthDayNumberTextColorBlack;
 
     //Marked Triangle
     private Path markedPath;
@@ -245,9 +243,6 @@ public class ShowInfoMonthView extends BaseMonthView {
         rectTypeMarkedColor = resources.getColor(R.color.type_marked);
 
 
-        //main day number textView
-        tvMonthDayNumberTextColorWhite = resources.getColor(R.color.white);
-        tvMonthDayNumberTextColorBlack = resources.getColor(R.color.black);
 
         typedArray.recycle();
     }
