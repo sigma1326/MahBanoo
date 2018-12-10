@@ -3,13 +3,18 @@ package com.simorgh.redcalendar;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.simorgh.cluecalendar.model.CalendarType;
+import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
 
+import java.util.Calendar;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener {
+public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +30,23 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //            e.printStackTrace();
 //        }
 //        c.setClueData(new ClueView.ClueData(6,26));
-        CalendarView calendarView = findViewById(R.id.calendarView);
-//        calendarView.setCalendarType(CalendarType.GREGORIAN);
+        calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDayClickListener(this);
+        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeShowCalendar);
+        calendarView.setCalendarType(CalendarType.PERSIAN);
+        Calendar min = Calendar.getInstance();
+        min.set(Calendar.YEAR, 2016);
+        min.set(Calendar.MONTH, 0);
+        Calendar max = Calendar.getInstance();
+        max.set(Calendar.YEAR, 2020);
+        max.set(Calendar.MONTH, 11);
+
+        calendarView.setRange(min, max);
+        calendarView.scrollToCurrentDate(Calendar.getInstance());
     }
 
-    void test(){}
+    CalendarView calendarView;
+
     @Override
     public void onDayChanged(int day, int dayType, OnViewDataChangedListener listener) {
         String dayS;
@@ -65,5 +82,10 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     @Override
     public void onButtonChangeClick() {
         Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDayClick(BaseMonthView view, Calendar day) {
+        Toast.makeText(this, " " + CalendarTool.GregorianToPersian(day).getPersianLongDate(), Toast.LENGTH_SHORT).show();
     }
 }

@@ -6,11 +6,14 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
+import com.simorgh.cluecalendar.util.CalendarTool;
 import com.simorgh.cluecalendar.util.MonthViewAdapter;
 
 import java.util.Calendar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -23,6 +26,11 @@ public class CalendarView extends LinearLayout {
     private WeekDaysLabelView labelView;
     private MonthViewAdapter adapter;
     private RecyclerView recyclerView;
+    private BaseMonthView.OnDayClickListener onDayClickListener;
+    private RecyclerView.LayoutManager layoutManager;
+    private Calendar min;
+    private Calendar max;
+
 
     public CalendarView(Context context) {
         super(context);
@@ -52,22 +60,16 @@ public class CalendarView extends LinearLayout {
         labelView.setCalendarType(CalendarType.PERSIAN);
         addView(labelView);
 
-        final Calendar minDate = Calendar.getInstance();
-        final Calendar maxDate = Calendar.getInstance();
-        minDate.set(Calendar.YEAR, 2018);
-        maxDate.set(Calendar.YEAR, 2019);
-
         recyclerView = new RecyclerView(getContext());
         addView(recyclerView);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MonthViewAdapter(getContext(), CalendarType.PERSIAN, BaseMonthView.MonthViewTypeShowCalendar);
-//        adapter.setRange(minDate,maxDate);
+        adapter = new MonthViewAdapter(getContext(), calendarType, monthViewType);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-//        recyclerView.setItemViewCacheSize(0);
-//        recyclerView.setDrawingCacheEnabled(false);
+        recyclerView.setItemViewCacheSize(0);
+        recyclerView.setDrawingCacheEnabled(false);
         recyclerView.setAdapter(adapter);
     }
 
@@ -88,5 +90,45 @@ public class CalendarView extends LinearLayout {
     public void setMonthViewType(int monthViewType) {
         this.monthViewType = monthViewType;
         adapter.setMonthViewType(monthViewType);
+    }
+
+    public BaseMonthView.OnDayClickListener getOnDayClickListener() {
+        return onDayClickListener;
+    }
+
+    public void setOnDayClickListener(BaseMonthView.OnDayClickListener onDayClickListener) {
+        this.onDayClickListener = onDayClickListener;
+        adapter.setOnDayClickListener(onDayClickListener);
+    }
+
+    public void setRange(@NonNull Calendar min, @NonNull Calendar max) {
+        this.min = min;
+        this.max = max;
+        adapter.setRange(min, max);
+    }
+
+    public void scrollToCurrentDate(Calendar now) {
+        if (layoutManager != null) {
+            int position = 0;
+            switch (calendarType) {
+                case CalendarType.GREGORIAN:
+                    int diffYear = now.get(Calendar.YEAR) - min.get(Calendar.YEAR);
+                    int diffMonth = now.get(Calendar.MONTH) - min.get(Calendar.MONTH);
+                    position = diffYear * 12 + diffMonth;
+                    break;
+                case CalendarType.PERSIAN:
+                    diffYear = CalendarTool.GregorianToPersian(now).getPersianYear() - CalendarTool.GregorianToPersian(min).getPersianYear();
+                    diffMonth = CalendarTool.GregorianToPersian(now).getPersianMonth() - CalendarTool.GregorianToPersian(min).getPersianMonth();
+                    position = diffYear * 12 + diffMonth;
+                    break;
+                case CalendarType.ARABIC:
+                    diffYear = CalendarTool.GregorianToHijri(now).get(UmmalquraCalendar.YEAR) - CalendarTool.GregorianToHijri(min).get(UmmalquraCalendar.YEAR);
+                    diffMonth = CalendarTool.GregorianToHijri(now).get(UmmalquraCalendar.MONTH) - CalendarTool.GregorianToHijri(min).get(UmmalquraCalendar.MONTH);
+                    position = diffYear * 12 + diffMonth;
+                    break;
+
+            }
+            layoutManager.scrollToPosition(position);
+        }
     }
 }

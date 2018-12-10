@@ -16,19 +16,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import com.simorgh.cluecalendar.R;
-import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.model.YearMonthDay;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
-import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.util.CalendarTool;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import androidx.annotation.Nullable;
-
-import static com.simorgh.cluecalendar.view.BaseMonthView.TAG;
 
 public class ShowInfoMonthView extends BaseMonthView {
     public static final String TAG = "monthView";
@@ -51,13 +45,8 @@ public class ShowInfoMonthView extends BaseMonthView {
     //Marked Triangle
     private Path markedPath;
 
+    private static Bitmap icon;
 
-    private final float CELL_LENGTH_RATIO = 8.2f;
-    private final float CELL_MARGIN_RATIO = 7.5f;
-    private final float MONTH_NAME_HEIGHT_RATIO = 8.8f;
-    private final float BOTTOM_MARGIN_RATIO = 24f;
-    private final int MIN_WIDTH = 360;
-    private int bottom_margin = -1;
 
     public static class ClueData {
         private static final int DEFAULT_RED_COUNT = 4;
@@ -236,12 +225,11 @@ public class ShowInfoMonthView extends BaseMonthView {
         Resources resources = getResources();
 
         //circle colors
-        rectTypeRedColor = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type1, resources.getColor(R.color.type_red));
-        rectTypeGreenColor = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type2, resources.getColor(R.color.type_green));
-        rectTypeGreen2Color = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type2, resources.getColor(R.color.type_green));
-        rectTypeYellowColor = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type4, resources.getColor(R.color.type_yellow));
+        rectTypeRedColor = resources.getColor(R.color.type_red);
+        rectTypeGreenColor = resources.getColor(R.color.type_green);
+        rectTypeGreen2Color = resources.getColor(R.color.type_green);
+        rectTypeYellowColor = resources.getColor(R.color.type_yellow);
         rectTypeMarkedColor = resources.getColor(R.color.type_marked);
-
 
 
         typedArray.recycle();
@@ -251,8 +239,7 @@ public class ShowInfoMonthView extends BaseMonthView {
     protected void initPaints() {
         super.initPaints();
 
-        final Resources res = getResources();
-
+        markedPath = new Path();
 
         mDaySelectorPaint = new Paint();
         mDaySelectorPaint.setAntiAlias(true);
@@ -295,94 +282,70 @@ public class ShowInfoMonthView extends BaseMonthView {
         rectTypeMarkedPaint.setStyle(Paint.Style.FILL);
         rectTypeMarkedPaint.setColor(rectTypeMarkedColor);
 
+        icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
     }
 
-//    @Override
-//    protected void drawDays(Canvas canvas) {
-//        super.drawDays(canvas);
-//        final TextPaint p = dayTextPaint;
-//        final int headerHeight = mMonthHeight;
-//        final int rowHeight = mDayHeight;
-//        final int colWidth = mCellWidth;
-//
-//        // Vertically centered within the month header height.
-//        final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
-//        final float y = (mMonthHeight + lineHeight) * 3f + dp2px(20);
-//
-//        int rowCenter = (int) (y + rowHeight / 2);
-//        int left;
-//        int right;
-//        int top;
-//        int bottom;
-//
-//        Log.d(TAG, "drawDays: " + findDayOffset());
-//
-//        for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
-//            final int colCenter = colWidth * col + colWidth / 2;
-//            final int colCenterRtl;
-//            if (shouldBeRTL()) {
-//                colCenterRtl = mPaddedWidth - colCenter;
-//            } else {
-//                colCenterRtl = colCenter;
-//            }
-//
-//
-//            final boolean isDayEnabled = isDayEnabled(day);
-//            final boolean isDayActivated = mActivatedDay == day;
-//            final boolean isDayToday = mToday == day;
-//
-//            top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
-//            bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
-//            left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
-//            right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
-//            if (isDayEnabled) {
-//
-//            }
-//            if (isDayActivated) {
-//
-//            }
-//            if (isDayToday && !isDayActivated) {
-//            } else if (isDayToday) {
-//            } else {
-//                if (isDayEnabled && isDayActivated) {
-//                } else {
-//                }
-//            }
-//            Log.d(TAG, "drawDays: " + getDayType(day));
-//            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
-//            if (getDayType(day) == TYPE_GRAY) {
-//                dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
-//            } else {
-//                dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
-//            }
-//            canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
-//                    bottom - p.getFontMetrics().bottom, p);
-//
-//            if (isDayMarked(day)) {
-//                markedPath.moveTo(left, top);
-//                markedPath.lineTo(left + dp2px(14), top);
-//                markedPath.lineTo(left, top + dp2px(14));
-//                markedPath.lineTo(left, top);
+    @Override
+    protected void drawDays(Canvas canvas) {
+        final TextPaint p = dayTextPaint;
+        final int headerHeight = mMonthHeight;
+        final int rowHeight = mDayHeight;
+        final int colWidth = mCellWidth;
+
+        int rowCenter = (int) (headerHeight + dp2px(8) + rowHeight / 2f);
+        int left;
+        int right;
+        int top;
+        int bottom;
+
+        for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
+            final int colCenter = colWidth * col + colWidth / 2;
+            final int colCenterRtl;
+            if (shouldBeRTL()) {
+                colCenterRtl = mPaddedWidth - colCenter;
+            } else {
+                colCenterRtl = colCenter;
+            }
+
+            top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
+            bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
+            left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
+            right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
+            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
+            int dayType = getDayType(day);
+            if (dayType == TYPE_GRAY) {
+                dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
+            } else {
+                dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
+            }
+            canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
+                    bottom - p.getFontMetrics().bottom, p);
+
+            if (isDayMarked(day)) {
+                markedPath.moveTo(left, top);
+                markedPath.lineTo(left + dp2px(14), top);
+                markedPath.lineTo(left, top + dp2px(14));
+                markedPath.lineTo(left, top);
 //                canvas.drawPath(markedPath, rectTypeMarkedPaint);
-//            }
-//
-//            if (getDayType(day) == TYPE_GREEN2) {
-//                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-//                canvas.drawBitmap(icon, left + dp2px(7), top + dp2px(7), rectTypeGreenPaint);
-//            }
-//            col++;
-//            if (col == DAYS_IN_WEEK) {
-//                col = 0;
-//                rowCenter += rowHeight;
-//            }
-//        }
-//    }
+            }
+
+            if (dayType == TYPE_GREEN2) {
+                canvas.drawBitmap(icon, left + dp2px(7), top + dp2px(7), rectTypeGreenPaint);
+            }
+
+            col++;
+            if (col == DAYS_IN_WEEK) {
+                col = 0;
+                rowCenter += rowHeight;
+            }
+        }
+    }
 
     private boolean isDayMarked(int day) {
         if (!isValidDayOfMonth(day)) {
             return false;
         }
-        if (day % 5 == 0) {
+        if (day % 2 == 0) {
             return true;
         }
         return false;

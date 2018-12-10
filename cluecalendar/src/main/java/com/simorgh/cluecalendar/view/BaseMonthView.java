@@ -323,21 +323,6 @@ public class BaseMonthView extends View {
         init();
     }
 
-    private void fakeInit() {
-        calendarType = 1;
-        mDaysInMonth = 31;
-        mEnabledDayEnd = 31;
-        mEnabledDayStart = 1;
-        mMonth = mCalendar.get(Calendar.MONTH);
-        mYear = mCalendar.get(Calendar.YEAR);
-        mMonthPersian = persianCalendar.getPersianMonth();
-        mYearPersian = persianCalendar.getPersianYear();
-        mWeekStart = PersianCalendar.SATURDAY;
-        mDayOfWeekStart = PersianCalendar.MONDAY;
-        clueData = new ClueData(3, 26, 1, Calendar.getInstance());
-        MonthViewType = MonthViewTypeShowCalendar;
-    }
-
     protected void initAttrs(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseMonthView);
         Resources resources = getResources();
@@ -736,7 +721,7 @@ public class BaseMonthView extends View {
             }
             mOnDayClickListener.onDayClick(this, date);
         }
-        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
         return true;
     }
 
