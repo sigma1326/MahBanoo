@@ -704,7 +704,6 @@ public class BaseMonthView extends View {
         if (!isValidDayOfMonth(day)) {
             return -1;
         }
-        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
         return day;
     }
 
@@ -734,6 +733,7 @@ public class BaseMonthView extends View {
             }
             mOnDayClickListener.onDayClick(this, date);
         }
+        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
         return true;
     }
 

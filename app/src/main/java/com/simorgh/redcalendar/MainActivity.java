@@ -1,7 +1,6 @@
 package com.simorgh.redcalendar;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.simorgh.cluecalendar.model.CalendarType;
