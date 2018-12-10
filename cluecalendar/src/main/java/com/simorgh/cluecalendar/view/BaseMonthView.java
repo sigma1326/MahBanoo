@@ -696,9 +696,9 @@ public class BaseMonthView extends View {
     }
 
     protected boolean onDayClicked(int day) {
-        if (!isValidDayOfMonth(day) || !isDayEnabled(day)) {
-            return false;
-        }
+//        if (!isValidDayOfMonth(day) || !isDayEnabled(day)) {
+//            return false;
+//        }
 
         if (mOnDayClickListener != null) {
             Calendar date = Calendar.getInstance();

@@ -46,6 +46,7 @@ public class ShowInfoMonthView extends BaseMonthView {
     private Path markedPath;
 
     private static Bitmap icon;
+    private IsDayMarkedListener isDayMarkedListener;
 
 
     public static class ClueData {
@@ -326,7 +327,7 @@ public class ShowInfoMonthView extends BaseMonthView {
                 markedPath.lineTo(left + dp2px(14), top);
                 markedPath.lineTo(left, top + dp2px(14));
                 markedPath.lineTo(left, top);
-//                canvas.drawPath(markedPath, rectTypeMarkedPaint);
+                canvas.drawPath(markedPath, rectTypeMarkedPaint);
             }
 
             if (dayType == TYPE_GREEN2) {
@@ -345,8 +346,8 @@ public class ShowInfoMonthView extends BaseMonthView {
         if (!isValidDayOfMonth(day)) {
             return false;
         }
-        if (day % 2 == 0) {
-            return true;
+        if (isDayMarkedListener != null) {
+            return isDayMarkedListener.isDayMarked(day);
         }
         return false;
     }
@@ -396,4 +397,15 @@ public class ShowInfoMonthView extends BaseMonthView {
         return rectTypeGrayPaint;
     }
 
+    public IsDayMarkedListener getIsDayMarkedListener() {
+        return isDayMarkedListener;
+    }
+
+    public void setIsDayMarkedListener(IsDayMarkedListener isDayMarkedListener) {
+        this.isDayMarkedListener = isDayMarkedListener;
+    }
+
+    public interface IsDayMarkedListener{
+        boolean isDayMarked(int day);
+    }
 }

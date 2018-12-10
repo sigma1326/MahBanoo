@@ -7,6 +7,7 @@ import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.util.CalendarTool;
 import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.CalendarView;
+import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
 
@@ -14,7 +15,7 @@ import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener {
+public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 
         calendarView.setRange(min, max);
         calendarView.scrollToCurrentDate(Calendar.getInstance());
+        calendarView.setIsDayMarkedListener(this);
     }
 
     CalendarView calendarView;
@@ -87,5 +89,10 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
         Toast.makeText(this, " " + CalendarTool.GregorianToPersian(day).getPersianLongDate(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean isDayMarked(int day) {
+        return day % 6 == 0;
     }
 }

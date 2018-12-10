@@ -63,6 +63,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     private int mCount;
     private int mFirstDayOfWeek;
+    private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
 
 
     public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
@@ -268,6 +269,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         }
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setPadding(4, 4, 4, 4);
+        ((ShowInfoMonthView) v).setIsDayMarkedListener(isDayMarkedListener);
         MonthViewHolder holder = new MonthViewHolder(-1, parent, (ShowInfoMonthView) v);
         holder.showInfoMonthView.setOnDayClickListener(onDayClickListener);
         mItems.append(new Random().nextInt(), holder);
@@ -365,9 +367,26 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
                 break;
         }
 //        Log.d(TAG, "onViewAttachedToWindow: " + position + " = " + month + " :: " + year + " :: " + enabledDayRangeStart + " :: " + enabledDayRangeEnd);
-
+        switch (monthViewType) {
+            case BaseMonthView.MonthViewTypeChangeDays:
+                break;
+            case BaseMonthView.MonthViewTypeShowCalendar:
+                ((ShowInfoMonthView) holder.showInfoMonthView).setIsDayMarkedListener(isDayMarkedListener);
+                break;
+            case BaseMonthView.MonthViewTypesetStartDay:
+                break;
+            default:
+        }
         holder.showInfoMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek, enabledDayRangeStart, enabledDayRangeEnd, calendarType);
         onViewDetachedFromWindow(holder);
+    }
+
+    public ShowInfoMonthView.IsDayMarkedListener getIsDayMarkedListener() {
+        return isDayMarkedListener;
+    }
+
+    public void setIsDayMarkedListener(ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener) {
+        this.isDayMarkedListener = isDayMarkedListener;
     }
 
     @Override

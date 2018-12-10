@@ -30,6 +30,7 @@ public class CalendarView extends LinearLayout {
     private RecyclerView.LayoutManager layoutManager;
     private Calendar min;
     private Calendar max;
+    private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
 
 
     public CalendarView(Context context) {
@@ -130,5 +131,14 @@ public class CalendarView extends LinearLayout {
             }
             layoutManager.scrollToPosition(position);
         }
+    }
+
+    public ShowInfoMonthView.IsDayMarkedListener getIsDayMarkedListener() {
+        return isDayMarkedListener;
+    }
+
+    public void setIsDayMarkedListener(ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener) {
+        this.isDayMarkedListener = isDayMarkedListener;
+        adapter.setIsDayMarkedListener(isDayMarkedListener);
     }
 }
