@@ -766,8 +766,9 @@ public class BaseMonthView extends View {
         long days = 0L;
         switch (calendarType) {
             case CalendarType.PERSIAN:
+                PersianCalendar p = new PersianCalendar();
                 p.setPersianDate(persianCalendar.getPersianYear(), persianCalendar.getPersianMonth() + 1, day);
-                days = CalendarTool.getDaysFromDiff(p, clueData.startDate);
+                days = CalendarTool.getDaysFromDiff(p, clueData.getStartDate());
                 break;
             case CalendarType.GREGORIAN:
                 break;
@@ -775,7 +776,7 @@ public class BaseMonthView extends View {
                 break;
         }
         if (days >= 0) {
-            day = (int) ((days) % clueData.totalDays) + 1;
+            day = (int) ((days) % clueData.getTotalDays()) + 1;
         } else {
             return TYPE_GRAY;
         }

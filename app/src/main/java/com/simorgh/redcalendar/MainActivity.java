@@ -93,6 +93,6 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 
     @Override
     public boolean isDayMarked(int day) {
-        return day % 6 == 0;
+        return day % 5 == 0;
     }
 }
