@@ -23,9 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CalendarView extends LinearLayout {
     private int calendarType;
     private int monthViewType;
-    private WeekDaysLabelView labelView;
+    private WeekDaysLabelView weekDaysLabelView;
     private MonthViewAdapter adapter;
-    private RecyclerView recyclerView;
     private BaseMonthView.OnDayClickListener onDayClickListener;
     private RecyclerView.LayoutManager layoutManager;
     private Calendar min;
@@ -58,11 +57,11 @@ public class CalendarView extends LinearLayout {
 
     private void init() {
         setOrientation(VERTICAL);
-        labelView = new WeekDaysLabelView(getContext());
-        labelView.setCalendarType(CalendarType.PERSIAN);
-        addView(labelView);
+        weekDaysLabelView = new WeekDaysLabelView(getContext());
+        weekDaysLabelView.setCalendarType(CalendarType.PERSIAN);
+        addView(weekDaysLabelView);
 
-        recyclerView = new RecyclerView(getContext());
+        RecyclerView recyclerView = new RecyclerView(getContext());
         addView(recyclerView);
         layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -81,7 +80,7 @@ public class CalendarView extends LinearLayout {
 
     public void setCalendarType(int calendarType) {
         this.calendarType = calendarType;
-        labelView.setCalendarType(calendarType);
+        weekDaysLabelView.setCalendarType(calendarType);
         adapter.setCalendarType(calendarType);
     }
 

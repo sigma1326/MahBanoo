@@ -31,11 +31,13 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //            e.printStackTrace();
 //        }
 //        c.setClueData(new ClueView.ClueData(6,26));
-        calendarView = findViewById(R.id.calendarView);
+
+
+        CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDayClickListener(this);
         calendarView.setMonthViewType(BaseMonthView.MonthViewTypeChangeDays);
         calendarView.setCalendarType(CalendarType.PERSIAN);
-        calendarView.setClueData(new BaseMonthView.ClueData(3,26,4,Calendar.getInstance()));
+        calendarView.setClueData(new BaseMonthView.ClueData(5, 28, 4, Calendar.getInstance()));
         Calendar min = Calendar.getInstance();
         min.set(Calendar.YEAR, 2018);
         min.set(Calendar.MONTH, 0);
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
         calendarView.setIsDayMarkedListener(this);
     }
 
-    CalendarView calendarView;
 
     @Override
     public void onDayChanged(int day, int dayType, OnViewDataChangedListener listener) {
