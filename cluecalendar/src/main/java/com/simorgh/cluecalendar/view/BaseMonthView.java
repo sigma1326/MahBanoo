@@ -11,7 +11,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -21,6 +20,7 @@ import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.cluecalendar.util.ClueData;
 import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
 
@@ -34,12 +34,15 @@ import androidx.core.view.ViewCompat;
 public class BaseMonthView extends View {
     public static final String TAG = "baseMonthView";
     protected int calendarType;
-    protected int MonthViewType;
+    protected int monthViewType;
     protected static final int DAYS_IN_WEEK = 7;
     protected static final int MAX_WEEKS_IN_MONTH = 6;
 
     protected static final int DEFAULT_SELECTED_DAY = -1;
     protected static final int DEFAULT_WEEK_START = Calendar.SUNDAY;
+
+    private int weeksInMonth = MAX_WEEKS_IN_MONTH;
+
 
     protected TextPaint mMonthPaint;
     protected TextPaint dayTextPaint;
@@ -106,6 +109,8 @@ public class BaseMonthView extends View {
     protected UmmalquraCalendar hijriCalendar = new UmmalquraCalendar();
     protected PersianDate persianDate = new PersianDate();
     protected Locale mLocale;
+    protected Calendar date = Calendar.getInstance();
+
 
     protected OnDayClickListener mOnDayClickListener;
     protected OnDaySelectedListener onDaySelectedListener;
@@ -113,188 +118,6 @@ public class BaseMonthView extends View {
     protected IsDayInRangeSelectedListener isDayInRangeSelectedListener;
 
     protected ClueData clueData;
-    private int WEEKS_IN_MONTH = MAX_WEEKS_IN_MONTH;
-
-    public static class ClueData {
-        private static final int DEFAULT_RED_COUNT = 4;
-        private static final int DEFAULT_GRAY_COUNT = 24;
-        private static final int DEFAULT_GREEN_COUNT = 3;
-        private static final int DEFAULT_YELLOW_COUNT = 5;
-        private static final int DEFAULT_GREEN2_INDEX = 7;
-
-        private int redCount = DEFAULT_RED_COUNT;
-        private int grayCount = DEFAULT_GRAY_COUNT;
-        private int greenStartIndex = DEFAULT_GREEN2_INDEX - 1;
-        private int greenEndIndex = DEFAULT_GREEN2_INDEX + 1;
-        private int yellowCount = DEFAULT_YELLOW_COUNT;
-        private int yellowStartIndex = -1;
-        private int yellowEndIndex = -1;
-        private int green2Index = DEFAULT_GREEN2_INDEX;
-        private int totalDays = 0;
-        private Calendar startDate;
-
-        public ClueData(int redCount, int grayCount, int yellowCount, Calendar startDate) {
-            this.startDate = startDate;
-            this.redCount = redCount;
-            this.grayCount = grayCount;
-            this.yellowCount = yellowCount;
-            this.totalDays = redCount + grayCount;
-            switch (grayCount) {
-                case 21:
-                    green2Index = redCount + 7;
-                    break;
-                case 22:
-                    green2Index = redCount + 8;
-                    break;
-                case 23:
-                    green2Index = redCount + 9;
-                    break;
-                case 24:
-                    green2Index = redCount + 10;
-                    break;
-                case 25:
-                    green2Index = redCount + 11;
-                    break;
-                case 26:
-                    green2Index = redCount + 12;
-                    break;
-                case 27:
-                    green2Index = redCount + 13;
-                    break;
-                case 28:
-                    green2Index = redCount + 14;
-                    break;
-                default:
-                    Log.d(TAG, "ClueData: invalid cycle length ");
-            }
-            greenStartIndex = green2Index - 1;
-            greenEndIndex = green2Index + 1;
-            yellowStartIndex = totalDays - yellowCount + 1;
-            yellowEndIndex = totalDays;
-        }
-
-        public ClueData(int redCount, int grayCount, Calendar startDate) {
-            this.redCount = redCount;
-            this.grayCount = grayCount;
-            this.yellowCount = DEFAULT_YELLOW_COUNT;
-            this.totalDays = redCount + grayCount;
-            switch (grayCount) {
-                case 21:
-                    green2Index = redCount + 7;
-                    break;
-                case 22:
-                    green2Index = redCount + 8;
-                    break;
-                case 23:
-                    green2Index = redCount + 9;
-                    break;
-                case 24:
-                    green2Index = redCount + 10;
-                    break;
-                case 25:
-                    green2Index = redCount + 11;
-                    break;
-                case 26:
-                    green2Index = redCount + 12;
-                    break;
-                case 27:
-                    green2Index = redCount + 13;
-                    break;
-                case 28:
-                    green2Index = redCount + 14;
-                    break;
-                default:
-                    Log.d(TAG, "ClueData: invalid cycle length ");
-            }
-            greenStartIndex = green2Index - 1;
-            greenEndIndex = green2Index + 1;
-            yellowStartIndex = totalDays - yellowCount + 1;
-            yellowEndIndex = totalDays;
-        }
-
-        public ClueData() {
-        }
-
-        public int getRedCount() {
-            return redCount;
-        }
-
-        public void setRedCount(int redCount) {
-            this.redCount = redCount;
-        }
-
-        public int getGrayCount() {
-            return grayCount;
-        }
-
-        public void setGrayCount(int grayCount) {
-            this.grayCount = grayCount;
-        }
-
-        public int getYellowCount() {
-            return yellowCount;
-        }
-
-        public void setYellowCount(int yellowCount) {
-            this.yellowCount = yellowCount;
-        }
-
-        public int getGreen2Index() {
-            return green2Index;
-        }
-
-        public void setGreen2Index(int green2Index) {
-            this.green2Index = green2Index;
-        }
-
-        public int getTotalDays() {
-            return totalDays;
-        }
-
-        public void setTotalDays(int totalDays) {
-            this.totalDays = totalDays;
-        }
-
-        public int getGreenStartIndex() {
-            return greenStartIndex;
-        }
-
-        public void setGreenStartIndex(int greenStartIndex) {
-            this.greenStartIndex = greenStartIndex;
-        }
-
-        public int getGreenEndIndex() {
-            return greenEndIndex;
-        }
-
-        public void setGreenEndIndex(int greenEndIndex) {
-            this.greenEndIndex = greenEndIndex;
-        }
-
-        public int getYellowStartIndex() {
-            return yellowStartIndex;
-        }
-
-        public void setYellowStartIndex(int yellowStartIndex) {
-            this.yellowStartIndex = yellowStartIndex;
-        }
-
-        public int getYellowEndIndex() {
-            return yellowEndIndex;
-        }
-
-        public void setYellowEndIndex(int yellowEndIndex) {
-            this.yellowEndIndex = yellowEndIndex;
-        }
-
-        public Calendar getStartDate() {
-            return startDate;
-        }
-
-        public void setStartDate(Calendar startDate) {
-            this.startDate = startDate;
-        }
-    }
 
     public BaseMonthView(Context context) {
         super(context);
@@ -343,7 +166,6 @@ public class BaseMonthView extends View {
     }
 
     protected void init() {
-
         mCalendar = Calendar.getInstance(mLocale);
         persianCalendar = new PersianCalendar(mCalendar.getTimeInMillis());
         hijriCalendar = new UmmalquraCalendar();
@@ -395,7 +217,7 @@ public class BaseMonthView extends View {
         int padEnd = ViewCompat.getPaddingEnd(this);
 
 
-        int preferredHeight = (int) ((mDesiredDayHeight * WEEKS_IN_MONTH + mDesiredMonthHeight
+        int preferredHeight = (int) ((mDesiredDayHeight * weeksInMonth + mDesiredMonthHeight
                 + getPaddingTop() + getPaddingBottom()) + dp2px(8));
         final int preferredWidth = mDesiredCellWidth * DAYS_IN_WEEK + padStart + padEnd;
         final int resolvedWidth = resolveSize(preferredWidth, widthMeasureSpec);
@@ -573,10 +395,10 @@ public class BaseMonthView extends View {
                 case 3:
                 case 4:
                 case 5:
-                    WEEKS_IN_MONTH = 5;
+                    weeksInMonth = 5;
                     break;
                 case 6:
-                    WEEKS_IN_MONTH = 6;
+                    weeksInMonth = 6;
                     break;
             }
         } else if (CalendarTool.getDaysInMonth(month, year, calendarType) == 31) {
@@ -586,11 +408,11 @@ public class BaseMonthView extends View {
                 case 2:
                 case 3:
                 case 4:
-                    WEEKS_IN_MONTH = 5;
+                    weeksInMonth = 5;
                     break;
                 case 5:
                 case 6:
-                    WEEKS_IN_MONTH = 6;
+                    weeksInMonth = 6;
                     break;
             }
         }
@@ -754,6 +576,26 @@ public class BaseMonthView extends View {
         return offset;
     }
 
+    protected Calendar getCalendarForDay(int day) {
+        switch (calendarType) {
+            case CalendarType.PERSIAN:
+                persianDate.setShYear(mYearPersian);
+                persianDate.setShMonth(mMonthPersian + 1);
+                persianDate.setShDay(day);
+                date = CalendarTool.PersianToGregorian(persianDate);
+                break;
+            case CalendarType.ARABIC:
+                hijriCalendar.set(UmmalquraCalendar.YEAR, mYearHijri);
+                hijriCalendar.set(UmmalquraCalendar.MONTH, mMonthHijri);
+                hijriCalendar.set(UmmalquraCalendar.DAY_OF_MONTH, day);
+                date = CalendarTool.HijriToGregorian(hijriCalendar);
+                break;
+            case CalendarType.GREGORIAN:
+                date.set(mYear, mMonth, day);
+                break;
+        }
+        return date;
+    }
 
     protected int getDayType(int day) {
         if (day == -1) {
@@ -779,15 +621,15 @@ public class BaseMonthView extends View {
         } else {
             return TYPE_GRAY;
         }
-        if (day <= clueData.redCount) {
+        if (day <= clueData.getRedCount()) {
             return TYPE_RED;
-        } else if (day <= clueData.totalDays) {
-            if (day >= clueData.greenStartIndex && day <= clueData.greenEndIndex) {
-                if (day == clueData.green2Index) {
+        } else if (day <= clueData.getTotalDays()) {
+            if (day >= clueData.getGreenStartIndex() && day <= clueData.getGreenEndIndex()) {
+                if (day == clueData.getGreen2Index()) {
                     return TYPE_GREEN2;
                 }
                 return TYPE_GREEN;
-            } else if (day >= clueData.yellowStartIndex && day <= clueData.yellowEndIndex) {
+            } else if (day >= clueData.getYellowStartIndex() && day <= clueData.getYellowEndIndex()) {
                 return TYPE_YELLOW;
             }
         }
@@ -857,7 +699,6 @@ public class BaseMonthView extends View {
         return false;
     }
 
-
     public ClueData getClueData() {
         return clueData;
     }
@@ -867,12 +708,6 @@ public class BaseMonthView extends View {
         postInvalidate();
     }
 
-    /**
-     * Handles callbacks when the user clicks on a time object.
-     */
-    public interface OnDayClickListener {
-        void onDayClick(BaseMonthView view, Calendar day);
-    }
 
     protected float dp2px(float dp) {
         return SizeConverter.dpToPx(getContext(), dp);
@@ -901,6 +736,10 @@ public class BaseMonthView extends View {
 
     public void setIsDayInRangeSelectedListener(IsDayInRangeSelectedListener isDayInRangeSelectedListener) {
         this.isDayInRangeSelectedListener = isDayInRangeSelectedListener;
+    }
+
+    public interface OnDayClickListener {
+        void onDayClick(BaseMonthView view, Calendar day);
     }
 
     public interface OnDaySelectedListener {

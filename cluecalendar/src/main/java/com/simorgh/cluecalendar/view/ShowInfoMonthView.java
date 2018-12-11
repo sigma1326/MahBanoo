@@ -7,28 +7,21 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.simorgh.cluecalendar.R;
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.util.CalendarTool;
 
-import java.util.Calendar;
-
 import androidx.annotation.Nullable;
 
 public class ShowInfoMonthView extends BaseMonthView {
     public static final String TAG = "monthView";
-    private Paint dayBkgPaint;
-    private Paint mDaySelectorPaint;
-
 
     //rectangle colors
     private Paint rectTypeRedPaint;
@@ -37,7 +30,6 @@ public class ShowInfoMonthView extends BaseMonthView {
     private Paint rectTypeMarkedPaint;
     private int rectTypeRedColor;
     private int rectTypeGreenColor;
-    private int rectTypeGreen2Color;
     private int rectTypeYellowColor;
     private int rectTypeMarkedColor;
 
@@ -75,7 +67,6 @@ public class ShowInfoMonthView extends BaseMonthView {
     @Override
     protected void init() {
         super.init();
-        clueData = new BaseMonthView.ClueData(5, 27, 3, Calendar.getInstance());
     }
 
     @Override
@@ -87,7 +78,6 @@ public class ShowInfoMonthView extends BaseMonthView {
         //circle colors
         rectTypeRedColor = resources.getColor(R.color.type_red);
         rectTypeGreenColor = resources.getColor(R.color.type_green);
-        rectTypeGreen2Color = resources.getColor(R.color.type_green);
         rectTypeYellowColor = resources.getColor(R.color.type_yellow);
         rectTypeMarkedColor = resources.getColor(R.color.type_marked);
 
@@ -100,17 +90,6 @@ public class ShowInfoMonthView extends BaseMonthView {
         super.initPaints();
 
         markedPath = new Path();
-
-        mDaySelectorPaint = new Paint();
-        mDaySelectorPaint.setAntiAlias(true);
-        mDaySelectorPaint.setStyle(Paint.Style.FILL);
-        mDaySelectorPaint.setStrokeWidth(3);
-        mDaySelectorPaint.setColor(Color.WHITE);
-
-
-        dayBkgPaint = new Paint();
-        dayBkgPaint.setAntiAlias(true);
-        dayBkgPaint.setStyle(Paint.Style.FILL);
 
         rectTypeRedPaint = new Paint();
         rectTypeRedPaint.setAntiAlias(true);
@@ -259,7 +238,7 @@ public class ShowInfoMonthView extends BaseMonthView {
         this.isDayMarkedListener = isDayMarkedListener;
     }
 
-    public interface IsDayMarkedListener{
+    public interface IsDayMarkedListener {
         boolean isDayMarked(int day);
     }
 }

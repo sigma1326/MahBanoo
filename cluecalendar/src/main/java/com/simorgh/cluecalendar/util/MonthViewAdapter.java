@@ -17,7 +17,6 @@
 package com.simorgh.cluecalendar.util;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -33,10 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static com.simorgh.cluecalendar.view.BaseMonthView.TAG;
 
 
 /**
@@ -55,13 +51,13 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private int monthViewType;
 
 
-    private Calendar mSelectedDay = Calendar.getInstance();
+    private Calendar today = Calendar.getInstance();
     private Calendar selectedDay = Calendar.getInstance();
-    private PersianCalendar persianCalendar;
+
     private PersianCalendar minP;
     private PersianCalendar p1;
     private PersianCalendar p2;
-    private UmmalquraCalendar hijriCalendar;
+
     private UmmalquraCalendar minH;
     private UmmalquraCalendar h1;
     private UmmalquraCalendar h2;
@@ -71,7 +67,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private int mFirstDayOfWeek;
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
     private int lastPosition = -1;
-    private BaseMonthView.ClueData clueData;
+    private ClueData clueData;
 
 
     public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
@@ -188,47 +184,6 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         return ret;
     }
 
-    private int getPositionForDay(@Nullable Calendar day) {
-        if (day == null) {
-            return -1;
-        }
-        final int yearOffset;
-        final int monthOffset;
-        int position = 0;
-        switch (calendarType) {
-            case CalendarType.GREGORIAN:
-                yearOffset = day.get(Calendar.YEAR) - mMinDate.get(Calendar.YEAR);
-                monthOffset = day.get(Calendar.MONTH) - mMinDate.get(Calendar.MONTH);
-                position = yearOffset * MONTHS_IN_YEAR + monthOffset;
-                break;
-            case CalendarType.ARABIC:
-                hijriCalendar = CalendarTool.GregorianToHijri(day);
-                minH = CalendarTool.GregorianToHijri(mMinDate);
-                yearOffset = hijriCalendar.get(UmmalquraCalendar.YEAR) - minH.get(UmmalquraCalendar.YEAR);
-                monthOffset = hijriCalendar.get(UmmalquraCalendar.MONTH) - minH.get(UmmalquraCalendar.MONTH);
-                position = yearOffset * MONTHS_IN_YEAR + monthOffset;
-                break;
-            case CalendarType.PERSIAN:
-                persianCalendar = CalendarTool.GregorianToPersian(day);
-                minP = CalendarTool.GregorianToPersian(mMinDate);
-                yearOffset = persianCalendar.getPersianYear() - minP.getPersianYear();
-                monthOffset = persianCalendar.getPersianMonth() - minP.getPersianMonth();
-                position = yearOffset * MONTHS_IN_YEAR + monthOffset;
-                break;
-        }
-
-        return position;
-    }
-
-
-    ShowInfoMonthView getView(Object object) {
-        if (object == null) {
-            return null;
-        }
-        final ViewHolder holder = (ViewHolder) object;
-        return holder.showInfoMonthView;
-    }
-
     private ShowInfoMonthView.OnDayClickListener onDayClickListener;
 
     public ShowInfoMonthView.OnDayClickListener getOnDayClickListener() {
@@ -278,7 +233,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         }
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setPadding(4, 4, 4, 4);
-        MonthViewHolder holder = new MonthViewHolder(-1, parent, v);
+        MonthViewHolder holder = new MonthViewHolder(0, parent, v);
         holder.baseMonthView.setClueData(clueData);
         holder.baseMonthView.setOnDayClickListener(onDayClickListener);
         holder.baseMonthView.setOnDaySelectedListener(this);
@@ -315,8 +270,8 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
         switch (calendarType) {
             case CalendarType.GREGORIAN:
-                if (mSelectedDay != null && mSelectedDay.get(Calendar.MONTH) == month) {
-                    selectedDay = mSelectedDay.get(Calendar.DAY_OF_MONTH);
+                if (today != null && today.get(Calendar.MONTH) == month) {
+                    selectedDay = today.get(Calendar.DAY_OF_MONTH);
                 } else {
                     selectedDay = -1;
                 }
@@ -334,8 +289,8 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
                 }
                 break;
             case CalendarType.PERSIAN:
-                PersianCalendar p = CalendarTool.GregorianToPersian(mSelectedDay);
-                if (mSelectedDay != null && p.getPersianMonth() == month) {
+                PersianCalendar p = CalendarTool.GregorianToPersian(today);
+                if (today != null && p.getPersianMonth() == month) {
                     selectedDay = p.getPersianDay();
                 } else {
                     selectedDay = -1;
@@ -356,8 +311,8 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
                 }
                 break;
             case CalendarType.ARABIC:
-                UmmalquraCalendar hijriCalendar = CalendarTool.GregorianToHijri(mSelectedDay);
-                if (mSelectedDay != null && hijriCalendar.get(UmmalquraCalendar.MONTH) == month) {
+                UmmalquraCalendar hijriCalendar = CalendarTool.GregorianToHijri(today);
+                if (today != null && hijriCalendar.get(UmmalquraCalendar.MONTH) == month) {
                     selectedDay = hijriCalendar.get(UmmalquraCalendar.DAY_OF_MONTH);
                 } else {
                     selectedDay = -1;
@@ -390,8 +345,6 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
             default:
         }
         holder.baseMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek, enabledDayRangeStart, enabledDayRangeEnd, calendarType);
-//        mItems.add(holder);
-//        onViewDetachedFromWindow(holder);
     }
 
     public ShowInfoMonthView.IsDayMarkedListener getIsDayMarkedListener() {
@@ -404,7 +357,6 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     @Override
     public void onViewDetachedFromWindow(@NonNull MonthViewHolder holder) {
-//        Log.d("d13", "onViewDetachedFromWindow: " + holder.position);
         if (holder.position < mItems.size())
             mItems.remove(holder.position);
         super.onViewDetachedFromWindow(holder);
@@ -427,28 +379,6 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         notifyDataSetChanged();
     }
 
-    private int getPositionForMonth(Calendar selectedDay) {
-        int position = 0;
-        switch (calendarType) {
-            case CalendarType.GREGORIAN:
-                int diffYear = selectedDay.get(Calendar.YEAR) - mMinDate.get(Calendar.YEAR);
-                int diffMonth = selectedDay.get(Calendar.MONTH) - mMinDate.get(Calendar.MONTH);
-                position = diffYear * 12 + diffMonth;
-                break;
-            case CalendarType.PERSIAN:
-                diffYear = CalendarTool.GregorianToPersian(selectedDay).getPersianYear() - CalendarTool.GregorianToPersian(mMinDate).getPersianYear();
-                diffMonth = CalendarTool.GregorianToPersian(selectedDay).getPersianMonth() - CalendarTool.GregorianToPersian(mMinDate).getPersianMonth();
-                position = diffYear * 12 + diffMonth;
-                break;
-            case CalendarType.ARABIC:
-                diffYear = CalendarTool.GregorianToHijri(selectedDay).get(UmmalquraCalendar.YEAR) - CalendarTool.GregorianToHijri(mMinDate).get(UmmalquraCalendar.YEAR);
-                diffMonth = CalendarTool.GregorianToHijri(selectedDay).get(UmmalquraCalendar.MONTH) - CalendarTool.GregorianToHijri(mMinDate).get(UmmalquraCalendar.MONTH);
-                position = diffYear * 12 + diffMonth;
-                break;
-        }
-        return position;
-    }
-
     @Override
     public boolean isDaySelected(Calendar day) {
         return selectedDay.get(Calendar.YEAR) == day.get(Calendar.YEAR) && selectedDay.get(Calendar.MONTH) == day.get(Calendar.MONTH)
@@ -456,7 +386,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     }
 
     @Override
-    public boolean isDayInRangeSelected(Calendar day, BaseMonthView.ClueData clueData) {
+    public boolean isDayInRangeSelected(Calendar day, ClueData clueData) {
         boolean firstDay = selectedDay.get(Calendar.YEAR) == day.get(Calendar.YEAR) && selectedDay.get(Calendar.MONTH) == day.get(Calendar.MONTH)
                 && selectedDay.get(Calendar.DAY_OF_MONTH) == day.get(Calendar.DAY_OF_MONTH);
         long diff = CalendarTool.getDaysFromDiff(day, selectedDay);
@@ -467,11 +397,11 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         }
     }
 
-    public void setClueData(BaseMonthView.ClueData clueData) {
+    public void setClueData(ClueData clueData) {
         this.clueData = clueData;
     }
 
-    public BaseMonthView.ClueData getClueData() {
+    public ClueData getClueData() {
         return clueData;
     }
 

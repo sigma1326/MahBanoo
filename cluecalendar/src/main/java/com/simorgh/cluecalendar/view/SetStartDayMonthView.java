@@ -11,9 +11,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 
 import com.simorgh.cluecalendar.R;
-import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
-import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.cluecalendar.util.ClueData;
 
 import java.util.Calendar;
 
@@ -57,7 +55,6 @@ public class SetStartDayMonthView extends BaseMonthView {
     @Override
     protected void init() {
         super.init();
-        clueData = new BaseMonthView.ClueData(5, 27, 3, Calendar.getInstance());
     }
 
     @Override
@@ -151,7 +148,7 @@ public class SetStartDayMonthView extends BaseMonthView {
                     bottom - p.getFontMetrics().bottom, p);
 
             if (isDaySelectedListener.isDaySelected(getCalendarForDay(day))) {
-                canvas.drawBitmap(icon_check, left+dp2px(10), top+dp2px(10), rectTypeRedPaint);
+                canvas.drawBitmap(icon_check, left + dp2px(10), top + dp2px(10), rectTypeRedPaint);
             }
 
             col++;
@@ -181,27 +178,6 @@ public class SetStartDayMonthView extends BaseMonthView {
         return rectTypeGrayPaint;
     }
 
-    private Calendar getCalendarForDay(int day) {
-        Calendar date = Calendar.getInstance();
-        switch (calendarType) {
-            case CalendarType.PERSIAN:
-                persianDate.setShYear(mYearPersian);
-                persianDate.setShMonth(mMonthPersian + 1);
-                persianDate.setShDay(day);
-                date = CalendarTool.PersianToGregorian(persianDate);
-                break;
-            case CalendarType.ARABIC:
-                hijriCalendar.set(UmmalquraCalendar.YEAR, mYearHijri);
-                hijriCalendar.set(UmmalquraCalendar.MONTH, mMonthHijri);
-                hijriCalendar.set(UmmalquraCalendar.DAY_OF_MONTH, day);
-                date = CalendarTool.HijriToGregorian(hijriCalendar);
-                break;
-            case CalendarType.GREGORIAN:
-                date.set(mYear, mMonth, day);
-                break;
-        }
-        return date;
-    }
 
     @Override
     protected int getDayType(int day) {

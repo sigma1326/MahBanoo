@@ -25,8 +25,6 @@ public class ChangeDaysMonthView extends BaseMonthView {
     private int rectTypeRedColor;
 
     private static Bitmap icon_check;
-    private Calendar date = Calendar.getInstance();
-
 
     public ChangeDaysMonthView(Context context) {
         super(context);
@@ -48,7 +46,6 @@ public class ChangeDaysMonthView extends BaseMonthView {
     @Override
     protected void init() {
         super.init();
-        clueData = new ClueData(3, 27, 3, Calendar.getInstance());
     }
 
     @Override
@@ -145,28 +142,6 @@ public class ChangeDaysMonthView extends BaseMonthView {
             return rectTypeRedPaint;
         }
         return rectTypeGrayPaint;
-    }
-
-
-    private Calendar getCalendarForDay(int day) {
-        switch (calendarType) {
-            case CalendarType.PERSIAN:
-                persianDate.setShYear(mYearPersian);
-                persianDate.setShMonth(mMonthPersian + 1);
-                persianDate.setShDay(day);
-                date = CalendarTool.PersianToGregorian(persianDate);
-                break;
-            case CalendarType.ARABIC:
-                hijriCalendar.set(UmmalquraCalendar.YEAR, mYearHijri);
-                hijriCalendar.set(UmmalquraCalendar.MONTH, mMonthHijri);
-                hijriCalendar.set(UmmalquraCalendar.DAY_OF_MONTH, day);
-                date = CalendarTool.HijriToGregorian(hijriCalendar);
-                break;
-            case CalendarType.GREGORIAN:
-                date.set(mYear, mMonth, day);
-                break;
-        }
-        return date;
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.cluecalendar.util.ClueData;
 import com.simorgh.cluecalendar.util.MonthViewAdapter;
 
 import java.util.Calendar;
@@ -30,7 +31,7 @@ public class CalendarView extends LinearLayout {
     private Calendar min;
     private Calendar max;
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
-    private BaseMonthView.ClueData clueData;
+    private ClueData clueData;
 
 
     public CalendarView(Context context) {
@@ -133,11 +134,11 @@ public class CalendarView extends LinearLayout {
         }
     }
 
-    public BaseMonthView.ClueData getClueData() {
+    public ClueData getClueData() {
         return clueData;
     }
 
-    public void setClueData(BaseMonthView.ClueData clueData) {
+    public void setClueData(ClueData clueData) {
         this.clueData = clueData;
         adapter.setClueData(clueData);
     }
