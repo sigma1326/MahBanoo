@@ -18,7 +18,6 @@ package com.simorgh.cluecalendar.util;
 
 import android.content.Context;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,12 +25,12 @@ import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.view.BaseMonthView;
+import com.simorgh.cluecalendar.view.ChangeDaysMonthView;
 import com.simorgh.cluecalendar.view.SetStartDayMonthView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,9 +40,10 @@ import static com.simorgh.cluecalendar.view.BaseMonthView.TAG;
 
 
 /**
- * An adapter for a list of {@link com.simorgh.cluecalendar.view.ShowInfoMonthView} items.
+ * An adapter for a list of {@link ShowInfoMonthView} items.
  */
-public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.MonthViewHolder> implements BaseMonthView.OnDaySelectedListener, BaseMonthView.IsDaySelectedListener {
+public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.MonthViewHolder> implements
+        BaseMonthView.OnDaySelectedListener, BaseMonthView.IsDaySelectedListener, BaseMonthView.IsDayInRangeSelectedListener {
     private static final int MONTHS_IN_YEAR = 12;
 
     private final Calendar mMinDate = Calendar.getInstance();
@@ -71,6 +71,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private int mFirstDayOfWeek;
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
     private int lastPosition = -1;
+    private BaseMonthView.ClueData clueData;
 
 
     public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
@@ -263,7 +264,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         BaseMonthView v;
         switch (monthViewType) {
             case BaseMonthView.MonthViewTypeChangeDays:
-                v = new ShowInfoMonthView(parent.getContext());
+                v = new ChangeDaysMonthView(parent.getContext());
                 break;
             case BaseMonthView.MonthViewTypeShowCalendar:
                 v = new ShowInfoMonthView(parent.getContext());
@@ -278,9 +279,11 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setPadding(4, 4, 4, 4);
         MonthViewHolder holder = new MonthViewHolder(-1, parent, v);
+        holder.baseMonthView.setClueData(clueData);
         holder.baseMonthView.setOnDayClickListener(onDayClickListener);
         holder.baseMonthView.setOnDaySelectedListener(this);
         holder.baseMonthView.setIsDaySelectedListener(this);
+        holder.baseMonthView.setIsDayInRangeSelectedListener(this);
         mItems.add(holder);
         return holder;
     }
@@ -414,17 +417,14 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     @Override
     public void onDaySelected(Calendar selectedDay) {
-        this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
-        int position = getPositionForMonth(selectedDay);
-        if (lastPosition != -1) {
-            if (lastPosition != position) {
-                lastPosition = position;
-                //todo is this good?
-                notifyDataSetChanged();
+        if (monthViewType == BaseMonthView.MonthViewTypeSetStartDay) {
+            if (!selectedDay.after(Calendar.getInstance())) {
+                this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
             }
         } else {
-            lastPosition = position;
+            this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
         }
+        notifyDataSetChanged();
     }
 
     private int getPositionForMonth(Calendar selectedDay) {
@@ -453,6 +453,26 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     public boolean isDaySelected(Calendar day) {
         return selectedDay.get(Calendar.YEAR) == day.get(Calendar.YEAR) && selectedDay.get(Calendar.MONTH) == day.get(Calendar.MONTH)
                 && selectedDay.get(Calendar.DAY_OF_MONTH) == day.get(Calendar.DAY_OF_MONTH);
+    }
+
+    @Override
+    public boolean isDayInRangeSelected(Calendar day, BaseMonthView.ClueData clueData) {
+        boolean firstDay = selectedDay.get(Calendar.YEAR) == day.get(Calendar.YEAR) && selectedDay.get(Calendar.MONTH) == day.get(Calendar.MONTH)
+                && selectedDay.get(Calendar.DAY_OF_MONTH) == day.get(Calendar.DAY_OF_MONTH);
+        long diff = CalendarTool.getDaysFromDiff(day, selectedDay);
+        if (diff < 0) {
+            return firstDay;
+        } else {
+            return firstDay || diff < clueData.getRedCount();
+        }
+    }
+
+    public void setClueData(BaseMonthView.ClueData clueData) {
+        this.clueData = clueData;
+    }
+
+    public BaseMonthView.ClueData getClueData() {
+        return clueData;
     }
 
     private static class ViewHolder {

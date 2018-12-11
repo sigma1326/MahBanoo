@@ -31,6 +31,7 @@ public class CalendarView extends LinearLayout {
     private Calendar min;
     private Calendar max;
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
+    private BaseMonthView.ClueData clueData;
 
 
     public CalendarView(Context context) {
@@ -131,6 +132,15 @@ public class CalendarView extends LinearLayout {
             }
             layoutManager.scrollToPosition(position);
         }
+    }
+
+    public BaseMonthView.ClueData getClueData() {
+        return clueData;
+    }
+
+    public void setClueData(BaseMonthView.ClueData clueData) {
+        this.clueData = clueData;
+        adapter.setClueData(clueData);
     }
 
     public ShowInfoMonthView.IsDayMarkedListener getIsDayMarkedListener() {

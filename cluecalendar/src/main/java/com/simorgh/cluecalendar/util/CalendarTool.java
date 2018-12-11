@@ -8,7 +8,11 @@ import com.simorgh.cluecalendar.model.YearMonthDay;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 
+import java.sql.Time;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class CalendarTool {
     //Saturday to Friday
@@ -347,21 +351,41 @@ public class CalendarTool {
         return "";
     }
 
-    private static Calendar inputGrg;
 
     public static long getDaysFromDiff(PersianCalendar input, Calendar startDate) {
-        long diffDays = -1;
-        inputGrg = CalendarTool.PersianToGregorian(input);
-        input.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH), 12, 0);
-        startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH), 12, 0);
-        if (input.getTimeInMillis() < startDate.getTimeInMillis()) {
-            return diffDays;
+        float diffDays = -1;
+        in.clear();
+        in = CalendarTool.PersianToGregorian(input);
+//        in.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH));
+        start.clear();
+        start.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH));
+        if (!input.after(startDate)) {
+            return (long) diffDays;
         }
-        diffDays = (inputGrg.getTimeInMillis() - startDate.getTimeInMillis()) / (60 * 60 * 24 * 1000);
+        diffDays = (float) (in.getTimeInMillis() - start.getTimeInMillis()) / (60 * 60 * 24 * 1000);
         if (diffDays < 0) {
-            return diffDays;
+            return (long) diffDays;
         }
-        return diffDays;
+        return (long) diffDays;
+    }
+
+    private static Calendar in = Calendar.getInstance();
+    private static Calendar start = Calendar.getInstance();
+
+    public static long getDaysFromDiff(Calendar input, Calendar startDate) {
+        float diffDays = -1;
+        in.clear();
+        in.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH));
+        start.clear();
+        start.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH));
+        if (!input.after(startDate)) {
+            return (long) diffDays;
+        }
+        diffDays = (float) (in.getTimeInMillis() - start.getTimeInMillis()) / (60 * 60 * 24 * 1000);
+        if (diffDays < 0) {
+            return (long) diffDays;
+        }
+        return (long) diffDays;
     }
 
 

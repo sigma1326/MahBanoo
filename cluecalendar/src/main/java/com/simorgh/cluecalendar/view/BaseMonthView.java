@@ -5,12 +5,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
@@ -18,17 +14,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
 
 import com.simorgh.cluecalendar.R;
 import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.model.YearMonthDay;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.util.CalendarTool;
-import com.simorgh.cluecalendar.util.MonthViewAdapter;
 import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
 
@@ -118,11 +110,12 @@ public class BaseMonthView extends View {
     protected OnDayClickListener mOnDayClickListener;
     protected OnDaySelectedListener onDaySelectedListener;
     protected IsDaySelectedListener isDaySelectedListener;
+    protected IsDayInRangeSelectedListener isDayInRangeSelectedListener;
 
-    protected static ClueData clueData;
+    protected ClueData clueData;
     private int WEEKS_IN_MONTH = MAX_WEEKS_IN_MONTH;
 
-    protected static class ClueData {
+    public static class ClueData {
         private static final int DEFAULT_RED_COUNT = 4;
         private static final int DEFAULT_GRAY_COUNT = 24;
         private static final int DEFAULT_GREEN_COUNT = 3;
@@ -865,6 +858,15 @@ public class BaseMonthView extends View {
     }
 
 
+    public ClueData getClueData() {
+        return clueData;
+    }
+
+    public void setClueData(ClueData clueData) {
+        this.clueData = clueData;
+        postInvalidate();
+    }
+
     /**
      * Handles callbacks when the user clicks on a time object.
      */
@@ -893,10 +895,23 @@ public class BaseMonthView extends View {
         this.onDaySelectedListener = onDaySelectedListener;
     }
 
+    public IsDayInRangeSelectedListener getIsDayInRangeSelectedListener() {
+        return isDayInRangeSelectedListener;
+    }
+
+    public void setIsDayInRangeSelectedListener(IsDayInRangeSelectedListener isDayInRangeSelectedListener) {
+        this.isDayInRangeSelectedListener = isDayInRangeSelectedListener;
+    }
+
     public interface OnDaySelectedListener {
         void onDaySelected(Calendar selectedDay);
     }
+
     public interface IsDaySelectedListener {
         boolean isDaySelected(Calendar day);
+    }
+
+    public interface IsDayInRangeSelectedListener {
+        boolean isDayInRangeSelected(Calendar day, ClueData clueData);
     }
 }
