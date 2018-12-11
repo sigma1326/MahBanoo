@@ -17,6 +17,7 @@
 package com.simorgh.cluecalendar.util;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,10 @@ import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.view.BaseMonthView;
+import com.simorgh.cluecalendar.view.SetStartDayMonthView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -34,23 +37,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.simorgh.cluecalendar.view.BaseMonthView.TAG;
+
 
 /**
  * An adapter for a list of {@link com.simorgh.cluecalendar.view.ShowInfoMonthView} items.
  */
-public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.MonthViewHolder> {
+public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.MonthViewHolder> implements BaseMonthView.OnDaySelectedListener, BaseMonthView.IsDaySelectedListener {
     private static final int MONTHS_IN_YEAR = 12;
 
     private final Calendar mMinDate = Calendar.getInstance();
     private final Calendar mMaxDate = Calendar.getInstance();
 
-    private SparseArray<MonthViewHolder> mItems = new SparseArray<>();
+    private ArrayList<MonthViewHolder> mItems = new ArrayList<>();
 
     private int calendarType;
     private int monthViewType;
 
 
     private Calendar mSelectedDay = Calendar.getInstance();
+    private Calendar selectedDay = Calendar.getInstance();
     private PersianCalendar persianCalendar;
     private PersianCalendar minP;
     private PersianCalendar p1;
@@ -64,6 +70,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private int mCount;
     private int mFirstDayOfWeek;
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
+    private int lastPosition = -1;
 
 
     public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
@@ -129,7 +136,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         // Update displayed views.
         final int count = mItems.size();
         for (int i = 0; i < count; i++) {
-            final ShowInfoMonthView showInfoMonthView = (ShowInfoMonthView) mItems.get(i).showInfoMonthView;
+            final ShowInfoMonthView showInfoMonthView = (ShowInfoMonthView) mItems.get(i).baseMonthView;
             showInfoMonthView.setFirstDayOfWeek(weekStart);
         }
     }
@@ -260,19 +267,21 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
                 break;
             case BaseMonthView.MonthViewTypeShowCalendar:
                 v = new ShowInfoMonthView(parent.getContext());
+                ((ShowInfoMonthView) v).setIsDayMarkedListener(isDayMarkedListener);
                 break;
-            case BaseMonthView.MonthViewTypesetStartDay:
-                v = new ShowInfoMonthView(parent.getContext());
+            case BaseMonthView.MonthViewTypeSetStartDay:
+                v = new SetStartDayMonthView(parent.getContext());
                 break;
             default:
                 v = new ShowInfoMonthView(parent.getContext());
         }
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setPadding(4, 4, 4, 4);
-        ((ShowInfoMonthView) v).setIsDayMarkedListener(isDayMarkedListener);
-        MonthViewHolder holder = new MonthViewHolder(-1, parent, (ShowInfoMonthView) v);
-        holder.showInfoMonthView.setOnDayClickListener(onDayClickListener);
-        mItems.append(new Random().nextInt(), holder);
+        MonthViewHolder holder = new MonthViewHolder(-1, parent, v);
+        holder.baseMonthView.setOnDayClickListener(onDayClickListener);
+        holder.baseMonthView.setOnDaySelectedListener(this);
+        holder.baseMonthView.setIsDaySelectedListener(this);
+        mItems.add(holder);
         return holder;
     }
 
@@ -292,7 +301,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     public void onViewAttachedToWindow(@NonNull MonthViewHolder holder) {
         int position = holder.position;
 
-        holder.showInfoMonthView.setOnDayClickListener(onDayClickListener);
+        holder.baseMonthView.setOnDayClickListener(onDayClickListener);
 
         final int month = getMonthForPosition(position);
         final int year = getYearForPosition(position);
@@ -371,14 +380,15 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
             case BaseMonthView.MonthViewTypeChangeDays:
                 break;
             case BaseMonthView.MonthViewTypeShowCalendar:
-                ((ShowInfoMonthView) holder.showInfoMonthView).setIsDayMarkedListener(isDayMarkedListener);
+                ((ShowInfoMonthView) holder.baseMonthView).setIsDayMarkedListener(isDayMarkedListener);
                 break;
-            case BaseMonthView.MonthViewTypesetStartDay:
+            case BaseMonthView.MonthViewTypeSetStartDay:
                 break;
             default:
         }
-        holder.showInfoMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek, enabledDayRangeStart, enabledDayRangeEnd, calendarType);
-        onViewDetachedFromWindow(holder);
+        holder.baseMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek, enabledDayRangeStart, enabledDayRangeEnd, calendarType);
+//        mItems.add(holder);
+//        onViewDetachedFromWindow(holder);
     }
 
     public ShowInfoMonthView.IsDayMarkedListener getIsDayMarkedListener() {
@@ -402,6 +412,49 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         return mCount;
     }
 
+    @Override
+    public void onDaySelected(Calendar selectedDay) {
+        this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+        int position = getPositionForMonth(selectedDay);
+        if (lastPosition != -1) {
+            if (lastPosition != position) {
+                lastPosition = position;
+                //todo is this good?
+                notifyDataSetChanged();
+            }
+        } else {
+            lastPosition = position;
+        }
+    }
+
+    private int getPositionForMonth(Calendar selectedDay) {
+        int position = 0;
+        switch (calendarType) {
+            case CalendarType.GREGORIAN:
+                int diffYear = selectedDay.get(Calendar.YEAR) - mMinDate.get(Calendar.YEAR);
+                int diffMonth = selectedDay.get(Calendar.MONTH) - mMinDate.get(Calendar.MONTH);
+                position = diffYear * 12 + diffMonth;
+                break;
+            case CalendarType.PERSIAN:
+                diffYear = CalendarTool.GregorianToPersian(selectedDay).getPersianYear() - CalendarTool.GregorianToPersian(mMinDate).getPersianYear();
+                diffMonth = CalendarTool.GregorianToPersian(selectedDay).getPersianMonth() - CalendarTool.GregorianToPersian(mMinDate).getPersianMonth();
+                position = diffYear * 12 + diffMonth;
+                break;
+            case CalendarType.ARABIC:
+                diffYear = CalendarTool.GregorianToHijri(selectedDay).get(UmmalquraCalendar.YEAR) - CalendarTool.GregorianToHijri(mMinDate).get(UmmalquraCalendar.YEAR);
+                diffMonth = CalendarTool.GregorianToHijri(selectedDay).get(UmmalquraCalendar.MONTH) - CalendarTool.GregorianToHijri(mMinDate).get(UmmalquraCalendar.MONTH);
+                position = diffYear * 12 + diffMonth;
+                break;
+        }
+        return position;
+    }
+
+    @Override
+    public boolean isDaySelected(Calendar day) {
+        return selectedDay.get(Calendar.YEAR) == day.get(Calendar.YEAR) && selectedDay.get(Calendar.MONTH) == day.get(Calendar.MONTH)
+                && selectedDay.get(Calendar.DAY_OF_MONTH) == day.get(Calendar.DAY_OF_MONTH);
+    }
+
     private static class ViewHolder {
         public final int position;
         public final View container;
@@ -417,13 +470,13 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     public class MonthViewHolder extends RecyclerView.ViewHolder {
         public int position;
         public final View container;
-        public final BaseMonthView showInfoMonthView;
+        public final BaseMonthView baseMonthView;
 
-        public MonthViewHolder(int position, View container, BaseMonthView showInfoMonthView) {
-            super(showInfoMonthView);
+        public MonthViewHolder(int position, View container, BaseMonthView baseMonthView) {
+            super(baseMonthView);
             this.position = position;
             this.container = container;
-            this.showInfoMonthView = showInfoMonthView;
+            this.baseMonthView = baseMonthView;
         }
     }
 }

@@ -28,6 +28,7 @@ import com.simorgh.cluecalendar.model.YearMonthDay;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.cluecalendar.util.MonthViewAdapter;
 import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
 
@@ -55,7 +56,7 @@ public class BaseMonthView extends View {
 
     public static final int MonthViewTypeShowCalendar = 0;
     public static final int MonthViewTypeChangeDays = 1;
-    public static final int MonthViewTypesetStartDay = 2;
+    public static final int MonthViewTypeSetStartDay = 2;
 
     public static final int TYPE_RED = 0;
     public static final int TYPE_GREEN = 1;
@@ -86,6 +87,7 @@ public class BaseMonthView extends View {
     protected int mPaddedHeight;
 
 
+    protected int selectedDay = -1;
     protected int mActivatedDay = -1;
     protected int mToday = DEFAULT_SELECTED_DAY;
     protected int mWeekStart = DEFAULT_WEEK_START;
@@ -114,7 +116,10 @@ public class BaseMonthView extends View {
     protected Locale mLocale;
 
     protected OnDayClickListener mOnDayClickListener;
-    protected ClueData clueData;
+    protected OnDaySelectedListener onDaySelectedListener;
+    protected IsDaySelectedListener isDaySelectedListener;
+
+    protected static ClueData clueData;
     private int WEEKS_IN_MONTH = MAX_WEEKS_IN_MONTH;
 
     protected static class ClueData {
@@ -720,6 +725,8 @@ public class BaseMonthView extends View {
                     break;
             }
             mOnDayClickListener.onDayClick(this, date);
+            onDaySelectedListener.onDaySelected(date);
+            selectedDay = day;
         }
 //        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
         return true;
@@ -754,7 +761,6 @@ public class BaseMonthView extends View {
         return offset;
     }
 
-    PersianCalendar p = new PersianCalendar();
 
     protected int getDayType(int day) {
         if (day == -1) {
@@ -828,6 +834,13 @@ public class BaseMonthView extends View {
         mOnDayClickListener = listener;
     }
 
+    public IsDaySelectedListener getIsDaySelectedListener() {
+        return isDaySelectedListener;
+    }
+
+    public void setIsDaySelectedListener(IsDaySelectedListener isDaySelectedListener) {
+        this.isDaySelectedListener = isDaySelectedListener;
+    }
 
     protected boolean shouldBeRTL() {
         boolean isRTLLanguage;
@@ -869,5 +882,21 @@ public class BaseMonthView extends View {
 
     protected float sp2px(float sp) {
         return SizeConverter.spToPx(getContext(), sp);
+    }
+
+
+    public OnDaySelectedListener getOnDaySelectedListener() {
+        return onDaySelectedListener;
+    }
+
+    public void setOnDaySelectedListener(OnDaySelectedListener onDaySelectedListener) {
+        this.onDaySelectedListener = onDaySelectedListener;
+    }
+
+    public interface OnDaySelectedListener {
+        void onDaySelected(Calendar selectedDay);
+    }
+    public interface IsDaySelectedListener {
+        boolean isDaySelected(Calendar day);
     }
 }

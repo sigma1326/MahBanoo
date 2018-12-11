@@ -33,14 +33,14 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //        c.setClueData(new ClueView.ClueData(6,26));
         calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDayClickListener(this);
-        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeShowCalendar);
+        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeSetStartDay);
         calendarView.setCalendarType(CalendarType.PERSIAN);
         Calendar min = Calendar.getInstance();
-        min.set(Calendar.YEAR, 2016);
+        min.set(Calendar.YEAR, 2018);
         min.set(Calendar.MONTH, 0);
         Calendar max = Calendar.getInstance();
-        max.set(Calendar.YEAR, 2020);
-        max.set(Calendar.MONTH, 11);
+        max.set(Calendar.YEAR, 2019);
+        max.set(Calendar.MONTH, 10);
 
         calendarView.setRange(min, max);
         calendarView.scrollToCurrentDate(Calendar.getInstance());
