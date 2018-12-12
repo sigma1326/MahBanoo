@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.cluecalendar.util.ClueData;
 import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
@@ -35,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 
         CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDayClickListener(this);
-        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeChangeDays);
+        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeShowCalendar);
         calendarView.setCalendarType(CalendarType.PERSIAN);
-        calendarView.setClueData(new BaseMonthView.ClueData(5, 28, 4, Calendar.getInstance()));
+        calendarView.setClueData(new ClueData(5, 28, 4, Calendar.getInstance()));
         Calendar min = Calendar.getInstance();
         min.set(Calendar.YEAR, 2018);
         min.set(Calendar.MONTH, 0);
