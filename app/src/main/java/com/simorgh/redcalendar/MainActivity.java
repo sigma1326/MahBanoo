@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stepper_layout);
+        setContentView(R.layout.activity_main);
 
 //        ClueView c = findViewById(R.id.clue_view);
 //        c.setOnDayChangedListener(this);

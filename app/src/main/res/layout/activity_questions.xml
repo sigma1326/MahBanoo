@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".QuestionsActivity"
     tools:theme="@style/MSDefaultStepperLayoutTheme">
 
 
@@ -143,4 +145,5 @@
         app:layout_constraintBottom_toTopOf="@+id/ms_btn_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
