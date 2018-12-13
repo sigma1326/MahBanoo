@@ -20,15 +20,15 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        ClueView c = findViewById(R.id.clue_view);
-//        c.setOnDayChangedListener(this);
-//        c.setOnButtonClickListener(this);
-//        try {
-//            c.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        c.setClueData(new ClueView.ClueData(6,26));
+        ClueView c = findViewById(R.id.clue_view);
+        c.setOnDayChangedListener(this);
+        c.setOnButtonClickListener(this);
+        try {
+            c.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        c.setClueData(new ClueView.ClueData(6,26));
 
 
 //        CalendarView calendarView = findViewById(R.id.calendarView);

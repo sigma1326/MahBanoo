@@ -3,21 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/intro_navigation"
-    app:startDestination="@id/setLastCycleDayFragment">
+    app:startDestination="@id/step_set_last_cycle">
     <fragment
-        android:id="@+id/setLastCycleDayFragment"
+        android:id="@+id/step_set_last_cycle"
         android:name="com.simorgh.redcalendar.ui.SetLastCycleDayFragment"
-        android:label="SetLastCycleDayFragment">
+        android:label="step_set_last_cycle">
         <action
             android:id="@+id/action_test"
             app:destination="@+id/test"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left" />
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/step_set_last_cycle" />
     </fragment>
     <fragment
         android:id="@+id/test"
         android:name="com.simorgh.redcalendar.ui.SetLastCycleDayFragment"
-        android:label="test" />
+        android:label="test">
+        <action
+            android:id="@+id/action_test_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/test" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.simorgh.redcalendar.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>
