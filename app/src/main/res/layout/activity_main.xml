@@ -7,15 +7,23 @@
     tools:context=".MainActivity">
 
 
-    <com.simorgh.cluecalendar.view.CalendarView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:id="@+id/calendarView"
+    <!--<com.simorgh.cluecalendar.view.CalendarView-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:id="@+id/calendarView"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.simorgh.stepper.StepperLayout
+        android:id="@+id/stepperLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </com.simorgh.cluecalendar.view.CalendarView>
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:ms_stepperType="progress_bar"
+        tools:theme="@style/AppTheme" />
 </androidx.constraintlayout.widget.ConstraintLayout>

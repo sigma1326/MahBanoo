@@ -3,11 +3,8 @@ package com.simorgh.redcalendar;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.util.CalendarTool;
-import com.simorgh.cluecalendar.util.ClueData;
 import com.simorgh.cluecalendar.view.BaseMonthView;
-import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
@@ -21,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.stepper_layout);
 
 //        ClueView c = findViewById(R.id.clue_view);
 //        c.setOnDayChangedListener(this);
@@ -34,21 +31,27 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //        c.setClueData(new ClueView.ClueData(6,26));
 
 
-        CalendarView calendarView = findViewById(R.id.calendarView);
-        calendarView.setOnDayClickListener(this);
-        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeShowCalendar);
-        calendarView.setCalendarType(CalendarType.PERSIAN);
-        calendarView.setClueData(new ClueData(5, 28, 4, Calendar.getInstance()));
-        Calendar min = Calendar.getInstance();
-        min.set(Calendar.YEAR, 2018);
-        min.set(Calendar.MONTH, 0);
-        Calendar max = Calendar.getInstance();
-        max.set(Calendar.YEAR, 2020);
-        max.set(Calendar.MONTH, 10);
+//        CalendarView calendarView = findViewById(R.id.calendarView);
+//        calendarView.setOnDayClickListener(this);
+//        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeShowCalendar);
+//        calendarView.setCalendarType(CalendarType.PERSIAN);
+//        calendarView.setClueData(new ClueData(5, 28, 4, Calendar.getInstance()));
+//        Calendar min = Calendar.getInstance();
+//        min.set(Calendar.YEAR, 2018);
+//        min.set(Calendar.MONTH, 0);
+//        Calendar max = Calendar.getInstance();
+//        max.set(Calendar.YEAR, 2020);
+//        max.set(Calendar.MONTH, 10);
+//
+//        calendarView.setRange(min, max);
+//        calendarView.scrollToCurrentDate(Calendar.getInstance());
+//        calendarView.setIsDayMarkedListener(this);
 
-        calendarView.setRange(min, max);
-        calendarView.scrollToCurrentDate(Calendar.getInstance());
-        calendarView.setIsDayMarkedListener(this);
+
+//        StepperLayout stepperLayout = findViewById(R.id.stepperLayout);
+//        stepperLayout.setListener(this);
+//        stepperLayout.setAdapter(new SampleFragmentStepAdapter(getSupportFragmentManager(), this));
+
     }
 
 
@@ -98,4 +101,5 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     public boolean isDayMarked(int day) {
         return day % 5 == 0;
     }
+
 }

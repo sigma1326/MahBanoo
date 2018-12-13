@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:theme="@style/MSDefaultStepperLayoutTheme">
+
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/ms_prevButton"
+        style="?attr/ms_backNavigationButtonStyle"
+        android:layout_width="20dp"
+        android:layout_height="18dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@null"
+        android:src="@drawable/back_copy"
+        app:layout_constraintBottom_toBottomOf="@+id/ms_progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/view_top_navigation"
+        app:layout_constraintStart_toEndOf="@+id/ms_progressBar"
+        app:layout_constraintTop_toTopOf="@+id/ms_progressBar"
+        tools:style="@style/MSNavBarButton.Back"
+        tools:textColor="@color/ms_bottomNavigationButtonTextColor" />
+
+    <ProgressBar
+        android:id="@+id/ms_progressBar"
+        style="@style/MSColorableProgressBar"
+        android:layout_width="220dp"
+        android:layout_height="7dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="60dp"
+        android:indeterminate="false"
+        android:progress="33"
+        android:progressDrawable="@drawable/curved_progress_bar"
+        android:rotation="180"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_top_navigation"
+        app:layout_constraintEnd_toEndOf="@id/view_top_navigation"
+        app:layout_constraintStart_toStartOf="@id/view_top_navigation"
+        app:layout_constraintTop_toTopOf="@id/view_top_navigation" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top_navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_begin="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_top_navigation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_top_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ms_tvStepFraction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="مرحله اول از پنج مرحله"
+        android:textAlignment="center"
+        android:textColor="#5b5b5b"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/ms_progressBar"
+        app:layout_constraintEnd_toEndOf="@+id/ms_progressBar"
+        app:layout_constraintStart_toStartOf="@+id/ms_progressBar"
+        app:layout_constraintTop_toTopOf="@+id/view_top_navigation" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ms_tvStepTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="18dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="آخرین روز پریود قبلی چه تاریخی بوده؟"
+        android:textColor="#3f3f3f"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_top_navigation"
+        app:layout_constraintEnd_toEndOf="@+id/ms_progressBar"
+        app:layout_constraintStart_toStartOf="@+id/ms_progressBar"
+        app:layout_constraintTop_toBottomOf="@+id/ms_progressBar" />
+
+    <fragment
+        android:id="@+id/stepper_nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/ms_btnForget"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_top_navigation"
+        app:navGraph="@navigation/stepper_navigation" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottomBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_end="56dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ms_btn_next"
+        style="@style/MSNavBarButton.Next"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="سوال بعدی"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_bottomBar" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ms_btnForget"
+        style="@style/MSNavBarButton.Forget"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="فراموش کرده‌اید؟"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/ms_btn_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

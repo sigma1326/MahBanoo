@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StepperLayout">
+        <!-- BACK button's text color -->
+        <attr name="ms_backButtonColor" format="color|reference" />
+        <!-- NEXT button's text color -->
+        <attr name="ms_nextButtonColor" format="color|reference" />
+        <!-- COMPLETE button's text color -->
+        <attr name="ms_completeButtonColor" format="color|reference" />
+        <!-- Active step's color -->
+        <attr name="ms_activeStepColor" format="color|reference" />
+        <!-- Inactive step's color -->
+        <attr name="ms_inactiveStepColor" format="color|reference" />
+        <!-- Background of the bottom navigation -->
+        <attr name="ms_bottomNavigationBackground" format="reference" />
+        <!-- Error's color -->
+        <attr name="ms_errorColor" format="color|reference" />
+
+        <!-- BACK button's background -->
+        <attr name="ms_backButtonBackground" format="reference" />
+        <!-- NEXT button's background -->
+        <attr name="ms_nextButtonBackground" format="reference" />
+        <!-- COMPLETE button's background -->
+        <attr name="ms_completeButtonBackground" format="reference" />
+
+        <!-- BACK button's text -->
+        <attr name="ms_backButtonText" format="string|reference" />
+        <!-- NEXT button's text -->
+        <attr name="ms_nextButtonText" format="string|reference" />
+        <!-- COMPLETE button's text -->
+        <attr name="ms_completeButtonText" format="string|reference" />
+
+        <!-- The width of the horizontal tab divider used in tabs stepper type -->
+        <attr name="ms_tabStepDividerWidth" format="dimension|reference" />
+
+        <!-- Flag indicating if the Back (Previous step) button should be shown on the first step. False by default. -->
+        <attr name="ms_showBackButtonOnFirstStep" format="boolean" />
+
+        <!-- Flag indicating if the Bottom Navigation should be shown on the layout. True by default. -->
+        <attr name="ms_showBottomNavigation" format="boolean" />
+
+        <!-- DEPRECATED: Use ms_showErrorStateEnabled instead -->
+        <attr name="ms_showErrorState" format="boolean" />
+
+        <!-- Flag indicating whether to show the error state. Only applicable for 'tabs' type. False by default. -->
+        <attr name="ms_showErrorStateEnabled" format="boolean" />
+
+        <!-- DEPRECATED: Use ms_showErrorStateOnBackEnabled instead -->
+        <attr name="ms_showErrorStateOnBack" format="boolean" />
+
+        <!-- Flag indicating whether to keep showing the error state when user moves back. Only applicable for 'tabs' type. False by default. -->
+        <attr name="ms_showErrorStateOnBackEnabled" format="boolean" />
+
+        <!-- Flag indicating whether to show the error message below the tab title if specified. Only applicable for 'tabs' type. False by default. -->
+        <attr name="ms_showErrorMessageEnabled" format="boolean" />
+
+        <!-- Flag indicating whether step navigation is possible by clicking on the tabs directly. Only applicable for 'tabs' type. True by default. -->
+        <attr name="ms_tabNavigationEnabled" format="boolean" />
+
+        <!-- Type(s) of stepper feedback -->
+        <attr name="ms_stepperFeedbackType">
+            <flag name="none" value="1" />
+            <flag name="tabs" value="2" />
+            <flag name="content_progress" value="4" />
+            <flag name="disabled_bottom_navigation" value="8" />
+            <flag name="disabled_content_interaction" value="16" />
+            <flag name="content_fade" value="32" />
+            <flag name="content_overlay" value="64" />
+        </attr>
+
+        <!-- An alpha value from 0 to 1.0f to be used for the faded out view if 'content_fade' stepper feedback type is set. 0.5f by default. -->
+        <attr name="ms_stepperFeedback_contentFadeAlpha" format="float" />
+
+        <!-- Background to be used for the overlay on top of the content if 'content_overlay' stepper feedback type is set. -->
+        <attr name="ms_stepperFeedback_contentOverlayBackground" format="reference" />
+
+        <!-- Theme to use for even more custom styling of the stepper layout.
+             It is recommended that it should extend @style/MSDefaultStepperLayoutTheme, which is the default theme used.
+             See StepperLayoutTheme below for a list of possible inner view styles to overwrite.
+        -->
+        <attr name="ms_stepperLayoutTheme" format="reference" />
+
+        <!-- REQUIRED: Type of the stepper-->
+        <attr name="ms_stepperType">
+            <enum name="dots" value="0x01" />
+            <enum name="progress_bar" value="0x02" />
+            <enum name="tabs" value="0x03" />
+            <enum name="none" value="0x04" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="RightNavigationButton">
+        <attr name="state_verification_failed" format="boolean" />
+    </declare-styleable>
+
+    <attr name="ms_stepperStyle" format="reference" />
+
+    <declare-styleable name="StepperLayoutTheme">
+
+        <!-- Used by ms_bottomNavigation in layout/ms_stepper_layout -->
+        <attr name="ms_bottomNavigationStyle" format="reference" />
+
+        <!-- Used by ms_stepTabsContainer in layout/ms_stepper_layout -->
+        <attr name="ms_tabsContainerStyle" format="reference" />
+
+        <!-- Used by ms_stepPrevButton in layout/ms_stepper_layout -->
+        <attr name="ms_backNavigationButtonStyle" format="reference" />
+
+        <!-- Used by ms_stepNextButton in layout/ms_stepper_layout -->
+        <attr name="ms_nextNavigationButtonStyle" format="reference" />
+
+        <attr name="ms_forgetNavigationButtonStyle" format="reference" />
+
+        <!-- Used by ms_stepCompleteButton in layout/ms_stepper_layout -->
+        <attr name="ms_completeNavigationButtonStyle" format="reference" />
+
+        <!-- Used by ms_stepProgressBar in layout/ms_stepper_layout -->
+        <attr name="ms_colorableProgressBarStyle" format="reference" />
+
+        <!-- Used by ms_stepPagerProgressBar in layout/ms_stepper_layout -->
+        <attr name="ms_stepPagerProgressBarStyle" format="reference" />
+
+        <!-- Used by ms_stepPagerOverlay in layout/ms_stepper_layout -->
+        <attr name="ms_stepPagerOverlayStyle" format="reference" />
+
+        <!-- Used by ms_stepTabsScrollView in layout/ms_tabs_container -->
+        <attr name="ms_stepTabsScrollViewStyle" format="reference" />
+
+        <!-- Used by ms_stepTabsInnerContainer in layout/ms_tabs_container -->
+        <attr name="ms_stepTabsInnerContainerStyle" format="reference" />
+
+        <!-- Used by ms_stepTabsProgressMessage in layout/ms_tabs_container -->
+        <attr name="ms_stepTabsProgressMessageStyle" format="reference" />
+
+        <!-- Used in layout/ms_step_tab_container -->
+        <attr name="ms_stepTabContainerStyle" format="reference" />
+
+        <!-- Used by ms_stepNumber in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabNumberStyle" format="reference" />
+
+        <!-- Used by ms_stepDoneIndicator in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabDoneIndicatorStyle" format="reference" />
+
+        <!-- Used by ms_stepIconBackground in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabIconBackgroundStyle" format="reference" />
+
+        <!-- Used by ms_stepTitle in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabTitleStyle" format="reference" />
+
+        <!-- Used by ms_stepSubtitle in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabSubtitleStyle" format="reference" />
+
+        <!-- Used by ms_stepDivider in layout/ms_step_tab.xml -->
+        <attr name="ms_stepTabDividerStyle" format="reference" />
+
+    </declare-styleable>
+
+</resources>
