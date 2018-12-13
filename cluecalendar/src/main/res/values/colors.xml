@@ -3,9 +3,11 @@
     <color name="type_red">#f84d60</color>
     <color name="my_type_gray">#e6e6e6</color>
     <color name="type_green">#669933</color>
+    <color name="my_type_gray_2">#e6e6e6</color>
     <color name="type_yellow">#ffb533</color>
     <color name="type_marked">#4b1199</color>
     <color name="white">#ffffff</color>
     <color name="black">#5b5b5b</color>
     <color name="shadow">#59000000</color>
+    <color name="colorPrimary">#00819b</color>
 </resources>

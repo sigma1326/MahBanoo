@@ -2,6 +2,7 @@ package com.simorgh.cluecalendar.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
@@ -32,6 +33,7 @@ public class CalendarView extends LinearLayout {
     private Calendar max;
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
     private ClueData clueData;
+    private int weekDaysViewBackgroundColor = -1;
 
 
     public CalendarView(Context context) {
@@ -60,6 +62,11 @@ public class CalendarView extends LinearLayout {
         setOrientation(VERTICAL);
         weekDaysLabelView = new WeekDaysLabelView(getContext());
         weekDaysLabelView.setCalendarType(CalendarType.PERSIAN);
+        if (weekDaysViewBackgroundColor != -1) {
+            weekDaysLabelView.setBackgroundColor(weekDaysViewBackgroundColor);
+//            setBackgroundColor(weekDaysViewBackgroundColor);
+
+        }
         addView(weekDaysLabelView);
 
         RecyclerView recyclerView = new RecyclerView(getContext());
@@ -92,6 +99,15 @@ public class CalendarView extends LinearLayout {
     public void setMonthViewType(int monthViewType) {
         this.monthViewType = monthViewType;
         adapter.setMonthViewType(monthViewType);
+    }
+
+    public int getWeekDaysViewBackgroundColor() {
+        return weekDaysViewBackgroundColor;
+    }
+
+    public void setWeekDaysViewBackgroundColor(int weekDaysViewBackgroundColor) {
+        this.weekDaysViewBackgroundColor = weekDaysViewBackgroundColor;
+        weekDaysLabelView.setBackgroundColor(weekDaysViewBackgroundColor);
     }
 
     public BaseMonthView.OnDayClickListener getOnDayClickListener() {

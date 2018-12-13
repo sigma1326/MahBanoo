@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
@@ -30,6 +31,9 @@ public class WeekDaysLabelView extends View {
     private static final int DEFAULT_WEEK_START = Calendar.SUNDAY;
     private int mWeekStart = DEFAULT_WEEK_START;
     private final String[] mDayOfWeekLabels = new String[7];
+    private int backgroundColor;
+    private int textColor;
+
 
     private Locale mLocale;
 
@@ -46,6 +50,7 @@ public class WeekDaysLabelView extends View {
     private int mPaddedHeight;
 
     private final TextPaint mDayOfWeekPaint = new TextPaint();
+    private final Paint dayBkgPaint = new Paint();
 
     public WeekDaysLabelView(Context context) {
         super(context);
@@ -88,14 +93,20 @@ public class WeekDaysLabelView extends View {
 
         final int dayOfWeekTextSize = res.getDimensionPixelSize(R.dimen.month_view_day_of_week_text_size);
 
+        textColor = res.getColor(R.color.colorPrimary);
+        backgroundColor = res.getColor(R.color.white);
 
         mDayOfWeekPaint.setAntiAlias(true);
         mDayOfWeekPaint.setTextSize(dayOfWeekTextSize);
         mDayOfWeekPaint.setTypeface(dayOfWeekTypeface);
         mDayOfWeekPaint.setTextAlign(Paint.Align.CENTER);
-        mDayOfWeekPaint.setColor(Color.parseColor("#00819b"));
+        mDayOfWeekPaint.setColor(textColor);
         mDayOfWeekPaint.setFakeBoldText(true);
         mDayOfWeekPaint.setStyle(Paint.Style.FILL);
+
+        dayBkgPaint.setColor(backgroundColor);
+        dayBkgPaint.setAntiAlias(true);
+        dayBkgPaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -148,19 +159,16 @@ public class WeekDaysLabelView extends View {
     protected void onDraw(Canvas canvas) {
         drawDaysOfWeek(canvas);
 
-        setBackgroundColor(Color.WHITE);
         setElevation(10);
     }
 
+    private RectF rectF = new RectF();
+
     private void drawDaysOfWeek(Canvas canvas) {
         final TextPaint p = mDayOfWeekPaint;
-        final int headerHeight = mDayOfWeekHeight;
-        final int rowHeight = mDayOfWeekHeight;
         final int colWidth = mCellWidth;
-
-        // Text is vertically centered within the day of week height.
-        final float halfLineHeight = (p.ascent() + p.descent()) / 2f;
-        final int rowCenter = headerHeight + rowHeight / 2;
+        rectF.set(getLeft(), getTop(), getRight(), 100);
+        canvas.drawRect(rectF, dayBkgPaint);
 
         for (int col = 0; col < DAYS_IN_WEEK; col++) {
             final int colCenter = colWidth * col + colWidth / 2;
@@ -268,6 +276,26 @@ public class WeekDaysLabelView extends View {
         }
 
         return false;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    @Override
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        dayBkgPaint.setColor(backgroundColor);
+        postInvalidate();
+    }
+
+    public int getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
+        postInvalidate();
     }
 
     private float dp2px(float dp) {
