@@ -32,7 +32,6 @@ import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -123,7 +122,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
         init();
 
-        // Positions are now invalid, clear everything and start over.
+        // Positions are selectedDay invalid, clear everything and start over.
         notifyDataSetChanged();
     }
 
@@ -370,18 +369,17 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         return mCount;
     }
 
-    LinkedList positionsToUpdate = new LinkedList();
     @Override
     public void onDaySelected(Calendar selectedDay) {
-
         if (monthViewType == BaseMonthView.MonthViewTypeSetStartDay) {
             if (!selectedDay.after(Calendar.getInstance())) {
                 this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+                notifyDataSetChanged();
             }
         } else {
             this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
     }
 
     @Override
@@ -412,6 +410,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     public class MonthViewHolder extends RecyclerView.ViewHolder {
         public int position;
+        public Calendar temp;
         public final View container;
         public final BaseMonthView baseMonthView;
 
