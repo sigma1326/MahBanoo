@@ -99,12 +99,14 @@ public class ChangeDaysMonthView extends BaseMonthView {
                 colCenterRtl = colCenter;
             }
 
+            date = getCalendarForDay(day);
+
             top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
             bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
             left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
             right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
-            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
-            int dayType = getDayType(day);
+            canvas.drawRect(left, top, right, bottom, getDayPaint(date));
+            int dayType = getDayType(date);
             if (dayType == TYPE_GRAY) {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
             } else {
@@ -113,7 +115,7 @@ public class ChangeDaysMonthView extends BaseMonthView {
             canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
                     bottom - p.getFontMetrics().bottom, p);
 
-            if (isValidDayOfMonth(day) && isDayInRangeSelectedListener.isDayInRangeSelected(getCalendarForDay(day), clueData)) {
+            if (isValidDayOfMonth(day) && isDayInRangeSelectedListener.isDayInRangeSelected(date, clueData)) {
                 canvas.drawBitmap(icon_check, left + dp2px(10), top + dp2px(10), rectTypeRedPaint);
             }
 
@@ -130,14 +132,10 @@ public class ChangeDaysMonthView extends BaseMonthView {
     }
 
     @Override
-    protected Paint getDayPaint(int day) {
-        if (day == -1) {
-            return rectTypeGrayPaint;
-        }
+    protected Paint getDayPaint(Calendar date) {
         if (clueData == null) {
             return rectTypeGrayPaint;
         }
-        Calendar date = getCalendarForDay(day);
         if (isDayInRangeSelectedListener.isDayInRangeSelected(date, clueData)) {
             return rectTypeRedPaint;
         }
@@ -145,8 +143,7 @@ public class ChangeDaysMonthView extends BaseMonthView {
     }
 
     @Override
-    protected int getDayType(int day) {
-        Calendar date = getCalendarForDay(day);
+    protected int getDayType(Calendar date) {
         if (isDayInRangeSelectedListener.isDayInRangeSelected(date, clueData)) {
             return TYPE_RED;
         }

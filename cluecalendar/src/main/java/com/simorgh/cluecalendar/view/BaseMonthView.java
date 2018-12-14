@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -110,6 +111,9 @@ public class BaseMonthView extends View {
     protected PersianDate persianDate = new PersianDate();
     protected Locale mLocale;
     protected Calendar date = Calendar.getInstance();
+
+    protected PersianCalendar p = new PersianCalendar();
+    protected UmmalquraCalendar hijri = new UmmalquraCalendar();
 
 
     protected OnDayClickListener mOnDayClickListener;
@@ -332,6 +336,9 @@ public class BaseMonthView extends View {
         return rectTypeGrayPaint;
     }
 
+    protected Paint getDayPaint(Calendar date) {
+        return rectTypeGrayPaint;
+    }
 
     public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType) {
         mActivatedDay = selectedDay;
@@ -420,6 +427,7 @@ public class BaseMonthView extends View {
         postInvalidate();
     }
 
+
     protected boolean sameDay(int day, Calendar today) {
         int todayDay = 0;
         int todayYear = 0;
@@ -428,7 +436,7 @@ public class BaseMonthView extends View {
         int compMonth = 0;
         switch (calendarType) {
             case CalendarType.PERSIAN:
-                PersianCalendar p = CalendarTool.GregorianToPersian(today);
+                p = CalendarTool.GregorianToPersian(today);
                 todayDay = p.getPersianDay();
                 todayMonth = p.getPersianMonth();
                 todayYear = p.getPersianYear();
@@ -436,7 +444,7 @@ public class BaseMonthView extends View {
                 compMonth = mMonthPersian;
                 break;
             case CalendarType.ARABIC:
-                UmmalquraCalendar hijri = CalendarTool.GregorianToHijri(today);
+                hijri = CalendarTool.GregorianToHijri(today);
                 compYear = mYearHijri;
                 compMonth = mMonthHijri;
                 todayDay = hijri.get(UmmalquraCalendar.DAY_OF_MONTH);
@@ -515,10 +523,11 @@ public class BaseMonthView extends View {
         return day;
     }
 
-    protected boolean onDayClicked(int day) {
+    protected void onDayClicked(int day) {
 //        if (!isValidDayOfMonth(day) || !isDayEnabled(day)) {
 //            return false;
 //        }
+        Log.d(TAG, "onDayClicked: "+day);
 
         if (mOnDayClickListener != null) {
             Calendar date = Calendar.getInstance();
@@ -544,7 +553,6 @@ public class BaseMonthView extends View {
             selectedDay = day;
         }
 //        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
-        return true;
     }
 
 
@@ -607,7 +615,6 @@ public class BaseMonthView extends View {
         long days = 0L;
         switch (calendarType) {
             case CalendarType.PERSIAN:
-                PersianCalendar p = new PersianCalendar();
                 p.setPersianDate(persianCalendar.getPersianYear(), persianCalendar.getPersianMonth() + 1, day);
                 days = CalendarTool.getDaysFromDiff(p, clueData.getStartDate());
                 break;
@@ -635,6 +642,34 @@ public class BaseMonthView extends View {
         }
         return TYPE_GRAY;
     }
+
+    protected int getDayType(Calendar date) {
+        if (clueData == null) {
+            return TYPE_RED;
+        }
+        long days;
+        int day;
+        days = CalendarTool.getDaysFromDiff(date, clueData.getStartDate());
+        if (days >= 0) {
+            day = (int) ((days) % clueData.getTotalDays()) + 1;
+        } else {
+            return TYPE_GRAY;
+        }
+        if (day <= clueData.getRedCount()) {
+            return TYPE_RED;
+        } else if (day <= clueData.getTotalDays()) {
+            if (day >= clueData.getGreenStartIndex() && day <= clueData.getGreenEndIndex()) {
+                if (day == clueData.getGreen2Index()) {
+                    return TYPE_GREEN2;
+                }
+                return TYPE_GREEN;
+            } else if (day >= clueData.getYellowStartIndex() && day <= clueData.getYellowEndIndex()) {
+                return TYPE_YELLOW;
+            }
+        }
+        return TYPE_GRAY;
+    }
+
 
     protected void updateMonthYearLabel() {
         int month = 0;

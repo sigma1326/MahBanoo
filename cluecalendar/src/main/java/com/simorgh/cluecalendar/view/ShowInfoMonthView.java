@@ -18,6 +18,8 @@ import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.util.CalendarTool;
 
+import java.util.Calendar;
+
 import androidx.annotation.Nullable;
 
 public class ShowInfoMonthView extends BaseMonthView {
@@ -140,13 +142,14 @@ public class ShowInfoMonthView extends BaseMonthView {
             } else {
                 colCenterRtl = colCenter;
             }
+            date = getCalendarForDay(day);
 
             top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
             bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
             left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
             right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
-            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
-            int dayType = getDayType(day);
+            canvas.drawRect(left, top, right, bottom, getDayPaint(date));
+            int dayType = getDayType(date);
             if (dayType == TYPE_GRAY) {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
             } else {
@@ -155,7 +158,7 @@ public class ShowInfoMonthView extends BaseMonthView {
             canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
                     bottom - p.getFontMetrics().bottom, p);
 
-            if (isDayMarked(day)) {
+            if (isDayMarked(date)) {
                 markedPath.moveTo(left, top);
                 markedPath.lineTo(left + dp2px(14), top);
                 markedPath.lineTo(left, top + dp2px(14));
@@ -175,12 +178,9 @@ public class ShowInfoMonthView extends BaseMonthView {
         }
     }
 
-    private boolean isDayMarked(int day) {
-        if (!isValidDayOfMonth(day)) {
-            return false;
-        }
+    private boolean isDayMarked(Calendar date) {
         if (isDayMarkedListener != null) {
-            return isDayMarkedListener.isDayMarked(day);
+            return isDayMarkedListener.isDayMarked(date);
         }
         return false;
     }
@@ -191,25 +191,14 @@ public class ShowInfoMonthView extends BaseMonthView {
     }
 
     @Override
-    protected Paint getDayPaint(int day) {
-        if (day == -1) {
-            return rectTypeGrayPaint;
-        }
+    protected Paint getDayPaint(Calendar date) {
         if (clueData == null) {
             return rectTypeGrayPaint;
         }
-        long days = 0L;
-        switch (calendarType) {
-            case CalendarType.PERSIAN:
-                PersianCalendar p = new PersianCalendar();
-                p.setPersianDate(persianCalendar.getPersianYear(), persianCalendar.getPersianMonth() + 1, day);
-                days = CalendarTool.getDaysFromDiff(p, clueData.getStartDate());
-                break;
-            case CalendarType.GREGORIAN:
-                break;
-            case CalendarType.ARABIC:
-                break;
-        }
+        long days;
+        int day;
+        days = CalendarTool.getDaysFromDiff(date, clueData.getStartDate());
+
         if (days >= 0) {
             day = (int) ((days) % clueData.getTotalDays()) + 1;
         } else {
@@ -239,6 +228,6 @@ public class ShowInfoMonthView extends BaseMonthView {
     }
 
     public interface IsDayMarkedListener {
-        boolean isDayMarked(int day);
+        boolean isDayMarked(Calendar day);
     }
 }

@@ -6,20 +6,18 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 
 import com.simorgh.cluecalendar.R;
-import com.simorgh.cluecalendar.util.ClueData;
 
 import java.util.Calendar;
 
 import androidx.annotation.Nullable;
 
 public class SetStartDayMonthView extends BaseMonthView {
-    private Paint dayBkgPaint;
-
 
     //rectangle colors
     private Paint rectTypeRedPaint;
@@ -78,10 +76,6 @@ public class SetStartDayMonthView extends BaseMonthView {
     protected void initPaints() {
         super.initPaints();
 
-        dayBkgPaint = new Paint();
-        dayBkgPaint.setAntiAlias(true);
-        dayBkgPaint.setStyle(Paint.Style.FILL);
-
         rectTypeRedPaint = new Paint();
         rectTypeRedPaint.setAntiAlias(true);
         rectTypeRedPaint.setStyle(Paint.Style.FILL);
@@ -133,12 +127,14 @@ public class SetStartDayMonthView extends BaseMonthView {
                 colCenterRtl = colCenter;
             }
 
+            date = getCalendarForDay(day);
+
             top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
             bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
             left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
             right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
-            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
-            int dayType = getDayType(day);
+            canvas.drawRect(left, top, right, bottom, getDayPaint(date));
+            int dayType = getDayType(date);
             if (dayType == TYPE_GRAY) {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
             } else {
@@ -147,7 +143,7 @@ public class SetStartDayMonthView extends BaseMonthView {
             canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
                     bottom - p.getFontMetrics().bottom, p);
 
-            if (isDaySelectedListener.isDaySelected(getCalendarForDay(day))) {
+            if (isDaySelectedListener.isDaySelected(date)) {
                 canvas.drawBitmap(icon_check, left + dp2px(10), top + dp2px(10), rectTypeRedPaint);
             }
 
@@ -164,29 +160,21 @@ public class SetStartDayMonthView extends BaseMonthView {
     }
 
     @Override
-    protected Paint getDayPaint(int day) {
-        if (day == -1) {
-            return rectTypeGrayPaint;
-        }
+    protected Paint getDayPaint(Calendar day) {
         if (clueData == null) {
             return rectTypeGrayPaint;
         }
-        Calendar date = getCalendarForDay(day);
         if (isDaySelectedListener.isDaySelected(date)) {
             return rectTypeRedPaint;
         }
         return rectTypeGrayPaint;
     }
 
-
     @Override
-    protected int getDayType(int day) {
-        Calendar date = getCalendarForDay(day);
+    protected int getDayType(Calendar date) {
         if (isDaySelectedListener.isDaySelected(date)) {
             return TYPE_RED;
         }
         return TYPE_GRAY;
     }
-
-
 }

@@ -57,6 +57,16 @@ public class CalendarView extends LinearLayout {
         init();
     }
 
+    public CalendarView(Context context, int monthViewType, int calendarType, ClueData clueData, Calendar minDate, Calendar maxDate) {
+        super(context);
+        this.monthViewType = monthViewType;
+        this.calendarType = calendarType;
+        this.clueData = clueData;
+        this.min = minDate;
+        this.max = maxDate;
+        init();
+    }
+
 
     private void init() {
         setOrientation(VERTICAL);
@@ -64,22 +74,23 @@ public class CalendarView extends LinearLayout {
         weekDaysLabelView.setCalendarType(CalendarType.PERSIAN);
         if (weekDaysViewBackgroundColor != -1) {
             weekDaysLabelView.setBackgroundColor(weekDaysViewBackgroundColor);
-//            setBackgroundColor(weekDaysViewBackgroundColor);
-
         }
         addView(weekDaysLabelView);
 
         RecyclerView recyclerView = new RecyclerView(getContext());
-        addView(recyclerView);
         layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        addView(recyclerView);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MonthViewAdapter(getContext(), calendarType, monthViewType);
+        adapter = new MonthViewAdapter(getContext(), clueData, calendarType, monthViewType, min, max);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(0);
-        recyclerView.setDrawingCacheEnabled(false);
+        recyclerView.setItemViewCacheSize(10);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(DRAWING_CACHE_QUALITY_AUTO);
         recyclerView.setAdapter(adapter);
+
     }
 
     public int getCalendarType() {

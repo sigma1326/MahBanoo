@@ -81,7 +81,7 @@ public class CalendarTool {
         return "";
     }
 
-    private static Calendar calendar = Calendar.getInstance();
+    private volatile static Calendar calendar = Calendar.getInstance();
 
     public static Calendar PersianToGregorian(PersianCalendar p) {
         try {
@@ -113,31 +113,31 @@ public class CalendarTool {
     }
 
     private static UmmalquraCalendar GregorianToHijri(YearMonthDay yearMonthDay) {
-        Calendar grg = Calendar.getInstance();
-        grg.set(yearMonthDay.getYear(), yearMonthDay.getMonth(), yearMonthDay.getDay());
-        return GregorianToHijri(grg);
+        calendar.clear();
+        calendar.set(yearMonthDay.getYear(), yearMonthDay.getMonth(), yearMonthDay.getDay());
+        return GregorianToHijri(calendar);
     }
 
     private static PersianCalendar GregorianToPersian(YearMonthDay yearMonthDay) {
-        Calendar grg = Calendar.getInstance();
-        grg.set(yearMonthDay.getYear(), yearMonthDay.getMonth(), yearMonthDay.getDay());
-        return GregorianToPersian(grg);
+        calendar.clear();
+        calendar.set(yearMonthDay.getYear(), yearMonthDay.getMonth(), yearMonthDay.getDay());
+        return GregorianToPersian(calendar);
     }
 
     public static Calendar PersianToGregorian(PersianDate persianDate) {
-        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
         calendar.setTimeInMillis(persianDate.getTime());
         return calendar;
     }
 
     public static Calendar HijriToGregorian(UmmalquraCalendar hijri) {
-        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
         calendar.setTimeInMillis(hijri.getTimeInMillis());
         return calendar;
     }
-
+    static volatile UmmalquraCalendar hijri = new UmmalquraCalendar();
     public static UmmalquraCalendar GregorianToHijri(Calendar calendar) {
-        UmmalquraCalendar hijri = new UmmalquraCalendar();
+        hijri.clear();
         hijri.setTimeInMillis(calendar.getTimeInMillis());
         return hijri;
     }
@@ -296,7 +296,7 @@ public class CalendarTool {
         return s.toString();
     }
 
-
+    static volatile PersianCalendar p = new PersianCalendar();
     public static int getDaysInMonth(int month, int year, int calendarType) {
         switch (calendarType) {
             case CalendarType.PERSIAN:
@@ -305,7 +305,7 @@ public class CalendarTool {
                 } else if (month < 11) {
                     return 30;
                 } else {
-                    PersianCalendar p = new PersianCalendar();
+                    p.clear();
                     p.setPersianDate(year, month, 1);
                     if (p.isPersianLeapYear()) {
                         return 30;
