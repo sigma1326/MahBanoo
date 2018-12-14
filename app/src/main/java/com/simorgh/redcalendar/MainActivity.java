@@ -28,8 +28,7 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
         } catch (Exception e) {
             e.printStackTrace();
         }
-        c.setClueData(new ClueView.ClueData(6,26));
-
+        c.setClueData(new ClueView.ClueData(6, 26));
 
 //        CalendarView calendarView = findViewById(R.id.calendarView);
 //        calendarView.setOnDayClickListener(this);
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //        Calendar max = Calendar.getInstance();
 //        max.set(Calendar.YEAR, 2020);
 //        max.set(Calendar.MONTH, 10);
-//
+
 //        calendarView.setRange(min, max);
 //        calendarView.scrollToCurrentDate(Calendar.getInstance());
 //        calendarView.setIsDayMarkedListener(this);
@@ -52,8 +51,37 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //        stepperLayout.setListener(this);
 //        stepperLayout.setAdapter(new SampleFragmentStepAdapter(getSupportFragmentManager(), this));
 
+        // Lock orientation into landscape.
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        // Create a GameView and bind it to this activity.
+        // You don't need a ViewGroup to fill the screen, because the system
+        // has a FrameLayout to which this will be added.
+//        mGameView = new GameView(this);
+//        // Android 4.1 and higher simple way to request fullscreen.
+//        mGameView.setSystemUiVisibility(SYSTEM_UI_FLAG_FULLSCREEN);
+//        setContentView(mGameView);
     }
 
+    private GameView mGameView;
+
+    /**
+     * Pauses game when activity is paused.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        mGameView.pause();
+    }
+
+    /**
+     * Resumes game when activity is resumed.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        mGameView.resume();
+    }
 
     @Override
     public void onDayChanged(int day, int dayType, OnViewDataChangedListener listener) {
@@ -98,8 +126,63 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     }
 
     @Override
-    public boolean isDayMarked(int day) {
-        return day % 5 == 0;
+    public boolean isDayMarked(Calendar day) {
+        return day.get(Calendar.DAY_OF_MONTH) % 5 == 0;
     }
 
+//    @Override
+//    public void onCompleted(View completeButton) {
+//
+//    }
+//
+//    @Override
+//    public void onError(VerificationError verificationError) {
+//
+//    }
+//
+//    @Override
+//    public void onStepSelected(int newStepPosition) {
+//
+//    }
+//
+//    @Override
+//    public void onReturn() {
+//
+//    }
+//
+//    private class SampleFragmentStepAdapter implements StepAdapter {
+//        private Context context;
+//
+//        public SampleFragmentStepAdapter(FragmentManager supportFragmentManager, Context context) {
+//            this.context = context;
+//        }
+//
+//        @Override
+//        public Step createStep(int position) {
+//            return new  SetLastCycleDayFragment();
+//        }
+//
+//        @Override
+//        public Step findStep(int position) {
+//            return null;
+//        }
+//
+//        @NonNull
+//        @Override
+//        public StepViewModel getViewModel(int position) {
+//            StepViewModel.Builder builder = new StepViewModel.Builder(context);
+//            builder.setTitle("");
+//            return builder.create();
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return 3;
+//        }
+//
+//        @Override
+//        public PagerAdapter getPagerAdapter() {
+//            return null;
+//        }
+//    }
 }

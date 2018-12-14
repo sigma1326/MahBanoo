@@ -1,13 +1,6 @@
-package com.simorgh.redcalendar.ui;
-
-import androidx.lifecycle.ViewModelProviders;
+package com.simorgh.redcalendar.ui.step1;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +14,12 @@ import com.simorgh.redcalendar.R;
 
 import java.util.Calendar;
 
-public class SetLastCycleDayFragment extends Fragment implements BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
+public class SetLastCycleDayFragment extends Fragment implements  BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
 
     private SetLastCycleDayViewModel mViewModel;
     private CalendarView calendarView;
@@ -34,23 +32,25 @@ public class SetLastCycleDayFragment extends Fragment implements BaseMonthView.O
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (calendarView == null) {
-            calendarView = new CalendarView(getContext());
-            calendarView.setOnDayClickListener(this);
-            calendarView.setIsDayMarkedListener(this);
-            calendarView.setMonthViewType(BaseMonthView.MonthViewTypeSetStartDay);
-            calendarView.setCalendarType(CalendarType.PERSIAN);
-            calendarView.setClueData(new ClueData(5, 28, 4, today));
             min.set(Calendar.YEAR, 2018);
             min.set(Calendar.MONTH, 0);
             max.set(Calendar.YEAR, 2020);
             max.set(Calendar.MONTH, 10);
-            calendarView.setRange(min, max);
+            calendarView = new CalendarView(getContext(), BaseMonthView.MonthViewTypeSetStartDay
+                    , CalendarType.PERSIAN, new ClueData(5, 28, 4, today), min, max);
+            calendarView.setOnDayClickListener(this);
+            calendarView.setIsDayMarkedListener(this);
+
             calendarView.scrollToCurrentDate(today);
             calendarView.setWeekDaysViewBackgroundColor(getResources().getColor(R.color.my_type_gray_2));
         }
+    }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return calendarView;
     }
 
@@ -67,7 +67,7 @@ public class SetLastCycleDayFragment extends Fragment implements BaseMonthView.O
     }
 
     @Override
-    public boolean isDayMarked(int day) {
+    public boolean isDayMarked(Calendar day) {
         return false;
     }
 }

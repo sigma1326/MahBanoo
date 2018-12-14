@@ -3,36 +3,78 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/intro_navigation"
-    app:startDestination="@id/step_set_last_cycle">
+    app:startDestination="@id/step1">
     <fragment
-        android:id="@+id/step_set_last_cycle"
-        android:name="com.simorgh.redcalendar.ui.SetLastCycleDayFragment"
-        android:label="step_set_last_cycle">
+        android:id="@+id/step1"
+        android:name="com.simorgh.redcalendar.ui.step1.SetLastCycleDayFragment"
+        android:label="step1">
         <action
-            android:id="@+id/action_test"
-            app:destination="@+id/test"
+            android:id="@+id/action_step1_to_step2"
+            app:destination="@+id/step2"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"
-            app:popUpTo="@+id/step_set_last_cycle" />
+            app:popUpTo="@+id/step1" />
     </fragment>
     <fragment
-        android:id="@+id/test"
-        android:name="com.simorgh.redcalendar.ui.SetLastCycleDayFragment"
-        android:label="test">
+        android:id="@+id/step2"
+        android:name="com.simorgh.redcalendar.ui.step2.SetCycleLengthFragment"
+        android:label="step2"
+        tools:layout="@layout/set_cycle_length_fragment">
         <action
-            android:id="@+id/action_test_to_mainActivity"
-            app:destination="@id/mainActivity"
+            android:id="@+id/action_step2_to_step3"
+            app:destination="@+id/step3"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"
-            app:popUpTo="@+id/test" />
+            app:popUpTo="@+id/step2" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.simorgh.redcalendar.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/step3"
+        android:name="com.simorgh.redcalendar.ui.step3.SetCycleFrequencyFragment"
+        android:label="step3">
+        <action
+            android:id="@+id/action_step3_to_step4"
+            app:destination="@id/step4"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/step3" />
+    </fragment>
+    <fragment
+        android:id="@+id/step4"
+        android:name="com.simorgh.redcalendar.ui.step4.SetPMSFragment"
+        android:label="step4">
+        <action
+            android:id="@+id/action_step4_to_step5"
+            app:destination="@id/step5"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/step4" />
+    </fragment>
+    <fragment
+        android:id="@+id/step5"
+        android:name="com.simorgh.redcalendar.ui.step5.SetBirthDateFragment"
+        android:label="step5">
+        <action
+            android:id="@+id/action_step5_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/step5"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>
