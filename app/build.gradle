@@ -38,5 +38,4 @@ dependencies {
     implementation 'androidx.core:core:1.0.1'
     implementation project(':clueview')
     implementation project(':cluecalendar')
-//    implementation project(':stepper')
 }
