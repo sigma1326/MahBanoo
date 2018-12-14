@@ -1,9 +1,20 @@
 <resources>
     <string name="app_name">RedCalendar</string>
 
-    <string name="tab_title">Tab title</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, sale viris intellegam usu eu, persius patrioque sea at. Ne salutandi repudiandae mei, cu mollis accusam mediocrem mea. Altera dolorem praesent at vis. Torquatos philosophia ad quo. Omnis adipiscing has ea, mel no hinc iudico percipit.</string>
-    <string name="lorem_ipsum2">Lorem ipsum dolor sit amet, sale viris intellegam usu eu, persius patrioque sea at. Ne salutandi repudiandae mei, cu mollis accusam mediocrem mea. Altera dolorem praesent at vis. Torquatos philosophia ad quo. Omnis adipiscing has ea, mel no hinc iudico percipit.</string>
-    <string name="lorem_ipsum3">Antiopam consetetur mel in. Urbanitas constituto persequeris ex ius, sed ei elitr ridens temporibus. Ex probo lorem etiam sea, ut meliore electram scripserit vim. Et dicunt facilisis his, tamquam postulant mei te. Eum ei aperiri labitur eripuit, ut sit autem pertinax.</string>
+    <string name="step1_title">آخرین روز پریود قبلی چه تاریخی بوده؟</string>
+    <string name="step2_title">طول پریود شما به طور معمول چند روز است؟</string>
+    <string name="step3_title">فاصله پریودهای شما بطور معمول چند روز است؟</string>
+    <string name="step4_title">سندرم پیش از قاعدگی شما چند روز است؟</string>
+    <string name="step5_title">متولد چه سالی هستید؟</string>
+
+    <string name="step1_fractionTitle">مرحله اول از پنج مرحله</string>
+    <string name="step2_fractionTitle">مرحله دوم از پنج مرحله</string>
+    <string name="step3_fractionTitle">مرحله سوم از پنج مرحله</string>
+    <string name="step4_fractionTitle">مرحله چهارم از پنج مرحله</string>
+    <string name="step5_fractionTitle">مرحله پنجم از پنج مرحله</string>
+
+    <string name="next_question">سوال بعدی</string>
+    <string name="login_to_app">ورود به برنامه</string>
+    <string name="forget">فراموش کرده‌اید؟</string>
 
 </resources>
