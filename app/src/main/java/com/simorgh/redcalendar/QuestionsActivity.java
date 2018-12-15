@@ -35,7 +35,6 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     private ProgressBar progressBar;
     private NavController navController;
     private View divider;
-    private View fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +50,11 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
         stepFractionTitle = findViewById(R.id.ms_tvStepFraction);
         progressBar = findViewById(R.id.ms_progressBar);
         divider = findViewById(R.id.view_divider);
-        fragment = findViewById(R.id.stepper_nav_host_fragment);
 
         nextButton.setTypeface(typeface);
         forgetButton.setTypeface(typeface);
 
-        progressBar.setProgress(20);
+//        progressBar.setProgress(20);
         navController = Navigation.findNavController(QuestionsActivity.this, R.id.stepper_nav_host_fragment);
         Navigation.findNavController(QuestionsActivity.this, R.id.stepper_nav_host_fragment).addOnDestinationChangedListener(this);
         nextButton.setOnClickListener(v -> {

@@ -1,6 +1,5 @@
 package com.simorgh.redcalendar;
 
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -13,8 +12,6 @@ import com.simorgh.clueview.OnViewDataChangedListener;
 import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
 
 public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
 
@@ -68,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
 //        setContentView(simpleMonthView);
     }
 
-    private GameView mGameView;
 
     /**
      * Pauses game when activity is paused.
@@ -76,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     @Override
     protected void onPause() {
         super.onPause();
-//        mGameView.pause();
     }
 
     /**
@@ -85,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     @Override
     protected void onResume() {
         super.onResume();
-//        mGameView.resume();
     }
 
     @Override
@@ -134,60 +128,4 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     public boolean isDayMarked(Calendar day) {
         return day.get(Calendar.DAY_OF_MONTH) % 5 == 0;
     }
-
-//    @Override
-//    public void onCompleted(View completeButton) {
-//
-//    }
-//
-//    @Override
-//    public void onError(VerificationError verificationError) {
-//
-//    }
-//
-//    @Override
-//    public void onStepSelected(int newStepPosition) {
-//
-//    }
-//
-//    @Override
-//    public void onReturn() {
-//
-//    }
-//
-//    private class SampleFragmentStepAdapter implements StepAdapter {
-//        private Context context;
-//
-//        public SampleFragmentStepAdapter(FragmentManager supportFragmentManager, Context context) {
-//            this.context = context;
-//        }
-//
-//        @Override
-//        public Step createStep(int position) {
-//            return new  SetLastCycleDayFragment();
-//        }
-//
-//        @Override
-//        public Step findStep(int position) {
-//            return null;
-//        }
-//
-//        @NonNull
-//        @Override
-//        public StepViewModel getViewModel(int position) {
-//            StepViewModel.Builder builder = new StepViewModel.Builder(context);
-//            builder.setTitle("");
-//            return builder.create();
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return 3;
-//        }
-//
-//        @Override
-//        public PagerAdapter getPagerAdapter() {
-//            return null;
-//        }
-//    }
 }
