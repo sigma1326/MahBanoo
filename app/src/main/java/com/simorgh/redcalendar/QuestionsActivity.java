@@ -12,6 +12,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -63,6 +64,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                 case R.id.step1:
                     navController.navigate(R.id.action_step1_to_step2);
 //                    progressBar.setProgress(40, true);
+                    runAnim(true);
                     break;
                 case R.id.step2:
                     navController.navigate(R.id.action_step2_to_step3);
@@ -152,6 +154,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                 stepFractionTitle.setText(R.string.step1_fractionTitle);
                 progressBar.setProgress(20);
                 nextButton.setText(R.string.next_question);
+                runAnim(false);
                 break;
             case R.id.step2:
                 stepTitle.setText(R.string.step2_title);

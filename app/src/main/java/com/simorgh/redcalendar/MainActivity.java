@@ -1,5 +1,6 @@
 package com.simorgh.redcalendar;
 
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -12,6 +13,8 @@ import com.simorgh.clueview.OnViewDataChangedListener;
 import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import static android.view.View.SYSTEM_UI_FLAG_FULLSCREEN;
 
 public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
 
@@ -58,9 +61,11 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
         // You don't need a ViewGroup to fill the screen, because the system
         // has a FrameLayout to which this will be added.
 //        mGameView = new GameView(this);
-//        // Android 4.1 and higher simple way to request fullscreen.
+        // Android 4.1 and higher simple way to request fullscreen.
 //        mGameView.setSystemUiVisibility(SYSTEM_UI_FLAG_FULLSCREEN);
 //        setContentView(mGameView);
+//        SimpleMonthView simpleMonthView = new SimpleMonthView(this);
+//        setContentView(simpleMonthView);
     }
 
     private GameView mGameView;
