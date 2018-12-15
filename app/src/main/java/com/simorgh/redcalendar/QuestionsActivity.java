@@ -69,6 +69,10 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                 case R.id.step2:
                     navController.navigate(R.id.action_step2_to_step3);
                     break;
+                case R.id.step2forget:
+                    navController.navigate(R.id.action_step2forget_to_step3);
+                    runAnim(true);
+                    break;
                 case R.id.step3:
                     navController.navigate(R.id.action_step3_to_step4);
                     break;
@@ -83,12 +87,22 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
             }
         });
 
+        forgetButton.setOnClickListener(v -> {
+            switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
+                case R.id.step2:
+                    navController.navigate(R.id.action_step2_to_step2forget);
+                    runAnim(false);
+                    break;
+            }
+        });
+
         prevButton.setOnClickListener(v -> {
             navController.navigateUp();
         });
     }
 
-    int h1,h2;
+    int h1, h2;
+
     private void runAnim(boolean visible) {
         if (visible) {
             if (forgetButton.getVisibility() == View.VISIBLE) {
@@ -157,6 +171,13 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                 runAnim(false);
                 break;
             case R.id.step2:
+                stepTitle.setText(R.string.step2_title);
+                stepFractionTitle.setText(R.string.step2_fractionTitle);
+                progressBar.setProgress(40);
+                nextButton.setText(R.string.next_question);
+                runAnim(true);
+                break;
+            case R.id.step2forget:
                 stepTitle.setText(R.string.step2_title);
                 stepFractionTitle.setText(R.string.step2_fractionTitle);
                 progressBar.setProgress(40);

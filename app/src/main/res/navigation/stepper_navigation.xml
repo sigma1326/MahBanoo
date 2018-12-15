@@ -30,6 +30,14 @@
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@+id/step2" />
+        <action
+            android:id="@+id/action_step2_to_step2forget"
+            app:destination="@id/step2forget"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"
+            app:popUpTo="@+id/step2" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -76,5 +84,18 @@
             app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@+id/step5"
             app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/step2forget"
+        android:name="com.simorgh.redcalendar.ui.step2_forget.Step2ForgetFragment"
+        android:label="step2forget">
+        <action
+            android:id="@+id/action_step2forget_to_step3"
+            app:destination="@id/step3"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_bottom"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top"
+            app:popUpTo="@+id/step2forget" />
     </fragment>
 </navigation>
