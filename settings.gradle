@@ -1,1 +1,1 @@
-include ':app', ':clueview', ':cluecalendar', ':stepper'
+include ':app', ':clueview', ':cluecalendar', ':stepper', ':numberpicker'
