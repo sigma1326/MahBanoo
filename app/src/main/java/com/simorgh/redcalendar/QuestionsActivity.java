@@ -84,6 +84,10 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     navController.navigate(R.id.action_step4_to_step5);
                     runAnim(false);
                     break;
+                case R.id.step4forget:
+                    navController.navigate(R.id.action_step4forget_to_step5);
+                    runAnim(false);
+                    break;
                 case R.id.step5:
                     navController.navigate(R.id.action_step5_to_mainActivity);
                     break;
@@ -101,6 +105,10 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     navController.navigate(R.id.action_step3_to_step3forget);
                     runAnim(false);
                     break;
+                case R.id.step4:
+                    navController.navigate(R.id.action_step4_to_step4forget);
+                    runAnim(false);
+                    break;
             }
         });
 
@@ -116,8 +124,15 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
             if (forgetButton.getVisibility() == View.VISIBLE) {
                 return;
             }
+
+
+            h1 = forgetButton.getHeight();
+            h2 = forgetButton.getHeight() + divider.getHeight();
             forgetButton.setVisibility(View.VISIBLE);
             divider.setVisibility(View.VISIBLE);
+
+            forgetButton.setTranslationY(h1);
+            divider.setTranslationY(h2);
 
             forgetButton.animate()
                     .translationYBy(-h1)
@@ -196,6 +211,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                 stepFractionTitle.setText(R.string.step3_fractionTitle);
                 progressBar.setProgress(60);
                 nextButton.setText(R.string.next_question);
+                runAnim(true);
                 break;
             case R.id.step3forget:
                 stepTitle.setText(R.string.step3_title);
@@ -209,6 +225,13 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                 progressBar.setProgress(80);
                 nextButton.setText(R.string.next_question);
                 runAnim(true);
+                break;
+            case R.id.step4forget:
+                stepTitle.setText(R.string.step4_title);
+                stepFractionTitle.setText(R.string.step4_fractionTitle);
+                progressBar.setProgress(80);
+                nextButton.setText(R.string.next_question);
+                runAnim(false);
                 break;
             case R.id.step5:
                 stepTitle.setText(R.string.step5_title);

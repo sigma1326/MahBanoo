@@ -127,8 +127,9 @@
     <View
         android:id="@+id/view_divider"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0.8dp"
         android:background="@color/colorPrimary"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/ms_btnForget"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -154,6 +155,7 @@
         android:background="?attr/selectableItemBackground"
         android:text="@string/forget"
         android:textSize="15sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/ms_btn_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
