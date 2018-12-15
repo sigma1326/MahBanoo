@@ -76,6 +76,10 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                 case R.id.step3:
                     navController.navigate(R.id.action_step3_to_step4);
                     break;
+                case R.id.step3forget:
+                    navController.navigate(R.id.action_step3forget_to_step4);
+                    runAnim(true);
+                    break;
                 case R.id.step4:
                     navController.navigate(R.id.action_step4_to_step5);
                     runAnim(false);
@@ -91,6 +95,10 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
             switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
                 case R.id.step2:
                     navController.navigate(R.id.action_step2_to_step2forget);
+                    runAnim(false);
+                    break;
+                case R.id.step3:
+                    navController.navigate(R.id.action_step3_to_step3forget);
                     runAnim(false);
                     break;
             }
@@ -184,6 +192,12 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                 nextButton.setText(R.string.next_question);
                 break;
             case R.id.step3:
+                stepTitle.setText(R.string.step3_title);
+                stepFractionTitle.setText(R.string.step3_fractionTitle);
+                progressBar.setProgress(60);
+                nextButton.setText(R.string.next_question);
+                break;
+            case R.id.step3forget:
                 stepTitle.setText(R.string.step3_title);
                 stepFractionTitle.setText(R.string.step3_fractionTitle);
                 progressBar.setProgress(60);
