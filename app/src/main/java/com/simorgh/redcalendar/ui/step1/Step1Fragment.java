@@ -19,16 +19,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class SetLastCycleDayFragment extends Fragment implements  BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
+public class Step1Fragment extends Fragment implements  BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
 
-    private SetLastCycleDayViewModel mViewModel;
+    private Step1ViewModel mViewModel;
     private CalendarView calendarView;
     private Calendar min = Calendar.getInstance();
     private Calendar max = Calendar.getInstance();
     private Calendar today = Calendar.getInstance();
 
-    public static SetLastCycleDayFragment newInstance() {
-        return new SetLastCycleDayFragment();
+    public static Step1Fragment newInstance() {
+        return new Step1Fragment();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SetLastCycleDayFragment extends Fragment implements  BaseMonthView.
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(SetLastCycleDayViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(Step1ViewModel.class);
         // TODO: Use the ViewModel
     }
 

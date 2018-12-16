@@ -23,7 +23,7 @@ public class Step2ForgetFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.set_cycle_length_fragment, container, false);
+        return inflater.inflate(R.layout.step2_fragment, container, false);
     }
 
     @Override
