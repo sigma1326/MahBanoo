@@ -1,10 +1,12 @@
 package com.simorgh.redcalendar.ui.step5;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.simorgh.numberpicker.NumberPicker;
 import com.simorgh.redcalendar.R;
 
 import androidx.annotation.NonNull;
@@ -15,14 +17,23 @@ import androidx.lifecycle.ViewModelProviders;
 public class SetBirthDateFragment extends Fragment {
 
     private SetBirthDateViewModel mViewModel;
+    private Typeface typeface;
+
 
     public static SetBirthDateFragment newInstance() {
         return new SetBirthDateFragment();
     }
 
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/iransans_medium.ttf");
+    }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.set_cycle_length_fragment, container, false);
+        View v = inflater.inflate(R.layout.step5_fragment, container, false);
+        NumberPicker numberPicker = v.findViewById(R.id.np_birth_date);
+        numberPicker.setTypeface(typeface);
+        return v;
     }
 
     @Override
