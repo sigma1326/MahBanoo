@@ -17,7 +17,7 @@
         app:np_orientation="vertical"
         app:np_selectedTextColor="#00819b"
         app:np_selectedTextSize="24sp"
-        app:np_startText="سال تولد را انتخاب کنید"
+        app:np_startText="@string/choose_birth_date"
         app:np_textSize="23sp"
         app:np_value="1382"
         app:np_width="64dp">

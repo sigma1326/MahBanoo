@@ -17,7 +17,7 @@
         app:np_selectedTextColor="#00819b"
         app:np_selectedTextSize="24sp"
         app:np_textSize="23sp"
-        app:np_startText="تعداد روز را انتخاب کنید"
+        app:np_startText="@string/choose_days"
         app:np_value="4"
         app:np_width="64dp">
 

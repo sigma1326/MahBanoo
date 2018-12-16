@@ -16,5 +16,8 @@
     <string name="next_question">سوال بعدی</string>
     <string name="login_to_app">ورود به برنامه</string>
     <string name="forget">فراموش کرده‌اید؟</string>
+    <string name="choose_birth_date">سال تولد را انتخاب کنید</string>
+    <string name="day">روز</string>
+    <string name="choose_days">تعداد روز را انتخاب کنید</string>
 
 </resources>
