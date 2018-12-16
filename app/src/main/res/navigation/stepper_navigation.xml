@@ -6,7 +6,7 @@
     app:startDestination="@id/step1">
     <fragment
         android:id="@+id/step1"
-        android:name="com.simorgh.redcalendar.ui.step1.SetLastCycleDayFragment"
+        android:name="com.simorgh.redcalendar.ui.step1.Step1Fragment"
         android:label="step1">
         <action
             android:id="@+id/action_step1_to_step2"
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/step2"
-        android:name="com.simorgh.redcalendar.ui.step2.SetCycleLengthFragment"
+        android:name="com.simorgh.redcalendar.ui.step2.Step2Fragment"
         android:label="step2"
         tools:layout="@layout/set_cycle_length_fragment">
         <action
@@ -46,7 +46,7 @@
         tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/step3"
-        android:name="com.simorgh.redcalendar.ui.step3.SetCycleFrequencyFragment"
+        android:name="com.simorgh.redcalendar.ui.step3.Step3Fragment"
         android:label="step3">
         <action
             android:id="@+id/action_step3_to_step4"

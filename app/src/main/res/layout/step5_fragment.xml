@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.simorgh.numberpicker.NumberPicker
+        android:id="@+id/np_birth_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        app:np_height="180dp"
+        app:np_max="1387"
+        app:np_formatter="%4d"
+        app:np_min="1347"
+        app:np_orientation="vertical"
+        app:np_selectedTextColor="#00819b"
+        app:np_selectedTextSize="24sp"
+        app:np_startText="سال تولد را انتخاب کنید"
+        app:np_textSize="23sp"
+        app:np_value="1382"
+        app:np_width="64dp">
+
+    </com.simorgh.numberpicker.NumberPicker>
+</FrameLayout>
