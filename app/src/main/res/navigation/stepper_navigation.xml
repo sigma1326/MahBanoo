@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/step4"
-        android:name="com.simorgh.redcalendar.ui.step4.SetPMSFragment"
+        android:name="com.simorgh.redcalendar.ui.step4.Step4Fragment"
         android:label="step4">
         <action
             android:id="@+id/action_step4_to_step5"
