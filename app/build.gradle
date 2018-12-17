@@ -40,4 +40,5 @@ dependencies {
     implementation project(':cluecalendar')
     implementation project(':numberpicker')
     implementation project(':bottombar')
+    implementation project(':cyclebar')
 }
