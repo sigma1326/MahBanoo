@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="shadow">#59000000</color>
+    <color name="selected_color">#00819b</color>
+    <color name="unselected_color">#848388</color>
+    <color name="circle_color">#00819b</color>
+    <color name="circle_icon_color">#ffffff</color>
+    <color name="background_color">#ffffff</color>
+    <color name="main_background_color">#00000000</color>
+</resources>
