@@ -753,8 +753,6 @@ public class ClueView extends View implements OnViewDataChangedListener {
 
     }
 
-    Paint temp = null;
-
     private void drawMainCircle(Canvas canvas) {
         //draw the main circle
         canvas.drawCircle(midX, midY, mainCircleRadius, mainCirclePaint);
