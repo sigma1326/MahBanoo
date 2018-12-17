@@ -279,7 +279,7 @@ public class BottomBar extends View {
         realWidth = px2dp(getWidth());
         realHeight = px2dp(getHeight());
 
-        circleRadius = realWidth / 12f;
+        circleRadius = realHeight / 3f;
         circleX = realWidth / 2f;
         circleY = realHeight / 3f + 5;
         Log.d("d13", "onLayout: " + realWidth + " :: " + realHeight);
@@ -291,7 +291,7 @@ public class BottomBar extends View {
         itemIconWidth = realWidth / 18f;
         backgroundLeftY = realHeight / 3f;
         icons_y_center = backgroundLeftY + 22;
-        icons_x_center = 43;
+        icons_x_center = realWidth / 8.4f;
     }
 
     @Override
