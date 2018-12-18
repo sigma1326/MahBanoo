@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CycleBar</string>
+    <string name="today">امروز</string>
+    <string name="day">روز</string>
 </resources>

@@ -72,6 +72,15 @@ public class CycleBar extends View {
 
     private ClueData clueData;
 
+    private static Calendar in = Calendar.getInstance();
+    private static Calendar start = Calendar.getInstance();
+
+    private static final float radius = 15f;
+
+    private String dayText;
+    private String todayText;
+
+
     public CycleBar(Context context) {
         super(context);
         initAttrs(context, null);
@@ -115,11 +124,14 @@ public class CycleBar extends View {
         totalDaysTextSize = typedArray.getDimension(R.styleable.CycleBar_totalDaysTextSize, resources.getDimension(R.dimen.totalDaysTextSize));
         todayTextSize = typedArray.getDimension(R.styleable.CycleBar_todayTextSize, resources.getDimension(R.dimen.todayTextSize));
 
+        todayText = resources.getString(R.string.today);
+        dayText = resources.getString(R.string.day);
+
         typedArray.recycle();
     }
 
     private void init() {
-        clueData = new ClueData(5, 25, 3, Calendar.getInstance());
+        today = Calendar.getInstance();
 
         redTypePaint = new Paint();
         redTypePaint.setAntiAlias(true);
@@ -241,19 +253,6 @@ public class CycleBar extends View {
         cycleBarWidth = realWidth - cycleBarX;
         cycleBarHeight = realHeight / 2.4f;
         cycleBarY = realHeight - cycleBarHeight;
-
-//        circleRadius = realHeight / 3f;
-//        circleX = realWidth / 2f;
-//        circleY = realHeight / 3f + 5;
-//
-//        circleIconWidth = realWidth / 10.6f;
-//        circleIconHeight = realWidth / 10.6f;
-//
-//        itemIconHeight = realWidth / 18f;
-//        itemIconWidth = realWidth / 18f;
-//        backgroundLeftY = realHeight / 3f;
-//        icons_y_center = backgroundLeftY + 22;
-//        icons_x_center = realWidth / 8.4f;
     }
 
     @Override
@@ -261,9 +260,16 @@ public class CycleBar extends View {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
+        if (isInEditMode()) {
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            clueData = new ClueData(5, 25, 3, c);
+        }
+        if (clueData == null) {
+            return;
+        }
         cycleBarRectF.set(dp2px(cycleBarX + 2), dp2px(cycleBarY + 2), dp2px(realWidth - 2), dp2px(realHeight - 2));
 
         cycleBarBorderRectF.set(dp2px(cycleBarX + 2), dp2px(cycleBarY + 2), dp2px(realWidth - 2), dp2px(realHeight - 2));
@@ -283,22 +289,73 @@ public class CycleBar extends View {
                 , cycleBarGreenDaysRectF.right - cycleBarGreenDaysRectF.width() / 3 - dp2px(1)
                 , cycleBarGreenDaysRectF.bottom - dp2px(3));
 
-        canvas.drawRoundRect(cycleBarRectF, dp2px(20), dp2px(20), grayTypePaint);
-        canvas.drawRoundRect(cycleBarBorderRectF, dp2px(20), dp2px(20), borderPaint);
-        canvas.drawRoundRect(cycleBarRedDaysRectF, dp2px(20), dp2px(20), redTypePaint);
-        canvas.drawRoundRect(cycleBarGreenDaysRectF, dp2px(20), dp2px(20), greenTypePaint);
+        canvas.drawRoundRect(cycleBarRectF, dp2px(radius), dp2px(radius), grayTypePaint);
+        canvas.drawRoundRect(cycleBarBorderRectF, dp2px(radius), dp2px(radius), borderPaint);
+        canvas.drawRoundRect(cycleBarRedDaysRectF, dp2px(radius), dp2px(radius), redTypePaint);
+        canvas.drawRoundRect(cycleBarGreenDaysRectF, dp2px(radius), dp2px(radius), greenTypePaint);
         canvas.drawBitmap(icon_greenType2, null, cycleBarGreen2RectF, greenTypePaint);
 
-        canvas.drawLine(dp2px(150), dp2px(cycleBarY + 1), dp2px(150), dp2px(cycleBarY - 15), todayMarkerPaint);
-        canvas.drawCircle(dp2px(150),dp2px(cycleBarY-15-4),dp2px(4),todayMarkerPaint);
-        canvas.drawText("امروز",dp2px(150)+0.2f*todayTextPaint.getFontMetrics().descent
-                ,dp2px(cycleBarY-15-4)-todayTextPaint.getFontMetrics().descent
-                ,todayTextPaint);
+        canvas.drawLine(getTodayX(), dp2px(cycleBarY + 3), getTodayX(), dp2px(cycleBarY - 15), todayMarkerPaint);
+        canvas.drawCircle(getTodayX(), dp2px(cycleBarY - 15 - 4), dp2px(4), todayMarkerPaint);
+        canvas.drawText(todayText, getTodayX() - todayTextPaint.getFontMetrics().descent
+                , dp2px(cycleBarY - 15 - 4) - todayTextPaint.getFontMetrics().descent
+                , todayTextPaint);
 
-        totalDaysText = "26 روز";
-        redDaysText = "3 روز";
-        canvas.drawText(totalDaysText, 2 * totalDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - totalDaysTextPaint.getFontMetrics().bottom, totalDaysTextPaint);
-        canvas.drawText(redDaysText, cycleBarRedDaysRectF.centerX() + 0.5f * redDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - 1.5f*redDaysTextPaint.getFontMetrics().bottom, redDaysTextPaint);
+        totalDaysText = clueData.getTotalDays() + " " + dayText;
+        redDaysText = clueData.getRedCount() + " " + dayText;
+        canvas.drawText(totalDaysText, dp2px(5) + 2 * totalDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - totalDaysTextPaint.getFontMetrics().bottom, totalDaysTextPaint);
+        canvas.drawText(redDaysText, cycleBarRedDaysRectF.centerX() + 0.5f * redDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - 1.5f * redDaysTextPaint.getFontMetrics().bottom, redDaysTextPaint);
+    }
+
+    private Calendar today;
+
+    private float getTodayX() {
+        if (clueData == null) {
+            return dp2px(cycleBarX);
+        }
+        int day = (int) getDaysFromDiff(today, clueData.getStartDate());
+        if (day == 0 || day < 0) {
+            day = 1;
+        } else {
+            day--;
+        }
+        float unit = cycleBarWidth / clueData.getTotalDays();
+        return dp2px(cycleBarX + cycleBarWidth - (unit * day) + unit / 2);
+    }
+
+
+    public static long getDaysFromDiff(Calendar input, Calendar startDate) {
+        float diffDays = -1;
+        in.clear();
+        in.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH));
+        start.clear();
+        start.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH));
+        if (!input.after(startDate)) {
+            return (long) diffDays;
+        }
+        diffDays = (float) (in.getTimeInMillis() - start.getTimeInMillis()) / (60 * 60 * 24 * 1000);
+        if (diffDays < 0) {
+            return (long) diffDays;
+        }
+        return (long) diffDays;
+    }
+
+    public ClueData getClueData() {
+        return clueData;
+    }
+
+    public void setClueData(ClueData clueData) {
+        this.clueData = clueData;
+        postInvalidate();
+    }
+
+    public Calendar getToday() {
+        return today;
+    }
+
+    public void setToday(Calendar today) {
+        this.today.setTimeInMillis(today.getTimeInMillis());
+        postInvalidate();
     }
 
     private float dp2px(float dp) {

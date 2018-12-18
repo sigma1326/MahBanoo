@@ -11,7 +11,5 @@
         <attr name="todayTextSize" format="dimension" />
         <attr name="redDaysTextColor" format="color" />
         <attr name="redDaysTextSize" format="dimension" />
-
-
     </declare-styleable>
 </resources>
