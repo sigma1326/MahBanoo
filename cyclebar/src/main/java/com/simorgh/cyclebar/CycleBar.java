@@ -271,6 +271,11 @@ public class CycleBar extends View {
         if (clueData == null) {
             return;
         }
+        drawToday(canvas);
+        drawCycleBar(canvas);
+       }
+
+    private void drawCycleBar(Canvas canvas) {
         cycleBarRectF.set(dp2px(cycleBarX + 2), dp2px(cycleBarY + 2), dp2px(realWidth - 2), dp2px(realHeight - 2));
 
         cycleBarBorderRectF.set(dp2px(cycleBarX + 2), dp2px(cycleBarY + 2), dp2px(realWidth - 2), dp2px(realHeight - 2));
@@ -296,16 +301,19 @@ public class CycleBar extends View {
         canvas.drawRoundRect(cycleBarGreenDaysRectF, dp2px(radius), dp2px(radius), greenTypePaint);
         canvas.drawBitmap(icon_greenType2, null, cycleBarGreen2RectF, greenTypePaint);
 
+        redDaysText = clueData.getRedCount() + " " + dayText;
+        canvas.drawText(redDaysText, cycleBarRedDaysRectF.centerX() + 0.5f * redDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - 1.5f * redDaysTextPaint.getFontMetrics().bottom, redDaysTextPaint);
+
+        totalDaysText = clueData.getTotalDays() + " " + dayText;
+        canvas.drawText(totalDaysText, dp2px(5) + 2 * totalDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - totalDaysTextPaint.getFontMetrics().bottom, totalDaysTextPaint);
+    }
+
+    private void drawToday(Canvas canvas) {
         canvas.drawLine(getTodayX(), dp2px(cycleBarY + 3), getTodayX(), dp2px(cycleBarY - 15), todayMarkerPaint);
         canvas.drawCircle(getTodayX(), dp2px(cycleBarY - 15 - 4), dp2px(4), todayMarkerPaint);
         canvas.drawText(todayText, getTodayX() - 0.2f * todayTextPaint.getFontMetrics().descent
                 , dp2px(cycleBarY - 15 - 4) - todayTextPaint.getFontMetrics().descent
                 , todayTextPaint);
-
-        totalDaysText = clueData.getTotalDays() + " " + dayText;
-        redDaysText = clueData.getRedCount() + " " + dayText;
-        canvas.drawText(totalDaysText, dp2px(5) + 2 * totalDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - totalDaysTextPaint.getFontMetrics().bottom, totalDaysTextPaint);
-        canvas.drawText(redDaysText, cycleBarRedDaysRectF.centerX() + 0.5f * redDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - 1.5f * redDaysTextPaint.getFontMetrics().bottom, redDaysTextPaint);
     }
 
     private Calendar today;
