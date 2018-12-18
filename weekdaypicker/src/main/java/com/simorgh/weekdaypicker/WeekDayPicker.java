@@ -27,5 +27,16 @@ public class WeekDayPicker extends View {
     }
 
 
+    private float dp2px(float dp) {
+        return SizeConverter.dpToPx(getContext(), dp);
+    }
+
+    private float px2dp(float px) {
+        return SizeConverter.pxToDp(getContext(), px);
+    }
+
+    private float sp2px(float sp) {
+        return SizeConverter.spToPx(getContext(), sp);
+    }
 
 }
