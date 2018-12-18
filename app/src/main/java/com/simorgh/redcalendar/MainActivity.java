@@ -1,8 +1,10 @@
 package com.simorgh.redcalendar;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.simorgh.bottombar.BottomBar;
 import com.simorgh.cluecalendar.util.CalendarTool;
 import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
@@ -12,8 +14,12 @@ import com.simorgh.clueview.OnViewDataChangedListener;
 import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 
-public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
+public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener, BottomBar.OnItemClickListener, BottomBar.OnCircleItemClickListener {
+
+    private AppCompatTextView titleText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,57 +36,18 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
         }
         c.setClueData(new ClueView.ClueData(6, 26));
 
-//        CalendarView calendarView = findViewById(R.id.calendarView);
-//        calendarView.setOnDayClickListener(this);
-//        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeShowCalendar);
-//        calendarView.setCalendarType(CalendarType.PERSIAN);
-//        calendarView.setClueData(new ClueData(5, 28, 4, Calendar.getInstance()));
-//        Calendar min = Calendar.getInstance();
-//        min.set(Calendar.YEAR, 2018);
-//        min.set(Calendar.MONTH, 0);
-//        Calendar max = Calendar.getInstance();
-//        max.set(Calendar.YEAR, 2020);
-//        max.set(Calendar.MONTH, 10);
-
-//        calendarView.setRange(min, max);
-//        calendarView.scrollToCurrentDate(Calendar.getInstance());
-//        calendarView.setIsDayMarkedListener(this);
-
-
-//        StepperLayout stepperLayout = findViewById(R.id.stepperLayout);
-//        stepperLayout.setListener(this);
-//        stepperLayout.setAdapter(new SampleFragmentStepAdapter(getSupportFragmentManager(), this));
+        titleText = findViewById(R.id.tv_toolbarTitle);
 
         // Lock orientation into landscape.
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        // Create a GameView and bind it to this activity.
-        // You don't need a ViewGroup to fill the screen, because the system
-        // has a FrameLayout to which this will be added.
-//        mGameView = new GameView(this);
-        // Android 4.1 and higher simple way to request fullscreen.
-//        mGameView.setSystemUiVisibility(SYSTEM_UI_FLAG_FULLSCREEN);
-//        setContentView(mGameView);
 //        SimpleMonthView simpleMonthView = new SimpleMonthView(this);
 //        setContentView(simpleMonthView);
+        BottomBar bottomBar = findViewById(R.id.bottomBar);
+        bottomBar.setItemClickListener(this);
+        bottomBar.setCircleItemClickListener(this);
     }
 
-
-    /**
-     * Pauses game when activity is paused.
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    /**
-     * Resumes game when activity is resumed.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void onDayChanged(int day, int dayType, OnViewDataChangedListener listener) {
@@ -127,5 +94,15 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     @Override
     public boolean isDayMarked(Calendar day) {
         return day.get(Calendar.DAY_OF_MONTH) % 5 == 0;
+    }
+
+    @Override
+    public void onClick(BottomBar.BottomItem item) {
+        titleText.setText(item.getText());
+    }
+
+    @Override
+    public void onClick() {
+        Toast.makeText(this, "circle", Toast.LENGTH_SHORT).show();
     }
 }

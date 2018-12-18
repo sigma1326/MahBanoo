@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.ui.step5;
+package com.simorgh.redcalendar.ui.register.step3;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,24 +14,24 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class SetBirthDateFragment extends Fragment {
+public class Step3Fragment extends Fragment {
 
-    private SetBirthDateViewModel mViewModel;
+    private Step3ViewModel mViewModel;
     private Typeface typeface;
 
-
-    public static SetBirthDateFragment newInstance() {
-        return new SetBirthDateFragment();
+    public static Step3Fragment newInstance() {
+        return new Step3Fragment();
     }
 
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/iransans_medium.ttf");
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.step5_fragment, container, false);
-        NumberPicker numberPicker = v.findViewById(R.id.np_birth_date);
+        View v = inflater.inflate(R.layout.step3_fragment, container, false);
+        NumberPicker numberPicker = v.findViewById(R.id.np_period_freq);
         numberPicker.setTypeface(typeface);
         return v;
     }
@@ -39,7 +39,7 @@ public class SetBirthDateFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(SetBirthDateViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(Step3ViewModel.class);
         // TODO: Use the ViewModel
     }
 

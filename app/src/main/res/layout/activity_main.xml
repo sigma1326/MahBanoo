@@ -6,22 +6,73 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.simorgh.clueview.ClueView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:id="@+id/clue_view"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <View
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/white"
+        android:elevation="10dp"
+        android:outlineAmbientShadowColor="#38000000"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.simorgh.clueview.ClueView
+        android:id="@+id/clue_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <com.simorgh.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_toolbarTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="دوره فعلی"
+        android:elevation="10dp"
+        android:fontFamily="@font/iransans_medium"
+        android:textSize="16sp"
+        android:textColor="#00819b"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageView"
+        android:layout_width="23dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_height="23dp"
+        android:layout_marginStart="21dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginLeft="21dp"
+        android:layout_marginTop="21dp"
+        android:elevation="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_info" />
+
     <!--<com.simorgh.redcalendar.SimpleMonthView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent"/>-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"/>-->
 
     <!--<com.simorgh.cluecalendar.view.CalendarView-->
     <!--android:layout_width="0dp"-->
@@ -33,13 +84,13 @@
     <!--app:layout_constraintTop_toTopOf="parent" />-->
 
     <!--<com.simorgh.stepper.StepperLayout-->
-        <!--android:id="@+id/stepperLayout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--app:ms_stepperType="progress_bar"-->
-        <!--tools:theme="@style/AppTheme" />-->
+    <!--android:id="@+id/stepperLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--app:ms_stepperType="progress_bar"-->
+    <!--tools:theme="@style/AppTheme" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

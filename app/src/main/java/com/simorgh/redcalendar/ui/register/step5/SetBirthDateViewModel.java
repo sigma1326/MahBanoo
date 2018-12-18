@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.ui.step5;
+package com.simorgh.redcalendar.ui.register.step5;
 
 import androidx.lifecycle.ViewModel;
 

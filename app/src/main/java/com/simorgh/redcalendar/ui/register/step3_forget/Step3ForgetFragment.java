@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.ui.step3_forget;
+package com.simorgh.redcalendar.ui.register.step3_forget;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
