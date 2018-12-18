@@ -41,4 +41,5 @@ dependencies {
     implementation project(':numberpicker')
     implementation project(':bottombar')
     implementation project(':cyclebar')
+    implementation project(':weekdaypicker')
 }
