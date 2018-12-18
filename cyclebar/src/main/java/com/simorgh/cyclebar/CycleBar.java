@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.Calendar;
@@ -250,7 +251,7 @@ public class CycleBar extends View {
         realHeight = px2dp(getHeight());
 
         cycleBarX = realWidth / 7.5f;
-        cycleBarWidth = realWidth - cycleBarX;
+        cycleBarWidth = realWidth - cycleBarX - 5;
         cycleBarHeight = realHeight / 2.4f;
         cycleBarY = realHeight - cycleBarHeight;
     }
@@ -297,7 +298,7 @@ public class CycleBar extends View {
 
         canvas.drawLine(getTodayX(), dp2px(cycleBarY + 3), getTodayX(), dp2px(cycleBarY - 15), todayMarkerPaint);
         canvas.drawCircle(getTodayX(), dp2px(cycleBarY - 15 - 4), dp2px(4), todayMarkerPaint);
-        canvas.drawText(todayText, getTodayX() - todayTextPaint.getFontMetrics().descent
+        canvas.drawText(todayText, getTodayX() - 0.2f * todayTextPaint.getFontMetrics().descent
                 , dp2px(cycleBarY - 15 - 4) - todayTextPaint.getFontMetrics().descent
                 , todayTextPaint);
 
