@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="redDaysTextSize">12sp</dimen>
+    <dimen name="totalDaysTextSize">15sp</dimen>
+    <dimen name="todayTextSize">12sp</dimen>
+</resources>

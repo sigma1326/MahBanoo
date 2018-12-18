@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="redTypeColor">#f84d60</color>
+    <color name="greenTypeColor">#669933</color>
+    <color name="grayTypeColor">#e6e6e6</color>
+    <color name="borderColor">#00819b</color>
+    <color name="todayColor">#00819b</color>
+    <color name="totalDaysTextColor">#5c5c5c</color>
+    <color name="redDaysTextColor">#ffffff</color>
+
+</resources>

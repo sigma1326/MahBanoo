@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CycleBar">
+        <attr name="redTypeColor" format="color" />
+        <attr name="greenTypeColor" format="color" />
+        <attr name="grayTypeColor" format="color" />
+        <attr name="borderColor" format="color" />
+        <attr name="todayColor" format="color" />
+        <attr name="totalDaysTextColor" format="color" />
+        <attr name="totalDaysTextSize" format="dimension" />
+        <attr name="todayTextSize" format="dimension" />
+        <attr name="redDaysTextColor" format="color" />
+        <attr name="redDaysTextSize" format="dimension" />
+
+
+    </declare-styleable>
+</resources>
