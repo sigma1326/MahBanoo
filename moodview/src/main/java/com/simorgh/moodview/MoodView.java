@@ -24,6 +24,5 @@ public class MoodView extends View {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public MoodView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-
     }
 }
