@@ -44,4 +44,5 @@ dependencies {
     implementation project(':weekdaypicker')
     implementation project(':moodview')
     implementation project(':weightview')
+    implementation project(':drugview')
 }
