@@ -33,8 +33,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha08'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha08'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha09'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha09'
     implementation 'androidx.core:core:1.0.1'
     implementation project(':clueview')
     implementation project(':cluecalendar')
@@ -43,4 +43,5 @@ dependencies {
     implementation project(':cyclebar')
     implementation project(':weekdaypicker')
     implementation project(':moodview')
+    implementation project(':weightview')
 }
