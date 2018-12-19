@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">WeightView</string>
+    <string name="weight">وزن</string>
+    <string name="kg">کیلوگرم</string>
 </resources>

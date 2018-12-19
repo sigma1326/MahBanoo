@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WeightView">
+        <attr name="weightString" format="string" />
+        <attr name="weightTextColor" format="color" />
+        <attr name="lineColor" format="color" />
+        <attr name="weightTextSize" format="dimension" />
+        <attr name="titleTextColor" format="color" />
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="kgTextSize" format="dimension" />
+        <attr name="kgTextColor" format="color" />
+    </declare-styleable>
+</resources>
