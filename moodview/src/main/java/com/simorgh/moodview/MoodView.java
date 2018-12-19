@@ -273,7 +273,7 @@ public class MoodView extends View {
         titleTextPaint.setAntiAlias(true);
         titleTextPaint.setStyle(Paint.Style.FILL);
         titleTextPaint.setTextSize(titleTextSize);
-        titleTextPaint.setTextAlign(Paint.Align.CENTER);
+        titleTextPaint.setTextAlign(Paint.Align.RIGHT);
         titleTextPaint.setColor(titleTextColor);
         titleTextPaint.setTypeface(typeface);
     }
@@ -329,7 +329,7 @@ public class MoodView extends View {
         realHeight = px2dp(getHeight());
         itemIconSize = (realHeight - 2) / 2.05f;
         checkIconSize = (itemIconSize) / 3f;
-        lineLength = realWidth / 1.55f;
+        lineLength = realWidth / 1.45f;
     }
 
     @Override
@@ -343,7 +343,7 @@ public class MoodView extends View {
         canvas.drawLine(0, titleTextPaint.getFontMetrics().descent / 2f + dp2px(12)
                 , dp2px(lineLength), titleTextPaint.getFontMetrics().descent / 2f + dp2px(12), linePaint);
         canvas.drawText(getTitleByType(getResources())
-                , dp2px(realWidth - 32) - 3 * titleTextPaint.getFontMetrics().descent, titleTextPaint.getFontMetrics().descent / 2f + dp2px(12), titleTextPaint);
+                , dp2px(realWidth - 32), titleTextPaint.getFontMetrics().descent / 2f + dp2px(12), titleTextPaint);
 
         float y = dp2px(realHeight / 2.08f);
         int i = 0;
@@ -377,8 +377,12 @@ public class MoodView extends View {
                                 selectedItems.add(i);
                             }
                         } else {
-                            selectedItems.clear();
-                            selectedItems.add(i);
+                            if (selectedItems.contains(i)) {
+                                selectedItems.remove(new Integer(i));
+                            } else {
+                                selectedItems.clear();
+                                selectedItems.add(i);
+                            }
                         }
                         if (onItemSelectedListener != null) {
                             onItemSelectedListener.onItemSelected(selectedItems);
@@ -414,7 +418,6 @@ public class MoodView extends View {
         init();
         postInvalidate();
     }
-
 
 
     private float dp2px(float dp) {
