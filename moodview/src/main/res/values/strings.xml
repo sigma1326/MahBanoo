@@ -1,3 +1,46 @@
 <resources>
     <string name="app_name">MoodView</string>
+
+    <string-array name="type_bleeding_strings">
+        <item>لکه‌بینی</item>
+        <item>کم</item>
+        <item>متوسط</item>
+        <item>زیاد</item>
+    </string-array>
+
+    <string-array name="type_emotion_strings">
+        <item>خوشحال</item>
+        <item>ناراحت</item>
+        <item>حساس</item>
+        <item>عصبانی</item>
+    </string-array>
+
+    <string-array name="type_pain_strings">
+        <item>درد شکم</item>
+        <item>حساس شدن سینه</item>
+        <item>سردرد</item>
+        <item>کمر درد</item>
+    </string-array>
+
+    <string-array name="type_eating_desire_strings">
+        <item>نمک</item>
+        <item>شکلات</item>
+        <item>شیرینی</item>
+        <item></item>
+    </string-array>
+
+    <string-array name="type_hair_style_strings">
+        <item>خوب</item>
+        <item>بد</item>
+        <item>چرب</item>
+        <item>خشک</item>
+    </string-array>
+
+
+
+    <string name="type_bleeding_title">میزان خونریزی</string>
+    <string name="type_emotion_title">احساسات</string>
+    <string name="type_pain_title">احساس درد</string>
+    <string name="type_eating_desire_title">میل به خوردن</string>
+    <string name="type_hair_style_title">حالت موها</string>
 </resources>

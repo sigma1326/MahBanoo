@@ -10,13 +10,15 @@ import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
+import com.simorgh.weekdaypicker.ClueData;
+import com.simorgh.weekdaypicker.WeekDayPicker;
 
 import java.util.Calendar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 
-public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener, BottomBar.OnItemClickListener, BottomBar.OnCircleItemClickListener {
+public class MainActivity extends AppCompatActivity implements ClueView.OnDayChangedListener, ClueView.OnButtonClickListener, BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener, BottomBar.OnItemClickListener, BottomBar.OnCircleItemClickListener, WeekDayPicker.onDaySelectedListener {
 
     private AppCompatTextView titleText;
 
@@ -26,26 +28,40 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ClueView c = findViewById(R.id.clue_view);
-        c.setOnDayChangedListener(this);
-        c.setOnButtonClickListener(this);
-        try {
-            c.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        c.setClueData(new ClueView.ClueData(6, 26));
+        // Lock orientation into landscape.
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+//        ClueView c = findViewById(R.id.clue_view);
+//        c.setOnDayChangedListener(this);
+//        c.setOnButtonClickListener(this);
+//        try {
+//            c.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        c.setClueData(new ClueView.ClueData(6, 26));
 
         titleText = findViewById(R.id.tv_toolbarTitle);
 
-        // Lock orientation into landscape.
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 //        SimpleMonthView simpleMonthView = new SimpleMonthView(this);
 //        setContentView(simpleMonthView);
         BottomBar bottomBar = findViewById(R.id.bottomBar);
         bottomBar.setItemClickListener(this);
         bottomBar.setCircleItemClickListener(this);
+
+//        CycleBar cycleBar = findViewById(R.id.cycleBar);
+        Calendar cc = Calendar.getInstance();
+        cc.set(Calendar.DAY_OF_MONTH, 26);
+//        cycleBar.setClueData(new ClueData(3,26,3,cc));
+
+//        WeekDayPicker weekDayPicker = findViewById(R.id.weekDayPicker);
+//        weekDayPicker.setClueData(new ClueData(3, 26, 3, Calendar.getInstance()));
+//        weekDayPicker.setSelectedDate(cc);
+//        weekDayPicker.setOnDaySelectedListener(this);
+
+
     }
 
 
@@ -104,5 +120,10 @@ public class MainActivity extends AppCompatActivity implements ClueView.OnDayCha
     @Override
     public void onClick() {
         Toast.makeText(this, "circle", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDaySelected(Calendar day) {
+        Toast.makeText(this, day.get(Calendar.DAY_OF_MONTH) + "", Toast.LENGTH_SHORT).show();
     }
 }

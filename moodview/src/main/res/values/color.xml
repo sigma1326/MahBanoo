@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="typeBleedingTextColor">#ed1e28</color>
+    <color name="typeEmotionTextColor">#000000</color>
+    <color name="typePainTextColor">#6a5a5d</color>
+    <color name="typeEatingDesireTextColor">#000000</color>
+    <color name="typeHairStyleTextColor">#bc875d</color>
+    <color name="titleTextColor">#000000</color>
+    <color name="lineColor">#a3a3a3</color>
+</resources>

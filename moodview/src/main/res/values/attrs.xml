@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MoodView">
+        <attr name="itemTextColor" format="color" />
+        <attr name="itemTextSize" format="dimension" />
+        <attr name="titleTextColor" format="color" />
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="lineColor" format="color" />
+
+        <attr name="itemType" format="enum">
+            <enum name="type_bleeding" value="0" />
+            <enum name="type_emotion" value="1" />
+            <enum name="type_pain" value="2" />
+            <enum name="type_eating_desire" value="3" />
+            <enum name="type_hair_style" value="4" />
+        </attr>
+
+    </declare-styleable>
+</resources>
