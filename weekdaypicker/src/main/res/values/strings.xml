@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WeekDayPicker</string>
+    <string name="saturday">شنبه</string>
+    <string name="sunday">یکشنبه</string>
+    <string name="monday">دوشنبه</string>
+    <string name="tuesday">سه‌شنبه</string>
+    <string name="wednesday">چهارشنبه</string>
+    <string name="thursday">پنج‌شنبه</string>
+    <string name="friday">جمعه</string>
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="WeekDayPicker">
+        <attr name="selectedCircleColor" format="color" />
+        <attr name="selectedTextColor" format="color" />
+        <attr name="unSelectedTextColor" format="color" />
+        <attr name="backgroundColor" format="color" />
+        <attr name="dayTextSize" format="dimension" />
+    </declare-styleable>
+</resources>
