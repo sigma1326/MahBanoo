@@ -12,6 +12,8 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.TextPaint;
@@ -282,7 +284,6 @@ public class BottomBar extends View {
         circleRadius = realHeight / 3f;
         circleX = realWidth / 2f;
         circleY = realHeight / 3f + 5;
-        Log.d("d13", "onLayout: " + realWidth + " :: " + realHeight);
 
         circleIconWidth = realWidth / 10.6f;
         circleIconHeight = realWidth / 10.6f;
@@ -302,6 +303,8 @@ public class BottomBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.DST);
+
         drawBackground(canvas);
 
         drawMainCircle(canvas);
@@ -311,6 +314,7 @@ public class BottomBar extends View {
     }
 
     private void drawBackground(Canvas canvas) {
+//        mainBackgroundPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         canvas.drawRect(0, 0, dp2px(realWidth), dp2px(realHeight / 3f), mainBackgroundPaint);
         canvas.drawRect(0, dp2px(backgroundLeftY), dp2px(realWidth), dp2px(realHeight), backgroundPaint);
     }
@@ -358,7 +362,7 @@ public class BottomBar extends View {
                                 < (getIconRect(2).centerX() - getIconRect(1).centerX() - 50)) {
                             selectedIndex = i + 1;
                             if (itemClickListener != null) {
-                                itemClickListener.onClick(items.get(selectedIndex - 1));
+                                itemClickListener.onClick(items.get(selectedIndex - 1), true);
                             }
                             break;
                         }
@@ -407,6 +411,21 @@ public class BottomBar extends View {
         return itemTextPaint;
     }
 
+    public int getSelectedIndex() {
+        return selectedIndex;
+    }
+
+    /**
+     * @param selectedIndex: starts from left to right (1 to 4) without counting the main circle
+     */
+    public void setSelectedIndex(int selectedIndex) {
+        this.selectedIndex = selectedIndex;
+        if (itemClickListener != null) {
+            itemClickListener.onClick(items.get(selectedIndex-1), false);
+        }
+        postInvalidate();
+    }
+
     private float dp2px(float dp) {
         return SizeConverter.dpToPx(getContext(), dp);
     }
@@ -437,7 +456,7 @@ public class BottomBar extends View {
     }
 
     public interface OnItemClickListener {
-        void onClick(BottomItem item);
+        void onClick(BottomItem item, boolean fromUser);
     }
 
     public interface OnCircleItemClickListener {

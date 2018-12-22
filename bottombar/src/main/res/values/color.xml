@@ -6,5 +6,5 @@
     <color name="circle_color">#00819b</color>
     <color name="circle_icon_color">#ffffff</color>
     <color name="background_color">#ffffff</color>
-    <color name="main_background_color">#00000000</color>
+    <color name="main_background_color">@android:color/transparent</color>
 </resources>
