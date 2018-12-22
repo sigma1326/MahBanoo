@@ -67,6 +67,8 @@ public class MoodView extends View {
     private ArrayList<Integer> selectedItems = new ArrayList<>();
     private ArrayList<Bitmap> itemIcons = new ArrayList<>();
 
+    private Bitmap checkIcon;
+
     private OnItemSelectedListener onItemSelectedListener;
 
     public MoodView(Context context) {
@@ -114,6 +116,7 @@ public class MoodView extends View {
         itemTextSize = typedArray.getDimension(R.styleable.MoodView_itemTextSize, resources.getDimension(R.dimen.itemTextSize));
         titleTextSize = typedArray.getDimension(R.styleable.MoodView_titleTextSize, resources.getDimension(R.dimen.titleTextSize));
 
+        checkIcon = BitmapFactory.decodeResource(getResources(), R.drawable.check);
 
         initItemStrings(resources);
 
@@ -354,7 +357,7 @@ public class MoodView extends View {
                     , x + dp2px(itemIconSize / 2), y + dp2px(itemIconSize / 2));
             canvas.drawBitmap(itemIcons.get(i), null, iconRect, null);
             if (selectedItems.contains(i)) {
-                canvas.drawBitmap(itemIcons.get(i), null, iconCheckRect, null);
+                canvas.drawBitmap(checkIcon, null, iconCheckRect, null);
             }
             canvas.drawText(itemStrings[i], x, y + dp2px(60), itemTextPaint);
         }
