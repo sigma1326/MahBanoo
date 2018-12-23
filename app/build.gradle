@@ -22,9 +22,9 @@ android {
     }
     configurations {
         cleanedAnnotations
-        compile.exclude group: 'org.jetbrains' , module:'annotations'
+        compile.exclude group: 'org.jetbrains', module: 'annotations'
     }
-    packagingOptions{
+    packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
 }
