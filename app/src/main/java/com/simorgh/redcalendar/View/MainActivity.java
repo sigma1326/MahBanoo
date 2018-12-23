@@ -15,7 +15,9 @@ import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
+import com.simorgh.redcalendar.Model.database.model.Cycle;
 import com.simorgh.redcalendar.R;
+import com.simorgh.redcalendar.ViewModel.CycleViewModel;
 import com.simorgh.weekdaypicker.ClueData;
 import com.simorgh.weekdaypicker.WeekDayPicker;
 
@@ -26,6 +28,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;

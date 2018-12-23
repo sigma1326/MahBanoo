@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +16,19 @@ import android.view.ViewGroup;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
 import com.simorgh.redcalendar.Model.AppManager;
+import com.simorgh.redcalendar.Model.database.model.Cycle;
 import com.simorgh.redcalendar.R;
+import com.simorgh.redcalendar.ViewModel.CycleViewModel;
 import com.simorgh.redcalendar.ViewModel.CycleViewViewModel;
+
+import java.util.Calendar;
 
 public class CycleViewFragment extends Fragment implements ClueView.OnButtonClickListener, ClueView.OnDayChangedListener {
 
     private CycleViewViewModel mViewModel;
     private ClueView clueView;
+    private CycleViewModel cycleViewModel;
+
 
     public static CycleViewFragment newInstance() {
         return new CycleViewFragment();
@@ -34,11 +41,11 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
         clueView.setOnButtonClickListener(this);
         clueView.setOnDayChangedListener(this);
         try {
-            clueView.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
+//            clueView.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        clueView.setClueData(AppManager.cvClueData);
+//        clueView.setClueData(AppManager.cvClueData);
 
         return v;
     }
@@ -47,6 +54,22 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewViewModel.class);
+        cycleViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
+//        Cycle c1 = new Cycle();
+//        c1.setCycleID(1);
+//        c1.setRedDaysCount(3);
+//        c1.setGrayDaysCount(25);
+//        c1.setYellowDaysCount(3);
+//        c1.setStartDate(Calendar.getInstance());
+//        cycleViewModel.updateCycle(c1);
+
+        cycleViewModel.getCycleLiveData().observe(this, cycle -> {
+            if (clueView != null && cycle!=null) {
+                clueView.setClueData(new ClueView.ClueData(cycle.getRedDaysCount(),
+                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount()));
+                Log.d(AppManager.TAG, cycle.toString());
+            }
+        });
     }
 
     @Override
