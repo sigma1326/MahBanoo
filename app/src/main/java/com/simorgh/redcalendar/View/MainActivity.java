@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     private NavController navController;
     private BottomBar bottomBar;
     private ImageView imgInfo;
-    private ImageView imgBack;
+    private ImageButton imgBack;
 
 
     @Override
