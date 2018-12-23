@@ -24,6 +24,9 @@ android {
         cleanedAnnotations
         compile.exclude group: 'org.jetbrains' , module:'annotations'
     }
+    packagingOptions{
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 dependencies {
@@ -69,4 +72,5 @@ dependencies {
     implementation project(':moodview')
     implementation project(':weightview')
     implementation project(':drugview')
+    implementation project(':cycleutils')
 }

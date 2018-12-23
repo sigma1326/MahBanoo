@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.ViewModel;
+package com.simorgh.redcalendar.ViewModel.main;
 
 
 import android.app.Application;

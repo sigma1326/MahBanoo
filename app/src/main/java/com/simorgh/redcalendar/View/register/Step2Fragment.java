@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View;
+package com.simorgh.redcalendar.View.register;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.simorgh.numberpicker.NumberPicker;
 import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.Step2ViewModel;
+import com.simorgh.redcalendar.ViewModel.register.Step2ViewModel;
 
 public class Step2Fragment extends Fragment {
 

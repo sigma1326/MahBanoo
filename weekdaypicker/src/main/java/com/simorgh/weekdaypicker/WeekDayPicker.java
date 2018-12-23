@@ -12,9 +12,10 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.simorgh.cycleutils.ClueData;
 
 import java.util.Calendar;
 

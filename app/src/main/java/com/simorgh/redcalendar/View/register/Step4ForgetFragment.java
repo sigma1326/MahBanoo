@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View;
+package com.simorgh.redcalendar.View.register;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.Step4ForgetViewModel;
+import com.simorgh.redcalendar.ViewModel.register.Step4ForgetViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

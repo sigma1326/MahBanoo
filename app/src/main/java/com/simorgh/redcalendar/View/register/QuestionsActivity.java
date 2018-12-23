@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View;
+package com.simorgh.redcalendar.View.register;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

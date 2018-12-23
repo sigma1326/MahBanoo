@@ -21,11 +21,14 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Toast;
+
+import com.simorgh.cycleutils.ClueData;
+
+import java.util.Calendar;
 
 import androidx.annotation.Nullable;
 
@@ -124,6 +127,7 @@ public class ClueView extends View implements OnViewDataChangedListener {
     //Month Day Number TextView
     private Paint tvMonthDayNumberPaint;
     private String tvMonthDayNumberText = "";
+    private int selectedDay = -1;
     private int tvMonthDayNumberTextColor;
     private float tvMonthDayNumberTextSize = -1;
     private float tvMonthDayNumberX = -1;
@@ -262,144 +266,6 @@ public class ClueView extends View implements OnViewDataChangedListener {
     private OnDayChangedListener onDayChangedListener;
     private OnButtonClickListener onButtonClickListener;
 
-    public static class ClueData {
-        private static final int DEFAULT_RED_COUNT = 4;
-        private static final int DEFAULT_GRAY_COUNT = 24;
-        private static final int DEFAULT_GREEN_COUNT = 3;
-        private static final int DEFAULT_YELLOW_COUNT = 5;
-        private static final int DEFAULT_GREEN2_INDEX = 7;
-
-        private int redCount = DEFAULT_RED_COUNT;
-        private int grayCount = DEFAULT_GRAY_COUNT;
-        private int greenStartIndex = DEFAULT_GREEN2_INDEX - 1;
-        private int greenEndIndex = DEFAULT_GREEN2_INDEX + 1;
-        private int yellowCount = DEFAULT_YELLOW_COUNT;
-        private int yellowStartIndex = -1;
-        private int yellowEndIndex = -1;
-        private int green2Index = DEFAULT_GREEN2_INDEX;
-        private int totalDays = 0;
-
-        public ClueData(int redCount, int grayCount, int yellowCount) {
-            this.redCount = redCount;
-            this.grayCount = grayCount;
-            this.yellowCount = yellowCount;
-            this.totalDays = redCount + grayCount;
-            switch (grayCount) {
-                case 21:
-                    green2Index = redCount + 7;
-                    break;
-                case 22:
-                    green2Index = redCount + 8;
-                    break;
-                case 23:
-                    green2Index = redCount + 9;
-                    break;
-                case 24:
-                    green2Index = redCount + 10;
-                    break;
-                case 25:
-                    green2Index = redCount + 11;
-                    break;
-                case 26:
-                    green2Index = redCount + 12;
-                    break;
-                case 27:
-                    green2Index = redCount + 13;
-                    break;
-                case 28:
-                    green2Index = redCount + 14;
-                    break;
-                default:
-                    Log.d(TAG, "ClueData: invalid cycle length ");
-            }
-            greenStartIndex = green2Index - 1;
-            greenEndIndex = green2Index + 1;
-            yellowStartIndex = totalDays - yellowCount + 1;
-            yellowEndIndex = totalDays;
-        }
-
-        public ClueData(int redCount, int grayCount) {
-            this.redCount = redCount;
-            this.grayCount = grayCount;
-            this.yellowCount = DEFAULT_YELLOW_COUNT;
-            this.totalDays = redCount + grayCount;
-            switch (grayCount) {
-                case 21:
-                    green2Index = redCount + 7;
-                    break;
-                case 22:
-                    green2Index = redCount + 8;
-                    break;
-                case 23:
-                    green2Index = redCount + 9;
-                    break;
-                case 24:
-                    green2Index = redCount + 10;
-                    break;
-                case 25:
-                    green2Index = redCount + 11;
-                    break;
-                case 26:
-                    green2Index = redCount + 12;
-                    break;
-                case 27:
-                    green2Index = redCount + 13;
-                    break;
-                case 28:
-                    green2Index = redCount + 14;
-                    break;
-                default:
-                    Log.d(TAG, "ClueData: invalid cycle length ");
-            }
-            greenStartIndex = green2Index - 1;
-            greenEndIndex = green2Index + 1;
-            yellowStartIndex = totalDays - yellowCount + 1;
-            yellowEndIndex = totalDays;
-        }
-
-        public ClueData() {
-        }
-
-        public int getRedCount() {
-            return redCount;
-        }
-
-        public void setRedCount(int redCount) {
-            this.redCount = redCount;
-        }
-
-        public int getGrayCount() {
-            return grayCount;
-        }
-
-        public void setGrayCount(int grayCount) {
-            this.grayCount = grayCount;
-        }
-
-        public int getYellowCount() {
-            return yellowCount;
-        }
-
-        public void setYellowCount(int yellowCount) {
-            this.yellowCount = yellowCount;
-        }
-
-        public int getGreen2Index() {
-            return green2Index;
-        }
-
-        public void setGreen2Index(int green2Index) {
-            this.green2Index = green2Index;
-        }
-
-        public int getTotalDays() {
-            return totalDays;
-        }
-
-        public void setTotalDays(int totalDays) {
-            this.totalDays = totalDays;
-        }
-    }
 
     public static final class Builder {
         private ClueData clueData;
@@ -661,7 +527,7 @@ public class ClueView extends View implements OnViewDataChangedListener {
         if (clueData != null) {
         }
 
-        clueData = new ClueData(3, 26,1);
+        clueData = new ClueData(3, 26, 1, Calendar.getInstance());
 
         //init the hover variables
         mediumCircleHoverPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -804,15 +670,15 @@ public class ClueView extends View implements OnViewDataChangedListener {
         if (clueData == null) {
             return smallCircleTypeRedPaint;
         }
-        if (getCurrentDay() <= clueData.redCount) {
+        if (getCurrentDay() <= clueData.getRedCount()) {
             return smallCircleTypeRedPaint;
-        } else if (getCurrentDay() <= clueData.totalDays) {
-            if (getCurrentDay() >= clueData.greenStartIndex && getCurrentDay() <= clueData.greenEndIndex) {
-                if (getCurrentDay() == clueData.green2Index) {
+        } else if (getCurrentDay() <= clueData.getTotalDays()) {
+            if (getCurrentDay() >= clueData.getGreenStartIndex() && getCurrentDay() <= clueData.getGreenEndIndex()) {
+                if (getCurrentDay() == clueData.getGreen2Index()) {
                     return smallCircleTypeGreenPaint;
                 }
                 return smallCircleTypeGreenPaint;
-            } else if (getCurrentDay() >= clueData.yellowStartIndex && getCurrentDay() <= clueData.yellowEndIndex) {
+            } else if (getCurrentDay() >= clueData.getYellowStartIndex() && getCurrentDay() <= clueData.getYellowEndIndex()) {
                 return smallCircleTypeYellowPaint;
             }
         }
@@ -826,15 +692,15 @@ public class ClueView extends View implements OnViewDataChangedListener {
         if (clueData == null) {
             return TYPE_RED;
         }
-        if (day <= clueData.redCount) {
+        if (day <= clueData.getRedCount()) {
             return TYPE_RED;
-        } else if (day <= clueData.totalDays) {
-            if (day >= clueData.greenStartIndex && day <= clueData.greenEndIndex) {
-                if (day == clueData.green2Index) {
+        } else if (day <= clueData.getTotalDays()) {
+            if (day >= clueData.getGreenStartIndex() && day <= clueData.getGreenEndIndex()) {
+                if (day == clueData.getGreen2Index()) {
                     return TYPE_GREEN2;
                 }
                 return TYPE_GREEN;
-            } else if (day >= clueData.yellowStartIndex && day <= clueData.yellowEndIndex) {
+            } else if (day >= clueData.getYellowStartIndex() && day <= clueData.getYellowEndIndex()) {
                 return TYPE_YELLOW;
             }
         }
@@ -849,15 +715,15 @@ public class ClueView extends View implements OnViewDataChangedListener {
         if (clueData == null) {
             return TYPE_RED;
         }
-        if (day <= clueData.redCount) {
+        if (day <= clueData.getRedCount()) {
             return TYPE_RED;
-        } else if (day <= clueData.totalDays) {
-            if (day >= clueData.greenStartIndex && day <= clueData.greenEndIndex) {
-                if (day == clueData.green2Index) {
+        } else if (day <= clueData.getTotalDays()) {
+            if (day >= clueData.getGreenStartIndex() && day <= clueData.getGreenEndIndex()) {
+                if (day == clueData.getGreen2Index()) {
                     return TYPE_GREEN2;
                 }
                 return TYPE_GREEN;
-            } else if (day >= clueData.yellowStartIndex && day <= clueData.yellowEndIndex) {
+            } else if (day >= clueData.getYellowStartIndex() && day <= clueData.getYellowEndIndex()) {
                 return TYPE_YELLOW;
             }
         }
@@ -871,15 +737,15 @@ public class ClueView extends View implements OnViewDataChangedListener {
         if (clueData == null) {
             return smallCircleTypeRedPaint;
         }
-        if (day <= clueData.redCount) {
+        if (day <= clueData.getRedCount()) {
             return smallCircleTypeRedPaint;
-        } else if (day <= clueData.totalDays) {
-            if (day >= clueData.greenStartIndex && day <= clueData.greenEndIndex) {
-                if (day == clueData.green2Index) {
+        } else if (day <= clueData.getTotalDays()) {
+            if (day >= clueData.getGreenStartIndex() && day <= clueData.getGreenEndIndex()) {
+                if (day == clueData.getGreen2Index()) {
                     return smallCircleTypeGreenPaint;
                 }
                 return smallCircleTypeGreenPaint;
-            } else if (day >= clueData.yellowStartIndex && day <= clueData.yellowEndIndex) {
+            } else if (day >= clueData.getYellowStartIndex() && day <= clueData.getYellowEndIndex()) {
                 return smallCircleTypeYellowPaint;
             }
         }
@@ -1437,6 +1303,7 @@ public class ClueView extends View implements OnViewDataChangedListener {
                 today = 1;
             }
         }
+        selectedDay = today;
         tvWeekDayNameText = weekDayName;
         if (isOptionalVisible) {
             tvOptionalText = optionalText;
@@ -1445,11 +1312,11 @@ public class ClueView extends View implements OnViewDataChangedListener {
         }
         tvMainDayNumberText = mainDayNumber;
         tvMonthDayNumberText = monthDayNumber;
-        tvMonthDayNumberText = today + "";
+        tvMonthDayNumberText = selectedDay + "";
         tvMonthNameText = monthName;
-        if (lastDay != today && !isAnimRunning) {
+        if (lastDay != selectedDay && !isAnimRunning) {
             if (!mainCircleHoverIsAnimating) {
-                lastDay = today;
+                lastDay = selectedDay;
                 mainCircleHoverX = mediumCircleX;
                 mainCircleHoverY = mediumCircleY;
                 mainCircleHoverRadiusAnimator = ObjectAnimator.ofFloat(this, "mainCircleHoverRadius", 0, 2 * mainCircleRadius).setDuration(200);

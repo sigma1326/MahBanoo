@@ -17,7 +17,6 @@
 package com.simorgh.cluecalendar.util;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,15 +27,13 @@ import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.ChangeDaysMonthView;
 import com.simorgh.cluecalendar.view.SetStartDayMonthView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
+import com.simorgh.cycleutils.ClueData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static com.simorgh.cluecalendar.view.BaseMonthView.TAG;
 
 
 /**
@@ -402,6 +399,10 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     public void setClueData(ClueData clueData) {
         this.clueData = clueData;
+        for (int i = 0; i < mItems.size(); i++) {
+            mItems.get(i).baseMonthView.setClueData(clueData);
+            notifyItemChanged(i);
+        }
     }
 
     public ClueData getClueData() {

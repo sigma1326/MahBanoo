@@ -2,7 +2,6 @@ package com.simorgh.cluecalendar.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
@@ -10,8 +9,8 @@ import android.widget.LinearLayout;
 import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
 import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.util.CalendarTool;
-import com.simorgh.cluecalendar.util.ClueData;
 import com.simorgh.cluecalendar.util.MonthViewAdapter;
+import com.simorgh.cycleutils.ClueData;
 
 import java.util.Calendar;
 
@@ -83,7 +82,7 @@ public class CalendarView extends LinearLayout {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MonthViewAdapter(getContext(), clueData, calendarType, monthViewType, min, max);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(10);
         recyclerView.setNestedScrollingEnabled(false);

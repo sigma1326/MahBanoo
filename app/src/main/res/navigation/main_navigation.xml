@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.simorgh.redcalendar.View.CycleViewFragment"
+        android:name="com.simorgh.redcalendar.View.main.CycleViewFragment"
         android:label="home"
         tools:layout="@layout/cycle_view_fragment">
         <action
@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/calendar"
-        android:name="com.simorgh.redcalendar.View.CalendarFragment"
+        android:name="com.simorgh.redcalendar.View.main.CalendarFragment"
         android:label="calendar"
         tools:layout="@layout/calendar_fragment">
         <action
@@ -85,7 +85,7 @@
 
     <fragment
         android:id="@+id/profile"
-        android:name="com.simorgh.redcalendar.View.ProfileFragment"
+        android:name="com.simorgh.redcalendar.View.main.ProfileFragment"
         android:label="profile"
         tools:layout="@layout/profile_fragment">
         <action
@@ -125,7 +125,7 @@
 
     <fragment
         android:id="@+id/settings"
-        android:name="com.simorgh.redcalendar.View.SettingsFragment"
+        android:name="com.simorgh.redcalendar.View.main.SettingsFragment"
         android:label="settings"
         tools:layout="@layout/settings_fragment">
         <action
@@ -165,7 +165,7 @@
 
     <fragment
         android:id="@+id/addNote"
-        android:name="com.simorgh.redcalendar.View.AddNoteFragment"
+        android:name="com.simorgh.redcalendar.View.main.AddMoodFragment"
         android:label="addNote"
         tools:layout="@layout/add_note_fragment" />
 </navigation>

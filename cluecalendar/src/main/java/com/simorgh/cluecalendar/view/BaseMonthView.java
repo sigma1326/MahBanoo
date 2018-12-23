@@ -21,9 +21,9 @@ import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.util.CalendarTool;
-import com.simorgh.cluecalendar.util.ClueData;
 import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
+import com.simorgh.cycleutils.ClueData;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -527,7 +527,7 @@ public class BaseMonthView extends View {
 //        if (!isValidDayOfMonth(day) || !isDayEnabled(day)) {
 //            return false;
 //        }
-        Log.d(TAG, "onDayClicked: "+day);
+        Log.d(TAG, "onDayClicked: " + day);
 
         if (mOnDayClickListener != null) {
             Calendar date = Calendar.getInstance();

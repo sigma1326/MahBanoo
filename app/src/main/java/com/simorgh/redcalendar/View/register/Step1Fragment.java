@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View;
+package com.simorgh.redcalendar.View.register;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,12 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.util.ClueData;
 import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
+import com.simorgh.cycleutils.ClueData;
 import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.Step1ViewModel;
+import com.simorgh.redcalendar.ViewModel.register.Step1ViewModel;
 
 import java.util.Calendar;
 
@@ -20,7 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class Step1Fragment extends Fragment implements  BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
+public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickListener, ShowInfoMonthView.IsDayMarkedListener {
 
     private Step1ViewModel mViewModel;
     private CalendarView calendarView;

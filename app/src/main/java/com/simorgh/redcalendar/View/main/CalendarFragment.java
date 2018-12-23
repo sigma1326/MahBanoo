@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View;
+package com.simorgh.redcalendar.View.main;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +18,19 @@ import com.simorgh.cluecalendar.model.CalendarType;
 import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
+import com.simorgh.cycleutils.ClueData;
 import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.CalendarViewModel;
+import com.simorgh.redcalendar.ViewModel.main.CalendarViewModel;
+import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
 
 public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener {
 
     private CalendarViewModel mViewModel;
+    private CycleViewModel cycleViewModel;
+    private CalendarView calendarView;
+
 
     public static CalendarFragment newInstance() {
         return new CalendarFragment();
@@ -40,11 +45,9 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View v = inflater.inflate(R.layout.calendar_fragment, container, false);
-
-        CalendarView calendarView = new CalendarView(getActivity()
+        calendarView = new CalendarView(getActivity()
                 , BaseMonthView.MonthViewTypeShowCalendar
-                , CalendarType.PERSIAN, AppManager.clueData
+                , CalendarType.PERSIAN, null
                 , AppManager.minDate, AppManager.maxDate);
 
         calendarView.setIsDayMarkedListener(this);
@@ -61,6 +64,14 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CalendarViewModel.class);
+        cycleViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
+        cycleViewModel.getCycleLiveData().observe(this, cycle -> {
+            if (calendarView != null && cycle != null) {
+                calendarView.setClueData(new ClueData(cycle.getRedDaysCount(),
+                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
+                Log.d(AppManager.TAG, cycle.toString());
+            }
+        });
     }
 
     @Override

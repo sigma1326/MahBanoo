@@ -17,6 +17,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.simorgh.cycleutils.ClueData;
+
 import java.util.Calendar;
 
 import androidx.annotation.Nullable;
@@ -273,7 +275,7 @@ public class CycleBar extends View {
         }
         drawToday(canvas);
         drawCycleBar(canvas);
-       }
+    }
 
     private void drawCycleBar(Canvas canvas) {
         cycleBarRectF.set(dp2px(cycleBarX + 2), dp2px(cycleBarY + 2), dp2px(realWidth - 2), dp2px(realHeight - 2));

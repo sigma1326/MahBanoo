@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View;
+package com.simorgh.redcalendar.View.register;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.simorgh.numberpicker.NumberPicker;
 import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.Step4ViewModel;
+import com.simorgh.redcalendar.ViewModel.register.Step4ViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

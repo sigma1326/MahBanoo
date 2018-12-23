@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View;
+package com.simorgh.redcalendar.View.main;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -15,13 +15,11 @@ import android.view.ViewGroup;
 
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
+import com.simorgh.cycleutils.ClueData;
 import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.Model.database.model.Cycle;
 import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.CycleViewModel;
-import com.simorgh.redcalendar.ViewModel.CycleViewViewModel;
-
-import java.util.Calendar;
+import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
+import com.simorgh.redcalendar.ViewModel.main.CycleViewViewModel;
 
 public class CycleViewFragment extends Fragment implements ClueView.OnButtonClickListener, ClueView.OnDayChangedListener {
 
@@ -55,18 +53,10 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewViewModel.class);
         cycleViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-//        Cycle c1 = new Cycle();
-//        c1.setCycleID(1);
-//        c1.setRedDaysCount(3);
-//        c1.setGrayDaysCount(25);
-//        c1.setYellowDaysCount(3);
-//        c1.setStartDate(Calendar.getInstance());
-//        cycleViewModel.updateCycle(c1);
-
         cycleViewModel.getCycleLiveData().observe(this, cycle -> {
-            if (clueView != null && cycle!=null) {
-                clueView.setClueData(new ClueView.ClueData(cycle.getRedDaysCount(),
-                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount()));
+            if (clueView != null && cycle != null) {
+                clueView.setClueData(new ClueData(cycle.getRedDaysCount(),
+                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 Log.d(AppManager.TAG, cycle.toString());
             }
         });

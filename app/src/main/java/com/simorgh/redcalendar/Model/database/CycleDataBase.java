@@ -12,7 +12,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Cycle.class, DayMood.class}, version = 1)
+@Database(entities = {Cycle.class, DayMood.class}, version = 1, exportSchema = false)
 @androidx.room.TypeConverters({TypeConverters.class})
 public abstract class CycleDataBase extends RoomDatabase {
 
