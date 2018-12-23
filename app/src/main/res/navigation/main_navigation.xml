@@ -1,5 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_navigation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/home">
 
+    <fragment
+        android:id="@+id/home"
+        android:name="com.simorgh.redcalendar.View.CycleViewFragment"
+        android:label="home"
+        tools:layout="@layout/cycle_view_fragment">
+        <action
+            android:id="@+id/action_home_to_calendar"
+            app:destination="@id/calendar"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/home" />
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/profile"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/home" />
+        <action
+            android:id="@+id/action_home_to_settings"
+            app:destination="@id/settings"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/home" />
+        <action
+            android:id="@+id/action_home_to_addNote"
+            app:destination="@id/addNote"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"
+            app:popUpTo="@+id/home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/calendar"
+        android:name="com.simorgh.redcalendar.View.CalendarFragment"
+        android:label="calendar"
+        tools:layout="@layout/calendar_fragment">
+        <action
+            android:id="@+id/action_calendar_to_profile"
+            app:destination="@id/profile"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/calendar" />
+        <action
+            android:id="@+id/action_calendar_to_settings"
+            app:destination="@id/settings"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/calendar" />
+        <action
+            android:id="@+id/action_calendar_to_home"
+            app:destination="@id/home"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+             />
+        <action
+            android:id="@+id/action_calendar_to_addNote"
+            app:destination="@id/addNote"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"
+            app:popUpTo="@+id/calendar" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profile"
+        android:name="com.simorgh.redcalendar.View.ProfileFragment"
+        android:label="profile"
+        tools:layout="@layout/profile_fragment">
+        <action
+            android:id="@+id/action_profile_to_calendar"
+            app:destination="@id/calendar"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@+id/profile" />
+        <action
+            android:id="@+id/action_profile_to_settings"
+            app:destination="@id/settings"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/profile" />
+        <action
+            android:id="@+id/action_profile_to_home"
+            app:destination="@id/home"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_profile_to_addNote"
+            app:destination="@id/addNote"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"
+            app:popUpTo="@+id/profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.simorgh.redcalendar.View.SettingsFragment"
+        android:label="settings"
+        tools:layout="@layout/settings_fragment">
+        <action
+            android:id="@+id/action_settings_to_calendar"
+            app:destination="@id/calendar"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@+id/settings" />
+        <action
+            android:id="@+id/action_settings_to_profile"
+            app:destination="@id/profile"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@+id/settings" />
+        <action
+            android:id="@+id/action_settings_to_home"
+            app:destination="@id/home"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_settings_to_addNote"
+            app:destination="@id/addNote"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"
+            app:popUpTo="@+id/settings" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addNote"
+        android:name="com.simorgh.redcalendar.View.AddNoteFragment"
+        android:label="addNote"
+        tools:layout="@layout/add_note_fragment" />
 </navigation>

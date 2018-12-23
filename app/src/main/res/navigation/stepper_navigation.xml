@@ -6,7 +6,7 @@
     app:startDestination="@id/step1">
     <fragment
         android:id="@+id/step1"
-        android:name="com.simorgh.redcalendar.ui.register.step1.Step1Fragment"
+        android:name="com.simorgh.redcalendar.View.Step1Fragment"
         android:label="step1">
         <action
             android:id="@+id/action_step1_to_step2"
@@ -19,9 +19,9 @@
     </fragment>
     <fragment
         android:id="@+id/step2"
-        android:name="com.simorgh.redcalendar.ui.register.step2.Step2Fragment"
+        android:name="com.simorgh.redcalendar.View.Step2Fragment"
         android:label="step2"
-        tools:layout="@layout/set_cycle_length_fragment">
+        tools:layout="@layout/step2_fragment">
         <action
             android:id="@+id/action_step2_to_step3"
             app:destination="@+id/step3"
@@ -41,12 +41,12 @@
     </fragment>
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.simorgh.redcalendar.MainActivity"
+        android:name="com.simorgh.redcalendar.View.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/step3"
-        android:name="com.simorgh.redcalendar.ui.register.step3.Step3Fragment"
+        android:name="com.simorgh.redcalendar.View.Step3Fragment"
         android:label="step3">
         <action
             android:id="@+id/action_step3_to_step4"
@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/step4"
-        android:name="com.simorgh.redcalendar.ui.register.step4.Step4Fragment"
+        android:name="com.simorgh.redcalendar.View.Step4Fragment"
         android:label="step4">
         <action
             android:id="@+id/action_step4_to_step5"
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/step5"
-        android:name="com.simorgh.redcalendar.ui.register.step5.SetBirthDateFragment"
+        android:name="com.simorgh.redcalendar.View.Step5Fragment"
         android:label="step5">
         <action
             android:id="@+id/action_step5_to_mainActivity"
@@ -103,7 +103,7 @@
     </fragment>
     <fragment
         android:id="@+id/step2forget"
-        android:name="com.simorgh.redcalendar.ui.register.step2_forget.Step2ForgetFragment"
+        android:name="com.simorgh.redcalendar.View.Step2ForgetFragment"
         android:label="step2forget">
         <action
             android:id="@+id/action_step2forget_to_step3"
@@ -116,7 +116,7 @@
     </fragment>
     <fragment
         android:id="@+id/step3forget"
-        android:name="com.simorgh.redcalendar.ui.register.step3_forget.Step3ForgetFragment"
+        android:name="com.simorgh.redcalendar.View.Step3ForgetFragment"
         android:label="step3forget" >
         <action
             android:id="@+id/action_step3forget_to_step4"
@@ -129,7 +129,7 @@
     </fragment>
     <fragment
         android:id="@+id/step4forget"
-        android:name="com.simorgh.redcalendar.ui.register.step4_forget.Step4ForgetFragment"
+        android:name="com.simorgh.redcalendar.View.Step4ForgetFragment"
         android:label="step4forget" >
         <action
             android:id="@+id/action_step4forget_to_step5"

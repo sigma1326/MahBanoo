@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="always"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".View.AddNoteFragment">
+
+            <com.simorgh.weekdaypicker.WeekDayPicker
+                android:id="@+id/weekDayPicker"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.simorgh.moodview.MoodView
+                android:id="@+id/moodViewBleeding"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                app:itemType="type_bleeding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/weekDayPicker" />
+
+            <com.simorgh.moodview.MoodView
+                android:id="@+id/moodViewEmotion"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:itemType="type_emotion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/moodViewBleeding" />
+
+            <com.simorgh.moodview.MoodView
+                android:id="@+id/moodViewPain"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:itemType="type_pain"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/moodViewEmotion" />
+
+            <com.simorgh.moodview.MoodView
+                android:id="@+id/moodViewEatingDesire"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:itemType="type_eating_desire"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/moodViewPain" />
+
+            <com.simorgh.moodview.MoodView
+                android:id="@+id/moodViewHairStyle"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:itemType="type_hair_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/moodViewEatingDesire" />
+
+            <com.simorgh.weightview.WeightView
+                android:id="@+id/weightView"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

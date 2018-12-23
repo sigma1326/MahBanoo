@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".View.MainActivity">
 
     <View
         android:id="@+id/toolbar"
@@ -12,52 +12,45 @@
         android:layout_height="65dp"
         android:background="@color/white"
         android:elevation="10dp"
-        android:outlineAmbientShadowColor="#38000000"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--<com.simorgh.clueview.ClueView-->
-        <!--android:id="@+id/clue_view"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="0dp"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/bottomBar"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/toolbar" />-->
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/img_back"
+        style="?attr/ms_backNavigationButtonStyle"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="invisible"
+        android:alpha="0"
+        android:elevation="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/back_copy"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintRight_toRightOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        tools:style="@style/MSNavBarButton.Back"
+        tools:textColor="@color/ms_bottomNavigationButtonTextColor" />
 
-    <com.simorgh.moodview.MoodView
-        android:id="@+id/mood_view"
+    <fragment
+        android:id="@+id/main_nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:itemType="type_pain"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-    <!--<com.simorgh.cyclebar.CycleBar-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginLeft="8dp"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:id="@+id/cycleBar"-->
-        <!--android:layout_marginRight="8dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/bottomBar"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent" />-->
-
-    <com.simorgh.weekdaypicker.WeekDayPicker
-        android:id="@+id/weekDayPicker"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:navGraph="@navigation/main_navigation" />
 
     <com.simorgh.bottombar.BottomBar
         android:id="@+id/bottomBar"
@@ -71,58 +64,34 @@
         android:id="@+id/tv_toolbarTitle"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:text="دوره فعلی"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
         android:elevation="10dp"
-        android:gravity="center"
         android:fontFamily="@font/iransans_medium"
-        android:textSize="16sp"
+        android:gravity="center"
+        android:text="دوره فعلی"
         android:textColor="#00819b"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toStartOf="@id/img_back"
+        app:layout_constraintLeft_toRightOf="@id/img_back"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView"
+        android:id="@+id/img_info"
         android:layout_width="23dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
         android:layout_height="23dp"
         android:layout_marginStart="21dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_marginRight="21dp"
         android:layout_marginLeft="21dp"
         android:layout_marginTop="21dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
         android:elevation="10dp"
+        android:focusable="true"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icon_info" />
 
-    <!--<com.simorgh.redcalendar.SimpleMonthView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"/>-->
-
-    <!--<com.simorgh.cluecalendar.view.CalendarView-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:id="@+id/calendarView"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--<com.simorgh.stepper.StepperLayout-->
-    <!--android:id="@+id/stepperLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"-->
-    <!--app:ms_stepperType="progress_bar"-->
-    <!--tools:theme="@style/AppTheme" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
