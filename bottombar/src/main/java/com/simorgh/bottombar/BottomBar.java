@@ -13,12 +13,10 @@ import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -354,7 +352,7 @@ public class BottomBar extends View {
                 if (Math.sqrt(Math.pow(Math.abs(event.getX() - dp2px(circleX)), 2) + Math.pow(Math.abs(event.getY() - dp2px(circleY)), 2))
                         < (getIconRect(2).centerX() - getIconRect(1).centerX() - 50)) {
                     if (circleItemClickListener != null) {
-                        circleItemClickListener.onClick();
+                        circleItemClickListener.onClick(true);
                     }
                 } else {
                     for (int i = 0; i < items.size(); i++) {
@@ -421,7 +419,11 @@ public class BottomBar extends View {
     public void setSelectedIndex(int selectedIndex) {
         this.selectedIndex = selectedIndex;
         if (itemClickListener != null) {
-            itemClickListener.onClick(items.get(selectedIndex-1), false);
+            if (selectedIndex == -1) {
+                circleItemClickListener.onClick(false);
+            } else {
+                itemClickListener.onClick(items.get(selectedIndex - 1), false);
+            }
         }
         postInvalidate();
     }
@@ -460,7 +462,7 @@ public class BottomBar extends View {
     }
 
     public interface OnCircleItemClickListener {
-        void onClick();
+        void onClick(boolean fromUser);
     }
 
 }
