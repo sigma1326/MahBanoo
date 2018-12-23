@@ -304,7 +304,7 @@ public class WeekDayPicker extends View {
 
     private void calculateWeekStart(Calendar selectedDate) {
         weekStartDate.setTimeInMillis(selectedDate.getTimeInMillis());
-        weekStartDate.add(Calendar.DAY_OF_MONTH, -selectedDate.get(Calendar.DAY_OF_WEEK));
+        weekStartDate.add(Calendar.DAY_OF_MONTH, -1 * selectedDate.get(Calendar.DAY_OF_WEEK));
     }
 
     private float dp2px(float dp) {
