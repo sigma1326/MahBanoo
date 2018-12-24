@@ -1,5 +1,6 @@
 package com.simorgh.redcalendar.View.register;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ public class Step4Fragment extends Fragment {
 
     private Step4ViewModel mViewModel;
     private Typeface typeface;
+    private OnYellowDaysCountSelectedListener onYellowDaysCountSelected;
 
 
     public static Step4Fragment newInstance() {
@@ -34,6 +36,7 @@ public class Step4Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.step4_fragment, container, false);
         NumberPicker numberPicker = v.findViewById(R.id.np_pms);
+        numberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> mViewModel.setYellowDayCount(newVal));
         numberPicker.setTypeface(typeface);
         return v;
     }
@@ -42,7 +45,30 @@ public class Step4Fragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(Step4ViewModel.class);
-        // TODO: Use the ViewModel
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (onYellowDaysCountSelected != null) {
+            onYellowDaysCountSelected.onYellowDaysCountSelected(mViewModel.getYellowDayCount());
+        }
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        onYellowDaysCountSelected = (OnYellowDaysCountSelectedListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onYellowDaysCountSelected = null;
+    }
+
+    public interface OnYellowDaysCountSelectedListener {
+        public void onYellowDaysCountSelected(int count);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.simorgh.redcalendar.View.register;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ public class Step4ForgetFragment extends Fragment {
     private Step4ForgetViewModel mViewModel;
     private TextView tvForget;
     private Typeface typeface;
+    private Step4Fragment.OnYellowDaysCountSelectedListener onYellowDaysCountSelected;
+
 
     public static Step4ForgetFragment newInstance() {
         return new Step4ForgetFragment();
@@ -38,7 +41,28 @@ public class Step4ForgetFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(Step4ForgetViewModel.class);
-        // TODO: Use the ViewModel
     }
+
+
+    @Override
+    public void onDestroyView() {
+        if (onYellowDaysCountSelected != null) {
+            onYellowDaysCountSelected.onYellowDaysCountSelected(4);
+        }
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        onYellowDaysCountSelected = (Step4Fragment.OnYellowDaysCountSelectedListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onYellowDaysCountSelected = null;
+    }
+
 
 }
