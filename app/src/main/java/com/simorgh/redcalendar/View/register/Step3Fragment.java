@@ -1,5 +1,6 @@
 package com.simorgh.redcalendar.View.register;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -45,6 +46,11 @@ public class Step3Fragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        onGrayDaysCountSelected = (OnGrayDaysCountSelectedListener) context;
+    }
 
     public interface OnGrayDaysCountSelectedListener {
         public void onGrayDaysCountSelected(int count);
