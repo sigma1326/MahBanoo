@@ -98,10 +98,10 @@ public class GameView extends SurfaceView implements Runnable {
         mFlashlightCone = new FlashlightCone(mViewWidth, mViewHeight);
 
         // Set font size proportional to view size.
-        mPaint.setTextSize(mViewHeight / 5);
+        mPaint.setTextSize(mViewHeight / 5f);
 
         mBitmap = BitmapFactory.decodeResource(
-                mContext.getResources(), R.drawable.android);
+                mContext.getResources(), R.drawable.back_copy);
         setUpBitmap();
     }
 

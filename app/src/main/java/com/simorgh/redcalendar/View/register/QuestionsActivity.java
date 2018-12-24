@@ -12,6 +12,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -129,9 +131,9 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
         }
     }
 
-    int h1, h2;
-
     private void runForgetButtonAnim(boolean visible) {
+        int h2;
+        int h1;
         if (visible) {
             if (forgetButton.getVisibility() == View.VISIBLE) {
                 return;
@@ -201,64 +203,91 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
             case R.id.step1:
                 stepTitle.setText(R.string.step1_title);
                 stepFractionTitle.setText(R.string.step1_fractionTitle);
-                progressBar.setProgress(20);
                 nextButton.setText(R.string.next_question);
+                runProgressBarAnim(20);
                 runForgetButtonAnim(false);
                 runPrevButtonAnim(false);
                 break;
             case R.id.step2:
                 stepTitle.setText(R.string.step2_title);
                 stepFractionTitle.setText(R.string.step2_fractionTitle);
-                progressBar.setProgress(40);
+                runProgressBarAnim(40);
                 nextButton.setText(R.string.next_question);
                 runForgetButtonAnim(true);
                 break;
             case R.id.step2forget:
                 stepTitle.setText(R.string.step2_title);
                 stepFractionTitle.setText(R.string.step2_fractionTitle);
-                progressBar.setProgress(40);
+                runProgressBarAnim(40);
                 nextButton.setText(R.string.next_question);
                 break;
             case R.id.step3:
                 stepTitle.setText(R.string.step3_title);
                 stepFractionTitle.setText(R.string.step3_fractionTitle);
-                progressBar.setProgress(60);
+                runProgressBarAnim(60);
                 nextButton.setText(R.string.next_question);
                 runForgetButtonAnim(true);
                 break;
             case R.id.step3forget:
                 stepTitle.setText(R.string.step3_title);
                 stepFractionTitle.setText(R.string.step3_fractionTitle);
-                progressBar.setProgress(60);
+                runProgressBarAnim(60);
                 nextButton.setText(R.string.next_question);
                 break;
             case R.id.step4:
                 stepTitle.setText(R.string.step4_title);
                 stepFractionTitle.setText(R.string.step4_fractionTitle);
-                progressBar.setProgress(80);
+                runProgressBarAnim(80);
                 nextButton.setText(R.string.next_question);
                 runForgetButtonAnim(true);
                 break;
             case R.id.step4forget:
                 stepTitle.setText(R.string.step4_title);
                 stepFractionTitle.setText(R.string.step4_fractionTitle);
-                progressBar.setProgress(80);
+                runProgressBarAnim(80);
                 nextButton.setText(R.string.next_question);
                 runForgetButtonAnim(false);
                 break;
             case R.id.step5:
                 stepTitle.setText(R.string.step5_title);
                 stepFractionTitle.setText(R.string.step5_fractionTitle);
-                progressBar.setProgress(100);
+                runProgressBarAnim(100);
                 nextButton.setText(R.string.login_to_app);
                 break;
             default:
         }
     }
 
+    private void runProgressBarAnim(int i) {
+        ProgressBarAnimation anim = new ProgressBarAnimation(progressBar, progressBar.getProgress(), i);
+        anim.setDuration(400);
+        progressBar.startAnimation(anim);
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         super.onSupportNavigateUp();
         return navController.navigateUp();
+    }
+
+    public class ProgressBarAnimation extends Animation {
+        private ProgressBar progressBar;
+        private float from;
+        private float to;
+
+        public ProgressBarAnimation(ProgressBar progressBar, float from, float to) {
+            super();
+            this.progressBar = progressBar;
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            super.applyTransformation(interpolatedTime, t);
+            float value = from + (to - from) * interpolatedTime;
+            progressBar.setProgress((int) value);
+        }
+
     }
 }

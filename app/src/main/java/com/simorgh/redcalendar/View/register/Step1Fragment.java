@@ -36,12 +36,11 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (calendarView == null) {
-            min.set(Calendar.YEAR, 2018);
+            min.set(Calendar.YEAR, today.get(Calendar.YEAR) - 1);
             min.set(Calendar.MONTH, 0);
-            max.set(Calendar.YEAR, 2020);
-            max.set(Calendar.MONTH, 10);
+            max.add(Calendar.MONTH, 1);
             calendarView = new CalendarView(getContext(), BaseMonthView.MonthViewTypeSetStartDay
-                    , CalendarType.PERSIAN, new ClueData(5, 28, 4, today), min, max);
+                    , CalendarType.PERSIAN, new ClueData(0, 0, 0, today), min, max);
             calendarView.setOnDayClickListener(this);
             calendarView.setIsDayMarkedListener(this);
 
@@ -59,12 +58,11 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(Step1ViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
-
+        mViewModel.setDay(day);
     }
 
     @Override
