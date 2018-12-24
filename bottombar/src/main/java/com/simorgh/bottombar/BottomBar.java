@@ -43,6 +43,8 @@ public class BottomBar extends View {
     private float itemTextY = -1;
     private float itemTextSize = -1;
 
+    private Paint shadowPaint;
+    private int shadowColor;
 
     private Paint backgroundPaint;
     private int backgroundColor;
@@ -156,6 +158,7 @@ public class BottomBar extends View {
 
         selectedIconColor = typedArray.getColor(R.styleable.BottomBar_selectedColor, resources.getColor(R.color.selected_color));
         unSelectedIconColor = typedArray.getColor(R.styleable.BottomBar_unSelectedColor, resources.getColor(R.color.unselected_color));
+        shadowColor = typedArray.getColor(R.styleable.BottomBar_unSelectedColor, resources.getColor(R.color.unselected_color));
 
         itemTextSize = typedArray.getDimension(R.styleable.BottomBar_textSize, resources.getDimension(R.dimen.textSize));
 
@@ -163,6 +166,11 @@ public class BottomBar extends View {
     }
 
     private void init() {
+        shadowPaint = new Paint();
+        shadowPaint.setAntiAlias(true);
+        shadowPaint.setStyle(Paint.Style.FILL);
+        shadowPaint.setColor(shadowColor);
+
         backgroundPaint = new Paint();
         backgroundPaint.setAntiAlias(true);
         backgroundPaint.setStyle(Paint.Style.FILL);
@@ -312,8 +320,8 @@ public class BottomBar extends View {
     }
 
     private void drawBackground(Canvas canvas) {
-//        mainBackgroundPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         canvas.drawRect(0, 0, dp2px(realWidth), dp2px(realHeight / 3f), mainBackgroundPaint);
+        canvas.drawLine(0, dp2px(backgroundLeftY-1), dp2px(realWidth),dp2px(backgroundLeftY-1), shadowPaint);
         canvas.drawRect(0, dp2px(backgroundLeftY), dp2px(realWidth), dp2px(realHeight), backgroundPaint);
     }
 

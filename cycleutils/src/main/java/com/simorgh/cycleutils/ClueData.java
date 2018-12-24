@@ -9,7 +9,7 @@ public class ClueData {
     private static final int DEFAULT_RED_COUNT = 4;
     private static final int DEFAULT_GRAY_COUNT = 24;
     private static final int DEFAULT_GREEN_COUNT = 3;
-    private static final int DEFAULT_YELLOW_COUNT = 5;
+    private static final int DEFAULT_YELLOW_COUNT = 3;
     private static final int DEFAULT_GREEN2_INDEX = 7;
 
     private int redCount = DEFAULT_RED_COUNT;
