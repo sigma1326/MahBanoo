@@ -1724,8 +1724,16 @@ public class NumberPicker extends LinearLayout {
                         canvas.drawRect(staticLeft, staticTop, staticRight, staticBottom, mSelectorWheelPaint);
                         mSelectorWheelPaint.setColor(color);
                         mSelectorWheelPaint.setTextSize(sp + 2);
-                        drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
-                        drawText(startText, x - 2 * mSelectorWheelPaint.getFontMetrics().descent, staticTextY, mSelectorWheelPaint, canvas);
+                        if (isFirstDraw) {
+                            isFirstDraw = false;
+                            mSelectorWheelPaint.setColor(color);
+                            mSelectorWheelPaint.setTextSize(spToPx(17));
+                            drawText(startText, x, textY, mSelectorWheelPaint, canvas);
+                            mSelectorWheelPaint.setTextSize(sp);
+                        } else {
+                            drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
+                        }
+//                        drawText(startText, x - 2 * mSelectorWheelPaint.getFontMetrics().descent, staticTextY, mSelectorWheelPaint, canvas);
                         mSelectorWheelPaint.setTextSize(sp);
                     } else {
                         drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
