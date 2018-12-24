@@ -19,6 +19,7 @@ public class Step3Fragment extends Fragment {
 
     private Step3ViewModel mViewModel;
     private Typeface typeface;
+    private OnGrayDaysCountSelectedListener onGrayDaysCountSelected;
 
     public static Step3Fragment newInstance() {
         return new Step3Fragment();
@@ -44,4 +45,8 @@ public class Step3Fragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+
+    public interface OnGrayDaysCountSelectedListener {
+        public void onGrayDaysCountSelected(int count);
+    }
 }
