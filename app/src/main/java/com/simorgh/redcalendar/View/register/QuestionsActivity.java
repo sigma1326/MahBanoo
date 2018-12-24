@@ -3,6 +3,7 @@ package com.simorgh.redcalendar.View.register;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Application;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.simorgh.redcalendar.Model.database.CycleRepository;
 import com.simorgh.redcalendar.Model.database.model.Cycle;
 import com.simorgh.redcalendar.R;
+import com.simorgh.redcalendar.View.main.MainActivity;
 import com.simorgh.redcalendar.ViewModel.register.CycleRegisterViewModel;
 
 import java.util.Calendar;
@@ -51,6 +53,10 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cycleRepository = new CycleRepository((Application) getApplicationContext());
+        if (cycleRepository.getCycleData() != null) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
         setContentView(R.layout.activity_questions);
 
         cycleRegisterViewModel = ViewModelProviders.of(this).get(CycleRegisterViewModel.class);
@@ -112,6 +118,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     cycle.setStartDate(calendar);
                     cycleRepository.insertCycle(cycle);
                     navController.navigate(R.id.action_step5_to_mainActivity);
+                    finish();
                     break;
                 default:
             }

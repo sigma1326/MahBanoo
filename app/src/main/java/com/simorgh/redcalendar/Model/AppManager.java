@@ -31,15 +31,5 @@ public class AppManager extends Application {
         maxDate = Calendar.getInstance();
         maxDate.set(Calendar.YEAR, 2020);
 
-        cycleRepository = new CycleRepository(this);
-        if (cycleRepository.getCycleData() == null) {
-            Cycle initCycle = new Cycle();
-            initCycle.setCycleID(1);
-            initCycle.setRedDaysCount(3);
-            initCycle.setGrayDaysCount(25);
-            initCycle.setYellowDaysCount(3);
-            initCycle.setStartDate(cc);
-            cycleRepository.insertCycle(initCycle);
-        }
     }
 }
