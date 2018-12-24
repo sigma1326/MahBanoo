@@ -292,9 +292,9 @@ public class CycleBar extends View {
                 , dp2px(realWidth - 2 - (cycleBarWidth / clueData.getTotalDays() * clueData.getGreenStartIndex()))
                 , dp2px(realHeight - 2));
 
-        cycleBarGreen2RectF.set(cycleBarGreenDaysRectF.left + cycleBarGreenDaysRectF.width() / 3 + dp2px(1)
+        cycleBarGreen2RectF.set(cycleBarGreenDaysRectF.left + 2.9f*cycleBarGreenDaysRectF.width() / 7 + dp2px(1)
                 , cycleBarGreenDaysRectF.top + dp2px(3)
-                , cycleBarGreenDaysRectF.right - cycleBarGreenDaysRectF.width() / 3 - dp2px(1)
+                , cycleBarGreenDaysRectF.right - 2.9f*cycleBarGreenDaysRectF.width() / 7 - dp2px(1)
                 , cycleBarGreenDaysRectF.bottom - dp2px(3));
 
         canvas.drawRoundRect(cycleBarRectF, dp2px(radius), dp2px(radius), grayTypePaint);
