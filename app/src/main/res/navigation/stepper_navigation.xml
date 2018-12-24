@@ -38,6 +38,10 @@
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom"
             app:popUpTo="@+id/step2" />
+        <argument
+            android:name="last_cycle_day"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -64,6 +68,14 @@
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom"
             app:popUpTo="@+id/step3" />
+        <argument
+            android:name="last_cycle_day"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="red_days_count"
+            app:argType="integer"
+            android:defaultValue="4" />
     </fragment>
     <fragment
         android:id="@+id/step4"
@@ -85,6 +97,18 @@
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom"
             app:popUpTo="@+id/step4" />
+        <argument
+            android:name="last_cycle_day"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="red_days_count"
+            app:argType="integer"
+            android:defaultValue="4" />
+        <argument
+            android:name="gray_days_count"
+            app:argType="integer"
+            android:defaultValue="24" />
     </fragment>
     <fragment
         android:id="@+id/step5"
@@ -100,6 +124,21 @@
             app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@+id/step5"
             app:popUpToInclusive="false" />
+        <argument
+            android:name="last_cycle_day"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="red_days_count"
+            android:defaultValue="4" />
+        <argument
+            android:name="gray_days_count"
+            app:argType="integer"
+            android:defaultValue="24" />
+        <argument
+            android:name="yellow_days_count"
+            app:argType="integer"
+            android:defaultValue="3" />
     </fragment>
     <fragment
         android:id="@+id/step2forget"
@@ -113,6 +152,10 @@
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@+id/step2" />
+        <argument
+            android:name="last_cycle_day"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
     <fragment
         android:id="@+id/step3forget"
@@ -126,6 +169,14 @@
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@+id/step3" />
+        <argument
+            android:name="last_cycle_day"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="red_days_count"
+            app:argType="integer"
+            android:defaultValue="4" />
     </fragment>
     <fragment
         android:id="@+id/step4forget"
@@ -139,5 +190,17 @@
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@+id/step4" />
+        <argument
+            android:name="last_cycle_day"
+            app:argType="long"
+            android:defaultValue="0L" />
+        <argument
+            android:name="red_days_count"
+            app:argType="integer"
+            android:defaultValue="4" />
+        <argument
+            android:name="gray_days_count"
+            app:argType="integer"
+            android:defaultValue="24" />
     </fragment>
 </navigation>
