@@ -34,7 +34,7 @@
         android:alpha="0"
         android:elevation="10dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/bb_copy"
+        android:src="@drawable/back_copy"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
         app:layout_constraintRight_toRightOf="@+id/toolbar"

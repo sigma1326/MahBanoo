@@ -2,24 +2,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:paddingBottom="96dp"
-
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:paddingBottom="96dp">
 
     <com.simorgh.numberpicker.NumberPicker
         android:id="@+id/np_pms"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="vertical"
+        app:np_alwaysShowText="true"
         app:np_height="180dp"
         app:np_max="14"
         app:np_min="1"
-        app:np_alwaysShowText="true"
         app:np_orientation="vertical"
         app:np_selectedTextColor="#00819b"
         app:np_selectedTextSize="24sp"
-        app:np_startText="@string/day"
+        app:np_startText="@string/choose_days"
         app:np_textSize="23sp"
         app:np_value="5"
         app:np_width="64dp">

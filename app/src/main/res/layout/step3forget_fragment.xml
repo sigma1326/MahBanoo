@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:paddingBottom="96dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_forget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="start"
+        android:fontFamily="@font/iransans_medium"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.03"
+        android:maxEms="12"
+        android:maxLines="10"
+        android:orientation="vertical"
+        android:text="@string/step3_forget_text"
+        android:textAlignment="center"
+        android:textColor="#3f3f3f"
+        android:textSize="16sp" />
+</FrameLayout>
