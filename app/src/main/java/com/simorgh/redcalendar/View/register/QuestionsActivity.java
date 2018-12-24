@@ -1,14 +1,8 @@
 package com.simorgh.redcalendar.View.register;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.Navigation;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Application;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -18,12 +12,30 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.simorgh.redcalendar.Model.database.CycleRepository;
+import com.simorgh.redcalendar.Model.database.model.Cycle;
 import com.simorgh.redcalendar.R;
+import com.simorgh.redcalendar.ViewModel.register.CycleRegisterViewModel;
 
+import java.util.Calendar;
 import java.util.Objects;
 
-public class QuestionsActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
+
+public class QuestionsActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener
+        , Step1Fragment.OnLastCycleDaySelectedListener
+        , Step2Fragment.OnRedDaysCountSelectedListener
+        , Step3Fragment.OnGrayDaysCountSelectedListener
+        , Step4Fragment.OnYellowDaysCountSelectedListener
+        , Step5Fragment.OnBirthDaySelectedListener {
 
     private Button nextButton;
     private Button forgetButton;
@@ -33,11 +45,16 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     private ProgressBar progressBar;
     private NavController navController;
     private View divider;
+    private CycleRegisterViewModel cycleRegisterViewModel;
+    private CycleRepository cycleRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
+
+        cycleRegisterViewModel = ViewModelProviders.of(this).get(CycleRegisterViewModel.class);
+        cycleRepository = new CycleRepository((Application) getApplicationContext());
 
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/iransans_medium.ttf");
 
@@ -84,6 +101,16 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     runForgetButtonAnim(false);
                     break;
                 case R.id.step5:
+                    Cycle cycle = new Cycle();
+                    cycle.setCycleID(1);
+                    cycle.setYellowDaysCount(cycleRegisterViewModel.getYellowDaysCount());
+                    cycle.setRedDaysCount(cycleRegisterViewModel.getRedDaysCount());
+                    cycle.setGrayDaysCount(cycleRegisterViewModel.getGrayDaysCount());
+                    cycle.setBirthYear(cycleRegisterViewModel.getBirthYear());
+                    Calendar calendar = cycleRegisterViewModel.getLastCycleEndDay();
+                    calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount());
+                    cycle.setStartDate(calendar);
+                    cycleRepository.insertCycle(cycle);
                     navController.navigate(R.id.action_step5_to_mainActivity);
                     break;
                 default:
@@ -268,6 +295,31 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     public boolean onSupportNavigateUp() {
         super.onSupportNavigateUp();
         return navController.navigateUp();
+    }
+
+    @Override
+    public void onLastCycleDaySelected(Calendar calendar) {
+        cycleRegisterViewModel.setLastCycleEndDay(calendar);
+    }
+
+    @Override
+    public void onRedDaysCountSelected(int count) {
+        cycleRegisterViewModel.setRedDaysCount(count);
+    }
+
+    @Override
+    public void onGrayDaysCountSelected(int count) {
+        cycleRegisterViewModel.setGrayDaysCount(count);
+    }
+
+    @Override
+    public void onYellowDaysCountSelected(int count) {
+        cycleRegisterViewModel.setYellowDaysCount(count);
+    }
+
+    @Override
+    public void onBirthDaySelected(int year) {
+        cycleRegisterViewModel.setBirthYear(year);
     }
 
     public class ProgressBarAnimation extends Animation {
