@@ -17,7 +17,8 @@
     <string name="login_to_app">ورود به برنامه</string>
     <string name="forget">فراموش کرده‌اید؟</string>
     <string name="choose_birth_date">سال تولد را انتخاب کنید</string>
-    <string name="day">سندرم پیش از قاعدگی شما چند روز است؟</string>
+    <string name="day">روز</string>
+    <string name="choose_pms">سندرم پیش از قاعدگی شما چند روز است؟</string>
     <string name="choose_days">تعداد روز را انتخاب کنید</string>
     <string name="addInformation">اضافه‌کردن اطلاعات</string>
     <string name="step2_forget_text">میانگین جهانی طول دوره پریود 4 روز می‌باشد که به صورت پیش فرض برای شما انتخاب می‌شود. می‌توانید با مراجعه به حساب کاربری آن را تغییر دهید.</string>
