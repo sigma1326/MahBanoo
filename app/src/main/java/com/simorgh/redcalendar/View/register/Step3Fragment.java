@@ -59,6 +59,25 @@ public class Step3Fragment extends Fragment {
             onGrayDaysCountSelected.onGrayDaysCountSelected(mViewModel.getGrayDayCount());
         }
     }
+    @Override
+    public void onC() {
+        super.onDestroyView();
+        if (onGrayDaysCountSelected != null) {
+            onGrayDaysCountSelected.onGrayDaysCountSelected(mViewModel.getGrayDayCount());
+        }
+    }    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (onGrayDaysCountSelected != null) {
+            onGrayDaysCountSelected.onGrayDaysCountSelected(mViewModel.getGrayDayCount());
+        }
+    }    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (onGrayDaysCountSelected != null) {
+            onGrayDaysCountSelected.onGrayDaysCountSelected(mViewModel.getGrayDayCount());
+        }
+    }
 
     @Override
     public void onDetach() {
