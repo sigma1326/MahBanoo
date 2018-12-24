@@ -14,8 +14,8 @@ public class ClueData {
 
     private int redCount = DEFAULT_RED_COUNT;
     private int grayCount = DEFAULT_GRAY_COUNT;
-    private int greenStartIndex = DEFAULT_GREEN2_INDEX - 1;
-    private int greenEndIndex = DEFAULT_GREEN2_INDEX + 1;
+    private int greenStartIndex = DEFAULT_GREEN2_INDEX - 3;
+    private int greenEndIndex = DEFAULT_GREEN2_INDEX + 3;
     private int yellowCount = DEFAULT_YELLOW_COUNT;
     private int yellowStartIndex = -1;
     private int yellowEndIndex = -1;
@@ -57,8 +57,8 @@ public class ClueData {
             default:
                 Log.d(TAG, "ClueData: invalid cycle length ");
         }
-        greenStartIndex = green2Index - 1;
-        greenEndIndex = green2Index + 1;
+        greenStartIndex = green2Index - 3;
+        greenEndIndex = green2Index + 3;
         yellowStartIndex = totalDays - yellowCount + 1;
         yellowEndIndex = totalDays;
     }
@@ -96,8 +96,8 @@ public class ClueData {
             default:
                 Log.d(TAG, "ClueData: invalid cycle length ");
         }
-        greenStartIndex = green2Index - 1;
-        greenEndIndex = green2Index + 1;
+        greenStartIndex = green2Index - 3;
+        greenEndIndex = green2Index + 3;
         yellowStartIndex = totalDays - yellowCount + 1;
         yellowEndIndex = totalDays;
     }
