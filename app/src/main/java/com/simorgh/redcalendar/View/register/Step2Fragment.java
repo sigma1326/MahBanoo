@@ -2,6 +2,7 @@ package com.simorgh.redcalendar.View.register;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ public class Step2Fragment extends Fragment {
 
     private Step2ViewModel mViewModel;
     private Typeface typeface;
+    private OnRedDaysCountSelectedListener onRedDaysCountSelected;
 
     public static Step2Fragment newInstance() {
         return new Step2Fragment();
@@ -33,10 +35,13 @@ public class Step2Fragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.step2_fragment, container, false);
         NumberPicker numberPicker = v.findViewById(R.id.np_period_days);
         numberPicker.setTypeface(typeface);
+        numberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            mViewModel.setRedDayCount(newVal);
+        });
         return v;
     }
 
@@ -44,7 +49,31 @@ public class Step2Fragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(Step2ViewModel.class);
-        // TODO: Use the ViewModel
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        if (onRedDaysCountSelected != null) {
+            onRedDaysCountSelected.onRedDaysCountSelected(mViewModel.getRedDayCount());
+        }
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        onRedDaysCountSelected = (OnRedDaysCountSelectedListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onRedDaysCountSelected = null;
+    }
+
+    public interface OnRedDaysCountSelectedListener {
+        public void onRedDaysCountSelected(int count);
     }
 
 }

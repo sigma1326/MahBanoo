@@ -1,5 +1,6 @@
 package com.simorgh.redcalendar.View.register;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
     private Calendar min = Calendar.getInstance();
     private Calendar max = Calendar.getInstance();
     private Calendar today = Calendar.getInstance();
+    private OnLastCycleDaySelectedListener onLastCycleDaySelected;
 
     public static Step1Fragment newInstance() {
         return new Step1Fragment();
@@ -60,6 +62,27 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
         mViewModel = ViewModelProviders.of(this).get(Step1ViewModel.class);
     }
 
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        onLastCycleDaySelected = (OnLastCycleDaySelectedListener) context;
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (onLastCycleDaySelected != null) {
+            onLastCycleDaySelected.onLastCycleDaySelected(mViewModel.getDay());
+        }
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        onLastCycleDaySelected = null;
+        super.onDetach();
+    }
+
     @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
         mViewModel.setDay(day);
@@ -68,5 +91,10 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
     @Override
     public boolean isDayMarked(Calendar day) {
         return false;
+    }
+
+
+    public interface OnLastCycleDaySelectedListener {
+        public void onLastCycleDaySelected(Calendar calendar);
     }
 }
