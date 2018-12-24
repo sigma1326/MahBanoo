@@ -52,6 +52,11 @@ public class Step3Fragment extends Fragment {
         onGrayDaysCountSelected = (OnGrayDaysCountSelectedListener) context;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onGrayDaysCountSelected = null;
+    }
     public interface OnGrayDaysCountSelectedListener {
         public void onGrayDaysCountSelected(int count);
     }
