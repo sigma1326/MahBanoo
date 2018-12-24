@@ -35,6 +35,7 @@ public class Step3Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.step3_fragment, container, false);
         NumberPicker numberPicker = v.findViewById(R.id.np_period_freq);
+        numberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> mViewModel.setGrayDayCount(newVal));
         numberPicker.setTypeface(typeface);
         return v;
     }
@@ -43,7 +44,6 @@ public class Step3Fragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(Step3ViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     @Override
@@ -53,25 +53,6 @@ public class Step3Fragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (onGrayDaysCountSelected != null) {
-            onGrayDaysCountSelected.onGrayDaysCountSelected(mViewModel.getGrayDayCount());
-        }
-    }
-    @Override
-    public void onC() {
-        super.onDestroyView();
-        if (onGrayDaysCountSelected != null) {
-            onGrayDaysCountSelected.onGrayDaysCountSelected(mViewModel.getGrayDayCount());
-        }
-    }    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (onGrayDaysCountSelected != null) {
-            onGrayDaysCountSelected.onGrayDaysCountSelected(mViewModel.getGrayDayCount());
-        }
-    }    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (onGrayDaysCountSelected != null) {
