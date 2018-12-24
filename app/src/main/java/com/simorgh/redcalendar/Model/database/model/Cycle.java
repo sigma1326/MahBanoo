@@ -25,6 +25,9 @@ public class Cycle {
     @ColumnInfo(name = "start_date")
     private Calendar startDate;
 
+    @ColumnInfo(name = "birth_year")
+    private int birthYear;
+
     public int getTotalDaysCount() {
         return redDaysCount + grayDaysCount;
     }
@@ -69,9 +72,17 @@ public class Cycle {
         this.yellowDaysCount = yellowDaysCount;
     }
 
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
+    }
+
     @NonNull
     @Override
     public String toString() {
-        return "cycle: {" + redDaysCount + " : " + grayDaysCount + " : " + yellowDaysCount + " : " + startDate.getTime().toString() + "}";
+        return "cycle: {" + redDaysCount + " : " + grayDaysCount + " : " + yellowDaysCount + " : " + birthYear + " : " + startDate.getTime().toString() + "}";
     }
 }
