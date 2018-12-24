@@ -2,7 +2,7 @@
     <string name="app_name">RedCalendar</string>
 
     <string name="step1_title">آخرین روز پریود قبلی چه تاریخی بوده؟</string>
-    <string name="step2_title">طول پریود شما به طور معمول چند روز است؟</string>
+    <string name="step2_title">طول دوره پریود شما به طور معمول چند روز است؟</string>
     <string name="step3_title">فاصله پریودهای شما بطور معمول چند روز است؟</string>
     <string name="step4_title">سندرم پیش از قاعدگی شما چند روز است؟</string>
     <string name="step5_title">متولد چه سالی هستید؟</string>
@@ -17,8 +17,11 @@
     <string name="login_to_app">ورود به برنامه</string>
     <string name="forget">فراموش کرده‌اید؟</string>
     <string name="choose_birth_date">سال تولد را انتخاب کنید</string>
-    <string name="day">روز</string>
+    <string name="day">سندرم پیش از قاعدگی شما چند روز است؟</string>
     <string name="choose_days">تعداد روز را انتخاب کنید</string>
     <string name="addInformation">اضافه‌کردن اطلاعات</string>
+    <string name="step2_forget_text">میانگین جهانی طول دوره پریود 4 روز می‌باشد که به صورت پیش فرض برای شما انتخاب می‌شود. می‌توانید با مراجعه به حساب کاربری آن را تغییر دهید.</string>
+    <string name="step3_forget_text">میانگین جهانی فاصله  بین دو دوره 24 روز می‌باشد که به صورت پیش فرض برای شما انتخاب می‌شود. می‌توانید با مراجعه به حساب کاربری آن را تغییر دهید.</string>
+    <string name="step4_forget_text">میانگین جهانی سندرم پیش از قاعدگی 3 روز می‌باشد که به صورت پیش فرض برای شما انتخاب می‌شود. می‌توانید با مراجعه به حساب کاربری آن را تغییر دهید.</string>
 
 </resources>
