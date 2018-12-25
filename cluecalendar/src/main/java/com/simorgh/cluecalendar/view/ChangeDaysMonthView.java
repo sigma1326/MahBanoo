@@ -11,9 +11,6 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 
 import com.simorgh.cluecalendar.R;
-import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
-import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.util.CalendarTool;
 
 import java.util.Calendar;
 
