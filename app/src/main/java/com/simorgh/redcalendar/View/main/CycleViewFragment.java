@@ -1,35 +1,45 @@
 package com.simorgh.redcalendar.View.main;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
+import com.simorgh.cluecalendar.util.CalendarTool;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
 import com.simorgh.cycleutils.ClueData;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
-import com.simorgh.redcalendar.ViewModel.main.CycleViewViewModel;
+
+import java.util.Calendar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 public class CycleViewFragment extends Fragment implements ClueView.OnButtonClickListener, ClueView.OnDayChangedListener {
 
-    private CycleViewViewModel mViewModel;
+    private CycleViewModel mViewModel;
     private ClueView clueView;
-    private CycleViewModel cycleViewModel;
+    private Calendar start = AppManager.getCalendarInstance();
+    private Calendar temp = AppManager.getCalendarInstance();
+    private Calendar today = AppManager.getCalendarInstance();
+    private Calendar currentCycleStartDate = AppManager.getCalendarInstance();
+    private boolean isFirstDraw = true;
 
 
     public static CycleViewFragment newInstance() {
         return new CycleViewFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -38,25 +48,26 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
         clueView = v.findViewById(R.id.clueView);
         clueView.setOnButtonClickListener(this);
         clueView.setOnDayChangedListener(this);
-        try {
-//            clueView.onViewDataChanged("شنبه", "متوسط", "روز اول", "1", "آذر", true, 12);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        clueView.setClueData(AppManager.cvClueData);
-
         return v;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(CycleViewViewModel.class);
-        cycleViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        cycleViewModel.getCycleLiveData().observe(this, cycle -> {
+        mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
+        mViewModel.getCycleLiveData().observe(this, cycle -> {
             if (clueView != null && cycle != null) {
+                mViewModel.setCycle(cycle);
                 clueView.setClueData(new ClueData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
+                clueView.showToday(AppManager.getCalendarInstance());
+                if (isFirstDraw) {
+                    isFirstDraw = false;
+                    clueView.showToday(AppManager.getCalendarInstance());
+                } else {
+                    clueView.setSelectedDay(mViewModel.getSelectedDay());
+                }
+                start.setTimeInMillis(cycle.getStartDate().getTimeInMillis());
                 Log.d(AppManager.TAG, cycle.toString());
             }
         });
@@ -69,33 +80,92 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
 
     @Override
     public void onDayChanged(int day, int dayType, OnViewDataChangedListener listener) {
-        String dayS;
-        switch (day % 7) {
-            case 0:
-                dayS = "شنبه";
-                break;
-            case 1:
-                dayS = "یک‌شنبه";
-                break;
-            case 2:
-                dayS = "دوشنبه";
-                break;
-            case 3:
-                dayS = "سه‌شنبه";
-                break;
-            case 4:
-                dayS = "چهارشنبه";
-                break;
-            case 5:
-                dayS = "پنج‌شنبه";
-                break;
-            case 6:
-                dayS = "جمعه";
-                break;
-            default:
-                dayS = "جمعه";
+        if (day == -1) {
+            day = mViewModel.getSelectedDay();
         }
-        listener.onViewDataChanged(dayS, "کم", "روز هفتم", "1", "آذر", true, day);
+        mViewModel.setSelectedDay(day);
+        long diffDays;
+        int day2;
+        diffDays = CalendarTool.getDaysFromDiff(today, start);
+        if (diffDays >= 0 && mViewModel.getCycle() != null) {
+            day2 = (int) ((diffDays) % mViewModel.getCycle().getTotalDaysCount()) + 1;
+            currentCycleStartDate.setTimeInMillis(today.getTimeInMillis());
+            currentCycleStartDate.add(Calendar.DAY_OF_MONTH, -1 * day2 + 1);
+        } else {
+            throw new UnsupportedOperationException("invalid cycle date");
+        }
+
+        temp.setTimeInMillis(currentCycleStartDate.getTimeInMillis());
+        temp.add(Calendar.DAY_OF_MONTH, day - 1);
+
+        PersianCalendar persianCalendar = CalendarTool.GregorianToPersian(temp);
+
+        boolean visible = false;
+        String optionalText = "احتمال بارداری: ";
+        switch (dayType) {
+            case ClueView.TYPE_RED:
+                break;
+            case ClueView.TYPE_GREEN:
+                visible = true;
+                optionalText += "متوسط";
+                break;
+            case ClueView.TYPE_GREEN2:
+                optionalText += "زیاد";
+                visible = true;
+                break;
+            case ClueView.TYPE_GRAY:
+                optionalText += "کم";
+                visible = true;
+                break;
+            case ClueView.TYPE_YELLOW:
+                break;
+        }
+        listener.onViewDataChanged(persianCalendar.getPersianWeekDayName()
+                , optionalText, days[day - 1], persianCalendar.getPersianDay() + ""
+                , CalendarTool.getIranianMonthName(persianCalendar.getPersianMonth() + 1), visible, day);
 
     }
+
+    private static String[] days = {
+            "روز اول",
+            "روز دوم",
+            "روز سوم",
+            "روز چهارم",
+            "روز پنجم",
+            "روز ششم",
+            "روز هفتم",
+            "روز هشتم",
+            "روز نهم",
+            "روز دهم",
+            "روز یازدهم",
+            "روز دوازدهم",
+            "روز سیزدهم",
+            "روز چهاردهم",
+            "روز پانزدهم",
+            "روز شانزدهم",
+            "روز هفدهم",
+            "روز هجدهم",
+            "روز نوزدهم",
+            "روز بیستم",
+            "روز بیست و یکم",
+            "روز بیست و دوم",
+            "روز بیست و سوم",
+            "روز بیست و چهارم",
+            "روز بیست و پنجم",
+            "روز بیست و ششم",
+            "روز بیست و هفتم",
+            "روز بیست و هشتم",
+            "روز بیست و نهم",
+            "روز سی‌ام",
+            "روز سی و یکم",
+            "روز سی و دوم",
+            "روز سی و سوم",
+            "روز سی و چهارم",
+            "روز سی و پنجم",
+            "روز سی و ششم",
+            "روز سی و هفتم",
+            "روز سی و هشتم",
+            "روز سی و نهم",
+            "روز چهلم",
+    };
 }

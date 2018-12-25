@@ -121,7 +121,7 @@
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
         <argument
             android:name="last_cycle_day"
             app:argType="long"

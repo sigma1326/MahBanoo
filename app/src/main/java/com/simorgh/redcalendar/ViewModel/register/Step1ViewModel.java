@@ -1,12 +1,14 @@
 package com.simorgh.redcalendar.ViewModel.register;
 
+import com.simorgh.redcalendar.Model.AppManager;
+
 import java.util.Calendar;
 
 import androidx.lifecycle.ViewModel;
 
 public class Step1ViewModel extends ViewModel {
     public Step1ViewModel() {
-        day = Calendar.getInstance();
+        day = AppManager.getCalendarInstance();
     }
 
     private Calendar day;

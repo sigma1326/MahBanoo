@@ -56,6 +56,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
         cycleRepository = new CycleRepository((Application) getApplicationContext());
         if (cycleRepository.getCycleData() != null) {
             startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
         setContentView(R.layout.activity_questions);
 
@@ -114,7 +115,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     cycle.setGrayDaysCount(cycleRegisterViewModel.getGrayDaysCount());
                     cycle.setBirthYear(cycleRegisterViewModel.getBirthYear());
                     Calendar calendar = cycleRegisterViewModel.getLastCycleEndDay();
-                    calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount());
+                    calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount()+1);
                     cycle.setStartDate(calendar);
                     cycleRepository.insertCycle(cycle);
                     navController.navigate(R.id.action_step5_to_mainActivity);
@@ -300,7 +301,6 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
 
     @Override
     public boolean onSupportNavigateUp() {
-        super.onSupportNavigateUp();
         return navController.navigateUp();
     }
 

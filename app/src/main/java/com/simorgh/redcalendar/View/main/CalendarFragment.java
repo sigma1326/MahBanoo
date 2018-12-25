@@ -20,15 +20,13 @@ import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.ClueData;
 import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.ViewModel.main.CalendarViewModel;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
 
 public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener {
 
-    private CalendarViewModel mViewModel;
-    private CycleViewModel cycleViewModel;
+    private CycleViewModel mViewModel;
     private CalendarView calendarView;
 
 
@@ -52,7 +50,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
 
         calendarView.setIsDayMarkedListener(this);
         calendarView.setOnDayClickListener(this);
-        calendarView.scrollToCurrentDate(Calendar.getInstance());
+        calendarView.scrollToCurrentDate(AppManager.getCalendarInstance());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             calendarView.setElevation(10);
@@ -63,9 +61,8 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(CalendarViewModel.class);
-        cycleViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        cycleViewModel.getCycleLiveData().observe(this, cycle -> {
+        mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
+        mViewModel.getCycleLiveData().observe(this, cycle -> {
             if (calendarView != null && cycle != null) {
                 calendarView.setClueData(new ClueData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));

@@ -14,6 +14,7 @@ import androidx.lifecycle.LiveData;
 public class CycleViewModel extends AndroidViewModel {
     private CycleRepository cycleRepository;
     private LiveData<Cycle> cycleLiveData;
+    private Cycle cycle;
     private int selectedDay = -1;
 
 
@@ -21,6 +22,23 @@ public class CycleViewModel extends AndroidViewModel {
         super(application);
         cycleRepository = new CycleRepository(application);
         cycleLiveData = cycleRepository.getCycleLiveData();
+//        cycle = cycleLiveData.getValue();
+    }
+
+    public int getSelectedDay() {
+        return selectedDay;
+    }
+
+    public void setSelectedDay(int selectedDay) {
+        this.selectedDay = selectedDay;
+    }
+
+    public Cycle getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(Cycle cycle) {
+        this.cycle = cycle;
     }
 
     public LiveData<Cycle> getCycleLiveData() {

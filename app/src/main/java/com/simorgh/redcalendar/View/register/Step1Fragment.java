@@ -11,6 +11,7 @@ import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.ClueData;
+import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.register.Step1ViewModel;
 
@@ -25,9 +26,9 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
 
     private Step1ViewModel mViewModel;
     private CalendarView calendarView;
-    private Calendar min = Calendar.getInstance();
-    private Calendar max = Calendar.getInstance();
-    private Calendar today = Calendar.getInstance();
+    private Calendar min = AppManager.getCalendarInstance();
+    private Calendar max = AppManager.getCalendarInstance();
+    private Calendar today = AppManager.getCalendarInstance();
     private OnLastCycleDaySelectedListener onLastCycleDaySelected;
 
     public static Step1Fragment newInstance() {

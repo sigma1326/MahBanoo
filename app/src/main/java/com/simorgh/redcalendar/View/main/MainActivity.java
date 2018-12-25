@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.simorgh.bottombar.BottomBar;
 import com.simorgh.redcalendar.R;
@@ -23,7 +24,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 
-public class MainActivity extends AppCompatActivity implements BottomBar.OnItemClickListener, BottomBar.OnCircleItemClickListener, NavController.OnDestinationChangedListener {
+public class MainActivity extends AppCompatActivity implements BottomBar.OnItemClickListener
+        , BottomBar.OnCircleItemClickListener
+        , NavController.OnDestinationChangedListener {
 
     private AppCompatTextView titleText;
     private NavController navController;
@@ -49,9 +52,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         bottomBar.setItemClickListener(this);
         bottomBar.setCircleItemClickListener(this);
         imgBack.setOnClickListener(v -> navController.navigateUp());
-
-        Calendar cc = Calendar.getInstance();
-        cc.set(Calendar.DAY_OF_MONTH, 26);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     }
 
     private void bottomBarClicked(boolean isCircle, BottomBar.BottomItem item) {
-        if (isCircle) {
+        if (isCircle || item==null) {
             switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
                 case R.id.home:
                     navController.navigate(R.id.action_home_to_addNote);
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 //                            NavOptions navOptions = new NavOptions.Builder()
 //                                    .setPopUpTo(R.id.home,
 //                                            true).build();
-                            navController.navigate(R.id.action_calendar_to_home, null);
+                            navController.popBackStack(R.id.home,false);
                             break;
                         case 3:
                             break;
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 case R.id.profile:
                     switch (item.getIndex()) {
                         case 4:
-                            navController.navigate(R.id.action_profile_to_home);
+                            navController.popBackStack(R.id.home,false);
                             break;
                         case 3:
                             navController.navigate(R.id.action_profile_to_calendar);
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 case R.id.settings:
                     switch (item.getIndex()) {
                         case 4:
-                            navController.navigate(R.id.action_settings_to_home);
+                            navController.popBackStack(R.id.home,false);
                             break;
                         case 3:
                             navController.navigate(R.id.action_settings_to_calendar);
@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 case R.id.addNote:
                     switch (item.getIndex()) {
                         case 4:
+                            navController.popBackStack(R.id.home,false);
                             break;
                         case 3:
                             break;

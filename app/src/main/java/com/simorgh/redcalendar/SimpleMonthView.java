@@ -25,6 +25,7 @@ import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
 import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cycleutils.ClueData;
+import com.simorgh.redcalendar.Model.AppManager;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -117,7 +118,7 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
     protected int mMonthHijri;
 
 
-    protected Calendar mCalendar = Calendar.getInstance();
+    protected Calendar mCalendar = AppManager.getCalendarInstance();
     protected PersianCalendar persianCalendar = new PersianCalendar();
     protected UmmalquraCalendar hijriCalendar = new UmmalquraCalendar();
     protected PersianDate persianDate = new PersianDate();
@@ -466,7 +467,7 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // Figure out what day today is.
-        final Calendar today = Calendar.getInstance();
+        final Calendar today = AppManager.getCalendarInstance();
         mToday = -1;
         mDaysInMonth = CalendarTool.getDaysInMonth(month, year, calendarType);
         for (int i = 0; i < mDaysInMonth; i++) {
@@ -602,7 +603,7 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         Log.d(TAG, "onDayClicked: " + day);
 
         if (mOnDayClickListener != null) {
-            Calendar date = Calendar.getInstance();
+            Calendar date = AppManager.getCalendarInstance();
             switch (calendarType) {
                 case CalendarType.PERSIAN:
                     persianDate.setShYear(mYearPersian);

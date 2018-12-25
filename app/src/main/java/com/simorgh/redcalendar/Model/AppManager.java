@@ -2,34 +2,37 @@ package com.simorgh.redcalendar.Model;
 
 import android.app.Application;
 
-import com.simorgh.cycleutils.ClueData;
 import com.simorgh.redcalendar.Model.database.CycleRepository;
-import com.simorgh.redcalendar.Model.database.model.Cycle;
 
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class AppManager extends Application {
     public static final String DB_NAME = "red-calendar-db";
     public static final String TAG = "debug13";
     public static Calendar minDate;
     public static Calendar maxDate;
-    public static Calendar cc = Calendar.getInstance();
 
 
     private CycleRepository cycleRepository;
 
+    public static Locale mLocale;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mLocale = getResources().getConfiguration().locale;
 
-        cc.set(Calendar.DAY_OF_MONTH, 15);
-
-        minDate = Calendar.getInstance();
+        minDate = getCalendarInstance();
         minDate.set(Calendar.YEAR, 2017);
 
-        maxDate = Calendar.getInstance();
+        maxDate = getCalendarInstance();
         maxDate.set(Calendar.YEAR, 2020);
 
+    }
+
+    public static Calendar getCalendarInstance() {
+        return Calendar.getInstance(TimeZone.getDefault(), mLocale);
     }
 }

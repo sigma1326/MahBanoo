@@ -18,13 +18,11 @@ import com.simorgh.cycleutils.ClueData;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
-import com.simorgh.redcalendar.ViewModel.main.ProfileViewModel;
 
 public class ProfileFragment extends Fragment {
 
-    private ProfileViewModel mViewModel;
+    private CycleViewModel mViewModel;
     private CycleBar cycleBar;
-    private CycleViewModel cycleViewModel;
 
 
     public static ProfileFragment newInstance() {
@@ -41,9 +39,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-        cycleViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        cycleViewModel.getCycleLiveData().observe(this, cycle -> {
+        mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
+        mViewModel.getCycleLiveData().observe(this, cycle -> {
             if (cycleBar != null && cycle != null) {
                 cycleBar.setClueData(new ClueData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));

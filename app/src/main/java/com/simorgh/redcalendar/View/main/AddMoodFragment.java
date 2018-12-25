@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import com.simorgh.cycleutils.ClueData;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.main.AddMoodViewModel;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 import com.simorgh.weekdaypicker.WeekDayPicker;
 
@@ -24,9 +23,8 @@ import java.util.Calendar;
 
 public class AddMoodFragment extends Fragment implements WeekDayPicker.onDaySelectedListener {
 
-    private AddMoodViewModel mViewModel;
+    private CycleViewModel mViewModel;
     private WeekDayPicker weekDayPicker;
-    private CycleViewModel cycleViewModel;
 
 
     public static AddMoodFragment newInstance() {
@@ -38,16 +36,15 @@ public class AddMoodFragment extends Fragment implements WeekDayPicker.onDaySele
         View v = inflater.inflate(R.layout.add_note_fragment, container, false);
         weekDayPicker = v.findViewById(R.id.weekDayPicker);
         weekDayPicker.setOnDaySelectedListener(this);
-        weekDayPicker.setSelectedDate(Calendar.getInstance());
+        weekDayPicker.setSelectedDate(AppManager.getCalendarInstance());
         return v;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(AddMoodViewModel.class);
-        cycleViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        cycleViewModel.getCycleLiveData().observe(this, cycle -> {
+        mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
+        mViewModel.getCycleLiveData().observe(this, cycle -> {
             if (weekDayPicker != null && cycle != null) {
                 weekDayPicker.setClueData(new ClueData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
