@@ -1,6 +1,7 @@
 package com.simorgh.spinner;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 
 import androidx.annotation.Nullable;
@@ -33,6 +34,9 @@ public abstract class NiceSpinnerBaseAdapter<T> extends BaseAdapter {
         this.horizontalAlignment = horizontalAlignment;
     }
 
+
+    private Typeface typeface;
+
     @Override
     public View getView(int position, @Nullable View convertView, ViewGroup parent) {
         Context context = parent.getContext();
@@ -50,8 +54,10 @@ public abstract class NiceSpinnerBaseAdapter<T> extends BaseAdapter {
             textView = ((ViewHolder) convertView.getTag()).textView;
         }
 
+        typeface = Typeface.createFromAsset(context.getAssets(), "fonts/iransans_medium.ttf");
         textView.setText(spinnerTextFormatter.format(getItem(position).toString()));
         textView.setTextColor(textColor);
+        textView.setTypeface(typeface);
 
         setTextHorizontalAlignment(textView);
 
