@@ -15,12 +15,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
+import com.simorgh.calendarutil.model.CalendarType;
+import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
+import com.simorgh.calendarutil.persiancalendar.PersianDate;
 import com.simorgh.cluecalendar.R;
-import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
-import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
-import com.simorgh.cluecalendar.persiancalendar.PersianDate;
-import com.simorgh.cluecalendar.util.CalendarTool;
 import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
 import com.simorgh.cycleutils.ClueData;
