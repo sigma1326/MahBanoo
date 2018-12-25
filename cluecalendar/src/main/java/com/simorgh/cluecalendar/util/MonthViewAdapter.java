@@ -20,9 +20,10 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
-import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
+import com.simorgh.calendarutil.model.CalendarType;
+import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.ChangeDaysMonthView;
 import com.simorgh.cluecalendar.view.SetStartDayMonthView;

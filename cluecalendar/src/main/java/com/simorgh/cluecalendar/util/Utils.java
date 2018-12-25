@@ -9,8 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 
+import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.cluecalendar.R;
-import com.simorgh.cluecalendar.model.CalendarType;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
