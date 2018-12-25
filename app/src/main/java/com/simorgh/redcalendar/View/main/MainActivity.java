@@ -3,17 +3,14 @@ package com.simorgh.redcalendar.View.main;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.simorgh.bottombar.BottomBar;
 import com.simorgh.redcalendar.R;
 
-import java.util.Calendar;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -26,7 +23,8 @@ import androidx.navigation.Navigation;
 
 public class MainActivity extends AppCompatActivity implements BottomBar.OnItemClickListener
         , BottomBar.OnCircleItemClickListener
-        , NavController.OnDestinationChangedListener {
+        , NavController.OnDestinationChangedListener
+        , CycleViewFragment.OnButtonChangeClickListener {
 
     private AppCompatTextView titleText;
     private NavController navController;
@@ -72,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     }
 
     private void bottomBarClicked(boolean isCircle, BottomBar.BottomItem item) {
-        if (isCircle || item==null) {
+        if (isCircle || item == null) {
             switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
                 case R.id.home:
                     navController.navigate(R.id.action_home_to_addNote);
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 //                            NavOptions navOptions = new NavOptions.Builder()
 //                                    .setPopUpTo(R.id.home,
 //                                            true).build();
-                            navController.popBackStack(R.id.home,false);
+                            navController.popBackStack(R.id.home, false);
                             break;
                         case 3:
                             break;
@@ -125,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 case R.id.profile:
                     switch (item.getIndex()) {
                         case 4:
-                            navController.popBackStack(R.id.home,false);
+                            navController.popBackStack(R.id.home, false);
                             break;
                         case 3:
                             navController.navigate(R.id.action_profile_to_calendar);
@@ -140,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 case R.id.settings:
                     switch (item.getIndex()) {
                         case 4:
-                            navController.popBackStack(R.id.home,false);
+                            navController.popBackStack(R.id.home, false);
                             break;
                         case 3:
                             navController.navigate(R.id.action_settings_to_calendar);
@@ -155,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 case R.id.addNote:
                     switch (item.getIndex()) {
                         case 4:
-                            navController.popBackStack(R.id.home,false);
+                            navController.popBackStack(R.id.home, false);
                             break;
                         case 3:
                             break;
@@ -189,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         }
     }
 
-    private void runBottomBarnAnim(boolean visible) {
+    private void runBottomBarAnim(boolean visible) {
         int h1;
         if (visible) {
             if (bottomBar.getVisibility() == View.VISIBLE) {
@@ -239,35 +237,43 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 if (bottomBar != null) {
                     imgInfo.setVisibility(View.VISIBLE);
                     bottomBar.setSelectedIndex(4);
-                    runBottomBarnAnim(true);
+                    runBottomBarAnim(true);
                     runBackButtonAnim(false);
                 }
                 break;
             case R.id.calendar:
                 if (bottomBar != null) {
                     bottomBar.setSelectedIndex(3);
-                    runBottomBarnAnim(true);
+                    runBottomBarAnim(true);
                     runBackButtonAnim(false);
                 }
                 break;
             case R.id.profile:
                 if (bottomBar != null) {
                     bottomBar.setSelectedIndex(2);
-                    runBottomBarnAnim(true);
+                    runBottomBarAnim(true);
                     runBackButtonAnim(false);
                 }
                 break;
             case R.id.settings:
                 if (bottomBar != null) {
                     bottomBar.setSelectedIndex(1);
-                    runBottomBarnAnim(true);
+                    runBottomBarAnim(true);
                     runBackButtonAnim(false);
                 }
                 break;
             case R.id.addNote:
                 if (bottomBar != null) {
                     bottomBar.setSelectedIndex(-1);
-                    runBottomBarnAnim(false);
+                    runBottomBarAnim(false);
+                    runBackButtonAnim(true);
+                }
+                break;
+
+            case R.id.change_cycle:
+                if (bottomBar != null) {
+                    bottomBar.setSelectedIndex(-1);
+                    runBottomBarAnim(false);
                     runBackButtonAnim(true);
                 }
                 break;
@@ -278,5 +284,13 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     public boolean onSupportNavigateUp() {
         super.onSupportNavigateUp();
         return navController.navigateUp();
+    }
+
+    @Override
+    public void onButtonChangeClicked() {
+        titleText.setText(getString(R.string.change_cycle_days));
+        if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.home) {
+            navController.navigate(R.id.action_home_to_change_cycle);
+        }
     }
 }

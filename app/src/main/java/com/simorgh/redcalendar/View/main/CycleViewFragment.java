@@ -1,5 +1,6 @@
 package com.simorgh.redcalendar.View.main;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 public class CycleViewFragment extends Fragment implements ClueView.OnButtonClickListener, ClueView.OnDayChangedListener {
 
@@ -31,6 +34,8 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
     private Calendar today = AppManager.getCalendarInstance();
     private Calendar currentCycleStartDate = AppManager.getCalendarInstance();
     private boolean isFirstDraw = true;
+    private OnButtonChangeClickListener onButtonChangeClickListener;
+
 
 
     public static CycleViewFragment newInstance() {
@@ -75,7 +80,25 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
 
     @Override
     public void onButtonChangeClick() {
+        if (onButtonChangeClickListener != null) {
+            onButtonChangeClickListener.onButtonChangeClicked();
+        }
+    }
 
+    public interface OnButtonChangeClickListener{
+        void onButtonChangeClicked();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        onButtonChangeClickListener = (OnButtonChangeClickListener) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onButtonChangeClickListener = null;
     }
 
     @Override

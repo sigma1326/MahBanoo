@@ -42,6 +42,14 @@
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom"
             app:popUpTo="@+id/home" />
+        <action
+            android:id="@+id/action_home_to_change_cycle"
+            app:destination="@id/change_cycle"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_bottom"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top"
+            app:popUpTo="@+id/home" />
     </fragment>
 
     <fragment
@@ -167,4 +175,9 @@
         android:name="com.simorgh.redcalendar.View.main.AddMoodFragment"
         android:label="addNote"
         tools:layout="@layout/add_note_fragment" />
+    <fragment
+        android:id="@+id/change_cycle"
+        android:name="com.simorgh.redcalendar.View.main.ChangeCycleStartDayFragment"
+        android:label="change_cycle"
+        tools:layout="@layout/change_cycle_start_day_fragment" />
 </navigation>

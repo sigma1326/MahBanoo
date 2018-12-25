@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.main.ChangeCycleStartDayFragment">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_apply_changes"
+        style="@style/MSNavBarButton.Next"
+        android:layout_width="215dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/btn_apply_change_round_bkg"
+        android:elevation="5dp"
+        android:fontFamily="@font/iransans_medium"
+        android:gravity="center"
+        android:text="@string/apply_changes"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:visibility="visible" />
+
+    <com.simorgh.cluecalendar.view.CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
+
+</FrameLayout>
