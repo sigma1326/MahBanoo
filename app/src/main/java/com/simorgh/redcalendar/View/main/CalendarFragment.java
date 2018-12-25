@@ -15,10 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simorgh.calendarutil.model.CalendarType;
-import com.simorgh.cluecalendar.view.BaseMonthView;
-import com.simorgh.cluecalendar.view.CalendarView;
-import com.simorgh.cluecalendar.view.ShowInfoMonthView;
-import com.simorgh.cycleutils.ClueData;
+import com.simorgh.cyclecalendar.view.BaseMonthView;
+import com.simorgh.cyclecalendar.view.CalendarView;
+import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
+import com.simorgh.cycleutils.CycleData;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
@@ -64,7 +64,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
         mViewModel.getCycleLiveData().observe(this, cycle -> {
             if (calendarView != null && cycle != null) {
-                calendarView.setClueData(new ClueData(cycle.getRedDaysCount(),
+                calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 Log.d(AppManager.TAG, cycle.toString());
             }

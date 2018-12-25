@@ -15,7 +15,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.simorgh.cycleutils.ClueData;
+import com.simorgh.cycleutils.CycleData;
 
 import java.util.Calendar;
 
@@ -43,7 +43,7 @@ public class WeekDayPicker extends View {
     private int unSelectedDayTextColor;
     private float dayTextSize = -1;
 
-    private ClueData clueData;
+    private CycleData cycleData;
 
     private Calendar selectedDate = Calendar.getInstance();
     private Calendar todayDate = Calendar.getInstance();
@@ -194,9 +194,9 @@ public class WeekDayPicker extends View {
         temp.setTimeInMillis(weekStartDate.getTimeInMillis());
         if (isInEditMode()) {
             calculateWeekStart(selectedDate);
-            clueData = new ClueData(5, 26, 3, Calendar.getInstance());
+            cycleData = new CycleData(5, 26, 3, Calendar.getInstance());
         }
-        if (clueData == null) {
+        if (cycleData == null) {
             return;
         }
         float y;
@@ -205,8 +205,8 @@ public class WeekDayPicker extends View {
         float dotRadius = dp2px(dotCircleRadius);
         int i = 0;
         for (float x = dp2px(realWidth) - dp2px(realWidth) / 14f; x > 0; x -= dp2px(realWidth) / 7f, i++) {
-            int day = (int) getDaysFromDiff(temp, clueData.getStartDate());
-            day = day % clueData.getTotalDays() + 1;
+            int day = (int) getDaysFromDiff(temp, cycleData.getStartDate());
+            day = day % cycleData.getTotalDays() + 1;
             if (getDaysFromDiff(temp, selectedDate) == 0) {
                 canvas.drawCircle(x, y, radius, circlePaint);
                 canvas.drawText(days[i], x, y + dp2px(10), selectedDayTextPaint);
@@ -276,12 +276,12 @@ public class WeekDayPicker extends View {
         return (long) diffDays;
     }
 
-    public ClueData getClueData() {
-        return clueData;
+    public CycleData getCycleData() {
+        return cycleData;
     }
 
-    public void setClueData(ClueData clueData) {
-        this.clueData = clueData;
+    public void setCycleData(CycleData cycleData) {
+        this.cycleData = cycleData;
         postInvalidate();
     }
 

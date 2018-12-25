@@ -1,11 +1,11 @@
-package com.simorgh.redcalendar;
+package com.simorgh.cyclecalendar.view;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -13,34 +13,26 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.View;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
 import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
+import com.simorgh.cyclecalendar.R;
 import com.simorgh.cyclecalendar.util.SizeConverter;
 import com.simorgh.cyclecalendar.util.Utils;
-import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cycleutils.CycleData;
-import com.simorgh.redcalendar.Model.AppManager;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callback {
-    private SurfaceHolder surfaceHolder;
-    private int mViewWidth;
-    private int mViewHeight;
-    private Paint paint;
-    private Context context;
-    private Thread thread = null;
-    volatile boolean running = false;
-    private int i;
+import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 
+public class BaseMonthView extends View {
     public static final String TAG = "baseMonthView";
     protected int calendarType;
     protected int monthViewType;
@@ -74,12 +66,8 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
     protected int rectTypeGrayColor;
     protected int tvMonthDayNumberTextColorWhite;
     protected int tvMonthDayNumberTextColorBlack;
-    protected int monthViewBkgColor;
-    private Paint rectTypeRedPaint;
-    private int rectTypeRedColor;
-    private Paint rectTypeGreenPaint;
-    private int rectTypeGreenColor;
 
+    protected int monthViewBkgColor;
 
     // Desired dimensions.
     protected int mDesiredMonthHeight;
@@ -96,7 +84,6 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
 
 
     protected int selectedDay = -1;
-    protected int highlightedDay = -1;
     protected int mActivatedDay = -1;
     protected int mToday = DEFAULT_SELECTED_DAY;
     protected int mWeekStart = DEFAULT_WEEK_START;
@@ -118,7 +105,7 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
     protected int mMonthHijri;
 
 
-    protected Calendar mCalendar = AppManager.getCalendarInstance();
+    protected Calendar mCalendar = Calendar.getInstance();
     protected PersianCalendar persianCalendar = new PersianCalendar();
     protected UmmalquraCalendar hijriCalendar = new UmmalquraCalendar();
     protected PersianDate persianDate = new PersianDate();
@@ -129,83 +116,79 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
     protected UmmalquraCalendar hijri = new UmmalquraCalendar();
 
 
-    protected BaseMonthView.OnDayClickListener mOnDayClickListener;
-    protected BaseMonthView.OnDaySelectedListener onDaySelectedListener;
-    protected BaseMonthView.IsDaySelectedListener isDaySelectedListener;
-    protected BaseMonthView.IsDayInRangeSelectedListener isDayInRangeSelectedListener;
+    protected OnDayClickListener mOnDayClickListener;
+    protected OnDaySelectedListener onDaySelectedListener;
+    protected IsDaySelectedListener isDaySelectedListener;
+    protected IsDayInRangeSelectedListener isDayInRangeSelectedListener;
 
     protected CycleData cycleData;
 
-    public SimpleMonthView(Context context) {
+    public BaseMonthView(Context context) {
         super(context);
+        initAttrs(context, null);
         init();
     }
 
-    public SimpleMonthView(Context context, AttributeSet attrs) {
+    public BaseMonthView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initAttrs(context, attrs);
         init();
     }
 
-    public SimpleMonthView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BaseMonthView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initAttrs(context, attrs);
         init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public SimpleMonthView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BaseMonthView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        initAttrs(context, attrs);
         init();
     }
 
-    private void init() {
-        surfaceHolder = getHolder();
-        paint = new Paint();
-        paint.setColor(Color.BLACK);
-        context = getContext();
-        running = true;
-//        thread = new Thread();
-//        thread.start();
-        getHolder().addCallback(this);
+    protected void initAttrs(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseMonthView);
         Resources resources = getResources();
 
-
         //circle colors
-        rectTypeGrayColor = resources.getColor(com.simorgh.cyclecalendar.R.color.my_type_gray);
-        rectTypeRedColor = resources.getColor(com.simorgh.cyclecalendar.R.color.type_red);
-        rectTypeGreenColor = resources.getColor(com.simorgh.cyclecalendar.R.color.type_green);
-        monthViewBkgColor = resources.getColor(com.simorgh.cyclecalendar.R.color.white);
+        rectTypeGrayColor = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type3, resources.getColor(R.color.my_type_gray));
+        monthViewBkgColor = resources.getColor(R.color.white);
 
-        mDesiredMonthHeight = resources.getDimensionPixelSize(com.simorgh.cyclecalendar.R.dimen.month_view_month_height);
-        mDesiredDayHeight = resources.getDimensionPixelSize(com.simorgh.cyclecalendar.R.dimen.month_view_day_height);
-        mDesiredCellWidth = resources.getDimensionPixelSize(com.simorgh.cyclecalendar.R.dimen.month_view_day_width);
+        mDesiredMonthHeight = resources.getDimensionPixelSize(R.dimen.month_view_month_height);
+        mDesiredDayHeight = resources.getDimensionPixelSize(R.dimen.month_view_day_height);
+        mDesiredCellWidth = resources.getDimensionPixelSize(R.dimen.month_view_day_width);
         mLocale = resources.getConfiguration().locale;
 
 
         //main day number textView
-        tvMonthDayNumberTextColorWhite = resources.getColor(com.simorgh.cyclecalendar.R.color.white);
-        tvMonthDayNumberTextColorBlack = resources.getColor(com.simorgh.cyclecalendar.R.color.black);
+        tvMonthDayNumberTextColorWhite = resources.getColor(R.color.white);
+        tvMonthDayNumberTextColorBlack = resources.getColor(R.color.black);
 
-        mDaysInMonth = 31;
-        mDayOfWeekStart = 1;
+        typedArray.recycle();
+    }
 
+    protected void init() {
         mCalendar = Calendar.getInstance(mLocale);
         persianCalendar = new PersianCalendar(mCalendar.getTimeInMillis());
         hijriCalendar = new UmmalquraCalendar();
 
         mDayFormatter = NumberFormat.getIntegerInstance(mLocale);
 
-        initPaints();
+        updateMonthYearLabel();
 
+        initPaints();
     }
 
     protected void initPaints() {
         final Resources res = getResources();
 
-        final Typeface monthTypeface = Utils.getTypeFace(getContext(), 1);
-        final Typeface dayTypeface = Utils.getTypeFace(getContext(), 1);
+        final Typeface monthTypeface = Utils.getTypeFace(getContext(), calendarType);
+        final Typeface dayTypeface = Utils.getTypeFace(getContext(), calendarType);
 
-        final int monthTextSize = res.getDimensionPixelSize(com.simorgh.cyclecalendar.R.dimen.month_view_month_text_size);
-        final int dayTextSize = res.getDimensionPixelSize(com.simorgh.cyclecalendar.R.dimen.month_view_day_text_size);
+        final int monthTextSize = res.getDimensionPixelSize(R.dimen.month_view_month_text_size);
+        final int dayTextSize = res.getDimensionPixelSize(R.dimen.month_view_day_text_size);
 
         mMonthPaint = new TextPaint();
         mMonthPaint.setAntiAlias(true);
@@ -230,34 +213,21 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         rectTypeGrayPaint.setAntiAlias(true);
         rectTypeGrayPaint.setStyle(Paint.Style.FILL);
         rectTypeGrayPaint.setColor(rectTypeGrayColor);
-
-
-        rectTypeRedPaint = new Paint();
-        rectTypeRedPaint.setAntiAlias(true);
-        rectTypeRedPaint.setStyle(Paint.Style.FILL);
-        rectTypeRedPaint.setColor(rectTypeRedColor);
-
-        rectTypeGreenPaint = new Paint();
-        rectTypeGreenPaint.setAntiAlias(true);
-        rectTypeGreenPaint.setStyle(Paint.Style.FILL);
-        rectTypeGreenPaint.setColor(rectTypeGreenColor);
     }
-
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int padStart = ViewCompat.getPaddingStart(this);
+        int padEnd = ViewCompat.getPaddingEnd(this);
 
-        mViewWidth = w;
-        mViewHeight = h;
 
-        // Set font size proportional to view size.
-        paint.setTextSize(mViewWidth / 5f);
-        paint.setColor(Color.WHITE);
-    }
+        int preferredHeight = (int) ((mDesiredDayHeight * weeksInMonth + mDesiredMonthHeight
+                + getPaddingTop() + getPaddingBottom()) + dp2px(8));
+        final int preferredWidth = mDesiredCellWidth * DAYS_IN_WEEK + padStart + padEnd;
+        final int resolvedWidth = resolveSize(preferredWidth, widthMeasureSpec);
+        int resolvedHeight = resolveSize(preferredHeight, heightMeasureSpec);
 
-    public void run() {
-
+        setMeasuredDimension(resolvedWidth, resolvedHeight);
     }
 
     @Override
@@ -295,8 +265,31 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         mCellWidth = cellWidth;
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        final int paddingLeft = getPaddingLeft();
+        final int paddingTop = getPaddingTop();
+        canvas.translate(paddingLeft, paddingTop);
 
-    @SuppressLint("NewApi")
+        drawMonth(canvas);
+        drawDays(canvas);
+
+        canvas.translate(-paddingLeft, -paddingTop);
+
+        setBackgroundColor(monthViewBkgColor);
+
+    }
+
+    protected void drawMonth(Canvas canvas) {
+        final float x = mPaddedWidth / 2f;
+
+        // Vertically centered within the month header height.
+        final float lineHeight = mMonthPaint.ascent() + mMonthPaint.descent();
+        final float y = (mMonthHeight + lineHeight);
+
+        canvas.drawText(mMonthYearLabel, x, y, mMonthPaint);
+    }
+
     protected void drawDays(Canvas canvas) {
         final TextPaint p = dayTextPaint;
         final int headerHeight = mMonthHeight;
@@ -322,17 +315,11 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
             bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
             left = (int) (colCenterRtl - colWidth / 2 + dp2px(3));
             right = (int) (colCenterRtl + colWidth / 2 - dp2px(3));
-            if (day == selectedDay) {
-                canvas.drawRoundRect(left, top, right, bottom, 10, 10, rectTypeRedPaint);
-            } else if (day == highlightedDay) {
-                canvas.drawRoundRect(left, top, right, bottom, 10, 10, rectTypeGreenPaint);
-            } else {
-                canvas.drawRoundRect(left, top, right, bottom, 10, 10, rectTypeGrayPaint);
-            }
-            if (day == selectedDay || day == highlightedDay) {
-                dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
-            } else {
+            canvas.drawRect(left, top, right, bottom, getDayPaint(day));
+            if (getDayType(day) == TYPE_GRAY) {
                 dayTextPaint.setColor(tvMonthDayNumberTextColorBlack);
+            } else {
+                dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
             }
             canvas.drawText(mDayFormatter.format(day), right - p.getFontMetrics().descent - dp2px(6),
                     bottom - p.getFontMetrics().bottom, p);
@@ -345,88 +332,12 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
-    protected int getDayType(int day) {
-        if (day == -1) {
-            return TYPE_GRAY;
-        }
-        if (cycleData == null) {
-            return TYPE_GRAY;
-        }
-        long days = 0L;
-        switch (calendarType) {
-            case CalendarType.PERSIAN:
-                p.setPersianDate(persianCalendar.getPersianYear(), persianCalendar.getPersianMonth() + 1, day);
-                days = CalendarTool.getDaysFromDiff(p, cycleData.getStartDate());
-                break;
-            case CalendarType.GREGORIAN:
-                break;
-            case CalendarType.ARABIC:
-                break;
-        }
-        if (days >= 0) {
-            day = (int) ((days) % cycleData.getTotalDays()) + 1;
-        } else {
-            return TYPE_GRAY;
-        }
-        if (day <= cycleData.getRedCount()) {
-            return TYPE_RED;
-        } else if (day <= cycleData.getTotalDays()) {
-            if (day >= cycleData.getGreenStartIndex() && day <= cycleData.getGreenEndIndex()) {
-                if (day == cycleData.getGreen2Index()) {
-                    return TYPE_GREEN2;
-                }
-                return TYPE_GREEN;
-            } else if (day >= cycleData.getYellowStartIndex() && day <= cycleData.getYellowEndIndex()) {
-                return TYPE_YELLOW;
-            }
-        }
-        return TYPE_GRAY;
-    }
-
-    protected int findDayOffset() {
-        final int offset = mDayOfWeekStart - mWeekStart;
-        if (mDayOfWeekStart < mWeekStart) {
-            return offset + DAYS_IN_WEEK;
-        }
-        return offset;
-    }
-
     protected Paint getDayPaint(int day) {
         return rectTypeGrayPaint;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        final int x = (int) (event.getX() + 0.5f);
-        final int y = (int) (event.getY() + 0.5f);
-
-        final int action = event.getAction();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                final int touchedItem = getDayAtLocation(x, y);
-                if (action == MotionEvent.ACTION_DOWN && touchedItem < 0) {
-                    // Touch something that's not an item, reject event.
-                    return false;
-                }
-
-                highlightedDay = getDayAtLocation(x, y);
-
-                break;
-
-            case MotionEvent.ACTION_UP:
-                final int clickedDay = getDayAtLocation(x, y);
-                onDayClicked(clickedDay);
-                // Fall through.
-            case MotionEvent.ACTION_CANCEL:
-                // Reset touched day on stream end.
-                postInvalidate();
-                break;
-        }
-        running = true;
-        surfaceChanged(getHolder(), 0, 0, 0);
-        return true;
+    protected Paint getDayPaint(Calendar date) {
+        return rectTypeGrayPaint;
     }
 
     public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType) {
@@ -467,7 +378,7 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // Figure out what day today is.
-        final Calendar today = AppManager.getCalendarInstance();
+        final Calendar today = Calendar.getInstance();
         mToday = -1;
         mDaysInMonth = CalendarTool.getDaysInMonth(month, year, calendarType);
         for (int i = 0; i < mDaysInMonth; i++) {
@@ -482,6 +393,7 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         mEnabledDayStart = mathConstrain(enabledDayStart, 1, mDaysInMonth);
         mEnabledDayEnd = mathConstrain(enabledDayEnd, mEnabledDayStart, mDaysInMonth);
 
+        updateMonthYearLabel();
         if (CalendarTool.getDaysInMonth(month, year, calendarType) <= 30) {
             switch (mDayOfWeekStart) {
                 case 0:
@@ -514,6 +426,7 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
 //        requestLayout();
         postInvalidate();
     }
+
 
     protected boolean sameDay(int day, Calendar today) {
         int todayDay = 0;
@@ -549,8 +462,34 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         return compYear == todayYear && compMonth == todayMonth && day == todayDay;
     }
 
-    protected static int mathConstrain(int amount, int low, int high) {
-        return amount < low ? low : (amount > high ? high : amount);
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final int x = (int) (event.getX() + 0.5f);
+        final int y = (int) (event.getY() + 0.5f);
+
+        final int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+                final int touchedItem = getDayAtLocation(x, y);
+                if (action == MotionEvent.ACTION_DOWN && touchedItem < 0) {
+                    // Touch something that's not an item, reject event.
+                    return false;
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                final int clickedDay = getDayAtLocation(x, y);
+                onDayClicked(clickedDay);
+                // Fall through.
+            case MotionEvent.ACTION_CANCEL:
+                // Reset touched day on stream end.
+                postInvalidate();
+                break;
+        }
+        return true;
     }
 
     protected int getDayAtLocation(int x, int y) {
@@ -584,18 +523,6 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         return day;
     }
 
-    protected boolean isValidDayOfMonth(int day) {
-        return day >= 1 && day <= mDaysInMonth;
-    }
-
-    protected static boolean isValidDayOfWeek(int day) {
-        return day >= Calendar.SUNDAY && day <= Calendar.SATURDAY;
-    }
-
-    protected static boolean isValidMonth(int month) {
-        return month >= 0 && month <= 11;
-    }
-
     protected void onDayClicked(int day) {
 //        if (!isValidDayOfMonth(day) || !isDayEnabled(day)) {
 //            return false;
@@ -603,7 +530,7 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         Log.d(TAG, "onDayClicked: " + day);
 
         if (mOnDayClickListener != null) {
-            Calendar date = AppManager.getCalendarInstance();
+            Calendar date = Calendar.getInstance();
             switch (calendarType) {
                 case CalendarType.PERSIAN:
                     persianDate.setShYear(mYearPersian);
@@ -621,9 +548,168 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
                     date.set(mYear, mMonth, day);
                     break;
             }
+            mOnDayClickListener.onDayClick(this, date);
+            onDaySelectedListener.onDaySelected(date);
+            selectedDay = day;
         }
-        selectedDay = day;
 //        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
+    }
+
+
+    protected static int mathConstrain(int amount, int low, int high) {
+        return amount < low ? low : (amount > high ? high : amount);
+    }
+
+    protected boolean isDayEnabled(int day) {
+        return day >= mEnabledDayStart && day <= mEnabledDayEnd;
+    }
+
+    protected boolean isValidDayOfMonth(int day) {
+        return day >= 1 && day <= mDaysInMonth;
+    }
+
+    protected static boolean isValidDayOfWeek(int day) {
+        return day >= Calendar.SUNDAY && day <= Calendar.SATURDAY;
+    }
+
+    protected static boolean isValidMonth(int month) {
+        return month >= 0 && month <= 11;
+    }
+
+    protected int findDayOffset() {
+        final int offset = mDayOfWeekStart - mWeekStart;
+        if (mDayOfWeekStart < mWeekStart) {
+            return offset + DAYS_IN_WEEK;
+        }
+        return offset;
+    }
+
+    protected Calendar getCalendarForDay(int day) {
+        switch (calendarType) {
+            case CalendarType.PERSIAN:
+                persianDate.setShYear(mYearPersian);
+                persianDate.setShMonth(mMonthPersian + 1);
+                persianDate.setShDay(day);
+                date = CalendarTool.PersianToGregorian(persianDate);
+                break;
+            case CalendarType.ARABIC:
+                hijriCalendar.set(UmmalquraCalendar.YEAR, mYearHijri);
+                hijriCalendar.set(UmmalquraCalendar.MONTH, mMonthHijri);
+                hijriCalendar.set(UmmalquraCalendar.DAY_OF_MONTH, day);
+                date = CalendarTool.HijriToGregorian(hijriCalendar);
+                break;
+            case CalendarType.GREGORIAN:
+                date.set(mYear, mMonth, day);
+                break;
+        }
+        return date;
+    }
+
+    protected int getDayType(int day) {
+        if (day == -1) {
+            return TYPE_RED;
+        }
+        if (cycleData == null) {
+            return TYPE_RED;
+        }
+        long days = 0L;
+        switch (calendarType) {
+            case CalendarType.PERSIAN:
+                p.setPersianDate(persianCalendar.getPersianYear(), persianCalendar.getPersianMonth() + 1, day);
+                days = CalendarTool.getDaysFromDiff(p, cycleData.getStartDate());
+                break;
+            case CalendarType.GREGORIAN:
+                break;
+            case CalendarType.ARABIC:
+                break;
+        }
+        if (days >= 0) {
+            day = (int) ((days) % cycleData.getTotalDays()) + 1;
+        } else {
+            return TYPE_GRAY;
+        }
+        if (day <= cycleData.getRedCount()) {
+            return TYPE_RED;
+        } else if (day <= cycleData.getTotalDays()) {
+            if (day >= cycleData.getGreenStartIndex() && day <= cycleData.getGreenEndIndex()) {
+                if (day == cycleData.getGreen2Index()) {
+                    return TYPE_GREEN2;
+                }
+                return TYPE_GREEN;
+            } else if (day >= cycleData.getYellowStartIndex() && day <= cycleData.getYellowEndIndex()) {
+                return TYPE_YELLOW;
+            }
+        }
+        return TYPE_GRAY;
+    }
+
+    protected int getDayType(Calendar date) {
+        if (cycleData == null) {
+            return TYPE_RED;
+        }
+        long days;
+        int day;
+        days = CalendarTool.getDaysFromDiff(date, cycleData.getStartDate());
+        if (days >= 0) {
+            day = (int) ((days) % cycleData.getTotalDays()) + 1;
+        } else {
+            return TYPE_GRAY;
+        }
+        if (day <= cycleData.getRedCount()) {
+            return TYPE_RED;
+        } else if (day <= cycleData.getTotalDays()) {
+            if (day >= cycleData.getGreenStartIndex() && day <= cycleData.getGreenEndIndex()) {
+                if (day == cycleData.getGreen2Index()) {
+                    return TYPE_GREEN2;
+                }
+                return TYPE_GREEN;
+            } else if (day >= cycleData.getYellowStartIndex() && day <= cycleData.getYellowEndIndex()) {
+                return TYPE_YELLOW;
+            }
+        }
+        return TYPE_GRAY;
+    }
+
+
+    protected void updateMonthYearLabel() {
+        int month = 0;
+        int year = 0;
+        switch (calendarType) {
+            case CalendarType.PERSIAN:
+                month = mMonthPersian;
+                year = mYearPersian;
+                break;
+            case CalendarType.ARABIC:
+                month = mMonthHijri;
+                year = mYearHijri;
+                break;
+            case CalendarType.GREGORIAN:
+                month = mMonth;
+                year = mYear;
+                break;
+        }
+        mMonthYearLabel = CalendarTool.getMonthName(month, calendarType) + " " + year;
+    }
+
+    public void setFirstDayOfWeek(int weekStart) {
+        if (isValidDayOfWeek(weekStart)) {
+            mWeekStart = weekStart;
+        } else {
+            mWeekStart = mCalendar.getFirstDayOfWeek();
+        }
+        postInvalidate();
+    }
+
+    public void setOnDayClickListener(OnDayClickListener listener) {
+        mOnDayClickListener = listener;
+    }
+
+    public IsDaySelectedListener getIsDaySelectedListener() {
+        return isDaySelectedListener;
+    }
+
+    public void setIsDaySelectedListener(IsDaySelectedListener isDaySelectedListener) {
+        this.isDaySelectedListener = isDaySelectedListener;
     }
 
     protected boolean shouldBeRTL() {
@@ -648,17 +734,15 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         return false;
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        running = false;
+    public CycleData getCycleData() {
+        return cycleData;
     }
 
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        running = true;
+    public void setCycleData(CycleData cycleData) {
+        this.cycleData = cycleData;
+        postInvalidate();
     }
+
 
     protected float dp2px(float dp) {
         return SizeConverter.dpToPx(getContext(), dp);
@@ -672,29 +756,36 @@ public class SimpleMonthView extends SurfaceView implements SurfaceHolder.Callba
         return SizeConverter.spToPx(getContext(), sp);
     }
 
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
 
+    public OnDaySelectedListener getOnDaySelectedListener() {
+        return onDaySelectedListener;
     }
 
-    Canvas canvas;
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-//        while (running) {
-        if (holder.getSurface().isValid()) {
-            canvas = holder.lockCanvas();
-            paint.setColor(Color.RED);
-            canvas.drawColor(Color.WHITE);
-//                canvas.drawText("Hello", mViewWidth / 2f - paint.getFontMetrics().leading, mViewHeight / 2f, paint);
-            drawDays(canvas);
-            holder.unlockCanvasAndPost(canvas);
-        }
-//        }
+    public void setOnDaySelectedListener(OnDaySelectedListener onDaySelectedListener) {
+        this.onDaySelectedListener = onDaySelectedListener;
     }
 
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
+    public IsDayInRangeSelectedListener getIsDayInRangeSelectedListener() {
+        return isDayInRangeSelectedListener;
+    }
 
+    public void setIsDayInRangeSelectedListener(IsDayInRangeSelectedListener isDayInRangeSelectedListener) {
+        this.isDayInRangeSelectedListener = isDayInRangeSelectedListener;
+    }
+
+    public interface OnDayClickListener {
+        void onDayClick(BaseMonthView view, Calendar day);
+    }
+
+    public interface OnDaySelectedListener {
+        void onDaySelected(Calendar selectedDay);
+    }
+
+    public interface IsDaySelectedListener {
+        boolean isDaySelected(Calendar day);
+    }
+
+    public interface IsDayInRangeSelectedListener {
+        boolean isDayInRangeSelected(Calendar day, CycleData cycleData);
     }
 }

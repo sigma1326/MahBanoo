@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.simorgh.cycleutils.ClueData;
+import com.simorgh.cycleutils.CycleData;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
@@ -46,7 +46,7 @@ public class AddMoodFragment extends Fragment implements WeekDayPicker.onDaySele
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
         mViewModel.getCycleLiveData().observe(this, cycle -> {
             if (weekDayPicker != null && cycle != null) {
-                weekDayPicker.setClueData(new ClueData(cycle.getRedDaysCount(),
+                weekDayPicker.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 Log.d(AppManager.TAG, cycle.toString());
             }

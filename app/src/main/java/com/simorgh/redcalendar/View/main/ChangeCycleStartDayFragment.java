@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.simorgh.calendarutil.model.CalendarType;
-import com.simorgh.cluecalendar.view.BaseMonthView;
-import com.simorgh.cluecalendar.view.CalendarView;
-import com.simorgh.cluecalendar.view.ShowInfoMonthView;
-import com.simorgh.cycleutils.ClueData;
+import com.simorgh.cyclecalendar.view.BaseMonthView;
+import com.simorgh.cyclecalendar.view.CalendarView;
+import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
+import com.simorgh.cycleutils.CycleData;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.Model.database.model.Cycle;
 import com.simorgh.redcalendar.R;
@@ -97,7 +97,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
         mViewModel.getCycleLiveData().observe(this, cycle -> {
             if (calendarView != null && cycle != null) {
                 mViewModel.setCycle(cycle);
-                calendarView.setClueData(new ClueData(cycle.getRedDaysCount(),
+                calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 calendarView.scrollToCurrentDate(cycle.getStartDate());
                 Log.d(AppManager.TAG, cycle.toString());

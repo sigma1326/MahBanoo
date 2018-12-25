@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
-import com.simorgh.clueview.ClueView;
-import com.simorgh.clueview.OnViewDataChangedListener;
-import com.simorgh.cycleutils.ClueData;
+import com.simorgh.cycleutils.CycleData;
+import com.simorgh.cycleview.CycleView;
+import com.simorgh.cycleview.OnViewDataChangedListener;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
@@ -23,10 +23,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class CycleViewFragment extends Fragment implements ClueView.OnButtonClickListener, ClueView.OnDayChangedListener {
+public class CycleViewFragment extends Fragment implements CycleView.OnButtonClickListener, CycleView.OnDayChangedListener {
 
     private CycleViewModel mViewModel;
-    private ClueView clueView;
+    private CycleView cycleView;
     private Calendar start = AppManager.getCalendarInstance();
     private Calendar temp = AppManager.getCalendarInstance();
     private Calendar today = AppManager.getCalendarInstance();
@@ -48,9 +48,9 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.cycle_view_fragment, container, false);
-        clueView = v.findViewById(R.id.clueView);
-        clueView.setOnButtonClickListener(this);
-        clueView.setOnDayChangedListener(this);
+        cycleView = v.findViewById(R.id.clueView);
+        cycleView.setOnButtonClickListener(this);
+        cycleView.setOnDayChangedListener(this);
         return v;
     }
 
@@ -59,16 +59,16 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
         mViewModel.getCycleLiveData().observe(this, cycle -> {
-            if (clueView != null && cycle != null) {
+            if (cycleView != null && cycle != null) {
                 mViewModel.setCycle(cycle);
-                clueView.setClueData(new ClueData(cycle.getRedDaysCount(),
+                cycleView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
-                clueView.showToday(AppManager.getCalendarInstance());
+                cycleView.showToday(AppManager.getCalendarInstance());
                 if (isFirstDraw) {
                     isFirstDraw = false;
-                    clueView.showToday(AppManager.getCalendarInstance());
+                    cycleView.showToday(AppManager.getCalendarInstance());
                 } else {
-                    clueView.setSelectedDay(mViewModel.getSelectedDay());
+                    cycleView.setSelectedDay(mViewModel.getSelectedDay());
                 }
                 start.setTimeInMillis(cycle.getStartDate().getTimeInMillis());
                 Log.d(AppManager.TAG, cycle.toString());
@@ -126,21 +126,21 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
         boolean visible = false;
         String optionalText = "احتمال بارداری: ";
         switch (dayType) {
-            case ClueView.TYPE_RED:
+            case CycleView.TYPE_RED:
                 break;
-            case ClueView.TYPE_GREEN:
+            case CycleView.TYPE_GREEN:
                 visible = true;
                 optionalText += "متوسط";
                 break;
-            case ClueView.TYPE_GREEN2:
+            case CycleView.TYPE_GREEN2:
                 optionalText += "زیاد";
                 visible = true;
                 break;
-            case ClueView.TYPE_GRAY:
+            case CycleView.TYPE_GRAY:
                 optionalText += "کم";
                 visible = true;
                 break;
-            case ClueView.TYPE_YELLOW:
+            case CycleView.TYPE_YELLOW:
                 break;
         }
         listener.onViewDataChanged(persianCalendar.getPersianWeekDayName()

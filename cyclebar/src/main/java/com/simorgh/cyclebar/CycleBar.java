@@ -14,10 +14,9 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
-import com.simorgh.cycleutils.ClueData;
+import com.simorgh.cycleutils.CycleData;
 
 import java.util.Calendar;
 
@@ -73,7 +72,7 @@ public class CycleBar extends View {
     private RectF cycleBarGreenDaysRectF;
     private RectF cycleBarGreen2RectF;
 
-    private ClueData clueData;
+    private CycleData cycleData;
 
     private static Calendar in = Calendar.getInstance();
     private static Calendar start = Calendar.getInstance();
@@ -268,9 +267,9 @@ public class CycleBar extends View {
         if (isInEditMode()) {
             Calendar c = Calendar.getInstance();
             c.set(Calendar.DAY_OF_MONTH, 1);
-            clueData = new ClueData(5, 25, 3, c);
+            cycleData = new CycleData(5, 25, 3, c);
         }
-        if (clueData == null) {
+        if (cycleData == null) {
             return;
         }
         drawToday(canvas);
@@ -282,14 +281,14 @@ public class CycleBar extends View {
 
         cycleBarBorderRectF.set(dp2px(cycleBarX + 2), dp2px(cycleBarY + 2), dp2px(realWidth - 2), dp2px(realHeight - 2));
 
-        cycleBarRedDaysRectF.set(dp2px(realWidth - 2 - (clueData.getRedCount() + 2) * (cycleBarWidth / clueData.getTotalDays()))
+        cycleBarRedDaysRectF.set(dp2px(realWidth - 2 - (cycleData.getRedCount() + 2) * (cycleBarWidth / cycleData.getTotalDays()))
                 , dp2px(cycleBarY + 2)
                 , dp2px(realWidth - 2)
                 , dp2px(realHeight - 2));
 
-        cycleBarGreenDaysRectF.set(dp2px(realWidth - 2 - 3 * (cycleBarWidth / clueData.getTotalDays()) - (cycleBarWidth / clueData.getTotalDays() * clueData.getGreenEndIndex()))
+        cycleBarGreenDaysRectF.set(dp2px(realWidth - 2 - 3 * (cycleBarWidth / cycleData.getTotalDays()) - (cycleBarWidth / cycleData.getTotalDays() * cycleData.getGreenEndIndex()))
                 , dp2px(cycleBarY + 2)
-                , dp2px(realWidth - 2 - (cycleBarWidth / clueData.getTotalDays() * clueData.getGreenStartIndex()))
+                , dp2px(realWidth - 2 - (cycleBarWidth / cycleData.getTotalDays() * cycleData.getGreenStartIndex()))
                 , dp2px(realHeight - 2));
 
         cycleBarGreen2RectF.set(cycleBarGreenDaysRectF.centerX() - dp2px(8)
@@ -303,10 +302,10 @@ public class CycleBar extends View {
         canvas.drawRoundRect(cycleBarGreenDaysRectF, dp2px(radius), dp2px(radius), greenTypePaint);
         canvas.drawBitmap(icon_greenType2, null, cycleBarGreen2RectF, greenTypePaint);
 
-        redDaysText = clueData.getRedCount() + " " + dayText;
+        redDaysText = cycleData.getRedCount() + " " + dayText;
         canvas.drawText(redDaysText, cycleBarRedDaysRectF.centerX() + 0.5f * redDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - 1.5f * redDaysTextPaint.getFontMetrics().bottom, redDaysTextPaint);
 
-        totalDaysText = clueData.getTotalDays() + " " + dayText;
+        totalDaysText = cycleData.getTotalDays() + " " + dayText;
         canvas.drawText(totalDaysText, dp2px(5) + 2 * totalDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - totalDaysTextPaint.getFontMetrics().bottom, totalDaysTextPaint);
     }
 
@@ -321,17 +320,17 @@ public class CycleBar extends View {
     private Calendar today;
 
     private float getTodayX() {
-        if (clueData == null) {
+        if (cycleData == null) {
             return dp2px(cycleBarX);
         }
-        int day = (int) getDaysFromDiff(today, clueData.getStartDate());
+        int day = (int) getDaysFromDiff(today, cycleData.getStartDate());
         if (day < 0) {
             day = 1;
         } else {
-            day = (day) % clueData.getTotalDays() + 1;
+            day = (day) % cycleData.getTotalDays() + 1;
             day--;
         }
-        float unit = cycleBarWidth / clueData.getTotalDays();
+        float unit = cycleBarWidth / cycleData.getTotalDays();
         return dp2px(cycleBarX + cycleBarWidth - (unit * day) + unit / 2);
     }
 
@@ -352,12 +351,12 @@ public class CycleBar extends View {
         return (long) diffDays;
     }
 
-    public ClueData getClueData() {
-        return clueData;
+    public CycleData getCycleData() {
+        return cycleData;
     }
 
-    public void setClueData(ClueData clueData) {
-        this.clueData = clueData;
+    public void setCycleData(CycleData cycleData) {
+        this.cycleData = cycleData;
         postInvalidate();
     }
 

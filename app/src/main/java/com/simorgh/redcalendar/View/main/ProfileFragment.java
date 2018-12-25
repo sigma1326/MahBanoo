@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simorgh.cyclebar.CycleBar;
-import com.simorgh.cycleutils.ClueData;
+import com.simorgh.cycleutils.CycleData;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
@@ -42,7 +42,7 @@ public class ProfileFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
         mViewModel.getCycleLiveData().observe(this, cycle -> {
             if (cycleBar != null && cycle != null) {
-                cycleBar.setClueData(new ClueData(cycle.getRedDaysCount(),
+                cycleBar.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 Log.d(AppManager.TAG, cycle.toString());
             }

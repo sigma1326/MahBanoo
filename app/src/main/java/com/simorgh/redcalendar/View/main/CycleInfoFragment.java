@@ -9,17 +9,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 
 import android.text.Html;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.simorgh.clueview.ClueView;
+import com.simorgh.cycleview.CycleView;
 import com.simorgh.redcalendar.R;
 
 public class CycleInfoFragment extends Fragment {
@@ -114,14 +111,14 @@ public class CycleInfoFragment extends Fragment {
             String text = "";
             dayType = CycleInfoFragmentArgs.fromBundle(getArguments()).getDayType();
             switch (dayType) {
-                case ClueView.TYPE_RED:
+                case CycleView.TYPE_RED:
                     text = redString;
                     break;
-                case ClueView.TYPE_GREEN:
-                case ClueView.TYPE_GREEN2:
+                case CycleView.TYPE_GREEN:
+                case CycleView.TYPE_GREEN2:
                     text = greenString;
                     break;
-                case ClueView.TYPE_YELLOW:
+                case CycleView.TYPE_YELLOW:
                     text = yellowInfoString;
                     break;
             }

@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.simorgh.bottombar.BottomBar;
-import com.simorgh.clueview.ClueView;
+import com.simorgh.cycleview.CycleView;
 import com.simorgh.redcalendar.R;
 
 import java.util.Objects;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     private BottomBar bottomBar;
     private ImageView imgInfo;
     private ImageButton imgBack;
-    private int dayType = ClueView.TYPE_GRAY;
+    private int dayType = CycleView.TYPE_GRAY;
 
 
     @Override
@@ -59,18 +59,18 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 
         imgInfo.setOnClickListener(v -> {
             switch (dayType) {
-                case ClueView.TYPE_RED:
+                case CycleView.TYPE_RED:
                     titleText.setText(getString(R.string.red_info_title));
                     break;
-                case ClueView.TYPE_GRAY:
+                case CycleView.TYPE_GRAY:
                     break;
-                case ClueView.TYPE_GREEN:
+                case CycleView.TYPE_GREEN:
                     titleText.setText(getString(R.string.green_info_title));
                     break;
-                case ClueView.TYPE_GREEN2:
+                case CycleView.TYPE_GREEN2:
                     titleText.setText(getString(R.string.green2_info_title));
                     break;
-                case ClueView.TYPE_YELLOW:
+                case CycleView.TYPE_YELLOW:
                     titleText.setText(getString(R.string.yellow_info_title));
                     break;
                 default:
@@ -368,19 +368,19 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         ColorFilter colorFilter = null;
 
         switch (dayType) {
-            case ClueView.TYPE_RED:
+            case CycleView.TYPE_RED:
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_red));
                 break;
-            case ClueView.TYPE_GRAY:
+            case CycleView.TYPE_GRAY:
                 imgInfo.setVisibility(View.INVISIBLE);
                 break;
-            case ClueView.TYPE_GREEN:
+            case CycleView.TYPE_GREEN:
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_green));
                 break;
-            case ClueView.TYPE_GREEN2:
+            case CycleView.TYPE_GREEN2:
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_green));
                 break;
-            case ClueView.TYPE_YELLOW:
+            case CycleView.TYPE_YELLOW:
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_yellow));
                 break;
             default:

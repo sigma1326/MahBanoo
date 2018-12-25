@@ -63,8 +63,8 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.8.2'
 
-    implementation project(':clueview')
-    implementation project(':cluecalendar')
+    implementation project(':cycleview')
+    implementation project(':cyclecalendar')
     implementation project(':numberpicker')
     implementation project(':bottombar')
     implementation project(':cyclebar')
@@ -74,5 +74,6 @@ dependencies {
     implementation project(':drugview')
     implementation project(':cycleutils')
     implementation project(path: ':calendarutil')
+    implementation project(path: ':spinner')
 
 }

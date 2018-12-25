@@ -21,7 +21,7 @@
         android:textSize="15sp"
         android:visibility="visible" />
 
-    <com.simorgh.cluecalendar.view.CalendarView
+    <com.simorgh.cyclecalendar.view.CalendarView
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

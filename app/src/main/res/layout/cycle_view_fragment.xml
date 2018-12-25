@@ -8,7 +8,7 @@
     tools:context=".View.main.CycleViewFragment">
 
 
-    <com.simorgh.clueview.ClueView
+    <com.simorgh.cycleview.CycleView
         android:id="@+id/clueView"
         android:layout_width="0dp"
         android:layout_height="0dp"

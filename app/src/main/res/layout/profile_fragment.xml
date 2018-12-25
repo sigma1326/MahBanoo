@@ -10,8 +10,96 @@
         android:id="@+id/cycleBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_CurrentCycleStartEnd" />
+
+    <TextView
+        android:id="@+id/tvCurrentCycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="دوره فعلی"
+        android:textColor="#00819b"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_CurrentCycleStartEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="27 آذر - 20 دی"
+        android:textColor="#5c5c5c"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCurrentCycle" />
+
+    <TextView
+        android:id="@+id/tvRedCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="طول دوره"
+        android:textColor="#00819b"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cycleBar" />
+
+    <TextView
+        android:id="@+id/tvGrayCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="فاصله بین دو دوره"
+        android:textColor="#00819b"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvRedCount" />
+
+    <TextView
+        android:id="@+id/tvBirthYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="سال تولد"
+        android:textColor="#00819b"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGrayCount" />
+
+    <Spinner
+        android:id="@+id/spinnerRedCount"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:background="@drawable/spinner_style"
+        android:layout_marginTop="45dp"
+        android:spinnerMode="dropdown"
+        android:entries="@array/type_bleeding_strings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cycleBar"
+        android:gravity="start|center_vertical" />
 </androidx.constraintlayout.widget.ConstraintLayout>
