@@ -325,9 +325,10 @@ public class CycleBar extends View {
             return dp2px(cycleBarX);
         }
         int day = (int) getDaysFromDiff(today, clueData.getStartDate());
-        if (day == 0 || day < 0) {
+        if (day < 0) {
             day = 1;
         } else {
+            day = (day) % clueData.getTotalDays() + 1;
             day--;
         }
         float unit = cycleBarWidth / clueData.getTotalDays();
