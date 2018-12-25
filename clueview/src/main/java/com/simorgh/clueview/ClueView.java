@@ -21,11 +21,12 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Toast;
 
+import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cycleutils.ClueData;
 
 import java.util.Calendar;
@@ -154,7 +155,7 @@ public class ClueView extends View implements OnViewDataChangedListener {
     private float midY = -1;
 
     //selected angle in degree
-    private float angle = -1;
+    private float angle = 0;
     private float ANGLE_UNIT = -1;
     private boolean isAnimRunning = false;
     private int lastDay = -1;
@@ -617,6 +618,41 @@ public class ClueView extends View implements OnViewDataChangedListener {
 
         drawMediumCircle(canvas);
 
+        isFirstDraw = false;
+    }
+
+
+    private Calendar temp = Calendar.getInstance();
+
+    public void showToday(Calendar today) {
+        if (clueData == null) {
+            return;
+        }
+        int day;
+        temp.clear();
+        temp.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
+        int diffDays = (int) CalendarTool.getDaysFromDiff(temp, clueData.getStartDate());
+        if (diffDays >= 0) {
+            day = ((diffDays) % clueData.getTotalDays()) + 1;
+            setSelectedDay(day);
+        } else {
+            throw new UnsupportedOperationException("invalid cycle date");
+        }
+    }
+
+    public int getSelectedDay() {
+        return selectedDay;
+    }
+
+    public void setSelectedDay(int selectedDay) {
+        if (selectedDay == -1) {
+            return;
+        }
+        this.selectedDay = selectedDay;
+        if (isValidAngle(calculateAngleForDay(selectedDay))) {
+            angle = calculateAngleForDay(selectedDay);
+            postInvalidate();
+        }
     }
 
     private void drawMainCircle(Canvas canvas) {
@@ -802,12 +838,14 @@ public class ClueView extends View implements OnViewDataChangedListener {
 
         canvas.drawText(tvMonthDayNumberText, tvMonthDayNumberX, tvMonthDayNumberY, tvMonthDayNumberPaint);
         canvas.drawText(tvMonthNameText, tvMonthNameX, tvMonthNameY, tvMonthNamePaint);
-        if (isFromUser) {
+        if (isFromUser || isFirstDraw) {
             if (onDayChangedListener != null) {
-                if (getDayFromAngle(angle) != -1) {
-                    onDayChangedListener.onDayChanged(getDayFromAngle(angle), getDayType(), this);
+                if (getCurrentDay() != -1) {
+                selectedDay = getCurrentDay();
+                onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
                 } else {
-                    Toast.makeText(getContext(), "bad angle", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "bad angle", Toast.LENGTH_SHORT).show();
+                    Log.d("debug13", "bad angle");
                 }
             }
         }
@@ -815,7 +853,7 @@ public class ClueView extends View implements OnViewDataChangedListener {
 
     private void initVariablesForDraw() {
         if (isFirstDraw) {
-            isFirstDraw = false;
+//            isFirstDraw = false;
 
             if (offsetAngle == -1) {
                 offsetAngle = DEFAULT_START_OFFSET_ANGLE;
@@ -877,8 +915,6 @@ public class ClueView extends View implements OnViewDataChangedListener {
             tvMonthDayNumberTextSize = sp2px((px2dp(mediumCircleRadius) / DAY_OF_MONTH_TV_TEXT_SIZE_RATIO));
             tvMonthDayNumberPaint.setTextSize(tvMonthDayNumberTextSize);
 
-            //init the angle for the first time
-//            angle = calculateAngleForDay(25);
         }
 
         calculateMediumCircleParamsXY();
@@ -980,6 +1016,9 @@ public class ClueView extends View implements OnViewDataChangedListener {
                 return -90 + DEFAULT_START_OFFSET_ANGLE;
             }
             return offsetAngle - 90;
+        }
+        if (offsetAngle == -1) {
+            offsetAngle = DEFAULT_START_OFFSET_ANGLE;
         }
         float angleUnit = (360 - 2 * offsetAngle) / (float) clueData.getTotalDays();
         return angleUnit * dayNumber + offsetAngle - 90;
@@ -1221,14 +1260,11 @@ public class ClueView extends View implements OnViewDataChangedListener {
         animator.setDuration(200);
         animator.setRepeatCount(0);
         final ValueAnimator finalAnimator = animator;
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                angle = (float) finalAnimator.getAnimatedValue();
-                isAnimRunning = true;
-                isFromUser = true;
-                invalidate();
-            }
+        animator.addUpdateListener(animation -> {
+            angle = (float) finalAnimator.getAnimatedValue();
+            isAnimRunning = true;
+            isFromUser = true;
+            invalidate();
         });
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -1312,7 +1348,6 @@ public class ClueView extends View implements OnViewDataChangedListener {
         }
         tvMainDayNumberText = mainDayNumber;
         tvMonthDayNumberText = monthDayNumber;
-        tvMonthDayNumberText = selectedDay + "";
         tvMonthNameText = monthName;
         if (lastDay != selectedDay && !isAnimRunning) {
             if (!mainCircleHoverIsAnimating) {
@@ -1345,12 +1380,9 @@ public class ClueView extends View implements OnViewDataChangedListener {
 
                     }
                 });
-                mainCircleHoverRadiusAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        mainCircleHoverRadius = (float) mainCircleHoverRadiusAnimator.getAnimatedValue();
-                        invalidate();
-                    }
+                mainCircleHoverRadiusAnimator.addUpdateListener(animation -> {
+                    mainCircleHoverRadius = (float) mainCircleHoverRadiusAnimator.getAnimatedValue();
+                    invalidate();
                 });
                 mainCircleHoverRadiusAnimator.start();
             }
