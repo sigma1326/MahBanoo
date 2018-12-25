@@ -13,9 +13,9 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.cluecalendar.R;
-import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.util.CalendarTool;
 import com.simorgh.cluecalendar.util.SizeConverter;
 import com.simorgh.cluecalendar.util.Utils;
 
