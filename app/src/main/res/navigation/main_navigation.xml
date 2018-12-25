@@ -50,6 +50,14 @@
             app:popEnterAnim="@anim/slide_in_bottom"
             app:popExitAnim="@anim/slide_out_top"
             app:popUpTo="@+id/home" />
+        <action
+            android:id="@+id/action_home_to_cycleInfo"
+            app:destination="@id/cycleInfo"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/slide_out_bottom"
+            app:popEnterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top"
+            app:popUpTo="@+id/home" />
     </fragment>
 
     <fragment
@@ -180,4 +188,14 @@
         android:name="com.simorgh.redcalendar.View.main.ChangeCycleStartDayFragment"
         android:label="change_cycle"
         tools:layout="@layout/change_cycle_start_day_fragment" />
+    <fragment
+        android:id="@+id/cycleInfo"
+        android:name="com.simorgh.redcalendar.View.main.CycleInfoFragment"
+        android:label="cycleInfo"
+        tools:layout="@layout/cycle_info_fragment" >
+        <argument
+            android:name="dayType"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

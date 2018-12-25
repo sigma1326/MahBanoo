@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     private BottomBar bottomBar;
     private ImageView imgInfo;
     private ImageButton imgBack;
+    private int dayType = ClueView.TYPE_GRAY;
 
 
     @Override
@@ -55,6 +56,32 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         bottomBar.setItemClickListener(this);
         bottomBar.setCircleItemClickListener(this);
         imgBack.setOnClickListener(v -> navController.navigateUp());
+
+        imgInfo.setOnClickListener(v -> {
+            switch (dayType) {
+                case ClueView.TYPE_RED:
+                    titleText.setText(getString(R.string.red_info_title));
+                    break;
+                case ClueView.TYPE_GRAY:
+                    break;
+                case ClueView.TYPE_GREEN:
+                    titleText.setText(getString(R.string.green_info_title));
+                    break;
+                case ClueView.TYPE_GREEN2:
+                    titleText.setText(getString(R.string.green2_info_title));
+                    break;
+                case ClueView.TYPE_YELLOW:
+                    titleText.setText(getString(R.string.yellow_info_title));
+                    break;
+                default:
+
+            }
+            if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.home) {
+                CycleViewFragmentDirections.ActionHomeToCycleInfo action = CycleViewFragmentDirections.actionHomeToCycleInfo();
+                action.setDayType(dayType);
+                navController.navigate(action);
+            }
+        });
     }
 
     @Override
@@ -192,6 +219,24 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         }
     }
 
+    private void runImageInfoAnim(boolean visible) {
+        if (visible) {
+            imgInfo.animate().alpha(1f).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    imgInfo.setVisibility(View.VISIBLE);
+                }
+            }).start();
+        } else {
+            imgInfo.animate().alpha(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    imgInfo.setVisibility(View.INVISIBLE);
+                }
+            }).start();
+        }
+    }
+
     private void runBottomBarAnim(boolean visible) {
         int h1;
         if (visible) {
@@ -244,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(4);
                     runBottomBarAnim(true);
                     runBackButtonAnim(false);
+                    runImageInfoAnim(true);
                 }
                 break;
             case R.id.calendar:
@@ -251,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(3);
                     runBottomBarAnim(true);
                     runBackButtonAnim(false);
+                    runImageInfoAnim(false);
                 }
                 break;
             case R.id.profile:
@@ -258,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(2);
                     runBottomBarAnim(true);
                     runBackButtonAnim(false);
+                    runImageInfoAnim(false);
                 }
                 break;
             case R.id.settings:
@@ -265,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(1);
                     runBottomBarAnim(true);
                     runBackButtonAnim(false);
+                    runImageInfoAnim(false);
                 }
                 break;
             case R.id.addNote:
@@ -272,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(-1);
                     runBottomBarAnim(false);
                     runBackButtonAnim(true);
+                    runImageInfoAnim(false);
                 }
                 break;
 
@@ -280,6 +330,15 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(-1);
                     runBottomBarAnim(false);
                     runBackButtonAnim(true);
+                    runImageInfoAnim(false);
+                }
+                break;
+            case R.id.cycleInfo:
+                if (bottomBar != null) {
+                    bottomBar.setSelectedIndex(-1);
+                    runBottomBarAnim(false);
+                    runBackButtonAnim(true);
+                    runImageInfoAnim(false);
                 }
                 break;
         }
@@ -304,8 +363,10 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         if (imgInfo == null) {
             return;
         }
+        this.dayType = dayType;
         imgInfo.setVisibility(View.VISIBLE);
         ColorFilter colorFilter = null;
+
         switch (dayType) {
             case ClueView.TYPE_RED:
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_red));

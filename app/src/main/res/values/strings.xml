@@ -26,5 +26,8 @@
     <string name="step3_forget_text">میانگین جهانی فاصله  بین دو دوره 24 روز می‌باشد که به صورت پیش فرض برای شما انتخاب می‌شود. می‌توانید با مراجعه به حساب کاربری آن را تغییر دهید.</string>
     <string name="step4_forget_text">میانگین جهانی سندرم پیش از قاعدگی 3 روز می‌باشد که به صورت پیش فرض برای شما انتخاب می‌شود. می‌توانید با مراجعه به حساب کاربری آن را تغییر دهید.</string>
     <string name="apply_changes">ثبت تغییرات</string>
-
+    <string name="yellow_info_title">سندرم پیش از قاعدگی</string>
+    <string name="red_info_title">دوره پریود</string>
+    <string name="green_info_title">دوره تخمک گذاری</string>
+    <string name="green2_info_title">دوره تخمک‌ گذاری</string>
 </resources>
