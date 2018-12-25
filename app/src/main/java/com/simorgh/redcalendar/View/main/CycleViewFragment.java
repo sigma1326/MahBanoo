@@ -22,8 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 public class CycleViewFragment extends Fragment implements ClueView.OnButtonClickListener, ClueView.OnDayChangedListener {
 
@@ -35,7 +33,7 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
     private Calendar currentCycleStartDate = AppManager.getCalendarInstance();
     private boolean isFirstDraw = true;
     private OnButtonChangeClickListener onButtonChangeClickListener;
-
+    private OnDayTypeChangedListener onDayTypeChangedListener;
 
 
     public static CycleViewFragment newInstance() {
@@ -85,7 +83,7 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
         }
     }
 
-    public interface OnButtonChangeClickListener{
+    public interface OnButtonChangeClickListener {
         void onButtonChangeClicked();
     }
 
@@ -93,12 +91,14 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         onButtonChangeClickListener = (OnButtonChangeClickListener) context;
+        onDayTypeChangedListener = (OnDayTypeChangedListener) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         onButtonChangeClickListener = null;
+        onDayTypeChangedListener = null;
     }
 
     @Override
@@ -147,7 +147,16 @@ public class CycleViewFragment extends Fragment implements ClueView.OnButtonClic
                 , optionalText, days[day - 1], persianCalendar.getPersianDay() + ""
                 , CalendarTool.getIranianMonthName(persianCalendar.getPersianMonth() + 1), visible, day);
 
+        if (onDayTypeChangedListener != null) {
+            onDayTypeChangedListener.onDayTypeChanged(dayType);
+        }
+
     }
+
+    public interface OnDayTypeChangedListener {
+        public void onDayTypeChanged(int dayType);
+    }
+
 
     private static String[] days = {
             "روز اول",

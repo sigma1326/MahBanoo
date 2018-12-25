@@ -18,4 +18,10 @@
     <color name="ms_bottomNavigationBackgroundColor">#FFFFFF</color>
     <color name="ms_defaultButtonBackgroundColor">#00819b</color>
     <color name="ms_defaultContentOverlayColor">@color/ms_white_54_opacity</color>
+
+
+    <color name="type_red">#f84d60</color>
+    <color name="type_gray">#adb6bc</color>
+    <color name="type_green">#669933</color>
+    <color name="type_yellow">#ffb533</color>
 </resources>

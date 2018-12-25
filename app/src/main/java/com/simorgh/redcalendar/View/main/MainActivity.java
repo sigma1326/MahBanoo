@@ -3,12 +3,16 @@ package com.simorgh.redcalendar.View.main;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.simorgh.bottombar.BottomBar;
+import com.simorgh.clueview.ClueView;
 import com.simorgh.redcalendar.R;
 
 import java.util.Objects;
@@ -24,7 +28,8 @@ import androidx.navigation.Navigation;
 public class MainActivity extends AppCompatActivity implements BottomBar.OnItemClickListener
         , BottomBar.OnCircleItemClickListener
         , NavController.OnDestinationChangedListener
-        , CycleViewFragment.OnButtonChangeClickListener {
+        , CycleViewFragment.OnButtonChangeClickListener
+        , CycleViewFragment.OnDayTypeChangedListener {
 
     private AppCompatTextView titleText;
     private NavController navController;
@@ -292,5 +297,35 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.home) {
             navController.navigate(R.id.action_home_to_change_cycle);
         }
+    }
+
+    @Override
+    public void onDayTypeChanged(int dayType) {
+        if (imgInfo == null) {
+            return;
+        }
+        imgInfo.setVisibility(View.VISIBLE);
+        ColorFilter colorFilter = null;
+        switch (dayType) {
+            case ClueView.TYPE_RED:
+                colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_red));
+                break;
+            case ClueView.TYPE_GRAY:
+                imgInfo.setVisibility(View.INVISIBLE);
+                break;
+            case ClueView.TYPE_GREEN:
+                colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_green));
+                break;
+            case ClueView.TYPE_GREEN2:
+                colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_green));
+                break;
+            case ClueView.TYPE_YELLOW:
+                colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_yellow));
+                break;
+            default:
+                colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_red));
+
+        }
+        imgInfo.setColorFilter(colorFilter);
     }
 }
