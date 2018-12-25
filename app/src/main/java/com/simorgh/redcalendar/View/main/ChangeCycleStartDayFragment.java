@@ -22,6 +22,8 @@ import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -119,9 +121,13 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     }
 
     private boolean isAnimRunning = false;
+    private Queue<Boolean> booleanQueue = new LinkedList<>();
     private void runButtonChangeAnim(boolean visible) {
         int h1;
         if (isAnimRunning) {
+            if (visible) {
+                booleanQueue.add(true);
+            }
             return;
         }
         if (visible) {
@@ -137,7 +143,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
             btnApplyChanges.animate()
                     .translationYBy(-h1)
                     .alpha(1.0f)
-                    .setDuration(500)
+                    .setDuration(400)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
@@ -158,12 +164,15 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
             btnApplyChanges.animate()
                     .translationYBy(h1)
                     .alpha(0.0f)
-                    .setDuration(500)
+                    .setDuration(400)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             btnApplyChanges.setVisibility(View.GONE);
                             isAnimRunning = false;
+                            if (!booleanQueue.isEmpty()) {
+                                runButtonChangeAnim(booleanQueue.poll());
+                            }
                         }
                         @Override
                         public void onAnimationStart(Animator animation) {
