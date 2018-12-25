@@ -73,4 +73,6 @@ dependencies {
     implementation project(':weightview')
     implementation project(':drugview')
     implementation project(':cycleutils')
+    implementation project(path: ':calendarutil')
+
 }

@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.simorgh.cluecalendar.model.CalendarType;
+import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.cluecalendar.view.BaseMonthView;
 import com.simorgh.cluecalendar.view.CalendarView;
 import com.simorgh.cluecalendar.view.ShowInfoMonthView;

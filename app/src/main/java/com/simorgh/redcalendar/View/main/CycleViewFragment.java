@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
-import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.clueview.ClueView;
 import com.simorgh.clueview.OnViewDataChangedListener;
 import com.simorgh.cycleutils.ClueData;
