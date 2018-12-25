@@ -13,10 +13,8 @@ import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 
+import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cluecalendar.R;
-import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
-import com.simorgh.cluecalendar.util.CalendarTool;
 
 import java.util.Calendar;
 
