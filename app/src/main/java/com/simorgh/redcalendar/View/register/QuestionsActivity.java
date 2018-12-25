@@ -295,7 +295,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
 
     private void runProgressBarAnim(int i) {
         ProgressBarAnimation anim = new ProgressBarAnimation(progressBar, progressBar.getProgress(), i);
-        anim.setDuration(400);
+        anim.setDuration(200);
         progressBar.startAnimation(anim);
     }
 

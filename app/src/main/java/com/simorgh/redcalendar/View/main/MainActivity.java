@@ -369,21 +369,26 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 
         switch (dayType) {
             case CycleView.TYPE_RED:
+                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_red));
                 break;
             case CycleView.TYPE_GRAY:
-                imgInfo.setVisibility(View.INVISIBLE);
+                runImageInfoAnim(false);
                 break;
             case CycleView.TYPE_GREEN:
+                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_green));
                 break;
             case CycleView.TYPE_GREEN2:
+                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_green));
                 break;
             case CycleView.TYPE_YELLOW:
+                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_yellow));
                 break;
             default:
+                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_red));
 
         }

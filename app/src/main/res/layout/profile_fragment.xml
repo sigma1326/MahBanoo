@@ -75,6 +75,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvRedCount" />
 
+
+    <TextView
+        android:id="@+id/tvYellowCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:fontFamily="@font/iransans_medium"
+        android:text="روز‌های پیش از قاعدگی"
+        android:textColor="#00819b"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGrayCount" />
+
     <TextView
         android:id="@+id/tvBirthYear"
         android:layout_width="wrap_content"
@@ -87,19 +102,70 @@
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGrayCount" />
+        app:layout_constraintTop_toBottomOf="@+id/tvYellowCount" />
 
-    <Spinner
+    <com.simorgh.spinner.NiceSpinner
         android:id="@+id/spinnerRedCount"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
+        android:layout_width="94dp"
+        android:layout_height="34dp"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"
         android:background="@drawable/spinner_style"
-        android:layout_marginTop="45dp"
-        android:spinnerMode="dropdown"
-        android:entries="@array/type_bleeding_strings"
+        android:gravity="start|center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textSize="12sp"
+        app:addToTextStart="false"
+        app:extraText="روز"
+        app:layout_constraintBottom_toBottomOf="@+id/tvRedCount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cycleBar"
-        android:gravity="start|center_vertical" />
+        app:layout_constraintTop_toTopOf="@+id/tvRedCount" />
+
+    <com.simorgh.spinner.NiceSpinner
+        android:id="@+id/spinnerGrayCount"
+        android:layout_width="94dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:background="@drawable/spinner_style"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textSize="12sp"
+        app:addToTextStart="false"
+        app:extraText="روز"
+        app:layout_constraintBottom_toBottomOf="@+id/tvGrayCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvGrayCount" />
+
+    <com.simorgh.spinner.NiceSpinner
+        android:id="@+id/spinnerYellowCount"
+        android:layout_width="94dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/spinner_style"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textSize="12sp"
+        app:addToTextStart="false"
+        app:extraText="روز"
+        app:layout_constraintBottom_toBottomOf="@+id/tvYellowCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvYellowCount" />
+
+    <com.simorgh.spinner.NiceSpinner
+        android:id="@+id/spinnerBirthYear"
+        android:layout_width="94dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/spinner_style"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textSize="12sp"
+        app:addToTextStart="true"
+        app:extraText="سال"
+        app:layout_constraintBottom_toBottomOf="@+id/tvBirthYear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvBirthYear" />
 </androidx.constraintlayout.widget.ConstraintLayout>

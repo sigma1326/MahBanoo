@@ -67,10 +67,6 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
         calendarView.setOnDayClickListener(this);
         calendarView.setOnScrollListener(this);
         calendarView.scrollToCurrentDate(AppManager.getCalendarInstance());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            calendarView.setElevation(10);
-        }
-
         if (getActivity() != null) {
             navController = Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment);
         }
