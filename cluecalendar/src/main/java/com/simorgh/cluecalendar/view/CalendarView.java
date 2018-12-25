@@ -6,9 +6,9 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
-import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.util.CalendarTool;
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
+import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.cluecalendar.util.MonthViewAdapter;
 import com.simorgh.cycleutils.ClueData;
 
