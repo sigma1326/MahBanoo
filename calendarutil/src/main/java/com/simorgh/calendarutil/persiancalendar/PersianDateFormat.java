@@ -1,4 +1,4 @@
-package com.simorgh.cluecalendar.persiancalendar;
+package com.simorgh.calendarutil.persiancalendar;
 
 
 import java.text.ParseException;

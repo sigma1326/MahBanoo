@@ -1,4 +1,4 @@
-package com.simorgh.cluecalendar.model;
+package com.simorgh.calendarutil.model;
 
 public class CalendarType {
     public static final int GREGORIAN = 0;

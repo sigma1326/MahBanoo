@@ -1,18 +1,15 @@
-package com.simorgh.cluecalendar.util;
+package com.simorgh.calendarutil;
+
 
 import android.annotation.SuppressLint;
 
-import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
-import com.simorgh.cluecalendar.model.CalendarType;
-import com.simorgh.cluecalendar.model.YearMonthDay;
-import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
-import com.simorgh.cluecalendar.persiancalendar.PersianDate;
+import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
+import com.simorgh.calendarutil.model.CalendarType;
+import com.simorgh.calendarutil.model.YearMonthDay;
+import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
+import com.simorgh.calendarutil.persiancalendar.PersianDate;
 
-import java.sql.Time;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class CalendarTool {
     //Saturday to Friday
@@ -135,7 +132,9 @@ public class CalendarTool {
         calendar.setTimeInMillis(hijri.getTimeInMillis());
         return calendar;
     }
+
     static volatile UmmalquraCalendar hijri = new UmmalquraCalendar();
+
     public static UmmalquraCalendar GregorianToHijri(Calendar calendar) {
         hijri.clear();
         hijri.setTimeInMillis(calendar.getTimeInMillis());
@@ -297,6 +296,7 @@ public class CalendarTool {
     }
 
     static volatile PersianCalendar p = new PersianCalendar();
+
     public static int getDaysInMonth(int month, int year, int calendarType) {
         switch (calendarType) {
             case CalendarType.PERSIAN:
@@ -353,18 +353,21 @@ public class CalendarTool {
 
 
     public static long getDaysFromDiff(PersianCalendar input, Calendar startDate) {
-        float diffDays = -1;
+        float diffDays;
         in.clear();
         in = CalendarTool.PersianToGregorian(input);
 //        in.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH));
         start.clear();
         start.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH));
-        if (!input.after(startDate)) {
-            return (long) diffDays;
+        if (in.compareTo(start) == 0) {
+            return 0L;
+        }
+        if (in.before(start)) {
+            return -1L;
         }
         diffDays = (float) (in.getTimeInMillis() - start.getTimeInMillis()) / (60 * 60 * 24 * 1000);
         if (diffDays < 0) {
-            return (long) diffDays;
+            return (long) -3;
         }
         return (long) diffDays;
     }
@@ -373,17 +376,20 @@ public class CalendarTool {
     private static Calendar start = Calendar.getInstance();
 
     public static long getDaysFromDiff(Calendar input, Calendar startDate) {
-        float diffDays = -1;
+        float diffDays;
         in.clear();
         in.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH));
         start.clear();
         start.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH));
-        if (!input.after(startDate)) {
-            return (long) diffDays;
+        if (in.compareTo(start) == 0) {
+            return 0L;
+        }
+        if (in.before(start)) {
+            return -1L;
         }
         diffDays = (float) (in.getTimeInMillis() - start.getTimeInMillis()) / (60 * 60 * 24 * 1000);
         if (diffDays < 0) {
-            return (long) diffDays;
+            return (long) -3;
         }
         return (long) diffDays;
     }

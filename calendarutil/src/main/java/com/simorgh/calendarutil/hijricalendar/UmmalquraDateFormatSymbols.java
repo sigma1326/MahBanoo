@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.simorgh.cluecalendar.hijricalendar;
+package com.simorgh.calendarutil.hijricalendar;
 
 import java.util.Arrays;
 import java.util.Locale;

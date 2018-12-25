@@ -1,8 +1,8 @@
-package com.simorgh.cluecalendar.model;
+package com.simorgh.calendarutil.model;
 
 
-import com.simorgh.cluecalendar.hijricalendar.UmmalquraCalendar;
-import com.simorgh.cluecalendar.persiancalendar.PersianCalendar;
+import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
+import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,7 +63,7 @@ public class YearMonthDay {
     }
 
     /**
-     * @param persianCalendar : gets {@link com.simorgh.cluecalendar.persiancalendar.PersianCalendar} class and
+     * @param persianCalendar : gets {@link com.simorgh.calendarutil.persiancalendar.PersianCalendar} class and
      *                        sets current {@link YearMonthDay} object
      *                        based on it.
      */

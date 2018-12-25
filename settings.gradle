@@ -1,1 +1,1 @@
-include ':app', ':clueview', ':cluecalendar', ':numberpicker', ':bottombar', ':cyclebar', ':weekdaypicker', ':moodview', ':weightview', ':drugview', ':cycleutils'
+include ':app', ':clueview', ':cluecalendar', ':numberpicker', ':bottombar', ':cyclebar', ':weekdaypicker', ':moodview', ':weightview', ':drugview', ':cycleutils', ':calendarutil'
