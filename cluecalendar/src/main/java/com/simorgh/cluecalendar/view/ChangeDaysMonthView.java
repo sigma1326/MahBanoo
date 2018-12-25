@@ -141,6 +141,9 @@ public class ChangeDaysMonthView extends BaseMonthView {
 
     @Override
     protected int getDayType(Calendar date) {
+        if (clueData == null) {
+            return TYPE_GRAY;
+        }
         if (isDayInRangeSelectedListener.isDayInRangeSelected(date, clueData)) {
             return TYPE_RED;
         }

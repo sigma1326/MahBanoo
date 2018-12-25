@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.simorgh.calendarutil.CalendarTool;
@@ -33,26 +34,35 @@ public class CalendarView extends LinearLayout {
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
     private ClueData clueData;
     private int weekDaysViewBackgroundColor = -1;
+    private OnScrollListener onScrollListener;
 
 
     public CalendarView(Context context) {
         super(context);
+        this.min = Calendar.getInstance();
+        this.max = Calendar.getInstance();
         init();
     }
 
     public CalendarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        this.min = Calendar.getInstance();
+        this.max = Calendar.getInstance();
         init();
     }
 
     public CalendarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.min = Calendar.getInstance();
+        this.max = Calendar.getInstance();
         init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public CalendarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        this.min = Calendar.getInstance();
+        this.max = Calendar.getInstance();
         init();
     }
 
@@ -89,6 +99,16 @@ public class CalendarView extends LinearLayout {
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(DRAWING_CACHE_QUALITY_AUTO);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (onScrollListener != null) {
+                    onScrollListener.onScrolled(newState != 0);
+                    Log.d("debug13", "" + (newState != 0));
+                }
+            }
+        });
 
     }
 
@@ -109,6 +129,22 @@ public class CalendarView extends LinearLayout {
     public void setMonthViewType(int monthViewType) {
         this.monthViewType = monthViewType;
         adapter.setMonthViewType(monthViewType);
+    }
+
+    @Override
+    public void setElevation(float elevation) {
+        super.setElevation(elevation);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            weekDaysLabelView.setElevation(elevation);
+        }
+    }
+
+    public OnScrollListener getOnScrollListener() {
+        return onScrollListener;
+    }
+
+    public void setOnScrollListener(OnScrollListener onScrollListener) {
+        this.onScrollListener = onScrollListener;
     }
 
     public int getWeekDaysViewBackgroundColor() {
@@ -176,5 +212,9 @@ public class CalendarView extends LinearLayout {
     public void setIsDayMarkedListener(ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener) {
         this.isDayMarkedListener = isDayMarkedListener;
         adapter.setIsDayMarkedListener(isDayMarkedListener);
+    }
+
+    public interface OnScrollListener {
+        public void onScrolled(boolean isScrolling);
     }
 }

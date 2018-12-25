@@ -388,6 +388,9 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     @Override
     public boolean isDayInRangeSelected(Calendar day, ClueData clueData) {
+        if (clueData == null) {
+            return false;
+        }
         boolean firstDay = selectedDay.get(Calendar.YEAR) == day.get(Calendar.YEAR) && selectedDay.get(Calendar.MONTH) == day.get(Calendar.MONTH)
                 && selectedDay.get(Calendar.DAY_OF_MONTH) == day.get(Calendar.DAY_OF_MONTH);
         long diff = CalendarTool.getDaysFromDiff(day, selectedDay);
