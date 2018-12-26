@@ -21,7 +21,6 @@ import com.simorgh.redcalendar.R;
 
 public class CycleInfoFragment extends Fragment {
 
-    private CycleInfoViewModel mViewModel;
     private TextView tvInfo;
     private Typeface typeface;
 
@@ -136,7 +135,6 @@ public class CycleInfoFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(CycleInfoViewModel.class);
     }
 
 }
