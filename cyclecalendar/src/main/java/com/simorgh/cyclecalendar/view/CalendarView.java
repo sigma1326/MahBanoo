@@ -35,7 +35,7 @@ public class CalendarView extends LinearLayout {
     private CycleData cycleData;
     private int weekDaysViewBackgroundColor = -1;
     private OnScrollListener onScrollListener;
-    private Calendar selctedDate = Calendar.getInstance();
+    private Calendar selectedDate = Calendar.getInstance();
 
 
     public CalendarView(Context context) {
@@ -173,12 +173,12 @@ public class CalendarView extends LinearLayout {
     }
 
     public Calendar getSelctedDate() {
-        return selctedDate;
+        return selectedDate;
     }
 
     public void setSelctedDate(Calendar selctedDate) {
-        this.selctedDate.setTimeInMillis(selctedDate.getTimeInMillis());
-        adapter.setSelectedDay(this.selctedDate);
+        this.selectedDate.setTimeInMillis(selctedDate.getTimeInMillis());
+        adapter.setSelectedDay(this.selectedDate);
     }
 
     public void scrollToCurrentDate(Calendar now) {

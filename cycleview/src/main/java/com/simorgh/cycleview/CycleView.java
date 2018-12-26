@@ -636,6 +636,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
             day = ((diffDays) % cycleData.getTotalDays()) + 1;
             setSelectedDay(day);
         } else {
+            setSelectedDay(1);
             Log.d("debug13", "invalid cycle date");
         }
     }
@@ -651,7 +652,6 @@ public class CycleView extends View implements OnViewDataChangedListener {
         this.selectedDay = selectedDay;
         if (isValidAngle(calculateAngleForDay(selectedDay))) {
             angle = calculateAngleForDay(selectedDay);
-            Log.d("debug13", angle + ":" + selectedDay);
             if (onDayChangedListener != null) {
                 onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
             }

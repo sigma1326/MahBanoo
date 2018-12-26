@@ -328,7 +328,7 @@ public class CycleBar extends View {
             day = 1;
         } else {
             day = (day) % cycleData.getTotalDays() + 1;
-            day--;
+//            day--;
         }
         float unit = cycleBarWidth / cycleData.getTotalDays();
         return dp2px(cycleBarX + cycleBarWidth - (unit * day) + unit / 2);

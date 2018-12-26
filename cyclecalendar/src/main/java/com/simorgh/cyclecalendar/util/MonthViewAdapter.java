@@ -378,7 +378,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     @Override
     public void onDaySelected(Calendar selectedDay) {
-        if (monthViewType == BaseMonthView.MonthViewTypeSetStartDay) {
+        if (monthViewType == BaseMonthView.MonthViewTypeSetStartDay || monthViewType==BaseMonthView.MonthViewTypeChangeDays) {
             if (!selectedDay.after(Calendar.getInstance())) {
                 this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
                 notifyDataSetChanged();
