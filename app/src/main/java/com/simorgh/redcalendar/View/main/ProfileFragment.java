@@ -2,6 +2,7 @@ package com.simorgh.redcalendar.View.main;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,11 @@ public class ProfileFragment extends Fragment {
     private NiceSpinner spinnerYellowDays;
     private NiceSpinner spinnerBirthYear;
     private TextView tvThisCycleStartEnd;
+    private TextView tvCurrentCycle;
+    private TextView tvRedDays;
+    private TextView tvGrayDays;
+    private TextView tvYellowDays;
+    private TextView tvBirthYear;
 
     private Calendar calendar = AppManager.getCalendarInstance();
     private PersianCalendar persianCalendar = CalendarTool.GregorianToPersian(calendar);
@@ -46,9 +52,19 @@ public class ProfileFragment extends Fragment {
     private List<Integer> datasetGray = new LinkedList<>(Arrays.asList(21, 22, 23, 24, 25, 26, 27, 28));
     private List<Integer> datasetYellow = new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
     private LinkedList<Integer> datasetBirthYear = new LinkedList<>();
+    private Typeface typeface;
+
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getActivity() != null) {
+            typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/iransans_medium.ttf");
+        }
     }
 
     @Override
@@ -60,7 +76,18 @@ public class ProfileFragment extends Fragment {
         spinnerYellowDays = v.findViewById(R.id.spinnerYellowCount);
         spinnerBirthYear = v.findViewById(R.id.spinnerBirthYear);
         tvThisCycleStartEnd = v.findViewById(R.id.tv_CurrentCycleStartEnd);
+        tvRedDays = v.findViewById(R.id.tv_red_count);
+        tvGrayDays = v.findViewById(R.id.tv_gray_count);
+        tvYellowDays = v.findViewById(R.id.tv_yellow_count);
+        tvBirthYear = v.findViewById(R.id.tv_birth_year);
+        tvCurrentCycle = v.findViewById(R.id.tv_current_cycle);
 
+        tvThisCycleStartEnd.setTypeface(typeface);
+        tvCurrentCycle.setTypeface(typeface);
+        tvRedDays.setTypeface(typeface);
+        tvGrayDays.setTypeface(typeface);
+        tvYellowDays.setTypeface(typeface);
+        tvBirthYear.setTypeface(typeface);
 
         for (int i = persianCalendar.getPersianYear() - 50; i <= persianCalendar.getPersianYear() - 13; i++) {
             datasetBirthYear.addLast(i);
@@ -121,7 +148,7 @@ public class ProfileFragment extends Fragment {
 
                 persianCalendarStartEnd = CalendarTool.GregorianToPersian(cycle.getCurrentCycleStart(AppManager.getCalendarInstance()));
                 String start = persianCalendarStartEnd.getPersianDay() + " " + persianCalendarStartEnd.getPersianMonthName();
-                persianCalendarStartEnd.addPersianDate(PersianCalendar.DAY_OF_MONTH, cycle.getTotalDaysCount()-1);
+                persianCalendarStartEnd.addPersianDate(PersianCalendar.DAY_OF_MONTH, cycle.getTotalDaysCount() - 1);
                 String end = persianCalendarStartEnd.getPersianDay() + " " + persianCalendarStartEnd.getPersianMonthName();
                 tvThisCycleStartEnd.setText(start + " - " + end);
                 Log.d(AppManager.TAG, cycle.toString());

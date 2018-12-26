@@ -30,4 +30,9 @@
     <string name="red_info_title">دوره پریود</string>
     <string name="green_info_title">دوره تخمک گذاری</string>
     <string name="green2_info_title">دوره تخمک‌ گذاری</string>
+    <string name="pms_days">سندرم پیش از قاعدگی</string>
+    <string name="gray_days">فاصله بین دو دوره</string>
+    <string name="red_days">طول دوره</string>
+    <string name="birth_year">سال تولد</string>
+    <string name="current_cycle">دوره فعلی</string>
 </resources>
