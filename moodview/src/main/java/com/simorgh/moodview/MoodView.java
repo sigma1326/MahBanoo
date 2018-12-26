@@ -367,7 +367,10 @@ public class MoodView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return false;
+                }
                 float y = dp2px(realHeight / 2f);
                 float radius = dp2px(itemIconSize);
                 int i = 0;
@@ -395,7 +398,7 @@ public class MoodView extends View {
                 }
                 invalidate();
                 return true;
-            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_DOWN:
                 invalidate();
                 return true;
             default:
