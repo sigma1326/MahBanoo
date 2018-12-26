@@ -35,4 +35,10 @@
     <string name="red_days">طول دوره</string>
     <string name="birth_year">سال تولد</string>
     <string name="current_cycle">دوره فعلی</string>
+    <string name="make_report_for_doctor">گزارش‌گیری برای پزشک</string>
+    <string name="clear_data">حذف اطلاعات از برنامه</string>
+    <string name="about_us">درباره ما</string>
+    <string name="share_app">اشتراک گذاری برنامه</string>
+    <string name="show_cycle_days_on_calendar">نمایش روزهای دوره روی تقویم</string>
+    <string name="show_pregnancy_prob">نمایش احتمال باردار‌ شدن</string>
 </resources>

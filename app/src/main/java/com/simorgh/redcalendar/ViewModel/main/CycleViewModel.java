@@ -20,6 +20,7 @@ public class CycleViewModel extends AndroidViewModel {
     private Cycle cycle;
     private int selectedDay = -1;
     private Calendar selectedDate = AppManager.getCalendarInstance();
+    private Calendar selectedStartDate = AppManager.getCalendarInstance();
 
 
     public CycleViewModel(@NonNull Application application) {
@@ -53,8 +54,20 @@ public class CycleViewModel extends AndroidViewModel {
         cycleRepository.insertCycle(cycle);
     }
 
+    public void clearData() {
+        cycleRepository.clearData();
+    }
+
     public void insertDayMood(DayMood dayMood) {
         cycleRepository.insertDayMood(dayMood);
+    }
+
+    public Calendar getSelectedStartDate() {
+        return selectedStartDate;
+    }
+
+    public void setSelectedStartDate(Calendar selectedStartDate) {
+        this.selectedStartDate.setTimeInMillis(selectedStartDate.getTimeInMillis());
     }
 
     public Calendar getSelectedDate() {

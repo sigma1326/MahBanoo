@@ -14,7 +14,7 @@
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
         android:fontFamily="@font/iransans_medium"
-        android:text="نمایش احتمال باردار‌ شدن"
+        android:text="@string/show_pregnancy_prob"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,67 +29,67 @@
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
         android:fontFamily="@font/iransans_medium"
-        android:text="نمایش روزهای دوره روی تقویم"
+        android:text="@string/show_cycle_days_on_calendar"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvShowPregnancyProb" />
 
     <TextView
-        android:id="@+id/tvShareApp"
+        android:id="@+id/tv_share_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
         android:fontFamily="@font/iransans_medium"
-        android:text="اشتراک گذاری برنامه"
+        android:text="@string/share_app"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvShowCycleDays" />
 
     <TextView
-        android:id="@+id/tvMakeReport"
+        android:id="@+id/tv_make_report"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
         android:fontFamily="@font/iransans_medium"
-        android:text="گزارش گیری برای پزشک"
+        android:text="@string/make_report_for_doctor"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvShareApp" />
+        app:layout_constraintTop_toBottomOf="@id/tv_share_app" />
 
     <TextView
-        android:id="@+id/tvClearDate"
+        android:id="@+id/tv_clear_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
         android:fontFamily="@font/iransans_medium"
-        android:text="حذف اطلاعات از برنامه"
+        android:text="@string/clear_data"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMakeReport" />
+        app:layout_constraintTop_toBottomOf="@id/tv_make_report" />
 
     <TextView
-        android:id="@+id/tvAboutUs"
+        android:id="@+id/tv_about_us"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
         android:fontFamily="@font/iransans_medium"
-        android:text="درباره ما"
+        android:text="@string/about_us"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvClearDate" />
+        app:layout_constraintTop_toBottomOf="@id/tv_clear_data" />
 
     <Switch
         android:id="@+id/switch_showPregnancyProb"

@@ -636,7 +636,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
             day = ((diffDays) % cycleData.getTotalDays()) + 1;
             setSelectedDay(day);
         } else {
-            throw new UnsupportedOperationException("invalid cycle date");
+            Log.d("debug13", "invalid cycle date");
         }
     }
 
@@ -651,7 +651,11 @@ public class CycleView extends View implements OnViewDataChangedListener {
         this.selectedDay = selectedDay;
         if (isValidAngle(calculateAngleForDay(selectedDay))) {
             angle = calculateAngleForDay(selectedDay);
-            postInvalidate();
+            Log.d("debug13", angle + ":" + selectedDay);
+            if (onDayChangedListener != null) {
+                onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
+            }
+
         }
     }
 
@@ -841,8 +845,8 @@ public class CycleView extends View implements OnViewDataChangedListener {
         if (isFromUser || isFirstDraw) {
             if (onDayChangedListener != null) {
                 if (getCurrentDay() != -1) {
-                selectedDay = getCurrentDay();
-                onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
+                    selectedDay = getCurrentDay();
+                    onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
                 } else {
 //                    Toast.makeText(getContext(), "bad angle", Toast.LENGTH_SHORT).show();
                     Log.d("debug13", "bad angle");
@@ -1348,6 +1352,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
         }
         tvMainDayNumberText = mainDayNumber;
         tvMonthDayNumberText = monthDayNumber;
+        Log.d("debug13", tvMonthDayNumberText + ":" + tvMainDayNumberText);
         tvMonthNameText = monthName;
         if (lastDay != selectedDay && !isAnimRunning) {
             if (!mainCircleHoverIsAnimating) {

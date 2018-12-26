@@ -17,6 +17,7 @@ import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,12 +64,11 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                 mViewModel.setCycle(cycle);
                 cycleView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
-                cycleView.showToday(AppManager.getCalendarInstance());
                 if (isFirstDraw) {
                     isFirstDraw = false;
                     cycleView.showToday(AppManager.getCalendarInstance());
                 } else {
-                    cycleView.setSelectedDay(mViewModel.getSelectedDay());
+                    cycleView.showToday(mViewModel.getSelectedDate());
                 }
                 start.setTimeInMillis(cycle.getStartDate().getTimeInMillis());
                 Log.d(AppManager.TAG, cycle.toString());
@@ -114,12 +114,16 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
             day2 = (int) ((diffDays) % mViewModel.getCycle().getTotalDaysCount()) + 1;
             currentCycleStartDate.setTimeInMillis(today.getTimeInMillis());
             currentCycleStartDate.add(Calendar.DAY_OF_MONTH, -1 * day2 + 1);
+            temp.setTimeInMillis(today.getTimeInMillis());
+            temp.add(Calendar.DAY_OF_MONTH, -1 * day2 + day);
+            mViewModel.setSelectedDate(temp);
         } else {
             throw new UnsupportedOperationException("invalid cycle date");
         }
 
         temp.setTimeInMillis(currentCycleStartDate.getTimeInMillis());
         temp.add(Calendar.DAY_OF_MONTH, day - 1);
+
 
         PersianCalendar persianCalendar = CalendarTool.GregorianToPersian(temp);
 
@@ -145,7 +149,8 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
         }
         listener.onViewDataChanged(persianCalendar.getPersianWeekDayName()
                 , optionalText, days[day - 1], persianCalendar.getPersianDay() + ""
-                , CalendarTool.getIranianMonthName(persianCalendar.getPersianMonth() + 1), visible, day);
+                , CalendarTool.getIranianMonthName(persianCalendar.getPersianMonth() + 1), Objects.requireNonNull(mViewModel.getCycleLiveData().getValue())
+                        .isShowPregnancyProb(), day);
 
         if (onDayTypeChangedListener != null) {
             onDayTypeChangedListener.onDayTypeChanged(dayType);

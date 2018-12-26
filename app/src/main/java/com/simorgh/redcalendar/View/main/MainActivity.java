@@ -2,6 +2,7 @@ package com.simorgh.redcalendar.View.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -24,6 +25,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements BottomBar.OnItemClickListener
         , BottomBar.OnCircleItemClickListener
@@ -354,6 +356,11 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.home) {
             navController.navigate(R.id.action_home_to_change_cycle);
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
     }
 
     @Override

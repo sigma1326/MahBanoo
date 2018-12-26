@@ -41,6 +41,10 @@ public class CycleRepository {
         return dayMoodDAO.getLiveDayMood(calendar);
     }
 
+    public void clearData() {
+        new ClearDataAsyncTask(cycleDao, dayMoodDAO).execute();
+    }
+
     public void insertCycle(Cycle cycle) {
         new insertCycleAsyncTask(cycleDao).execute(cycle);
     }
@@ -49,7 +53,25 @@ public class CycleRepository {
         new insertDayMoodAsyncTask(dayMoodDAO).execute(dayMood);
     }
 
-    private static class insertCycleAsyncTask extends AsyncTask<Cycle, Void, Void> {
+    private static class ClearDataAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private CycleDAO cycleDAO;
+        private DayMoodDAO dayMoodDAO;
+
+        ClearDataAsyncTask(CycleDAO cycleDAO, DayMoodDAO dayMoodDAO) {
+            this.cycleDAO = cycleDAO;
+            this.dayMoodDAO = dayMoodDAO;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            cycleDAO.deleteAll();
+            dayMoodDAO.deleteAll();
+            return null;
+        }
+    }
+
+    private static class insertCycleAsyncTask extends android.os.AsyncTask<Cycle, Void, Void> {
 
         private CycleDAO mAsyncTaskDao;
 

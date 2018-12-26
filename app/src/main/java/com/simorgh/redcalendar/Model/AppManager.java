@@ -7,10 +7,15 @@ import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
 import com.simorgh.redcalendar.Model.database.CycleRepository;
+import com.simorgh.redcalendar.R;
 
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
+import io.github.inflationx.viewpump.ViewPump;
 
 public class AppManager extends Application {
     public static final String DB_NAME = "red-calendar-db";
@@ -41,7 +46,13 @@ public class AppManager extends Application {
         Log.d(TAG, persianDate.toDate().toString());
         Log.d(TAG, persianDate.getShDay() + ":" + persianDate.getShMonth() + ":" + persianDate.getShYear());
 
-
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(new CalligraphyInterceptor(
+                        new CalligraphyConfig.Builder()
+                                .setDefaultFontPath("fonts/iransans_medium.ttf")
+                                .setFontAttrId(R.attr.fontPath)
+                                .build()))
+                .build());
     }
 
     public static Calendar getCalendarInstance() {

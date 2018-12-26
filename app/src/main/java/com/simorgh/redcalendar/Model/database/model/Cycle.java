@@ -30,6 +30,33 @@ public class Cycle {
     @ColumnInfo(name = "birth_year")
     private int birthYear;
 
+    @ColumnInfo(name = "show_cycle_days")
+    private boolean showCycleDays;
+
+    @ColumnInfo(name = "show_pregnancy_prob")
+    private boolean showPregnancyProb;
+
+    public boolean isShowPregnancyProb() {
+        return showPregnancyProb;
+    }
+
+    public void setShowPregnancyProb(boolean showPregnancyProb) {
+        this.showPregnancyProb = showPregnancyProb;
+    }
+
+    public boolean isShowCycleDays() {
+        return showCycleDays;
+    }
+
+    public void setShowCycleDays(boolean showCycleDays) {
+        this.showCycleDays = showCycleDays;
+    }
+
+    public Cycle() {
+        showPregnancyProb = true;
+        showCycleDays = true;
+    }
+
     public int getTotalDaysCount() {
         return redDaysCount + grayDaysCount;
     }
@@ -85,7 +112,8 @@ public class Cycle {
     @NonNull
     @Override
     public String toString() {
-        return "cycle: {" + redDaysCount + " : " + grayDaysCount + " : " + yellowDaysCount + " : " + birthYear + " : " + startDate.getTime().toString() + "}";
+        return "cycle: {" + redDaysCount + " : " + grayDaysCount + " : " + yellowDaysCount + " : "
+                + birthYear + " : " + showCycleDays + " : " + showPregnancyProb + " : " + startDate.getTime().toString() + "}";
     }
 
     public Calendar getCurrentCycleStart(Calendar today) {

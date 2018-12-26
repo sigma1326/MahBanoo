@@ -3,7 +3,6 @@ package com.simorgh.redcalendar.View.main;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,7 +75,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
         btnApplyChanges.setOnClickListener(v1 -> {
             Cycle cycle = mViewModel.getCycleLiveData().getValue();
             if (cycle != null) {
-                cycle.setStartDate(mViewModel.getSelectedDate());
+                cycle.setStartDate(mViewModel.getSelectedStartDate());
                 mViewModel.updateCycle(cycle);
                 navController.navigateUp();
             }
@@ -96,6 +95,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
                 calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 calendarView.scrollToCurrentDate(cycle.getStartDate());
+                calendarView.setSelctedDate(cycle.getStartDate());
                 Log.d(AppManager.TAG, cycle.toString());
             }
         });
@@ -108,7 +108,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
 
     @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
-        mViewModel.setSelectedDate(day);
+        mViewModel.setSelectedStartDate(day);
     }
 
     @Override

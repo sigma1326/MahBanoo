@@ -114,6 +114,15 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         init();
     }
 
+    public Calendar getSelectedDay() {
+        return selectedDay;
+    }
+
+    public void setSelectedDay(Calendar selectedDay) {
+        this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+        notifyDataSetChanged();
+    }
+
     public void setRange(@NonNull Calendar min, @NonNull Calendar max) {
         mMinDate.setTimeInMillis(min.getTimeInMillis());
         mMaxDate.setTimeInMillis(max.getTimeInMillis());
