@@ -119,6 +119,11 @@ public class ProfileFragment extends Fragment {
                 spinnerYellowDays.setSelectedIndex(cycle.getYellowDaysCount() - 1);
                 spinnerBirthYear.setSelectedIndex(cycle.getBirthYear() - (persianCalendar.getPersianYear() - 50));
 
+                persianCalendarStartEnd = CalendarTool.GregorianToPersian(cycle.getCurrentCycleStart(AppManager.getCalendarInstance()));
+                String start = persianCalendarStartEnd.getPersianDay() + " " + persianCalendarStartEnd.getPersianMonthName();
+                persianCalendarStartEnd.addPersianDate(PersianCalendar.DAY_OF_MONTH, cycle.getTotalDaysCount()-1);
+                String end = persianCalendarStartEnd.getPersianDay() + " " + persianCalendarStartEnd.getPersianMonthName();
+                tvThisCycleStartEnd.setText(start + " - " + end);
                 Log.d(AppManager.TAG, cycle.toString());
             }
         });
