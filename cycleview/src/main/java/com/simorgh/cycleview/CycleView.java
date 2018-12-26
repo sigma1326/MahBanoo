@@ -655,7 +655,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
             if (onDayChangedListener != null) {
                 onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
             }
-
+            postInvalidate();
         }
     }
 
@@ -842,9 +842,9 @@ public class CycleView extends View implements OnViewDataChangedListener {
 
         canvas.drawText(tvMonthDayNumberText, tvMonthDayNumberX, tvMonthDayNumberY, tvMonthDayNumberPaint);
         canvas.drawText(tvMonthNameText, tvMonthNameX, tvMonthNameY, tvMonthNamePaint);
-        if (isFromUser || isFirstDraw) {
+        if (isFromUser) {
             if (onDayChangedListener != null) {
-                if (getCurrentDay() != -1) {
+                if (getCurrentDay() != -1 && lastDay != getCurrentDay()) {
                     selectedDay = getCurrentDay();
                     onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
                 } else {
@@ -1345,14 +1345,13 @@ public class CycleView extends View implements OnViewDataChangedListener {
         }
         selectedDay = today;
         tvWeekDayNameText = weekDayName;
-        if (isOptionalVisible) {
+        if (isOptionalVisible && getDayType(selectedDay) != TYPE_RED) {
             tvOptionalText = optionalText;
         } else {
             tvOptionalText = "";
         }
         tvMainDayNumberText = mainDayNumber;
         tvMonthDayNumberText = monthDayNumber;
-        Log.d("debug13", tvMonthDayNumberText + ":" + tvMainDayNumberText);
         tvMonthNameText = monthName;
         if (lastDay != selectedDay && !isAnimRunning) {
             if (!mainCircleHoverIsAnimating) {
