@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         imgBack.setOnClickListener(v -> navController.navigateUp());
 
         imgInfo.setOnClickListener(v -> {
+            runImageInfoAnim(false);
             switch (dayType) {
                 case CycleView.TYPE_RED:
                     titleText.setText(getString(R.string.red_info_title));
@@ -137,9 +138,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 case R.id.calendar:
                     switch (item.getIndex()) {
                         case 4:
-//                            NavOptions navOptions = new NavOptions.Builder()
-//                                    .setPopUpTo(R.id.home,
-//                                            true).build();
                             navController.popBackStack(R.id.home, false);
                             break;
                         case 3:
@@ -220,7 +218,13 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     }
 
     private void runImageInfoAnim(boolean visible) {
+        if (imgInfo == null) {
+            return;
+        }
         if (visible) {
+            if (imgInfo.getVisibility() == View.VISIBLE) {
+                return;
+            }
             imgInfo.animate().alpha(1f).setDuration(500).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -228,6 +232,9 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 }
             }).start();
         } else {
+            if (imgInfo.getVisibility() == View.INVISIBLE) {
+                return;
+            }
             imgInfo.animate().alpha(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -260,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     }).start();
 
         } else {
-            if (bottomBar.getVisibility() == View.GONE) {
+            if (bottomBar.getVisibility() == View.INVISIBLE) {
                 return;
             }
             h1 = bottomBar.getHeight();
@@ -271,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            bottomBar.setVisibility(View.GONE);
+                            bottomBar.setVisibility(View.INVISIBLE);
                         }
                     }).start();
         }
@@ -279,9 +286,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 
     @Override
     public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-        if (imgInfo != null) {
-            imgInfo.setVisibility(View.GONE);
-        }
+        runImageInfoAnim(Objects.requireNonNull(controller.getCurrentDestination()).getId() == R.id.home);
         switch (Objects.requireNonNull(controller.getCurrentDestination()).getId()) {
             case R.id.home:
                 if (bottomBar != null) {
@@ -289,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(4);
                     runBottomBarAnim(true);
                     runBackButtonAnim(false);
-                    runImageInfoAnim(true);
                 }
                 break;
             case R.id.calendar:
@@ -297,7 +301,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(3);
                     runBottomBarAnim(true);
                     runBackButtonAnim(false);
-                    runImageInfoAnim(false);
                 }
                 break;
             case R.id.profile:
@@ -305,7 +308,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(2);
                     runBottomBarAnim(true);
                     runBackButtonAnim(false);
-                    runImageInfoAnim(false);
                 }
                 break;
             case R.id.settings:
@@ -313,7 +315,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(1);
                     runBottomBarAnim(true);
                     runBackButtonAnim(false);
-                    runImageInfoAnim(false);
                 }
                 break;
             case R.id.addNote:
@@ -321,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(-1);
                     runBottomBarAnim(false);
                     runBackButtonAnim(true);
-                    runImageInfoAnim(false);
                 }
                 break;
 
@@ -330,7 +330,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(-1);
                     runBottomBarAnim(false);
                     runBackButtonAnim(true);
-                    runImageInfoAnim(false);
                 }
                 break;
             case R.id.cycleInfo:
@@ -338,7 +337,6 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     bottomBar.setSelectedIndex(-1);
                     runBottomBarAnim(false);
                     runBackButtonAnim(true);
-                    runImageInfoAnim(false);
                 }
                 break;
         }
@@ -360,38 +358,26 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 
     @Override
     public void onDayTypeChanged(int dayType) {
-        if (imgInfo == null) {
-            return;
-        }
         this.dayType = dayType;
-        imgInfo.setVisibility(View.VISIBLE);
-        ColorFilter colorFilter = null;
+        ColorFilter colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_gray));
 
         switch (dayType) {
             case CycleView.TYPE_RED:
-                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_red));
                 break;
             case CycleView.TYPE_GRAY:
-                runImageInfoAnim(false);
                 break;
             case CycleView.TYPE_GREEN:
-                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_green));
                 break;
             case CycleView.TYPE_GREEN2:
-                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_green));
                 break;
             case CycleView.TYPE_YELLOW:
-                runImageInfoAnim(true);
                 colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_yellow));
                 break;
-            default:
-                runImageInfoAnim(true);
-                colorFilter = new LightingColorFilter(Color.TRANSPARENT, getColor(R.color.type_red));
-
         }
         imgInfo.setColorFilter(colorFilter);
+        runImageInfoAnim(dayType != CycleView.TYPE_GRAY);
     }
 }
