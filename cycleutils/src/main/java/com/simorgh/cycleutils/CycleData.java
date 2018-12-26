@@ -2,6 +2,8 @@ package com.simorgh.cycleutils;
 
 import android.util.Log;
 
+import com.simorgh.calendarutil.CalendarTool;
+
 import java.util.Calendar;
 
 public class CycleData {
@@ -183,5 +185,21 @@ public class CycleData {
 
     public void setStartDate(Calendar startDate) {
         this.startDate = startDate;
+    }
+
+    private Calendar currentCycleStartDate = Calendar.getInstance();
+
+    public Calendar getCurrentCycleStart(Calendar today) {
+        long diffDays;
+        int day2;
+        diffDays = CalendarTool.getDaysFromDiff(today, startDate);
+        if (diffDays >= 0) {
+            day2 = (int) ((diffDays) % getTotalDays()) + 1;
+            currentCycleStartDate.setTimeInMillis(today.getTimeInMillis());
+            currentCycleStartDate.add(Calendar.DAY_OF_MONTH, -1 * day2 + 1);
+        } else {
+            throw new UnsupportedOperationException("invalid cycle date");
+        }
+        return currentCycleStartDate;
     }
 }
