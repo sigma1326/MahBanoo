@@ -37,15 +37,15 @@
         android:id="@+id/tv_CurrentCycleStartEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
         android:fontFamily="@font/iransans_medium"
         android:text="27 آذر - 20 دی"
         android:textColor="#5c5c5c"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCurrentCycle" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvCurrentCycle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvCurrentCycle" />
 
     <TextView
         android:id="@+id/tvRedCount"
