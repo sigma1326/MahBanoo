@@ -9,11 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
-import android.util.Range;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
@@ -38,8 +37,11 @@ public class ProfileFragment extends Fragment {
     private NiceSpinner spinnerGrayDays;
     private NiceSpinner spinnerYellowDays;
     private NiceSpinner spinnerBirthYear;
+    private TextView tvThisCycleStartEnd;
+
     private Calendar calendar = AppManager.getCalendarInstance();
     private PersianCalendar persianCalendar = CalendarTool.GregorianToPersian(calendar);
+    private PersianCalendar persianCalendarStartEnd = CalendarTool.GregorianToPersian(calendar);
     private List<Integer> datasetRed = new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
     private List<Integer> datasetGray = new LinkedList<>(Arrays.asList(21, 22, 23, 24, 25, 26, 27, 28));
     private List<Integer> datasetYellow = new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
@@ -57,6 +59,7 @@ public class ProfileFragment extends Fragment {
         spinnerGrayDays = v.findViewById(R.id.spinnerGrayCount);
         spinnerYellowDays = v.findViewById(R.id.spinnerYellowCount);
         spinnerBirthYear = v.findViewById(R.id.spinnerBirthYear);
+        tvThisCycleStartEnd = v.findViewById(R.id.tv_CurrentCycleStartEnd);
 
 
         for (int i = persianCalendar.getPersianYear() - 50; i <= persianCalendar.getPersianYear() - 13; i++) {
