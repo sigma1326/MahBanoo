@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -60,7 +61,9 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         imgBack.setOnClickListener(v -> navController.navigateUp());
 
         imgInfo.setOnClickListener(v -> {
-            runImageInfoAnim(false);
+            if (isImgInfoAnimRunning) {
+                return;
+            }
             switch (dayType) {
                 case CycleView.TYPE_RED:
                     titleText.setText(getString(R.string.red_info_title));
@@ -219,7 +222,13 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         }
     }
 
+    private boolean isImgInfoAnimRunning = false;
+
     private void runImageInfoAnim(boolean visible) {
+        Log.d("debug13", visible + ":" + isImgInfoAnimRunning);
+        if (isImgInfoAnimRunning) {
+            return;
+        }
         if (imgInfo == null) {
             return;
         }
@@ -229,8 +238,14 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
             }
             imgInfo.animate().alpha(1f).setDuration(500).setListener(new AnimatorListenerAdapter() {
                 @Override
+                public void onAnimationStart(Animator animation) {
+                    isImgInfoAnimRunning = true;
+                }
+
+                @Override
                 public void onAnimationEnd(Animator animation) {
                     imgInfo.setVisibility(View.VISIBLE);
+                    isImgInfoAnimRunning = false;
                 }
             }).start();
         } else {
@@ -239,8 +254,13 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
             }
             imgInfo.animate().alpha(0f).setDuration(500).setListener(new AnimatorListenerAdapter() {
                 @Override
+                public void onAnimationStart(Animator animation) {
+                    isImgInfoAnimRunning = true;
+                }
+                @Override
                 public void onAnimationEnd(Animator animation) {
                     imgInfo.setVisibility(View.INVISIBLE);
+                    isImgInfoAnimRunning = false;
                 }
             }).start();
         }
