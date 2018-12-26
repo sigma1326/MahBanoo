@@ -3,6 +3,7 @@ package com.simorgh.redcalendar.Model.database.model;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -11,6 +12,7 @@ import androidx.room.PrimaryKey;
 public class DayMood {
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "mood_id")
+    @NonNull
     private Calendar id;
 
     @ColumnInfo(name = "type_bleeding")
@@ -40,6 +42,7 @@ public class DayMood {
 
     public void setId(Calendar id) {
         this.id = id;
+        typeBleedingSelectedIndex = -1;
     }
 
     public int getTypeBleedingSelectedIndex() {

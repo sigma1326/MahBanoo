@@ -15,11 +15,13 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 
@@ -64,8 +66,8 @@ public class MoodView extends View {
     private RectF iconRect = new RectF();
     private RectF iconCheckRect = new RectF();
 
-    private ArrayList<Integer> selectedItems = new ArrayList<>();
-    private ArrayList<Bitmap> itemIcons = new ArrayList<>();
+    private List<Integer> selectedItems = new ArrayList<>();
+    private List<Bitmap> itemIcons = new ArrayList<>();
 
     private Bitmap checkIcon;
 
@@ -348,6 +350,12 @@ public class MoodView extends View {
         canvas.drawText(getTitleByType(getResources())
                 , dp2px(realWidth - 32), titleTextPaint.getFontMetrics().descent / 2f + dp2px(12), titleTextPaint);
 
+        for (int j = 0; j < selectedItems.size(); j++) {
+            if (moodType == TYPE_BLEEDING) {
+                Log.d("debug13", "onDraw: " + selectedItems.get(j));
+            }
+        }
+
         float y = dp2px(realHeight / 2.08f);
         int i = 0;
         for (float x = dp2px(realWidth) - dp2px(realWidth) / 8f; x > 0 && i < itemSize; x -= dp2px(realWidth) / 4f, i++) {
@@ -426,6 +434,30 @@ public class MoodView extends View {
     }
 
 
+    public List<Integer> getSelectedItems() {
+        return selectedItems;
+    }
+
+    public void setSelectedItems(List<Integer> selectedItems) {
+        if (selectedItems == null || selectedItems.size() == 0) {
+            this.selectedItems.clear();
+        } else {
+            this.selectedItems.clear();
+            this.selectedItems.addAll(selectedItems);
+        }
+        postInvalidate();
+    }
+
+    public void setSelectedItem(Integer selectedItem) {
+        if (selectedItem == null) {
+            this.selectedItems.clear();
+        } else {
+            this.selectedItems.clear();
+            this.selectedItems.add(selectedItem);
+        }
+        invalidate();
+    }
+
     private float dp2px(float dp) {
         return SizeConverter.dpToPx(getContext(), dp);
     }
@@ -439,7 +471,7 @@ public class MoodView extends View {
     }
 
     public interface OnItemSelectedListener {
-        public void onItemSelected(ArrayList<Integer> selectedItems);
+        public void onItemSelected(List<Integer> selectedItems);
     }
 
 }

@@ -1,12 +1,10 @@
 package com.simorgh.redcalendar.Model.database.dao;
 
-import com.simorgh.redcalendar.Model.database.model.Cycle;
 import com.simorgh.redcalendar.Model.database.model.DayMood;
 
 import java.util.Calendar;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;

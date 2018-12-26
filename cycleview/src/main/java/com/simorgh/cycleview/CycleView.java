@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Toast;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cycleutils.CycleData;
@@ -848,10 +849,11 @@ public class CycleView extends View implements OnViewDataChangedListener {
                     selectedDay = getCurrentDay();
                     onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
                 } else {
-//                    Toast.makeText(getContext(), "bad angle", Toast.LENGTH_SHORT).show();
                     Log.d("debug13", "bad angle");
                 }
             }
+        } else if (isFirstDraw) {
+            setSelectedDay(selectedDay);
         }
     }
 

@@ -14,9 +14,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.simorgh.bottombar.BottomBar;
+import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cycleview.CycleView;
+import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     private ImageView imgInfo;
     private ImageButton imgBack;
     private int dayType = CycleView.TYPE_GRAY;
+    private Calendar selectedDay = AppManager.getCalendarInstance();
 
 
     @Override
@@ -111,16 +115,17 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         if (isCircle || item == null) {
             switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
                 case R.id.home:
-                    navController.navigate(R.id.action_home_to_addNote);
+//                    CycleViewFragmentDirections.actionHomeToAddNote().setSelectedDay(new YearMonthDay(selectedDay));
+                    navController.navigate(CycleViewFragmentDirections.actionHomeToAddNote().setSelectedDay(new YearMonthDay(selectedDay)));
                     break;
                 case R.id.calendar:
-                    navController.navigate(R.id.action_calendar_to_addNote);
+                    navController.navigate(CalendarFragmentDirections.actionCalendarToAddNote().setSelectedDay(new YearMonthDay(selectedDay)));
                     break;
                 case R.id.profile:
-                    navController.navigate(R.id.action_profile_to_addNote);
+                    navController.navigate(ProfileFragmentDirections.actionProfileToAddNote().setSelectedDay(new YearMonthDay(selectedDay)));
                     break;
                 case R.id.settings:
-                    navController.navigate(R.id.action_settings_to_addNote);
+                    navController.navigate(SettingsFragmentDirections.actionSettingsToAddNote().setSelectedDay(new YearMonthDay(selectedDay)));
                     break;
             }
         } else {
@@ -406,5 +411,10 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         }
         imgInfo.setColorFilter(colorFilter);
         runImageInfoAnim(dayType != CycleView.TYPE_GRAY);
+    }
+
+    @Override
+    public void onDayChanged(Calendar day) {
+        selectedDay.setTimeInMillis(day.getTimeInMillis());
     }
 }

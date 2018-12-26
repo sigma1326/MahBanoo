@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -205,7 +206,7 @@ public class WeekDayPicker extends View {
         float dotRadius = dp2px(dotCircleRadius);
         int i = 0;
         for (float x = dp2px(realWidth) - dp2px(realWidth) / 14f; x > 0; x -= dp2px(realWidth) / 7f, i++) {
-            int day = (int) getDaysFromDiff(temp, cycleData.getStartDate());
+            int day = (int) getDaysFromDiff(temp, cycleData.getCurrentCycleStart(Calendar.getInstance()));
             day = day % cycleData.getTotalDays() + 1;
             if (getDaysFromDiff(temp, selectedDate) == 0) {
                 canvas.drawCircle(x, y, radius, circlePaint);
@@ -225,7 +226,7 @@ public class WeekDayPicker extends View {
                     canvas.drawCircle(x, y + dp2px(20), dotRadius, circlePaint);
                 }
             }
-            temp.roll(Calendar.DAY_OF_MONTH, true);
+            temp.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
 
@@ -240,7 +241,7 @@ public class WeekDayPicker extends View {
                 for (float x = dp2px(realWidth) - dp2px(realWidth) / 14f; x > 0; x -= dp2px(realWidth) / 7f, i++) {
                     if (Math.sqrt(Math.pow(Math.abs(event.getX() - x), 2) + Math.pow(Math.abs(event.getY() - y), 2)) < radius) {
                         selectedDate.setTimeInMillis(weekStartDate.getTimeInMillis());
-                        selectedDate.roll(Calendar.DAY_OF_MONTH, i);
+                        selectedDate.add(Calendar.DAY_OF_MONTH, i);
                         if (onDaySelectedListener != null) {
                             onDaySelectedListener.onDaySelected(selectedDate);
                         }
@@ -298,14 +299,16 @@ public class WeekDayPicker extends View {
     }
 
     public void setSelectedDate(Calendar selectedDate) {
-        this.selectedDate = selectedDate;
+        this.selectedDate.setTimeInMillis(selectedDate.getTimeInMillis());
         calculateWeekStart(selectedDate);
         postInvalidate();
     }
 
     private void calculateWeekStart(Calendar selectedDate) {
         weekStartDate.setTimeInMillis(selectedDate.getTimeInMillis());
-        weekStartDate.add(Calendar.DAY_OF_MONTH, -1 * selectedDate.get(Calendar.DAY_OF_WEEK));
+        if (selectedDate.get(Calendar.DAY_OF_WEEK) != 7) {
+            weekStartDate.add(Calendar.DAY_OF_MONTH, -1 * selectedDate.get(Calendar.DAY_OF_WEEK));
+        }
     }
 
     private float dp2px(float dp) {

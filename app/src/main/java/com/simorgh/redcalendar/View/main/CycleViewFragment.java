@@ -117,6 +117,10 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
             temp.setTimeInMillis(today.getTimeInMillis());
             temp.add(Calendar.DAY_OF_MONTH, -1 * day2 + day);
             mViewModel.setSelectedDate(temp);
+//            mViewModel.setSelectedDateMood(temp);
+            if (onDayTypeChangedListener != null) {
+                onDayTypeChangedListener.onDayChanged(temp);
+            }
         } else {
             throw new UnsupportedOperationException("invalid cycle date");
         }
@@ -127,22 +131,18 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
 
         PersianCalendar persianCalendar = CalendarTool.GregorianToPersian(temp);
 
-        boolean visible = false;
         String optionalText = "احتمال بارداری: ";
         switch (dayType) {
             case CycleView.TYPE_RED:
                 break;
             case CycleView.TYPE_GREEN:
-                visible = true;
                 optionalText += "متوسط";
                 break;
             case CycleView.TYPE_GREEN2:
                 optionalText += "زیاد";
-                visible = true;
                 break;
             case CycleView.TYPE_GRAY:
                 optionalText += "کم";
-                visible = true;
                 break;
             case CycleView.TYPE_YELLOW:
                 break;
@@ -150,7 +150,7 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
         listener.onViewDataChanged(persianCalendar.getPersianWeekDayName()
                 , optionalText, days[day - 1], persianCalendar.getPersianDay() + ""
                 , CalendarTool.getIranianMonthName(persianCalendar.getPersianMonth() + 1)
-                , visible & Objects.requireNonNull(mViewModel.getCycleLiveData().getValue())
+                , Objects.requireNonNull(mViewModel.getCycleLiveData().getValue())
                         .isShowPregnancyProb(), day);
 
         if (onDayTypeChangedListener != null) {
@@ -161,6 +161,8 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
 
     public interface OnDayTypeChangedListener {
         public void onDayTypeChanged(int dayType);
+
+        public void onDayChanged(Calendar day);
     }
 
 

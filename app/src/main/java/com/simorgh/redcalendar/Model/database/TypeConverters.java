@@ -2,7 +2,8 @@ package com.simorgh.redcalendar.Model.database;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.simorgh.redcalendar.Model.AppManager;
+import com.simorgh.calendarutil.model.CalendarType;
+import com.simorgh.calendarutil.model.YearMonthDay;
 
 import java.lang.reflect.Type;
 import java.util.Calendar;
@@ -13,19 +14,28 @@ import androidx.room.TypeConverter;
 
 public class TypeConverters {
     @TypeConverter
-    public static Calendar toCalendar(Long value) {
+    public static Calendar toCalendar(String value) {
         if (value == null) {
             return null;
         } else {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(value);
+            Type listType = new TypeToken<YearMonthDay>() {
+            }.getType();
+            YearMonthDay yearMonthDay = gson.fromJson(value, listType);
+            calendar.set(Calendar.DAY_OF_MONTH, yearMonthDay.getDay());
+            calendar.set(Calendar.MONTH, yearMonthDay.getMonth());
+            calendar.set(Calendar.YEAR, yearMonthDay.getYear());
             return calendar;
         }
     }
 
     @TypeConverter
-    public static Long toTimeInMillis(Calendar calendar) {
-        return calendar == null ? null : calendar.getTimeInMillis();
+    public static String toTimeInMillis(Calendar calendar) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        YearMonthDay yearMonthDay = new YearMonthDay(year, month, day, CalendarType.GREGORIAN);
+        return gson.toJson(yearMonthDay);
     }
 
 

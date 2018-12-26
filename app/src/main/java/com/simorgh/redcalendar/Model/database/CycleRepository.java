@@ -17,16 +17,22 @@ public class CycleRepository {
     private CycleDAO cycleDao;
     private DayMoodDAO dayMoodDAO;
     private LiveData<Cycle> cycleLiveData;
+    private LiveData<List<DayMood>> listLiveData;
 
     public CycleRepository(Application application) {
         CycleDataBase db = CycleDataBase.getDatabase(application);
         cycleDao = db.cycleDAO();
         dayMoodDAO = db.dayMoodDAO();
         cycleLiveData = cycleDao.getLiveCycle(1);
+        listLiveData = dayMoodDAO.getLiveDayMoods();
     }
 
     public Cycle getCycleData() {
         return cycleDao.getCycle(1);
+    }
+
+    public DayMood getDayMood(Calendar calendar) {
+        return dayMoodDAO.getDayMood(calendar);
     }
 
     public LiveData<Cycle> getCycleLiveData() {
@@ -39,6 +45,14 @@ public class CycleRepository {
 
     public LiveData<DayMood> getLiveDayMoodData(Calendar calendar) {
         return dayMoodDAO.getLiveDayMood(calendar);
+    }
+
+    public LiveData<List<DayMood>> getListLiveData() {
+        return listLiveData;
+    }
+
+    public void setListLiveData(LiveData<List<DayMood>> listLiveData) {
+        this.listLiveData = listLiveData;
     }
 
     public void clearData() {

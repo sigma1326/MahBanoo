@@ -9,6 +9,7 @@ import com.simorgh.redcalendar.Model.database.model.Cycle;
 import com.simorgh.redcalendar.Model.database.model.DayMood;
 
 import java.util.Calendar;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -17,9 +18,11 @@ import androidx.lifecycle.LiveData;
 public class CycleViewModel extends AndroidViewModel {
     private CycleRepository cycleRepository;
     private LiveData<Cycle> cycleLiveData;
+    private LiveData<List<DayMood>> moodsLiveData;
     private Cycle cycle;
     private int selectedDay = -1;
     private Calendar selectedDate = AppManager.getCalendarInstance();
+    private Calendar selectedDateMood = AppManager.getCalendarInstance();
     private Calendar selectedStartDate = AppManager.getCalendarInstance();
 
 
@@ -27,7 +30,35 @@ public class CycleViewModel extends AndroidViewModel {
         super(application);
         cycleRepository = new CycleRepository(application);
         cycleLiveData = cycleRepository.getCycleLiveData();
-//        cycle = cycleLiveData.getValue();
+        moodsLiveData = cycleRepository.getListLiveData();
+    }
+
+//    public DayMood getDayMood() {
+//        return dayMood;
+//    }
+
+    public LiveData<List<DayMood>> getMoodsLiveData() {
+        return moodsLiveData;
+    }
+
+    public void setMoodsLiveData(LiveData<List<DayMood>> moodsLiveData) {
+        this.moodsLiveData = moodsLiveData;
+    }
+
+    public Calendar getSelectedDateMood() {
+        return selectedDateMood;
+    }
+
+    public DayMood getSelectedDateMood(Calendar day) {
+        return cycleRepository.getDayMood(day);
+    }
+
+    public void setSelectedDateMood(Calendar selectedDateMood) {
+        this.selectedDateMood.setTimeInMillis(selectedDateMood.getTimeInMillis());
+    }
+
+    public DayMood getDayMood() {
+        return cycleRepository.getDayMood(selectedDateMood);
     }
 
     public int getSelectedDay() {
@@ -58,7 +89,7 @@ public class CycleViewModel extends AndroidViewModel {
         cycleRepository.clearData();
     }
 
-    public void insertDayMood(DayMood dayMood) {
+    public void updateDayMood(DayMood dayMood) {
         cycleRepository.insertDayMood(dayMood);
     }
 

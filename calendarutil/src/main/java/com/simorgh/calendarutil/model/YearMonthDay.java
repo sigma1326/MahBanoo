@@ -1,12 +1,17 @@
 package com.simorgh.calendarutil.model;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 
 import org.jetbrains.annotations.NotNull;
 
-public class YearMonthDay {
+import java.util.Calendar;
+
+public class YearMonthDay implements Parcelable {
     private int year;
     private int month;
     private int day;
@@ -23,6 +28,13 @@ public class YearMonthDay {
         this.month = month;
         this.day = day;
         this.calendarType = calendarType;
+    }
+
+    public YearMonthDay(Calendar grgCalendar) {
+        this.year = grgCalendar.get(Calendar.YEAR);
+        this.month = grgCalendar.get(Calendar.MONTH);
+        this.day = grgCalendar.get(Calendar.DAY_OF_MONTH);
+        this.calendarType = CalendarType.GREGORIAN;
     }
 
     public int getYear() {
@@ -82,5 +94,17 @@ public class YearMonthDay {
         year = hijri.get(UmmalquraCalendar.YEAR);
         month = hijri.get(UmmalquraCalendar.MONTH);
         day = hijri.get(UmmalquraCalendar.DAY_OF_MONTH);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(year);
+        dest.writeInt(month);
+        dest.writeInt(day);
     }
 }

@@ -182,7 +182,13 @@
         android:id="@+id/addNote"
         android:name="com.simorgh.redcalendar.View.main.AddMoodFragment"
         android:label="addNote"
-        tools:layout="@layout/add_note_fragment" />
+        tools:layout="@layout/add_note_fragment" >
+        <argument
+            android:name="selectedDay"
+            app:argType="com.simorgh.calendarutil.model.YearMonthDay"
+            android:defaultValue="@null"
+            app:nullable="true"/>
+    </fragment>
     <fragment
         android:id="@+id/change_cycle"
         android:name="com.simorgh.redcalendar.View.main.ChangeCycleStartDayFragment"
