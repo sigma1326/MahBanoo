@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.moodview.MoodView;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
@@ -25,6 +26,11 @@ public class AddMoodFragment extends Fragment implements WeekDayPicker.onDaySele
 
     private CycleViewModel mViewModel;
     private WeekDayPicker weekDayPicker;
+    private MoodView mvBleeding;
+    private MoodView mvEmotion;
+    private MoodView mvPain;
+    private MoodView mvEatingDeisre;
+    private MoodView mvHairStyle;
 
 
     public static AddMoodFragment newInstance() {
@@ -37,6 +43,9 @@ public class AddMoodFragment extends Fragment implements WeekDayPicker.onDaySele
         weekDayPicker = v.findViewById(R.id.weekDayPicker);
         weekDayPicker.setOnDaySelectedListener(this);
         weekDayPicker.setSelectedDate(AppManager.getCalendarInstance());
+        weekDayPicker.setOnDaySelectedListener(day -> {
+
+        });
         return v;
     }
 

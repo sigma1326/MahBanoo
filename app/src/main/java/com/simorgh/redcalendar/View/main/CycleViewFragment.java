@@ -149,7 +149,8 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
         }
         listener.onViewDataChanged(persianCalendar.getPersianWeekDayName()
                 , optionalText, days[day - 1], persianCalendar.getPersianDay() + ""
-                , CalendarTool.getIranianMonthName(persianCalendar.getPersianMonth() + 1), Objects.requireNonNull(mViewModel.getCycleLiveData().getValue())
+                , CalendarTool.getIranianMonthName(persianCalendar.getPersianMonth() + 1)
+                , visible & Objects.requireNonNull(mViewModel.getCycleLiveData().getValue())
                         .isShowPregnancyProb(), day);
 
         if (onDayTypeChangedListener != null) {
