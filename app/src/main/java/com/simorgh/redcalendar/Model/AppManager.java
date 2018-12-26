@@ -1,7 +1,11 @@
 package com.simorgh.redcalendar.Model;
 
 import android.app.Application;
+import android.util.Log;
 
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
+import com.simorgh.calendarutil.persiancalendar.PersianDate;
 import com.simorgh.redcalendar.Model.database.CycleRepository;
 
 import java.util.Calendar;
@@ -30,9 +34,17 @@ public class AppManager extends Application {
         maxDate = getCalendarInstance();
         maxDate.set(Calendar.YEAR, 2020);
 
+        PersianCalendar persianCalendar = CalendarTool.GregorianToPersian(getCalendarInstance());
+        PersianDate persianDate = new PersianDate();
+        persianDate.setGrgDay(25);
+        Log.d(TAG, persianCalendar.getPersianLongDate());
+        Log.d(TAG, persianDate.toDate().toString());
+        Log.d(TAG, persianDate.getShDay() + ":" + persianDate.getShMonth() + ":" + persianDate.getShYear());
+
+
     }
 
     public static Calendar getCalendarInstance() {
-        return Calendar.getInstance(TimeZone.getDefault(), mLocale);
+        return Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"), mLocale);
     }
 }
