@@ -1,5 +1,7 @@
 package com.simorgh.redcalendar.Model.database.model;
 
+import com.simorgh.calendarutil.CalendarTool;
+
 import java.util.Calendar;
 
 import androidx.annotation.NonNull;
@@ -84,5 +86,19 @@ public class Cycle {
     @Override
     public String toString() {
         return "cycle: {" + redDaysCount + " : " + grayDaysCount + " : " + yellowDaysCount + " : " + birthYear + " : " + startDate.getTime().toString() + "}";
+    }
+
+    public Calendar getCurrentCycleStart(Calendar today) {
+        Calendar calendar = Calendar.getInstance();
+        long diffDays;
+        int day2;
+        diffDays = CalendarTool.getDaysFromDiff(today, getStartDate());
+        if (diffDays >= 0) {
+            day2 = (int) ((diffDays) % getTotalDaysCount()) + 1;
+            calendar.add(Calendar.DAY_OF_MONTH, -1 * day2 + 1);
+        } else {
+            throw new UnsupportedOperationException("invalid cycle date");
+        }
+        return calendar;
     }
 }
