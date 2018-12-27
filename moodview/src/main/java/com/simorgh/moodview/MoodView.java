@@ -352,7 +352,10 @@ public class MoodView extends View {
 
         for (int j = 0; j < selectedItems.size(); j++) {
             if (moodType == TYPE_BLEEDING) {
-                Log.d("debug13", "onDraw: " + selectedItems.get(j));
+                Log.d("debug13", "bleed: " + selectedItems.get(j));
+            }
+            if (moodType == TYPE_EMOTION) {
+                Log.d("debug13", "emotion: " + selectedItems.get(j));
             }
         }
 
@@ -388,14 +391,14 @@ public class MoodView extends View {
                             if (selectedItems.contains(i)) {
                                 selectedItems.remove(new Integer(i));
                             } else {
-                                selectedItems.add(i);
+                                selectedItems.add(new Integer(i));
                             }
                         } else {
                             if (selectedItems.contains(i)) {
                                 selectedItems.remove(new Integer(i));
                             } else {
                                 selectedItems.clear();
-                                selectedItems.add(i);
+                                selectedItems.add(new Integer(i));
                             }
                         }
                         if (onItemSelectedListener != null) {

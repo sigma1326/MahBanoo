@@ -36,6 +36,7 @@ public class CalendarView extends LinearLayout {
     private int weekDaysViewBackgroundColor = -1;
     private OnScrollListener onScrollListener;
     private Calendar selectedDate = Calendar.getInstance();
+    private boolean showInfo = true;
 
 
     public CalendarView(Context context) {
@@ -140,6 +141,15 @@ public class CalendarView extends LinearLayout {
         }
     }
 
+    public boolean isShowInfo() {
+        return showInfo;
+    }
+
+    public void setShowInfo(boolean showInfo) {
+        this.showInfo = showInfo;
+        adapter.setShowInfo(showInfo);
+    }
+
     public OnScrollListener getOnScrollListener() {
         return onScrollListener;
     }
@@ -176,7 +186,7 @@ public class CalendarView extends LinearLayout {
         return selectedDate;
     }
 
-    public void setSelctedDate(Calendar selctedDate) {
+    public void setSelectedDate(Calendar selctedDate) {
         this.selectedDate.setTimeInMillis(selctedDate.getTimeInMillis());
         adapter.setSelectedDay(this.selectedDate);
     }

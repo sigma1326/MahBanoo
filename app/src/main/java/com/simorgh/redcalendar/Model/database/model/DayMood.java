@@ -36,6 +36,7 @@ public class DayMood {
     @ColumnInfo(name = "weight")
     private float weight;
 
+    @NonNull
     public Calendar getId() {
         return id;
     }

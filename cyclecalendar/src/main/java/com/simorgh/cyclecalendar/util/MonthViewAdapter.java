@@ -70,6 +70,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
     private int lastPosition = -1;
     private CycleData cycleData;
+    private boolean showInfo;
 
 
     public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
@@ -336,7 +337,8 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
                 break;
             default:
         }
-        holder.baseMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek, enabledDayRangeStart, enabledDayRangeEnd, calendarType);
+        holder.baseMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek
+                , enabledDayRangeStart, enabledDayRangeEnd, calendarType,showInfo);
 
     }
 
@@ -420,6 +422,15 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     public CycleData getCycleData() {
         return cycleData;
+    }
+
+    public void setShowInfo(boolean showInfo) {
+        this.showInfo = showInfo;
+        notifyDataSetChanged();
+    }
+
+    public boolean getShowInfo() {
+        return showInfo;
     }
 
     public class MonthViewHolder extends RecyclerView.ViewHolder {

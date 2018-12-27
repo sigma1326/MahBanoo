@@ -123,6 +123,9 @@ public class BaseMonthView extends View {
 
     protected CycleData cycleData;
 
+    protected boolean showInfo = true;
+
+
     public BaseMonthView(Context context) {
         super(context);
         initAttrs(context, null);
@@ -340,7 +343,7 @@ public class BaseMonthView extends View {
         return rectTypeGrayPaint;
     }
 
-    public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType) {
+    public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType, boolean showInfo) {
         mActivatedDay = selectedDay;
         this.calendarType = calendarType;
         switch (calendarType) {
@@ -423,7 +426,7 @@ public class BaseMonthView extends View {
                     break;
             }
         }
-//        requestLayout();
+        this.showInfo = showInfo;
         postInvalidate();
     }
 
@@ -644,8 +647,8 @@ public class BaseMonthView extends View {
     }
 
     protected int getDayType(Calendar date) {
-        if (cycleData == null) {
-            return TYPE_RED;
+        if (cycleData == null || !showInfo) {
+            return TYPE_GRAY;
         }
         long days;
         int day;
@@ -670,6 +673,13 @@ public class BaseMonthView extends View {
         return TYPE_GRAY;
     }
 
+    public boolean isShowInfo() {
+        return showInfo;
+    }
+
+    public void setShowInfo(boolean showInfo) {
+        this.showInfo = showInfo;
+    }
 
     protected void updateMonthYearLabel() {
         int month = 0;

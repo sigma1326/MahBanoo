@@ -80,6 +80,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
             if (calendarView != null && cycle != null) {
                 calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
+                calendarView.setShowInfo(cycle.isShowCycleDays());
                 Log.d(AppManager.TAG, cycle.toString());
             }
         });

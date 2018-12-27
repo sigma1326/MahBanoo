@@ -190,7 +190,7 @@ public class ShowInfoMonthView extends BaseMonthView {
 
     @Override
     protected Paint getDayPaint(Calendar date) {
-        if (cycleData == null) {
+        if (cycleData == null || !showInfo) {
             return rectTypeGrayPaint;
         }
         long days;

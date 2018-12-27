@@ -75,7 +75,6 @@ public class AddMoodFragment extends Fragment {
                 calendar.set(Calendar.MONTH, yearMonthDay.getMonth());
                 calendar.set(Calendar.YEAR, yearMonthDay.getYear());
                 mViewModel.setSelectedDateMood(calendar);
-                Toast.makeText(getContext(), yearMonthDay.toString(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -84,8 +83,8 @@ public class AddMoodFragment extends Fragment {
             DayMood dayMood = mViewModel.getDayMood();
             if (dayMood == null) {
                 dayMood = new DayMood();
+                dayMood.setId(mViewModel.getSelectedDateMood());
             }
-            dayMood.setId(mViewModel.getSelectedDateMood());
             if (selectedItems.isEmpty()) {
                 dayMood.setTypeBleedingSelectedIndex(-1);
             } else {
@@ -98,8 +97,8 @@ public class AddMoodFragment extends Fragment {
             DayMood dayMood = mViewModel.getDayMood();
             if (dayMood == null) {
                 dayMood = new DayMood();
+                dayMood.setId(mViewModel.getSelectedDateMood());
             }
-            dayMood.setId(mViewModel.getSelectedDateMood());
             if (selectedItems.isEmpty()) {
                 dayMood.setTypeEmotionSelectedIndices(null);
             } else {
@@ -112,8 +111,8 @@ public class AddMoodFragment extends Fragment {
             DayMood dayMood = mViewModel.getDayMood();
             if (dayMood == null) {
                 dayMood = new DayMood();
+                dayMood.setId(mViewModel.getSelectedDateMood());
             }
-            dayMood.setId(mViewModel.getSelectedDateMood());
             if (selectedItems.isEmpty()) {
                 dayMood.setTypePainSelectedIndices(null);
             } else {
@@ -126,8 +125,8 @@ public class AddMoodFragment extends Fragment {
             DayMood dayMood = mViewModel.getDayMood();
             if (dayMood == null) {
                 dayMood = new DayMood();
+                dayMood.setId(mViewModel.getSelectedDateMood());
             }
-            dayMood.setId(mViewModel.getSelectedDateMood());
             if (selectedItems.isEmpty()) {
                 dayMood.setTypeEatingDesireSelectedIndices(null);
             } else {
@@ -140,8 +139,8 @@ public class AddMoodFragment extends Fragment {
             DayMood dayMood = mViewModel.getDayMood();
             if (dayMood == null) {
                 dayMood = new DayMood();
+                dayMood.setId(mViewModel.getSelectedDateMood());
             }
-            dayMood.setId(mViewModel.getSelectedDateMood());
             if (selectedItems.isEmpty()) {
                 dayMood.setTypeHairStyleSelectedIndices(null);
             } else {

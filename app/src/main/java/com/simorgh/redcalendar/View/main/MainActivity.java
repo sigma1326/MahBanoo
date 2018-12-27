@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.github.florent37.kotlin.pleaseanimate.PleaseAnim;
+import com.github.florent37.kotlin.pleaseanimate.core.Expectations;
 import com.simorgh.bottombar.BottomBar;
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cycleview.CycleView;
@@ -262,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 public void onAnimationStart(Animator animation) {
                     isImgInfoAnimRunning = true;
                 }
+
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     imgInfo.setVisibility(View.INVISIBLE);
@@ -313,7 +316,11 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 
     @Override
     public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-        runImageInfoAnim(Objects.requireNonNull(controller.getCurrentDestination()).getId() == R.id.home);
+        if (imgInfo != null) {
+            imgInfo.setVisibility(Objects.requireNonNull(controller.getCurrentDestination()).getId() == R.id.home ? View.VISIBLE : View.INVISIBLE);
+        }
+
+//        runImageInfoAnim(Objects.requireNonNull(controller.getCurrentDestination()).getId() == R.id.home);
         switch (Objects.requireNonNull(controller.getCurrentDestination()).getId()) {
             case R.id.home:
                 if (bottomBar != null) {
@@ -346,6 +353,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 break;
             case R.id.addNote:
                 if (bottomBar != null) {
+                    titleText.setText(getString(R.string.addInformation));
                     bottomBar.setSelectedIndex(-1);
                     runBottomBarAnim(false);
                     runBackButtonAnim(true);
@@ -410,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 break;
         }
         imgInfo.setColorFilter(colorFilter);
-        runImageInfoAnim(dayType != CycleView.TYPE_GRAY);
+        imgInfo.setVisibility(dayType != CycleView.TYPE_GRAY ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

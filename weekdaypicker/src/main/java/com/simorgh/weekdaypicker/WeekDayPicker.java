@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cycleutils.CycleData;
 
 import java.util.Calendar;
@@ -36,6 +37,7 @@ public class WeekDayPicker extends View {
     private float dotCircleRadius = -1;
 
     private Paint circlePaint;
+    private Paint circle2Paint;
     private int selectedDayCircleColor;
 
     private TextPaint selectedDayTextPaint;
@@ -111,6 +113,12 @@ public class WeekDayPicker extends View {
         circlePaint.setAntiAlias(true);
         circlePaint.setStyle(Paint.Style.FILL);
         circlePaint.setColor(selectedDayCircleColor);
+
+        circle2Paint = new Paint();
+        circle2Paint.setAntiAlias(true);
+        circle2Paint.setStyle(Paint.Style.STROKE);
+        circle2Paint.setStrokeWidth(dp2px(2));
+        circle2Paint.setColor(unSelectedDayTextColor);
 
         AssetManager assetMgr = getContext().getAssets();
         typeface = Typeface.createFromAsset(assetMgr, "fonts/iransans_medium.ttf");
@@ -206,11 +214,11 @@ public class WeekDayPicker extends View {
         float dotRadius = dp2px(dotCircleRadius);
         int i = 0;
         for (float x = dp2px(realWidth) - dp2px(realWidth) / 14f; x > 0; x -= dp2px(realWidth) / 7f, i++) {
-            int day = (int) getDaysFromDiff(temp, cycleData.getCurrentCycleStart(Calendar.getInstance()));
-            day = day % cycleData.getTotalDays() + 1;
+            int day = CalendarTool.GregorianToPersian(temp).getPersianDay();
+            String month = CalendarTool.GregorianToPersian(temp).getPersianMonthName();
             if (getDaysFromDiff(temp, selectedDate) == 0) {
                 canvas.drawCircle(x, y, radius, circlePaint);
-                canvas.drawText(days[i], x, y + dp2px(10), selectedDayTextPaint);
+                canvas.drawText(month, x, y + dp2px(10), selectedDayTextPaint);
                 if (day != 0) {
                     canvas.drawText(day + "", x, y - dp2px(10), selectedDayTextPaint);
                 }
@@ -218,7 +226,9 @@ public class WeekDayPicker extends View {
                     canvas.drawCircle(x, y + dp2px(20), dotRadius, selectedDayTextPaint);
                 }
             } else {
-                canvas.drawText(days[i], x, y + dp2px(10), unSelectedDayTextPaint);
+                canvas.drawCircle(x, y, radius, circle2Paint);
+
+//                canvas.drawText(month, x, y + dp2px(10), unSelectedDayTextPaint);
                 if (day != 0) {
                     canvas.drawText(day + "", x, y - dp2px(10), unSelectedDayTextPaint);
                 }

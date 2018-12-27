@@ -95,7 +95,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
                 calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 calendarView.scrollToCurrentDate(cycle.getStartDate());
-                calendarView.setSelctedDate(cycle.getStartDate());
+                calendarView.setSelectedDate(cycle.getStartDate());
                 Log.d(AppManager.TAG, cycle.toString());
             }
         });
