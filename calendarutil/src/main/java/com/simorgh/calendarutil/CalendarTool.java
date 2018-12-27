@@ -376,7 +376,7 @@ public class CalendarTool {
     private static Calendar start = Calendar.getInstance();
 
     public static long getDaysFromDiff(Calendar input, Calendar startDate) {
-        float diffDays;
+        double diffDays;
         in.clear();
         in.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH));
         start.clear();
@@ -388,6 +388,7 @@ public class CalendarTool {
             return -1L;
         }
         diffDays = (float) (in.getTimeInMillis() - start.getTimeInMillis()) / (60 * 60 * 24 * 1000);
+        diffDays = Math.ceil(diffDays);
         if (diffDays < 0) {
             return (long) -3;
         }
