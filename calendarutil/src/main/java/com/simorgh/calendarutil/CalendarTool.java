@@ -93,6 +93,10 @@ public class CalendarTool {
         return new PersianCalendar(c.getTimeInMillis());
     }
 
+    public static PersianDate GregorianToPersianDate(Calendar c) {
+        return new PersianDate(c.getTimeInMillis());
+    }
+
     public static void convertToOriginalDateType(YearMonthDay yearMonthDay) {
         switch (yearMonthDay.getCalendarType()) {
             case CalendarType.PERSIAN:
