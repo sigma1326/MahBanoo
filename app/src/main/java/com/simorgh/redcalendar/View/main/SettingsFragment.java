@@ -18,11 +18,17 @@ import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.View.register.QuestionsActivity;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
+import static com.simorgh.redcalendar.Model.AppManager.TAG;
 
 public class SettingsFragment extends Fragment {
 
@@ -33,6 +39,8 @@ public class SettingsFragment extends Fragment {
     private TextView tvShareApp;
     private TextView tvMakeReport;
     private TextView tvAboutUs;
+    private NavController navController;
+
 
     private CycleViewModel mViewModel;
 
@@ -63,6 +71,8 @@ public class SettingsFragment extends Fragment {
         tvClearData = v.findViewById(R.id.tv_clear_data);
         tvShareApp = v.findViewById(R.id.tv_share_app);
         tvMakeReport = v.findViewById(R.id.tv_make_report);
+        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment);
+
 
         showPregnancyProb.setOnCheckedChangeListener((buttonView, isChecked) -> {
             Cycle cycle = mViewModel.getCycleLiveData().getValue();
@@ -102,6 +112,10 @@ public class SettingsFragment extends Fragment {
                     .show();
         });
 
+        tvMakeReport.setOnClickListener(v1 -> {
+            navController.navigate(R.id.action_settings_to_make_report);
+        });
+
         return v;
     }
 
@@ -113,7 +127,7 @@ public class SettingsFragment extends Fragment {
             if (showCycleDays != null && cycle != null) {
                 showCycleDays.setChecked(cycle.isShowCycleDays());
                 showPregnancyProb.setChecked(cycle.isShowPregnancyProb());
-                Log.d(AppManager.TAG, cycle.toString());
+                Log.d(TAG, cycle.toString());
             }
         });
     }

@@ -374,6 +374,22 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                     runBackButtonAnim(true);
                 }
                 break;
+            case R.id.make_report:
+                if (bottomBar != null) {
+                    bottomBar.setSelectedIndex(-1);
+                    runBottomBarAnim(false);
+                    runBackButtonAnim(true);
+                    titleText.setText(getString(R.string.make_report_for_doctor));
+                }
+                break;
+            case R.id.report_date:
+                if (bottomBar != null) {
+                    bottomBar.setSelectedIndex(-1);
+                    runBottomBarAnim(false);
+                    runBackButtonAnim(true);
+                    titleText.setText(getString(R.string.set_date));
+                }
+                break;
         }
     }
 
