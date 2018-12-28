@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.main.MakeReportFragment">
+
+    <TextView
+        android:id="@+id/tv_time_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginRight="29dp"
+        android:text="بازه‌ی  زمانی"
+        android:textColor="#323232"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_range_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:text="از تاریخ"
+        android:textColor="#00819b"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_time_range"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_range" />
+
+    <Button
+        android:id="@+id/btn_start_range"
+        android:layout_width="244dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn_range_ripple_background"
+        android:text="1397/02/02"
+        android:textColor="#797979"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_range_start" />
+
+    <TextView
+        android:id="@+id/tv_range_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:text="تا تاریخ"
+        android:textColor="#00819b"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_time_range"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_start_range" />
+
+
+    <Button
+        android:id="@+id/btn_end_range"
+        android:layout_width="244dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn_range_ripple_background"
+        android:text="1397/02/02"
+        android:textColor="#797979"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_range_end" />
+
+    <TextView
+        android:id="@+id/tv_report_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="موارد ارسالی"
+        android:textColor="#00819b"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_time_range"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_end_range" />
+
+    <CheckBox
+        android:id="@+id/chb_bleeding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:checked="true"
+        android:gravity="center"
+        android:layoutDirection="rtl"
+        android:text="شدت خونریزی"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_report_options"
+        app:layout_constraintTop_toBottomOf="@+id/tv_report_options" />
+
+    <CheckBox
+        android:id="@+id/chb_eating_desire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="14dp"
+        android:checked="true"
+        android:gravity="center"
+        android:layoutDirection="rtl"
+        android:text="میل به خوردن"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_report_options" />
+
+    <CheckBox
+        android:id="@+id/chb_emotion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:checked="true"
+        android:gravity="center"
+        android:layoutDirection="rtl"
+        android:text="احساسات"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_report_options"
+        app:layout_constraintTop_toBottomOf="@+id/chb_bleeding" />
+
+
+    <CheckBox
+        android:id="@+id/chb_hair_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="18dp"
+        android:checked="true"
+        android:gravity="center"
+        android:layoutDirection="rtl"
+        android:text="حالت موها"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/chb_eating_desire"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chb_eating_desire" />
+
+    <CheckBox
+        android:id="@+id/chb_pain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:checked="true"
+        android:gravity="center"
+        android:layoutDirection="rtl"
+        android:text="احساس درد"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_report_options"
+        app:layout_constraintTop_toBottomOf="@+id/chb_emotion" />
+
+    <CheckBox
+        android:id="@+id/chb_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="18dp"
+        android:checked="true"
+        android:gravity="center"
+        android:layoutDirection="rtl"
+        android:text="وزن"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/chb_hair_style"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chb_hair_style" />
+
+
+    <CheckBox
+        android:id="@+id/chb_drugs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:checked="true"
+        android:gravity="center"
+        android:layoutDirection="rtl"
+        android:text="داروهای مصرفی"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_report_options"
+        app:layout_constraintTop_toBottomOf="@+id/chb_pain" />
+
+    <Button
+        android:id="@+id/btn_make_report"
+        android:layout_width="244dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn_make_report_ripple_background"
+        android:text="ارسال گزارش"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chb_drugs" />
+</androidx.constraintlayout.widget.ConstraintLayout>

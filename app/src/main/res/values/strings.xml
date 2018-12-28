@@ -41,4 +41,5 @@
     <string name="share_app">اشتراک گذاری برنامه</string>
     <string name="show_cycle_days_on_calendar">نمایش روزهای دوره روی تقویم</string>
     <string name="show_pregnancy_prob">نمایش احتمال باردار‌ شدن</string>
+    <string name="set_date">انتخاب تاریخ</string>
 </resources>
