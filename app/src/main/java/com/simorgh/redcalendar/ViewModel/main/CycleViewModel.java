@@ -22,6 +22,7 @@ public class CycleViewModel extends AndroidViewModel {
     private Cycle cycle;
     private int selectedDay = -1;
     private Calendar selectedDate = AppManager.getCalendarInstance();
+    private Calendar selectedDateCalendar = AppManager.getCalendarInstance();
     private Calendar selectedDateMood = AppManager.getCalendarInstance();
     private Calendar selectedStartDate = AppManager.getCalendarInstance();
 
@@ -43,6 +44,14 @@ public class CycleViewModel extends AndroidViewModel {
 
     public void setMoodsLiveData(LiveData<List<DayMood>> moodsLiveData) {
         this.moodsLiveData = moodsLiveData;
+    }
+
+    public Calendar getSelectedDateCalendar() {
+        return selectedDateCalendar;
+    }
+
+    public void setSelectedDateCalendar(Calendar selectedDateCalendar) {
+        this.selectedDateCalendar.setTimeInMillis(selectedDateCalendar.getTimeInMillis());
     }
 
     public Calendar getSelectedDateMood() {

@@ -387,7 +387,7 @@ public class CalendarTool {
         if (in.before(start)) {
             return -1L;
         }
-        diffDays = (float) (in.getTimeInMillis() - start.getTimeInMillis()) / (60 * 60 * 24 * 1000);
+        diffDays = (in.getTimeInMillis() - start.getTimeInMillis()) / (60d * 60d * 24d * 1000d);
         diffDays = Math.ceil(diffDays);
         if (diffDays < 0) {
             return (long) -3;

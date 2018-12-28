@@ -81,6 +81,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
                 calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 calendarView.setShowInfo(cycle.isShowCycleDays());
+                calendarView.scrollToCurrentDate(mViewModel.getSelectedDateCalendar());
                 Log.d(AppManager.TAG, cycle.toString());
             }
         });
@@ -109,6 +110,9 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
 
     @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
-        navController.navigate(CalendarFragmentDirections.actionCalendarToAddNote().setSelectedDay(new YearMonthDay(day)));
+        if (!day.after(AppManager.getCalendarInstance())) {
+            mViewModel.setSelectedDateCalendar(day);
+            navController.navigate(CalendarFragmentDirections.actionCalendarToAddNote().setSelectedDay(new YearMonthDay(day)));
+        }
     }
 }
