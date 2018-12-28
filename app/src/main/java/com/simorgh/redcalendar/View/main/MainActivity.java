@@ -12,9 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.github.florent37.kotlin.pleaseanimate.PleaseAnim;
-import com.github.florent37.kotlin.pleaseanimate.core.Expectations;
 import com.simorgh.bottombar.BottomBar;
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cycleview.CycleView;
@@ -109,15 +108,17 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         if (fromUser) {
             bottomBarClicked(true, null);
             titleText.setText(getString(R.string.addInformation));
-
         }
     }
 
     private void bottomBarClicked(boolean isCircle, BottomBar.BottomItem item) {
         if (isCircle || item == null) {
+            if (selectedDay.after(AppManager.getCalendarInstance())) {
+                Toast.makeText(this, "قابل انتخاب نیست", Toast.LENGTH_SHORT).show();
+                return;
+            }
             switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
                 case R.id.home:
-//                    CycleViewFragmentDirections.actionHomeToAddNote().setSelectedDay(new YearMonthDay(selectedDay));
                     navController.navigate(CycleViewFragmentDirections.actionHomeToAddNote().setSelectedDay(new YearMonthDay(selectedDay)));
                     break;
                 case R.id.calendar:

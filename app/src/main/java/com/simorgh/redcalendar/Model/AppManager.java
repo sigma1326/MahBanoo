@@ -6,7 +6,7 @@ import android.util.Log;
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
-import com.simorgh.redcalendar.Model.database.CycleRepository;
+import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.redcalendar.R;
 
 import java.util.Calendar;
@@ -18,7 +18,6 @@ import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
 
 public class AppManager extends Application {
-    public static final String DB_NAME = "red-calendar-db";
     public static final String TAG = "debug13";
     public static Calendar minDate;
     public static Calendar maxDate;

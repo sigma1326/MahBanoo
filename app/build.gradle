@@ -12,8 +12,16 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -75,10 +83,11 @@ dependencies {
     implementation project(':cycleutils')
     implementation project(path: ':calendarutil')
     implementation project(path: ':spinner')
+    implementation project(path: ':reportutil')
+    implementation project(path: ':databaseutils')
 
     //Calligraphy
     implementation 'io.github.inflationx:calligraphy3:3.0.0'
     implementation 'io.github.inflationx:viewpump:1.0.0'
 
-    implementation 'com.github.florent37:kotlinpleaseanimate:1.0.2'
 }

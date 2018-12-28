@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.Model.database.model;
+package com.simorgh.databaseutils.model;
 
 import com.simorgh.calendarutil.CalendarTool;
 

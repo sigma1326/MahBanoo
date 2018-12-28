@@ -16,7 +16,7 @@ import com.simorgh.cyclecalendar.view.CalendarView;
 import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.CycleData;
 import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.Model.database.model.Cycle;
+import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 

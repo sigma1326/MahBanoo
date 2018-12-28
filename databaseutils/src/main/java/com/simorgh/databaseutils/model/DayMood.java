@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.Model.database.model;
+package com.simorgh.databaseutils.model;
 
 import java.util.Calendar;
 import java.util.List;

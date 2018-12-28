@@ -1,16 +1,7 @@
 package com.simorgh.redcalendar.View.main;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,14 +13,21 @@ import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cyclecalendar.view.CalendarView;
 import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.databaseutils.CycleRepository;
+import com.simorgh.databaseutils.model.DayMood;
 import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.Model.database.CycleRepository;
-import com.simorgh.redcalendar.Model.database.model.DayMood;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener {
 
@@ -37,8 +35,6 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
     private CalendarView calendarView;
     private CycleRepository cycleRepository;
     private NavController navController;
-
-
 
 
     public static CalendarFragment newInstance() {

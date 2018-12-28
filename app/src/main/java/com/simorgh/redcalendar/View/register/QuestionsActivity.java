@@ -13,10 +13,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.simorgh.redcalendar.Model.database.CycleRepository;
-import com.simorgh.redcalendar.Model.database.model.Cycle;
+import com.simorgh.databaseutils.CycleRepository;
+import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.View.main.MainActivity;
 import com.simorgh.redcalendar.ViewModel.register.CycleRegisterViewModel;

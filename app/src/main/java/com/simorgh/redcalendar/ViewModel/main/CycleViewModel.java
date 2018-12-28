@@ -3,10 +3,10 @@ package com.simorgh.redcalendar.ViewModel.main;
 
 import android.app.Application;
 
+import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.Model.database.CycleRepository;
-import com.simorgh.redcalendar.Model.database.model.Cycle;
-import com.simorgh.redcalendar.Model.database.model.DayMood;
+import com.simorgh.databaseutils.model.Cycle;
+import com.simorgh.databaseutils.model.DayMood;
 
 import java.util.Calendar;
 import java.util.List;
@@ -68,6 +68,10 @@ public class CycleViewModel extends AndroidViewModel {
 
     public DayMood getDayMood() {
         return cycleRepository.getDayMood(selectedDateMood);
+    }
+
+    public DayMood getDayMood(Calendar calendar) {
+        return cycleRepository.getDayMood(calendar);
     }
 
     public int getSelectedDay() {

@@ -1,12 +1,11 @@
-package com.simorgh.redcalendar.Model.database;
+package com.simorgh.databaseutils;
 
 import android.content.Context;
 
-import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.Model.database.dao.CycleDAO;
-import com.simorgh.redcalendar.Model.database.dao.DayMoodDAO;
-import com.simorgh.redcalendar.Model.database.model.Cycle;
-import com.simorgh.redcalendar.Model.database.model.DayMood;
+import com.simorgh.databaseutils.dao.CycleDAO;
+import com.simorgh.databaseutils.dao.DayMoodDAO;
+import com.simorgh.databaseutils.model.Cycle;
+import com.simorgh.databaseutils.model.DayMood;
 
 import androidx.room.Database;
 import androidx.room.Room;
@@ -15,6 +14,8 @@ import androidx.room.RoomDatabase;
 @Database(entities = {Cycle.class, DayMood.class}, version = 1, exportSchema = false)
 @androidx.room.TypeConverters({TypeConverters.class})
 public abstract class CycleDataBase extends RoomDatabase {
+    public static final String DB_NAME = "red-calendar-db";
+
 
     abstract CycleDAO cycleDAO();
 
@@ -27,7 +28,7 @@ public abstract class CycleDataBase extends RoomDatabase {
             synchronized (CycleDataBase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            CycleDataBase.class, AppManager.DB_NAME).allowMainThreadQueries().build();
+                            CycleDataBase.class, DB_NAME).allowMainThreadQueries().build();
                 }
             }
         }

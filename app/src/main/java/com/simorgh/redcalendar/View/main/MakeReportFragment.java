@@ -1,15 +1,7 @@
 package com.simorgh.redcalendar.View.main;
 
-import androidx.lifecycle.ViewModelProviders;
-
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +10,21 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.simorgh.calendarutil.CalendarTool;
-import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
-import com.simorgh.moodview.MoodView;
-import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.Model.database.model.Cycle;
+import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.MakeReportViewModel;
+import com.simorgh.reportutil.ReportUtils;
 
+import java.io.File;
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import static com.simorgh.redcalendar.Model.AppManager.TAG;
 
@@ -46,6 +44,7 @@ public class MakeReportFragment extends Fragment {
     private Button btnMakeReport;
 
     private NavController navController;
+    private CycleRepository cycleRepository;
 
 
     public static MakeReportFragment newInstance() {
@@ -55,6 +54,7 @@ public class MakeReportFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        cycleRepository = new CycleRepository(Objects.requireNonNull(getActivity()).getApplication());
     }
 
     @Override
@@ -75,7 +75,6 @@ public class MakeReportFragment extends Fragment {
 
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment);
 
-
         btnRangeStart.setOnClickListener(v1 -> {
             mViewModel.setRangeStart(true);
             navController.navigate(R.id.action_make_report_to_report_date);
@@ -88,11 +87,27 @@ public class MakeReportFragment extends Fragment {
 
 
         btnMakeReport.setOnClickListener(v1 -> {
-
+            try {
+                ReportUtils.createReport(getActivity(), cycleRepository.getCycleData());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
 
         return v;
+    }
+
+
+    public static String getAppPath(Context context) {
+        File dir = new File(android.os.Environment.getExternalStorageDirectory()
+                + File.separator
+                + context.getResources().getString(R.string.app_name)
+                + File.separator);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        return dir.getPath() + File.separator;
     }
 
     @Override

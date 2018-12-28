@@ -1,6 +1,6 @@
-package com.simorgh.redcalendar.Model.database.dao;
+package com.simorgh.databaseutils.dao;
 
-import com.simorgh.redcalendar.Model.database.model.DayMood;
+import com.simorgh.databaseutils.model.DayMood;
 
 import java.util.Calendar;
 import java.util.List;

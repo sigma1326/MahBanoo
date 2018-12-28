@@ -1347,7 +1347,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
         }
         selectedDay = today;
         tvWeekDayNameText = weekDayName;
-        if (isOptionalVisible && getDayType(selectedDay) != TYPE_RED) {
+        if (isOptionalVisible && getDayType(selectedDay) != TYPE_RED && getDayType(selectedDay) != TYPE_YELLOW) {
             tvOptionalText = optionalText;
         } else {
             tvOptionalText = "";

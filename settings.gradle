@@ -1,1 +1,1 @@
-include ':app', ':cycleview', ':cyclecalendar', ':numberpicker', ':bottombar', ':cyclebar', ':weekdaypicker', ':moodview', ':weightview', ':drugview', ':cycleutils', ':calendarutil', ':spinner'
+include ':app', ':cycleview', ':cyclecalendar', ':numberpicker', ':bottombar', ':cyclebar', ':weekdaypicker', ':moodview', ':weightview', ':drugview', ':cycleutils', ':calendarutil', ':spinner', ':reportutil', ':databaseutils'

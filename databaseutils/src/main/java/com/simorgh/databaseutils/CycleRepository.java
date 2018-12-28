@@ -1,12 +1,12 @@
-package com.simorgh.redcalendar.Model.database;
+package com.simorgh.databaseutils;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
-import com.simorgh.redcalendar.Model.database.dao.CycleDAO;
-import com.simorgh.redcalendar.Model.database.dao.DayMoodDAO;
-import com.simorgh.redcalendar.Model.database.model.Cycle;
-import com.simorgh.redcalendar.Model.database.model.DayMood;
+import com.simorgh.databaseutils.dao.CycleDAO;
+import com.simorgh.databaseutils.dao.DayMoodDAO;
+import com.simorgh.databaseutils.model.Cycle;
+import com.simorgh.databaseutils.model.DayMood;
 
 import java.util.Calendar;
 import java.util.List;

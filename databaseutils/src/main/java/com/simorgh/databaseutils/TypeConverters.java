@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.Model.database;
+package com.simorgh.databaseutils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

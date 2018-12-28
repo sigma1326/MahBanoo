@@ -1,6 +1,6 @@
-package com.simorgh.redcalendar.Model.database.dao;
+package com.simorgh.databaseutils.dao;
 
-import com.simorgh.redcalendar.Model.database.model.Cycle;
+import com.simorgh.databaseutils.model.Cycle;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
