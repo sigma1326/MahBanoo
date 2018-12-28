@@ -2,27 +2,39 @@ package com.simorgh.redcalendar.View.main;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
 
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.moodview.MoodView;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.redcalendar.Model.DrugItem;
+import com.simorgh.redcalendar.Model.DrugListAdapter;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 import com.simorgh.weekdaypicker.WeekDayPicker;
 
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 public class AddMoodFragment extends Fragment {
 
@@ -33,6 +45,14 @@ public class AddMoodFragment extends Fragment {
     private MoodView mvPain;
     private MoodView mvEatingDesire;
     private MoodView mvHairStyle;
+
+    private Button btnApplyWeight;
+    private Button btnAddDrug;
+
+    private EditText etWeight;
+    private EditText etDrugName;
+
+    private RecyclerView rvDrugs;
 
 
     public static AddMoodFragment newInstance() {
@@ -53,6 +73,18 @@ public class AddMoodFragment extends Fragment {
         });
         mViewModel.getMoodsLiveData().observe(this, dayMoods -> {
             updateViews();
+            DayMood dayMood = mViewModel.getDayMood();
+            List<DrugItem> drugItemList = new LinkedList<>();
+            if (rvDrugs != null && dayMood != null) {
+                if (mViewModel.getDayMood().getDrugs() != null) {
+                    DrugItem drugItem;
+                    for (int i = 0; i < mViewModel.getDayMood().getDrugs().size(); i++) {
+                        drugItem = new DrugItem(mViewModel.getDayMood().getDrugs().get(i));
+                        drugItemList.add(drugItem);
+                    }
+                }
+                ((DrugListAdapter) Objects.requireNonNull(rvDrugs.getAdapter())).submitList(drugItemList);
+            }
         });
     }
 
@@ -64,6 +96,65 @@ public class AddMoodFragment extends Fragment {
         mvPain = v.findViewById(R.id.moodViewPain);
         mvEatingDesire = v.findViewById(R.id.moodViewEatingDesire);
         mvHairStyle = v.findViewById(R.id.moodViewHairStyle);
+
+
+        btnApplyWeight = v.findViewById(R.id.btn_weight_apply);
+        etWeight = v.findViewById(R.id.et_weight);
+        btnAddDrug = v.findViewById(R.id.btn_drug_apply);
+        etDrugName = v.findViewById(R.id.et_drug);
+        rvDrugs = v.findViewById(R.id.rv_drugs);
+        rvDrugs.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        rvDrugs.setAdapter(new DrugListAdapter(new DrugListAdapter.DrugDiffCallBack()));
+        rvDrugs.setNestedScrollingEnabled(false);
+
+
+        btnAddDrug.setOnClickListener(v1 -> {
+            if (etDrugName != null && etDrugName.getText().length() > 0) {
+                if (mViewModel.getDayMood() != null) {
+                    DayMood dayMood = mViewModel.getDayMood();
+                    if (mViewModel.getDayMood().getDrugs() != null) {
+                        dayMood.getDrugs().add(etDrugName.getText().toString());
+                        mViewModel.updateDayMood(dayMood);
+                    } else {
+                        List<String> drugs = new LinkedList<>();
+                        drugs.add(etDrugName.getText().toString());
+                        dayMood.setDrugs(drugs);
+                        mViewModel.updateDayMood(dayMood);
+                    }
+                } else {
+                    DayMood dayMood = new DayMood();
+                    dayMood.setId(mViewModel.getSelectedDateMood());
+                    dayMood.setDrugs(new LinkedList<>());
+                    List<String> drugs = new LinkedList<>();
+                    drugs.add(etDrugName.getText().toString());
+                    dayMood.setDrugs(drugs);
+                    mViewModel.updateDayMood(dayMood);
+                }
+            }
+        });
+
+        btnApplyWeight.setOnClickListener(v1 -> {
+            if (etDrugName != null && etWeight.getText().length() > 0) {
+                if (mViewModel.getDayMood() != null) {
+                    DayMood dayMood = mViewModel.getDayMood();
+                    try {
+                        dayMood.setWeight(Float.parseFloat(etWeight.getText().toString()));
+                        mViewModel.updateDayMood(dayMood);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    DayMood dayMood = new DayMood();
+                    dayMood.setId(mViewModel.getSelectedDateMood());
+                    try {
+                        dayMood.setWeight(Float.parseFloat(etWeight.getText().toString()));
+                        mViewModel.updateDayMood(dayMood);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         if (getArguments() != null) {
             YearMonthDay yearMonthDay = AddMoodFragmentArgs.fromBundle(getArguments()).getSelectedDay();
@@ -156,6 +247,7 @@ public class AddMoodFragment extends Fragment {
         return v;
     }
 
+    @SuppressLint("DefaultLocale")
     private void updateViews() {
         mvBleeding.setSelectedItem(null);
         mvEmotion.setSelectedItems(null);
@@ -171,6 +263,8 @@ public class AddMoodFragment extends Fragment {
             mvPain.setSelectedItems(dayMood.getTypePainSelectedIndices());
             mvEatingDesire.setSelectedItems(dayMood.getTypeEatingDesireSelectedIndices());
             mvHairStyle.setSelectedItems(dayMood.getTypeHairStyleSelectedIndices());
+
+            etWeight.setHint(String.format("%3.3f", dayMood.getWeight()));
         }
     }
 

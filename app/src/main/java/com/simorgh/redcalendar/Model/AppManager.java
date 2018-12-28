@@ -6,7 +6,6 @@ import android.util.Log;
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
-import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.redcalendar.R;
 
 import java.util.Calendar;
@@ -21,10 +20,6 @@ public class AppManager extends Application {
     public static final String TAG = "debug13";
     public static Calendar minDate;
     public static Calendar maxDate;
-
-
-    private CycleRepository cycleRepository;
-
     public static Locale mLocale;
 
     @Override

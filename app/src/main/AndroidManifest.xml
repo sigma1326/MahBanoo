@@ -27,7 +27,9 @@
             android:name="isLoggedIn"
             android:enabled="false"
             android:targetActivity=".View.main.MainActivity" />
-        <activity android:name=".View.main.MainActivity">
+        <activity
+            android:name=".View.main.MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
 
@@ -43,7 +45,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
     </application>
 
