@@ -176,18 +176,26 @@
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom"
             app:popUpTo="@+id/settings" />
+        <action
+            android:id="@+id/action_settings_to_make_report"
+            app:destination="@id/make_report"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"
+            app:popUpTo="@+id/settings" />
     </fragment>
 
     <fragment
         android:id="@+id/addNote"
         android:name="com.simorgh.redcalendar.View.main.AddMoodFragment"
         android:label="addNote"
-        tools:layout="@layout/add_note_fragment" >
+        tools:layout="@layout/add_note_fragment">
         <argument
             android:name="selectedDay"
-            app:argType="com.simorgh.calendarutil.model.YearMonthDay"
             android:defaultValue="@null"
-            app:nullable="true"/>
+            app:argType="com.simorgh.calendarutil.model.YearMonthDay"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/change_cycle"
@@ -198,10 +206,29 @@
         android:id="@+id/cycleInfo"
         android:name="com.simorgh.redcalendar.View.main.CycleInfoFragment"
         android:label="cycleInfo"
-        tools:layout="@layout/cycle_info_fragment" >
+        tools:layout="@layout/cycle_info_fragment">
         <argument
             android:name="dayType"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/make_report"
+        android:name="com.simorgh.redcalendar.View.main.MakeReportFragment"
+        android:label="make_report"
+        tools:layout="@layout/make_report_fragment" >
+        <action
+            android:id="@+id/action_make_report_to_report_date"
+            app:destination="@id/report_date"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@+id/make_report" />
+    </fragment>
+    <fragment
+        android:id="@+id/report_date"
+        android:name="com.simorgh.redcalendar.View.main.ReportDateFragment"
+        android:label="report_date"
+        tools:layout="@layout/report_date_fragment" />
 </navigation>
