@@ -11,6 +11,7 @@ import com.simorgh.databaseutils.model.DayMood;
 import java.util.Calendar;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 public class CycleRepository {
@@ -53,6 +54,10 @@ public class CycleRepository {
 
     public void setListLiveData(LiveData<List<DayMood>> listLiveData) {
         this.listLiveData = listLiveData;
+    }
+
+    public List<DayMood> getDayMoodRange(@NonNull Calendar start, @NonNull Calendar calendar) {
+        return dayMoodDAO.getLiveDayMoodRange(start, calendar);
     }
 
     public void clearData() {

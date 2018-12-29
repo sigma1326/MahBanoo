@@ -1,6 +1,5 @@
 package com.simorgh.redcalendar.Model;
 
-import android.app.Application;
 import android.util.Log;
 
 import com.simorgh.calendarutil.CalendarTool;
@@ -12,11 +11,12 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import androidx.multidex.MultiDexApplication;
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
 
-public class AppManager extends Application {
+public class AppManager extends MultiDexApplication {
     public static final String TAG = "debug13";
     public static Calendar minDate;
     public static Calendar maxDate;

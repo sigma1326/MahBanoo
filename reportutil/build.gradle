@@ -37,5 +37,7 @@ dependencies {
 
     implementation project(':cycleutils')
     implementation project(path: ':databaseutils')
-
+    implementation project(path: ':calendarutil')
+    implementation project(path: ':cyclecalendar')
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 }

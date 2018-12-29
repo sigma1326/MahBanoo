@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+#-keep public class java.awt.Graphics2D
+#-keep class com.itextpdf:itextpdf
+#
+# -keep class javax.xml.crypto.dsig.** { *; }
+# -dontwarn javax.xml.crypto.dsig.**
+# -keep class javax.xml.crypto.** { *; }
+# -dontwarn javax.xml.crypto.**
+# -keep class org.spongycastle.** { *; }
+# -dontwarn org.spongycastle.**

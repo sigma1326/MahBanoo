@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="25dp"
+    android:layout_height="32dp"
     android:layout_gravity="center"
     android:background="@android:color/transparent"
     android:gravity="center"
@@ -19,13 +19,16 @@
     <TextView
         android:id="@+id/tv_drug_name"
         android:layout_width="wrap_content"
-        android:paddingTop="3dp"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
+        android:maxLength="20"
+        android:lines="1"
+        android:paddingTop="4dp"
+        android:ems="5"
         android:layout_height="match_parent"
         android:fontFamily="@font/iransans_medium"
         android:text="قرص منیزیم"
         android:textColor="#00819b"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
 </LinearLayout>

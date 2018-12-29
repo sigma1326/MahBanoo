@@ -11,12 +11,15 @@ import android.widget.CheckBox;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
+import com.simorgh.cyclecalendar.view.BaseMonthView;
+import com.simorgh.cycleutils.CycleData;
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.MakeReportViewModel;
 import com.simorgh.reportutil.ReportUtils;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -88,7 +91,16 @@ public class MakeReportFragment extends Fragment {
 
         btnMakeReport.setOnClickListener(v1 -> {
             try {
-                ReportUtils.createReport(getActivity(), cycleRepository.getCycleData());
+                ReportUtils.createReport(getActivity(), cycleRepository.getCycleData()
+                        , Objects.requireNonNull(mViewModel.getRangeStartLive().getValue()),
+                        Objects.requireNonNull(mViewModel.getRangeEndLive().getValue())
+                        , chbBleeding.isChecked()
+                        , chbEmotion.isChecked()
+                        , chbPain.isChecked()
+                        , chbEatingDesire.isChecked()
+                        , chbHairStyle.isChecked()
+                        , chbWeight.isChecked()
+                        , chbDrugs.isChecked());
             } catch (Exception e) {
                 e.printStackTrace();
             }
