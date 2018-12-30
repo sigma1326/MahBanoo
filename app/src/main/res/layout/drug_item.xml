@@ -7,28 +7,30 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginStart="4dp"
-        android:id="@+id/img_remove"
-        android:rotation="45"
-        android:layout_gravity="center"
-        android:layout_marginEnd="4dp"
-        android:src="@drawable/ic_icons8_plus" />
     <TextView
         android:id="@+id/tv_drug_name"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
-        android:maxLength="20"
-        android:lines="1"
-        android:paddingTop="4dp"
-        android:ems="5"
-        android:layout_height="match_parent"
         android:fontFamily="@font/iransans_medium"
+        android:lines="1"
+        android:ems="3"
+        android:maxLength="20"
+        android:paddingTop="4dp"
         android:text="قرص منیزیم"
         android:textColor="#00819b"
         android:textSize="16sp" />
+    <ImageView
+        android:id="@+id/img_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:rotation="45"
+        android:src="@drawable/ic_icons8_plus" />
+
 
 </LinearLayout>

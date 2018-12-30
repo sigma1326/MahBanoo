@@ -1,13 +1,12 @@
 package com.simorgh.redcalendar.Model;
 
 import android.app.Application;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.databaseutils.model.DayMood;
@@ -36,56 +35,62 @@ public class DrugListAdapter extends ListAdapter<DrugItem, DrugListAdapter.ViewH
         if (cycleRepository == null) {
             cycleRepository = new CycleRepository((Application) parent.getContext().getApplicationContext());
         }
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.drug_item, parent, false), null);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drug_item, parent, false);
+        ViewHolder holder = new ViewHolder(v, null);
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (getItem(position) != null && getItem(position).getDrugName() != null && holder.drugItem != null) {
+        holder.drugItem = getItem(position);
+        ((TextView) holder.itemView.findViewById(R.id.tv_drug_name)).setText(holder.drugItem.getDrugName());
+
+        if (getItem(position) != null && getItem(position).getDrugName() != null) {
             holder.drugItem.setDrugName(getItem(position).getDrugName());
             holder.drugItem.setId(getItem(position).getId());
             holder.imgRemove.setOnClickListener(v -> {
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    DayMood dayMood = cycleRepository.getDayMood(holder.drugItem.getId());
-                    if (dayMood != null) {
-                        int index = -1;
-                        for (int i = 0; i < dayMood.getDrugs().size(); i++) {
-                            if (i < dayMood.getDrugs().size() && dayMood.getDrugs().get(i).equals(holder.drugItem.getDrugName())) {
-                                index = i;
-                                break;
-                            }
-                        }
-                        if (index != -1) {
+                Toast.makeText(v.getContext(), "test1", Toast.LENGTH_SHORT).show();
+
+
+                DayMood dayMood = cycleRepository.getDayMood(holder.drugItem.getId());
+                if (dayMood != null) {
+                    int index = -1;
+                    for (int i = 0; i < dayMood.getDrugs().size(); i++) {
+                        if (i < dayMood.getDrugs().size() && dayMood.getDrugs().get(i).equals(holder.drugItem.getDrugName())) {
+                            index = i;
                             dayMood.getDrugs().remove(index);
-                            cycleRepository.insertDayMood(dayMood);
                         }
                     }
-                });
-            });
-        } else {
-            holder.drugItem = new DrugItem();
-            holder.drugItem.setDrugName(getItem(position).getDrugName());
-            holder.drugItem.setId(getItem(position).getId());
-            ((TextView) holder.itemView.findViewById(R.id.tv_drug_name)).setText(holder.drugItem.getDrugName());
-            holder.imgRemove.setOnClickListener(v -> {
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    DayMood dayMood = cycleRepository.getDayMood(holder.drugItem.getId());
-                    if (dayMood != null) {
-                        int index = -1;
-                        for (int i = 0; i < dayMood.getDrugs().size(); i++) {
-                            if (i < dayMood.getDrugs().size() && dayMood.getDrugs().get(i).equals(holder.drugItem.getDrugName())) {
-                                index = i;
-                                break;
-                            }
-                        }
-                        if (index != -1) {
-                            dayMood.getDrugs().remove(index);
-                            cycleRepository.insertDayMood(dayMood);
-                        }
+                    if (index != -1) {
+                        cycleRepository.insertDayMood(dayMood);
                     }
-                });
+                }
             });
         }
+//        else {
+//            holder.drugItem = getItem(position);
+////            holder.drugItem.setDrugName(getItem(position).getDrugName());
+////            holder.drugItem.setId(getItem(position).getId());
+//            ((TextView) holder.itemView.findViewById(R.id.tv_drug_name)).setText(holder.drugItem.getDrugName());
+//            holder.imgRemove.setOnClickListener(v -> {
+//                Toast.makeText(v.getContext(), "test", Toast.LENGTH_SHORT).show();
+//
+//                DayMood dayMood = cycleRepository.getDayMood(holder.drugItem.getId());
+//                if (dayMood != null) {
+//                    int index = -1;
+//                    for (int i = 0; i < dayMood.getDrugs().size(); i++) {
+//                        if (i < dayMood.getDrugs().size() && dayMood.getDrugs().get(i).equals(holder.drugItem.getDrugName())) {
+//                            index = i;
+//                            break;
+//                        }
+//                    }
+//                    if (index != -1) {
+//                        dayMood.getDrugs().remove(index);
+//                        cycleRepository.insertDayMood(dayMood);
+//                    }
+//                }
+//            });
+//        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

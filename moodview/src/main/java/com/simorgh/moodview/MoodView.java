@@ -105,7 +105,7 @@ public class MoodView extends View {
         moodType = typedArray.getInt(R.styleable.MoodView_itemType, TYPE_BLEEDING);
 
         if (moodType == TYPE_EATING_DESIRE) {
-            itemSize = 3;
+            itemSize = 4;
         } else {
             itemSize = 4;
         }
@@ -179,6 +179,9 @@ public class MoodView extends View {
                 itemIcons.add(bitmap);
 
                 bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.item_eating_desire3);
+                itemIcons.add(bitmap);
+
+                bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.item_eating_desire4);
                 itemIcons.add(bitmap);
                 break;
             case TYPE_HAIR_STYLE:

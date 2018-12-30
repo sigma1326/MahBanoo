@@ -157,15 +157,18 @@ public class PersianCalendar extends GregorianCalendar {
 	 * Calculate persian date from current Date and populates the corresponding
 	 * fields(persianYear, persianMonth, persianDay)
 	 */
+	private static PersianDate persianDate = new PersianDate();
+
 	protected void calculatePersianDate() {
-		long julianDate = ((long) Math.floor((getTimeInMillis() - PersianCalendarConstants.MILLIS_JULIAN_EPOCH)) / PersianCalendarConstants.MILLIS_OF_A_DAY);
-		long PersianRowDate = PersianCalendarUtils.julianToPersian(julianDate);
-		long year = PersianRowDate >> 16;
-		int month = (int) (PersianRowDate & 0xff00) >> 8;
-		int day = (int) (PersianRowDate & 0xff);
-		this.persianYear = (int) (year > 0 ? year : year - 1);
-		this.persianMonth = month;
-		this.persianDay = day;
+//		long julianDate = ((long) Math.floor((getTimeInMillis() - PersianCalendarConstants.MILLIS_JULIAN_EPOCH)) / PersianCalendarConstants.MILLIS_OF_A_DAY);
+//		long PersianRowDate = PersianCalendarUtils.julianToPersian(julianDate);
+//		long year = PersianRowDate >> 16;
+//		int month = (int) (PersianRowDate & 0xff00) >> 8;
+//		int day = (int) (PersianRowDate & 0xff);
+		persianDate.setTimeInMiliSecond(getTimeInMillis());
+		this.persianYear = persianDate.getShYear();
+		this.persianMonth = persianDate.getShMonth() - 1;
+		this.persianDay = persianDate.getShDay();
 	}
 
 	/**

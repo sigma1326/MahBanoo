@@ -16,7 +16,7 @@
         app:np_alwaysShowText="true"
         app:np_height="180dp"
         app:np_max="14"
-        app:np_min="1"
+        app:np_min="0"
         app:np_orientation="vertical"
         app:np_selectedTextColor="#00819b"
         app:np_selectedTextSize="24sp"

@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+        android:id="@+id/nested_scroll_view"
         android:fitsSystemWindows="true"
         android:isScrollContainer="true"
         android:overScrollMode="always"
@@ -20,25 +21,12 @@
             android:orientation="vertical"
             tools:context=".View.main.AddMoodFragment">
 
-            <com.simorgh.weekdaypicker.WeekDayPicker
-                android:id="@+id/weekDayPicker"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <com.simorgh.moodview.MoodView
                 android:id="@+id/moodViewBleeding"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginTop="8dp"
                 app:itemType="type_bleeding"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/weekDayPicker"
                 tools:visibility="gone" />
 
             <com.simorgh.moodview.MoodView
@@ -46,9 +34,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 app:itemType="type_emotion"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/moodViewBleeding"
                 tools:visibility="gone" />
 
             <com.simorgh.moodview.MoodView
@@ -56,9 +41,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 app:itemType="type_pain"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/moodViewEmotion"
                 tools:visibility="gone" />
 
             <com.simorgh.moodview.MoodView
@@ -66,9 +48,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 app:itemType="type_eating_desire"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/moodViewPain"
                 tools:visibility="gone" />
 
             <com.simorgh.moodview.MoodView
@@ -117,7 +96,7 @@
                 <EditText
                     android:id="@+id/et_weight"
                     android:layout_width="168dp"
-                    android:layout_height="34dp"
+                    android:layout_height="44dp"
                     android:layout_marginTop="60dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
@@ -130,15 +109,15 @@
                     android:padding="5dp"
                     android:textAlignment="center"
                     android:textColor="#cc888888"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/btn_weight_apply"
                     app:layout_constraintTop_toBottomOf="@id/view" />
 
                 <Button
                     android:id="@+id/btn_weight_apply"
-                    android:layout_width="87dp"
-                    android:layout_height="34dp"
+                    android:layout_width="95dp"
+                    android:layout_height="44dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:background="@drawable/btn_weight_ripple_background"
@@ -147,7 +126,7 @@
                     android:paddingTop="4dp"
                     android:text="تائید"
                     android:textColor="#ffffff"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/et_weight"
                     app:layout_constraintEnd_toStartOf="@+id/et_weight"
                     app:layout_constraintHorizontal_chainStyle="packed"
@@ -165,9 +144,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_marginBottom="33dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="33dp">
 
                 <View
                     android:id="@+id/view1"
@@ -201,7 +180,7 @@
                 <EditText
                     android:id="@+id/et_drug"
                     android:layout_width="168dp"
-                    android:layout_height="34dp"
+                    android:layout_height="44dp"
                     android:layout_marginTop="34dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
@@ -223,8 +202,8 @@
 
                 <Button
                     android:id="@+id/btn_drug_apply"
-                    android:layout_width="87dp"
-                    android:layout_height="34dp"
+                    android:layout_width="95dp"
+                    android:layout_height="44dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:background="@drawable/btn_weight_ripple_background"
@@ -233,7 +212,7 @@
                     android:paddingTop="4dp"
                     android:text="اضافه به لیست"
                     android:textColor="#ffffff"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/et_drug"
                     app:layout_constraintEnd_toStartOf="@+id/et_drug"
                     app:layout_constraintHorizontal_chainStyle="packed"
@@ -249,17 +228,19 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_drugs"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@android:color/transparent"
                     app:layoutManager="GridLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/et_drug"
-                    app:layout_constraintStart_toStartOf="@+id/btn_drug_apply"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/et_drug"
                     app:spanCount="2"
                     tools:listitem="@layout/drug_item">

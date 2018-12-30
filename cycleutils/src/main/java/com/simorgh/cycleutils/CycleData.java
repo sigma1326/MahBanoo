@@ -195,6 +195,7 @@ public class CycleData {
         diffDays = CalendarTool.getDaysFromDiff(today, startDate);
         if (diffDays >= 0) {
             day2 = (int) ((diffDays) % getTotalDays()) + 1;
+            currentCycleStartDate.clear();
             currentCycleStartDate.setTimeInMillis(today.getTimeInMillis());
             currentCycleStartDate.add(Calendar.DAY_OF_MONTH, -1 * day2 + 1);
         } else {

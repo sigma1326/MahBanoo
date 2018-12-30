@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
+import com.simorgh.calendarutil.persiancalendar.PersianDate;
 import com.simorgh.cycleutils.CycleData;
 import com.simorgh.cycleview.CycleView;
 import com.simorgh.cycleview.OnViewDataChangedListener;
@@ -82,7 +83,7 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
                 if (isFirstDraw) {
                     isFirstDraw = false;
-                    cycleView.showToday(AppManager.getCalendarInstance());
+                    cycleView.showToday((CalendarTool.PersianToGregorian(new PersianDate())));
                 } else {
                     cycleView.showToday(mViewModel.getSelectedDate());
                 }
@@ -274,6 +275,9 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                             break;
                         case 2:
                             imageView.setImageResource(R.drawable.item_eating_desire3);
+                            break;
+                        case 3:
+                            imageView.setImageResource(R.drawable.item_eating_desire4);
                             break;
                     }
                     imageView.setVisibility(View.VISIBLE);

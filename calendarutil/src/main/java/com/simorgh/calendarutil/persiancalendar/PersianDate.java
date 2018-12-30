@@ -48,6 +48,11 @@ public class PersianDate
 		this.changeTime();
 	}
 
+	public void setTimeInMiliSecond(long millis) {
+		this.timeInMiliSecond = millis;
+		this.changeTime();
+	}
+
 	/**
 	 * Constractou
 	 */

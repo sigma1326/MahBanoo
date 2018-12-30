@@ -1,6 +1,7 @@
 package com.simorgh.databaseutils.model;
 
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -91,7 +92,10 @@ public class DayMood {
     }
 
     public void setDrugs(List<String> drugs) {
-        this.drugs = drugs;
+        if (this.drugs == null) {
+            this.drugs = new LinkedList<>();
+        }
+        this.drugs.addAll(drugs);
     }
 
     public float getWeight() {
