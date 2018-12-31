@@ -36,8 +36,7 @@ public class DrugListAdapter extends ListAdapter<DrugItem, DrugListAdapter.ViewH
             cycleRepository = new CycleRepository((Application) parent.getContext().getApplicationContext());
         }
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drug_item, parent, false);
-        ViewHolder holder = new ViewHolder(v, null);
-        return holder;
+        return new ViewHolder(v, null);
     }
 
     @Override

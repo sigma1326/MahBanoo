@@ -95,7 +95,9 @@ public class DayMood {
         if (this.drugs == null) {
             this.drugs = new LinkedList<>();
         }
-        this.drugs.addAll(drugs);
+        if (drugs!=null) {
+            this.drugs.addAll(drugs);
+        }
     }
 
     public float getWeight() {

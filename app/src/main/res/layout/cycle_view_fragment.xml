@@ -19,44 +19,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <LinearLayout
-        android:id="@+id/layout"
         android:layout_width="wrap_content"
-        android:layout_height="73dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="5dp"
-        android:background="#FAFAFA"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:orientation="horizontal"
+        android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clueView">
 
-        <ImageView
-            android:id="@+id/img_item1"
-            android:layout_width="73dp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_day_moods"
+            android:layout_width="0dp"
             android:layout_height="73dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            tools:src="@drawable/item_eating_desire1" />
-
-        <ImageView
-            android:id="@+id/img_item2"
-            android:layout_width="73dp"
-            android:layout_height="73dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            tools:src="@drawable/item_emotion1" />
-
-        <ImageView
-            android:id="@+id/img_item3"
-            android:layout_width="73dp"
-            android:layout_height="73dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            tools:src="@drawable/item_hair_style2" />
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#FAFAFA"
+            android:orientation="horizontal"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/item_day_mood" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
