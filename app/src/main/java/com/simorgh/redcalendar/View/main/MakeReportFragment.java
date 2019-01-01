@@ -1,5 +1,6 @@
 package com.simorgh.redcalendar.View.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -123,6 +124,7 @@ public class MakeReportFragment extends Fragment {
         return dir.getPath() + File.separator;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -130,28 +132,21 @@ public class MakeReportFragment extends Fragment {
         mViewModel.getRangeStartLive().observe(this, calendar -> {
             if (calendar != null && btnRangeStart != null) {
                 PersianDate persianDate = CalendarTool.GregorianToPersianDate(calendar);
-//                if (isFirst) {
-//                    persianDate.addDay(-10);
-//                    mViewModel.setRangeStart(CalendarTool.PersianToGregorian(persianDate));
-//                    isFirst = false;
-//                }
-                btnRangeStart.setText(new StringBuilder()
-                        .append(persianDate.getShYear()).append("/")
-                        .append(persianDate.getShMonth()).append("/")
-                        .append(persianDate.getShDay()).toString());
-                Log.d(TAG, "start: " + calendar.getTime().toString());
+                if (isFirst) {
+                    persianDate.addDay(-10);
+                    mViewModel.setRangeStart(CalendarTool.PersianToGregorian(persianDate));
+                    isFirst = false;
+                }
+                btnRangeStart.setText(String.format("%s/%d/%d", String.valueOf(persianDate.getShYear())
+                        , persianDate.getShMonth(), persianDate.getShDay()));
             }
         });
 
         mViewModel.getRangeEndLive().observe(this, calendar -> {
             if (calendar != null && btnRangeEnd != null) {
                 PersianDate persianDate = CalendarTool.GregorianToPersianDate(calendar);
-                btnRangeEnd.setText(new StringBuilder()
-                        .append(persianDate.getShYear()).append("/")
-                        .append(persianDate.getShMonth()).append("/")
-                        .append(persianDate.getShDay()).toString());
-
-                Log.d(TAG, "end: " + calendar.getTime().toString());
+                btnRangeEnd.setText(String.format("%s/%d/%d", String.valueOf(persianDate.getShYear())
+                        , persianDate.getShMonth(), persianDate.getShDay()));
 
             }
         });

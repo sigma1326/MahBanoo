@@ -150,7 +150,7 @@ public class ProfileFragment extends Fragment {
                 String start = persianCalendarStartEnd.getPersianDay() + " " + persianCalendarStartEnd.getPersianMonthName();
                 persianCalendarStartEnd.addPersianDate(PersianCalendar.DAY_OF_MONTH, cycle.getTotalDaysCount() - 1);
                 String end = persianCalendarStartEnd.getPersianDay() + " " + persianCalendarStartEnd.getPersianMonthName();
-                tvThisCycleStartEnd.setText(start + " - " + end);
+                tvThisCycleStartEnd.setText(String.format("%s - %s", start, end));
                 Log.d(AppManager.TAG, cycle.toString());
             }
         });
