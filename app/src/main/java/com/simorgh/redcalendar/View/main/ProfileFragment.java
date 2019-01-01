@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
     private PersianCalendar persianCalendarStartEnd = CalendarTool.GregorianToPersian(calendar);
     private List<Integer> datasetRed = new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
     private List<Integer> datasetGray = new LinkedList<>(Arrays.asList(21, 22, 23, 24, 25, 26, 27, 28));
-    private List<Integer> datasetYellow = new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
+    private List<Integer> datasetYellow = new LinkedList<>(Arrays.asList(0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
     private LinkedList<Integer> datasetBirthYear = new LinkedList<>();
     private Typeface typeface;
 
@@ -143,7 +143,7 @@ public class ProfileFragment extends Fragment {
 
                 spinnerRedDays.setSelectedIndex(cycle.getRedDaysCount() - 1);
                 spinnerGrayDays.setSelectedIndex(cycle.getGrayDaysCount() - 21);
-                spinnerYellowDays.setSelectedIndex(cycle.getYellowDaysCount() - 1);
+                spinnerYellowDays.setSelectedIndex(cycle.getYellowDaysCount());
                 spinnerBirthYear.setSelectedIndex(cycle.getBirthYear() - (persianCalendar.getPersianYear() - 50));
 
                 persianCalendarStartEnd = CalendarTool.GregorianToPersian(cycle.getCurrentCycleStart(AppManager.getCalendarInstance()));

@@ -205,9 +205,6 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
     private void showDayMoods() {
         DayMood dayMood = mViewModel.getDayMood(temp);
         moodItems = new LinkedList<>();
-        if (rvDayMoods != null) {
-//            rvDayMoods.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
         if (dayMood != null && rvDayMoods != null) {
             if (dayMood.getTypeBleedingSelectedIndex() != -1) {
                 moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_BLEEDING, dayMood.getTypeBleedingSelectedIndex()));
@@ -232,14 +229,12 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                     moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_HAIR_STYLE, dayMood.getTypeHairStyleSelectedIndices().get(i)));
                 }
             }
-            Log.d("debug13", "showDayMoods: " + moodItems.size());
         }
         assert rvDayMoods != null;
         if (rvDayMoods != null) {
             ViewGroup.LayoutParams params = rvDayMoods.getLayoutParams();
-            params.width = (int) (moodItems.size() * SizeConverter.dpToPx(Objects.requireNonNull(getContext()), 79));
+            params.width = (int) (moodItems.size() * SizeConverter.dpToPx(Objects.requireNonNull(getContext()), 81));
             rvDayMoods.setLayoutParams(params);
-//            rvDayMoods.invalidate();
         }
         ((MoodListAdapter) Objects.requireNonNull(rvDayMoods.getAdapter())).submitList(moodItems);
     }
