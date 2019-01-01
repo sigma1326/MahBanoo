@@ -48,6 +48,7 @@ public class MakeReportFragment extends Fragment {
 
     private NavController navController;
     private CycleRepository cycleRepository;
+    private boolean isFirst = true;
 
 
     public static MakeReportFragment newInstance() {
@@ -129,6 +130,11 @@ public class MakeReportFragment extends Fragment {
         mViewModel.getRangeStartLive().observe(this, calendar -> {
             if (calendar != null && btnRangeStart != null) {
                 PersianDate persianDate = CalendarTool.GregorianToPersianDate(calendar);
+//                if (isFirst) {
+//                    persianDate.addDay(-10);
+//                    mViewModel.setRangeStart(CalendarTool.PersianToGregorian(persianDate));
+//                    isFirst = false;
+//                }
                 btnRangeStart.setText(new StringBuilder()
                         .append(persianDate.getShYear()).append("/")
                         .append(persianDate.getShMonth()).append("/")

@@ -1,6 +1,7 @@
 package com.simorgh.calendarutil.model;
 
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -37,6 +38,25 @@ public class YearMonthDay implements Parcelable {
         this.calendarType = CalendarType.GREGORIAN;
     }
 
+    protected YearMonthDay(Parcel in) {
+        year = in.readInt();
+        month = in.readInt();
+        day = in.readInt();
+        calendarType = in.readInt();
+    }
+
+    public static final Creator<YearMonthDay> CREATOR = new Creator<YearMonthDay>() {
+        @Override
+        public YearMonthDay createFromParcel(Parcel in) {
+            return new YearMonthDay(in);
+        }
+
+        @Override
+        public YearMonthDay[] newArray(int size) {
+            return new YearMonthDay[size];
+        }
+    };
+
     public int getYear() {
         return year;
     }
@@ -69,9 +89,10 @@ public class YearMonthDay implements Parcelable {
         this.calendarType = calendarType;
     }
 
+    @SuppressLint("DefaultLocale")
     @NotNull
     public String toString() {
-        return getYear() + "/" + (getMonth() + 1) + "/" + getDay();
+        return getYear() + "/" + String.format("%02d",(getMonth() + 1)) + "/" + String.format("%02d",(getDay()));
     }
 
     /**
@@ -101,6 +122,7 @@ public class YearMonthDay implements Parcelable {
         return 0;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(year);

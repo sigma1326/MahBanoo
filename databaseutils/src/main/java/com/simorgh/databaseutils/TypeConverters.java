@@ -1,5 +1,7 @@
 package com.simorgh.databaseutils;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.simorgh.calendarutil.model.CalendarType;
@@ -14,28 +16,32 @@ import androidx.room.TypeConverter;
 
 public class TypeConverters {
     @TypeConverter
-    public static Calendar toCalendar(String value) {
+    public static Calendar toCalendar(Long value) {
         if (value == null) {
             return null;
         } else {
             Calendar calendar = Calendar.getInstance();
-            Type listType = new TypeToken<YearMonthDay>() {
-            }.getType();
-            YearMonthDay yearMonthDay = gson.fromJson(value, listType);
-            calendar.set(Calendar.DAY_OF_MONTH, yearMonthDay.getDay());
-            calendar.set(Calendar.MONTH, yearMonthDay.getMonth());
-            calendar.set(Calendar.YEAR, yearMonthDay.getYear());
+            int year = Integer.parseInt(String.valueOf(value).substring(6));
+            int month = Integer.parseInt(String.valueOf(value).substring(4, 6));
+            int day = Integer.parseInt(String.valueOf(value).substring(0, 4));
+            calendar.set(Calendar.DAY_OF_MONTH, year);
+            calendar.set(Calendar.MONTH, month-1);
+            calendar.set(Calendar.YEAR, day);
             return calendar;
         }
     }
 
     @TypeConverter
-    public static String toTimeInMillis(Calendar calendar) {
+    public static long toTimeInMillis(Calendar calendar) {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         YearMonthDay yearMonthDay = new YearMonthDay(year, month, day, CalendarType.GREGORIAN);
-        return gson.toJson(yearMonthDay);
+        long ret;
+        ret = yearMonthDay.getYear();
+        ret = ret * 100 + (yearMonthDay.getMonth() + 1);
+        ret = ret * 100 + yearMonthDay.getDay();
+        return ret;
     }
 
 
