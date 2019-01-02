@@ -248,7 +248,7 @@ public class ReportUtils {
                     }
                 }
                 if (reportEmotion && dayMoodList.get(i).getTypeEmotionSelectedIndices() != null && !dayMoodList.get(i).getTypeEmotionSelectedIndices().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? " - " : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
                     loggedMoods.append("احساسات: ");
                     boolean hasFirst = false;
                     for (int j = 0; j < dayMoodList.get(i).getTypeEmotionSelectedIndices().size(); j++) {
@@ -278,7 +278,7 @@ public class ReportUtils {
                 }
 
                 if (reportPain && dayMoodList.get(i).getTypePainSelectedIndices() != null && !dayMoodList.get(i).getTypePainSelectedIndices().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? " - " : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
                     loggedMoods.append("احساس درد: ");
                     boolean hasFirst = false;
                     for (int j = 0; j < dayMoodList.get(i).getTypePainSelectedIndices().size(); j++) {
@@ -308,7 +308,7 @@ public class ReportUtils {
                 }
 
                 if (reportEatingDesire && dayMoodList.get(i).getTypeEatingDesireSelectedIndices() != null && !dayMoodList.get(i).getTypeEatingDesireSelectedIndices().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? " - " : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
                     loggedMoods.append("میل به خوردن: ");
                     boolean hasFirst = false;
                     for (int j = 0; j < dayMoodList.get(i).getTypeEatingDesireSelectedIndices().size(); j++) {
@@ -338,7 +338,7 @@ public class ReportUtils {
                 }
 
                 if (reportHairStyle && dayMoodList.get(i).getTypeHairStyleSelectedIndices() != null && !dayMoodList.get(i).getTypeHairStyleSelectedIndices().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? " - " : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
                     loggedMoods.append("حالت موها: ");
                     boolean hasFirst = false;
                     for (int j = 0; j < dayMoodList.get(i).getTypeHairStyleSelectedIndices().size(); j++) {
@@ -368,13 +368,13 @@ public class ReportUtils {
                 }
 
                 if (reportWeight && dayMoodList.get(i).getWeight() != 0) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? " - " : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
                     loggedMoods.append("وزن: ");
                     loggedMoods.append(dayMoodList.get(i).getWeight());
                 }
 
                 if (reportDrugs && dayMoodList.get(i).getDrugs() != null && !dayMoodList.get(i).getDrugs().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? " - " : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
                     loggedMoods.append("داروهای مصرفی: ");
                     for (int j = 0; j < dayMoodList.get(i).getDrugs().size(); j++) {
                         loggedMoods.append(dayMoodList.get(i).getDrugs().get(j));
@@ -385,8 +385,6 @@ public class ReportUtils {
                 }
 
                 Paragraph paragraph = new Paragraph(loggedMoods.toString(), f);
-                paragraph.setSpacingAfter(20);
-                paragraph.setMultipliedLeading(20f);
                 cell = new PdfPCell(paragraph);
                 cell.setPadding(5);
                 cell.setColspan(2);
