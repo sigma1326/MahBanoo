@@ -43,7 +43,7 @@ import androidx.fragment.app.FragmentActivity;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-public class ReportUtils {
+public final class ReportUtils {
     private static CycleRepository cycleRepository;
     private static CycleData cycleData;
 
