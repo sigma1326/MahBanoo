@@ -19,6 +19,7 @@ import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.cyclebar.CycleBar;
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.databaseutils.model.UserWithCycles;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.redcalendar.R;
@@ -98,32 +99,32 @@ public class ProfileFragment extends Fragment {
         spinnerBirthYear.attachDataSource(datasetBirthYear);
 
         spinnerRedDays.addOnItemClickListener((parent, view, position, id) -> {
-            if (mViewModel.getCycleLiveData().getValue() != null) {
-                Cycle cycle = mViewModel.getCycleLiveData().getValue();
+            if (mViewModel.getUserWithCyclesLiveData().getValue() != null) {
+                Cycle cycle = mViewModel.getUserWithCyclesLiveData().getValue().getCurrentCycle();
                 cycle.setRedDaysCount(datasetRed.get(position));
                 mViewModel.updateCycle(cycle);
             }
         });
 
         spinnerGrayDays.addOnItemClickListener((parent, view, position, id) -> {
-            if (mViewModel.getCycleLiveData().getValue() != null) {
-                Cycle cycle = mViewModel.getCycleLiveData().getValue();
+            if (mViewModel.getUserWithCyclesLiveData().getValue() != null) {
+                Cycle cycle = mViewModel.getUserWithCyclesLiveData().getValue().getCurrentCycle();
                 cycle.setGrayDaysCount(datasetGray.get(position));
                 mViewModel.updateCycle(cycle);
             }
         });
 
         spinnerYellowDays.addOnItemClickListener((parent, view, position, id) -> {
-            if (mViewModel.getCycleLiveData().getValue() != null) {
-                Cycle cycle = mViewModel.getCycleLiveData().getValue();
+            if (mViewModel.getUserWithCyclesLiveData().getValue() != null) {
+                Cycle cycle = mViewModel.getUserWithCyclesLiveData().getValue().getCurrentCycle();
                 cycle.setYellowDaysCount(datasetYellow.get(position));
                 mViewModel.updateCycle(cycle);
             }
         });
 
         spinnerBirthYear.addOnItemClickListener((parent, view, position, id) -> {
-            if (mViewModel.getCycleLiveData().getValue() != null) {
-                Cycle cycle = mViewModel.getCycleLiveData().getValue();
+            if (mViewModel.getUserWithCyclesLiveData().getValue() != null) {
+                Cycle cycle = mViewModel.getUserWithCyclesLiveData().getValue().getCurrentCycle();
                 cycle.setBirthYear(datasetBirthYear.get(position));
                 mViewModel.updateCycle(cycle);
             }
@@ -136,8 +137,9 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getCycleLiveData().observe(this, cycle -> {
-            if (cycleBar != null && cycle != null) {
+        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
+            if (cycleBar != null && userWithCycles != null) {
+                Cycle cycle = userWithCycles.getCurrentCycle();
                 cycleBar.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
 

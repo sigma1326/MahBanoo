@@ -9,11 +9,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "cycle")
+@Entity(tableName = "cycles")
 public class Cycle {
-    @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "cycle_id")
-    private int cycleID;
+    @ColumnInfo(name = "user_id")
+    private int userId;
 
     @ColumnInfo(name = "red_days_count")
     private int redDaysCount;
@@ -24,49 +23,18 @@ public class Cycle {
     @ColumnInfo(name = "yellow_days_count")
     private int yellowDaysCount;
 
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "start_date")
     private Calendar startDate;
+
+    @ColumnInfo(name = "end_date")
+    private Calendar endDate;
 
     @ColumnInfo(name = "birth_year")
     private int birthYear;
 
-    @ColumnInfo(name = "show_cycle_days")
-    private boolean showCycleDays;
-
-    @ColumnInfo(name = "show_pregnancy_prob")
-    private boolean showPregnancyProb;
-
-    public boolean isShowPregnancyProb() {
-        return showPregnancyProb;
-    }
-
-    public void setShowPregnancyProb(boolean showPregnancyProb) {
-        this.showPregnancyProb = showPregnancyProb;
-    }
-
-    public boolean isShowCycleDays() {
-        return showCycleDays;
-    }
-
-    public void setShowCycleDays(boolean showCycleDays) {
-        this.showCycleDays = showCycleDays;
-    }
-
-    public Cycle() {
-        showPregnancyProb = true;
-        showCycleDays = true;
-    }
-
     public int getTotalDaysCount() {
         return redDaysCount + grayDaysCount;
-    }
-
-    public int getCycleID() {
-        return cycleID;
-    }
-
-    public void setCycleID(int cycleID) {
-        this.cycleID = cycleID;
     }
 
     public int getRedDaysCount() {
@@ -93,8 +61,20 @@ public class Cycle {
         return startDate;
     }
 
-    public void setStartDate(Calendar startDate) {
-        this.startDate = startDate;
+    public void setStartDate(@NonNull Calendar startDate) {
+        if (this.startDate == null) {
+            this.startDate = Calendar.getInstance();
+            this.startDate.clear();
+        }
+        this.startDate.setTimeInMillis(startDate.getTimeInMillis());
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public void setYellowDaysCount(int yellowDaysCount) {
@@ -113,7 +93,19 @@ public class Cycle {
     @Override
     public String toString() {
         return "cycle: {" + redDaysCount + " : " + grayDaysCount + " : " + yellowDaysCount + " : "
-                + birthYear + " : " + showCycleDays + " : " + showPregnancyProb + " : " + startDate.getTime().toString() + "}";
+                + birthYear + " : " + startDate.getTime().toString() + "}";
+    }
+
+    public Calendar getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(@NonNull Calendar endDate) {
+        if (this.endDate == null) {
+            this.endDate = Calendar.getInstance();
+            this.endDate.clear();
+        }
+        this.endDate.setTimeInMillis(endDate.getTimeInMillis());
     }
 
     public Calendar getCurrentCycleStart(Calendar today) {
@@ -128,5 +120,22 @@ public class Cycle {
             throw new UnsupportedOperationException("invalid cycle date");
         }
         return calendar;
+    }
+
+    @Override
+    public Cycle clone() {
+        try {
+            super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        Cycle cycle = new Cycle();
+        cycle.setStartDate(getStartDate());
+        cycle.setEndDate(getEndDate());
+        cycle.setGrayDaysCount(getGrayDaysCount());
+        cycle.setRedDaysCount(getRedDaysCount());
+        cycle.setYellowDaysCount(getYellowDaysCount());
+
+        return cycle;
     }
 }

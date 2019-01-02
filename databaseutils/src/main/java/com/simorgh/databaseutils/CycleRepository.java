@@ -2,11 +2,16 @@ package com.simorgh.databaseutils;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.service.autofill.UserData;
 
 import com.simorgh.databaseutils.dao.CycleDAO;
 import com.simorgh.databaseutils.dao.DayMoodDAO;
+import com.simorgh.databaseutils.dao.UserDAO;
+import com.simorgh.databaseutils.dao.UserWithCyclesDAO;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.databaseutils.model.User;
+import com.simorgh.databaseutils.model.UserWithCycles;
 
 import java.util.Calendar;
 import java.util.List;
@@ -17,27 +22,52 @@ import androidx.lifecycle.LiveData;
 public class CycleRepository {
     private CycleDAO cycleDao;
     private DayMoodDAO dayMoodDAO;
-    private LiveData<Cycle> cycleLiveData;
-    private LiveData<List<DayMood>> listLiveData;
+    private UserDAO userDAO;
+    private UserWithCyclesDAO userWithCyclesDAO;
+    //    private LiveData<Cycle> cycleLiveData;
+    private LiveData<List<DayMood>> moodsLiveData;
+    private LiveData<UserWithCycles> userWithCyclesLiveData;
 
     public CycleRepository(Application application) {
         CycleDataBase db = CycleDataBase.getDatabase(application);
         cycleDao = db.cycleDAO();
         dayMoodDAO = db.dayMoodDAO();
-        cycleLiveData = cycleDao.getLiveCycle(1);
-        listLiveData = dayMoodDAO.getLiveDayMoods();
+        userDAO = db.userDAO();
+        userWithCyclesDAO = db.userWithCyclesDAO();
+        moodsLiveData = dayMoodDAO.getLiveDayMoods();
+        userWithCyclesLiveData = userWithCyclesDAO.getUserWithCyclesLiveData();
     }
 
     public Cycle getCycleData() {
-        return cycleDao.getCycle(1);
+        if (userWithCyclesDAO.getUserWithCycles() == null) {
+            return null;
+        }
+        if (userWithCyclesDAO.getUserWithCycles().getCycles() == null) {
+            return null;
+        }
+        if (userWithCyclesDAO.getUserWithCycles().getCycles().size() == 0) {
+            return null;
+        }
+        return userWithCyclesDAO.getUserWithCycles().getCycles().get(0);
+//        for (Cycle cycle : userWithCyclesDAO.getUserWithCycles().getCycles()) {
+//            if (cycle.getStartDate().getTimeInMillis()
+//                    == userWithCyclesDAO.getUserWithCycles().getUser().getCurrentCycle().getTimeInMillis()) {
+//                return cycle;
+//            }
+//        }
+//        return null;
     }
 
     public DayMood getDayMood(Calendar calendar) {
         return dayMoodDAO.getDayMood(calendar);
     }
 
-    public LiveData<Cycle> getCycleLiveData() {
-        return cycleLiveData;
+    public UserWithCycles getUserWithCycles() {
+        return userWithCyclesDAO.getUserWithCycles();
+    }
+
+    public LiveData<UserWithCycles> getUserWithCyclesLiveData() {
+        return userWithCyclesLiveData;
     }
 
     public LiveData<List<DayMood>> getLiveDayMoodsData() {
@@ -48,12 +78,12 @@ public class CycleRepository {
         return dayMoodDAO.getLiveDayMood(calendar);
     }
 
-    public LiveData<List<DayMood>> getListLiveData() {
-        return listLiveData;
+    public LiveData<List<DayMood>> getMoodsLiveData() {
+        return moodsLiveData;
     }
 
-    public void setListLiveData(LiveData<List<DayMood>> listLiveData) {
-        this.listLiveData = listLiveData;
+    public void setMoodsLiveData(LiveData<List<DayMood>> moodsLiveData) {
+        this.moodsLiveData = moodsLiveData;
     }
 
     public List<DayMood> getDayMoodRange(@NonNull Calendar start, @NonNull Calendar calendar) {
@@ -66,6 +96,10 @@ public class CycleRepository {
 
     public void insertCycle(Cycle cycle) {
         new insertCycleAsyncTask(cycleDao).execute(cycle);
+    }
+
+    public void insertUser(User user) {
+        new insertUserAsyncTask(userDAO).execute(user);
     }
 
     public void insertDayMood(DayMood dayMood) {
@@ -89,6 +123,22 @@ public class CycleRepository {
             return null;
         }
     }
+
+    private static class insertUserAsyncTask extends android.os.AsyncTask<User, Void, Void> {
+
+        private UserDAO mAsyncTaskDao;
+
+        insertUserAsyncTask(UserDAO dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final User... params) {
+            mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
 
     private static class insertCycleAsyncTask extends android.os.AsyncTask<Cycle, Void, Void> {
 

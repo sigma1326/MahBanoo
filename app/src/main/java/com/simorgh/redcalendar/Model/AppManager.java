@@ -28,7 +28,7 @@ public class AppManager extends MultiDexApplication {
         mLocale = getResources().getConfiguration().locale;
 
         minDate = getCalendarInstance();
-        minDate.set(Calendar.YEAR, 2017);
+        minDate.set(Calendar.YEAR, 2018);
 
         maxDate = getCalendarInstance();
         maxDate.set(Calendar.YEAR, 2020);

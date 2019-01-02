@@ -1,15 +1,8 @@
 package com.simorgh.redcalendar.View.main;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +11,10 @@ import android.widget.TextView;
 
 import com.simorgh.cycleview.CycleView;
 import com.simorgh.redcalendar.R;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class CycleInfoFragment extends Fragment {
 

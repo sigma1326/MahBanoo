@@ -14,7 +14,9 @@ import com.simorgh.cyclecalendar.view.CalendarView;
 import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.CycleData;
 import com.simorgh.databaseutils.CycleRepository;
+import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.databaseutils.model.User;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
@@ -28,6 +30,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener {
 
@@ -48,6 +51,8 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
         cycleRepository = new CycleRepository(Objects.requireNonNull(getActivity()).getApplication());
     }
 
+    RecyclerView recyclerView;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         calendarView = new CalendarView(getActivity()
@@ -65,20 +70,48 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             calendarView.setElevation(10);
         }
+//        View v = LayoutInflater.from(getContext()).inflate(R.layout.calendar_fragment, container, false);
+//        recyclerView = v.findViewById(R.id.rv_month);
+//
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+//        recyclerView.setAdapter(new MonthListAdapter(new MonthListAdapter.MonthDiffCallBack()));
+//        recyclerView.setNestedScrollingEnabled(false);
+//        recyclerView.setHasFixedSize(true);
+
         return calendarView;
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        List<MonthItem> monthItems = new LinkedList<>();
+//      new Thread(() -> {
+//          for (int i = 0; i < 10; i++) {
+//              monthItems.add(new MonthItem());
+//          }
+////          new Handler(Looper.getMainLooper()).post(() ->
+////                  );
+//          ((MonthListAdapter) Objects.requireNonNull(recyclerView.getAdapter())).submitList(monthItems);
+//
+//      }).run();
+
+    }
+
+    @Override
+
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getCycleLiveData().observe(this, cycle -> {
-            if (calendarView != null && cycle != null) {
+        mViewModel.getUserWithCyclesLiveData().observe(this,userWithCycles -> {
+            if (calendarView != null && userWithCycles != null) {
+                Cycle cycle = userWithCycles.getCurrentCycle();
+                User user = userWithCycles.getUser();
                 calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
-                calendarView.setShowInfo(cycle.isShowCycleDays());
                 calendarView.scrollToCurrentDate(mViewModel.getSelectedDateCalendar());
                 Log.d(AppManager.TAG, cycle.toString());
+                mViewModel.setUser(user);
+                calendarView.setShowInfo(user.isShowCycleDays());
             }
         });
     }

@@ -4,14 +4,18 @@ import android.content.Context;
 
 import com.simorgh.databaseutils.dao.CycleDAO;
 import com.simorgh.databaseutils.dao.DayMoodDAO;
+import com.simorgh.databaseutils.dao.UserDAO;
+import com.simorgh.databaseutils.dao.UserWithCyclesDAO;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.databaseutils.model.User;
+import com.simorgh.databaseutils.model.UserWithCycles;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Cycle.class, DayMood.class}, version = 1, exportSchema = false)
+@Database(entities = {Cycle.class, DayMood.class, User.class}, version = 1, exportSchema = false)
 @androidx.room.TypeConverters({TypeConverters.class})
 public abstract class CycleDataBase extends RoomDatabase {
     public static final String DB_NAME = "red-calendar-db";
@@ -20,6 +24,10 @@ public abstract class CycleDataBase extends RoomDatabase {
     abstract CycleDAO cycleDAO();
 
     abstract DayMoodDAO dayMoodDAO();
+
+    abstract UserDAO userDAO();
+
+    abstract UserWithCyclesDAO userWithCyclesDAO();
 
     private static volatile CycleDataBase INSTANCE;
 

@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.databaseutils.model.Cycle;
+import com.simorgh.databaseutils.model.User;
+import com.simorgh.databaseutils.model.UserWithCycles;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.View.main.MainActivity;
 import com.simorgh.redcalendar.ViewModel.register.CycleRegisterViewModel;
@@ -108,7 +110,6 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     break;
                 case R.id.step5:
                     Cycle cycle = new Cycle();
-                    cycle.setCycleID(1);
                     cycle.setYellowDaysCount(cycleRegisterViewModel.getYellowDaysCount());
                     cycle.setRedDaysCount(cycleRegisterViewModel.getRedDaysCount());
                     cycle.setGrayDaysCount(cycleRegisterViewModel.getGrayDaysCount());
@@ -116,7 +117,12 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     Calendar calendar = cycleRegisterViewModel.getLastCycleEndDay();
                     calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount()+1);
                     cycle.setStartDate(calendar);
+                    cycle.setEndDate(calendar);
+                    cycle.setUserId(1);
                     cycleRepository.insertCycle(cycle);
+                    User user = new User();
+                    user.setCurrentCycle(calendar);
+                    cycleRepository.insertUser(user);
                     navController.navigate(R.id.action_step5_to_mainActivity);
                     finish();
                     break;

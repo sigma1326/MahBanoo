@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.simorgh.databaseutils.model.Cycle;
+import com.simorgh.databaseutils.model.User;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.View.register.QuestionsActivity;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
@@ -74,19 +74,19 @@ public class SettingsFragment extends Fragment {
 
 
         showPregnancyProb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Cycle cycle = mViewModel.getCycleLiveData().getValue();
-            if (cycle != null) {
-                cycle.setShowPregnancyProb(isChecked);
-                mViewModel.updateCycle(cycle);
+            User user = Objects.requireNonNull(mViewModel.getUserWithCyclesLiveData().getValue()).getUser();
+            if (user != null) {
+                user.setShowPregnancyProb(isChecked);
+                mViewModel.updateUser(user);
             }
         });
 
 
         showCycleDays.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Cycle cycle = mViewModel.getCycleLiveData().getValue();
-            if (cycle != null) {
-                cycle.setShowCycleDays(isChecked);
-                mViewModel.updateCycle(cycle);
+            User user = Objects.requireNonNull(mViewModel.getUserWithCyclesLiveData().getValue()).getUser();
+            if (user != null) {
+                user.setShowCycleDays(isChecked);
+                mViewModel.updateUser(user);
             }
         });
 
@@ -122,11 +122,11 @@ public class SettingsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getCycleLiveData().observe(this, cycle -> {
-            if (showCycleDays != null && cycle != null) {
-                showCycleDays.setChecked(cycle.isShowCycleDays());
-                showPregnancyProb.setChecked(cycle.isShowPregnancyProb());
-                Log.d(TAG, cycle.toString());
+        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
+            if (showCycleDays != null && userWithCycles != null) {
+                showCycleDays.setChecked(userWithCycles.getUser().isShowCycleDays());
+                showPregnancyProb.setChecked(userWithCycles.getUser().isShowPregnancyProb());
+                Log.d(TAG, userWithCycles.getUser().getCurrentCycle().toString());
             }
         });
     }

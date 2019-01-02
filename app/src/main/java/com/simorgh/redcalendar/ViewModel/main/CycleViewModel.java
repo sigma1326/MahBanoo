@@ -4,9 +4,11 @@ package com.simorgh.redcalendar.ViewModel.main;
 import android.app.Application;
 
 import com.simorgh.databaseutils.CycleRepository;
-import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.databaseutils.model.User;
+import com.simorgh.databaseutils.model.UserWithCycles;
+import com.simorgh.redcalendar.Model.AppManager;
 
 import java.util.Calendar;
 import java.util.List;
@@ -17,9 +19,10 @@ import androidx.lifecycle.LiveData;
 
 public class CycleViewModel extends AndroidViewModel {
     private CycleRepository cycleRepository;
-    private LiveData<Cycle> cycleLiveData;
+    private LiveData<UserWithCycles> userWithCyclesLiveData;
     private LiveData<List<DayMood>> moodsLiveData;
     private Cycle cycle;
+    private User user;
     private int selectedDay = -1;
     private Calendar selectedDate = AppManager.getCalendarInstance();
     private Calendar selectedDateCalendar = AppManager.getCalendarInstance();
@@ -30,13 +33,22 @@ public class CycleViewModel extends AndroidViewModel {
     public CycleViewModel(@NonNull Application application) {
         super(application);
         cycleRepository = new CycleRepository(application);
-        cycleLiveData = cycleRepository.getCycleLiveData();
-        moodsLiveData = cycleRepository.getListLiveData();
+        userWithCyclesLiveData = cycleRepository.getUserWithCyclesLiveData();
+        moodsLiveData = cycleRepository.getMoodsLiveData();
     }
 
 //    public DayMood getDayMood() {
 //        return dayMood;
 //    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public LiveData<List<DayMood>> getMoodsLiveData() {
         return moodsLiveData;
@@ -90,12 +102,16 @@ public class CycleViewModel extends AndroidViewModel {
         this.cycle = cycle;
     }
 
-    public LiveData<Cycle> getCycleLiveData() {
-        return cycleLiveData;
+    public LiveData<UserWithCycles> getUserWithCyclesLiveData() {
+        return userWithCyclesLiveData;
     }
 
     public void updateCycle(Cycle cycle) {
         cycleRepository.insertCycle(cycle);
+    }
+
+    public void updateUser(User user) {
+        cycleRepository.insertUser(user);
     }
 
     public void clearData() {

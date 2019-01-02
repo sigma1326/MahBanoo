@@ -15,6 +15,8 @@ import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cyclecalendar.view.CalendarView;
 import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.databaseutils.model.User;
+import com.simorgh.databaseutils.model.UserWithCycles;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.redcalendar.R;
@@ -38,7 +40,6 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     private Button btnApplyChanges;
     private NavController navController;
     private Typeface typeface;
-
 
 
     public static ChangeCycleStartDayFragment newInstance() {
@@ -73,10 +74,14 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
         btnApplyChanges = v.findViewById(R.id.btn_apply_changes);
         btnApplyChanges.setTypeface(typeface);
         btnApplyChanges.setOnClickListener(v1 -> {
-            Cycle cycle = mViewModel.getCycleLiveData().getValue();
-            if (cycle != null) {
+            UserWithCycles userWithCycles = mViewModel.getUserWithCyclesLiveData().getValue();
+            if (userWithCycles != null) {
+                Cycle cycle = userWithCycles.getCurrentCycle();
                 cycle.setStartDate(mViewModel.getSelectedStartDate());
+                User user = userWithCycles.getUser();
+                user.setCurrentCycle(mViewModel.getSelectedStartDate());
                 mViewModel.updateCycle(cycle);
+                mViewModel.updateUser(user);
                 navController.navigateUp();
             }
         });
@@ -89,14 +94,21 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getCycleLiveData().observe(this, cycle -> {
-            if (calendarView != null && cycle != null) {
+        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
+            if (calendarView != null && userWithCycles != null) {
+                Cycle cycle = userWithCycles.getCurrentCycle();
+                User user = userWithCycles.getUser();
+                mViewModel.setUser(user);
                 mViewModel.setCycle(cycle);
                 calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
-                calendarView.scrollToCurrentDate(cycle.getStartDate());
+                calendarView.scrollToCurrentDate(mViewModel.getSelectedDateCalendar());
                 calendarView.setSelectedDate(cycle.getStartDate());
                 Log.d(AppManager.TAG, cycle.toString());
+                for (Cycle c : userWithCycles.getCycles()) {
+                    Log.d("debug13", "onCreateView: " + c);
+                }
+                calendarView.setShowInfo(user.isShowCycleDays());
             }
         });
     }
@@ -118,6 +130,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
 
     private boolean isAnimRunning = false;
     private Queue<Boolean> booleanQueue = new LinkedList<>();
+
     private void runButtonChangeAnim(boolean visible) {
         int h1;
         if (isAnimRunning) {
@@ -170,6 +183,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
                                 runButtonChangeAnim(booleanQueue.poll());
                             }
                         }
+
                         @Override
                         public void onAnimationStart(Animator animation) {
                             isAnimRunning = true;

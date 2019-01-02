@@ -8,11 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.google.android.flexbox.AlignContent;
-import com.google.android.flexbox.FlexDirection;
-import com.google.android.flexbox.FlexWrap;
-import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
@@ -20,6 +15,7 @@ import com.simorgh.cycleutils.CycleData;
 import com.simorgh.cycleview.CycleView;
 import com.simorgh.cycleview.OnViewDataChangedListener;
 import com.simorgh.cycleview.SizeConverter;
+import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
 import com.simorgh.moodview.MoodView;
 import com.simorgh.redcalendar.Model.AppManager;
@@ -77,14 +73,9 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
         return v;
     }
 
-    FlexboxLayoutManager layoutManager;
     LinearLayoutManager linearLayoutManager;
 
     private void initMoodRecyclerView() {
-        layoutManager = new FlexboxLayoutManager(getContext());
-        layoutManager.setFlexDirection(FlexDirection.ROW);
-        layoutManager.setJustifyContent(JustifyContent.CENTER);
-        layoutManager.setFlexWrap(FlexWrap.WRAP);
         rvDayMoods.setNestedScrollingEnabled(false);
         linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
         rvDayMoods.setLayoutManager(linearLayoutManager);
@@ -97,8 +88,10 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getCycleLiveData().observe(this, cycle -> {
-            if (cycleView != null && cycle != null) {
+        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
+            if (cycleView != null && userWithCycles != null) {
+                mViewModel.setUser(userWithCycles.getUser());
+                Cycle cycle = userWithCycles.getCurrentCycle();
                 mViewModel.setCycle(cycle);
                 cycleView.setCycleData(new CycleData(cycle.getRedDaysCount(),
                         cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
@@ -191,7 +184,7 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
         listener.onViewDataChanged(persianCalendar.getPersianWeekDayName()
                 , optionalText, days[day - 1], persianCalendar.getPersianDay() + ""
                 , CalendarTool.getIranianMonthName(persianCalendar.getPersianMonth() + 1)
-                , Objects.requireNonNull(mViewModel.getCycleLiveData().getValue())
+                , Objects.requireNonNull(Objects.requireNonNull(mViewModel.getUserWithCyclesLiveData().getValue()).getUser())
                         .isShowPregnancyProb(), day);
 
         if (onDayTypeChangedListener != null) {

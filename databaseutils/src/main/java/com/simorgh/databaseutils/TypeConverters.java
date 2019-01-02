@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.room.TypeConverter;
 
 public class TypeConverters {
@@ -21,9 +22,13 @@ public class TypeConverters {
             return null;
         } else {
             Calendar calendar = Calendar.getInstance();
+            if (String.valueOf(value).length() < 8) {
+                return Calendar.getInstance();
+            }
             int year = Integer.parseInt(String.valueOf(value).substring(6));
             int month = Integer.parseInt(String.valueOf(value).substring(4, 6));
             int day = Integer.parseInt(String.valueOf(value).substring(0, 4));
+            calendar.clear();
             calendar.set(Calendar.DAY_OF_MONTH, year);
             calendar.set(Calendar.MONTH, month-1);
             calendar.set(Calendar.YEAR, day);
@@ -32,7 +37,10 @@ public class TypeConverters {
     }
 
     @TypeConverter
-    public static long toTimeInMillis(Calendar calendar) {
+    public static long toTimeInMillis(@NonNull Calendar calendar) {
+        if (calendar == null) {
+            return 0;
+        }
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);

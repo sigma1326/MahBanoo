@@ -3,7 +3,6 @@ package com.simorgh.redcalendar.View.main;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,12 @@ import android.widget.CheckBox;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
-import com.simorgh.cyclecalendar.view.BaseMonthView;
-import com.simorgh.cycleutils.CycleData;
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.MakeReportViewModel;
 import com.simorgh.reportutil.ReportUtils;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -29,8 +25,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
-import static com.simorgh.redcalendar.Model.AppManager.TAG;
 
 public class MakeReportFragment extends Fragment {
 
