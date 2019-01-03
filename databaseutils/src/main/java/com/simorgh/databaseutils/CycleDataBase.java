@@ -9,7 +9,6 @@ import com.simorgh.databaseutils.dao.UserWithCyclesDAO;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
 import com.simorgh.databaseutils.model.User;
-import com.simorgh.databaseutils.model.UserWithCycles;
 
 import androidx.room.Database;
 import androidx.room.Room;

@@ -103,7 +103,7 @@ public class CycleInfoFragment extends Fragment {
         tvInfo.setTypeface(typeface);
 
         if (getArguments() != null) {
-            int dayType = 0;
+            int dayType;
             String text = "";
             dayType = CycleInfoFragmentArgs.fromBundle(getArguments()).getDayType();
             switch (dayType) {

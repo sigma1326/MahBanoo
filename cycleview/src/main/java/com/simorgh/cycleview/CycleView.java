@@ -25,13 +25,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Toast;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cycleutils.CycleData;
 
 import java.util.Calendar;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 public class CycleView extends View implements OnViewDataChangedListener {
@@ -525,11 +525,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
         tvMonthNamePaint.setTextAlign(Paint.Align.CENTER);
         tvMonthNamePaint.setTextSize(tvMonthNameTextSize);
 
-        //init the array to save the angles
-        if (cycleData != null) {
-        }
-
-        cycleData = new CycleData(3, 26, 1, Calendar.getInstance(),Calendar.getInstance());
+        cycleData = new CycleData(3, 26, 1, Calendar.getInstance(), Calendar.getInstance());
 
         //init the hover variables
         mediumCircleHoverPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -948,8 +944,6 @@ public class CycleView extends View implements OnViewDataChangedListener {
         this.cycleData = cycleData;
         this.viewData = viewData;
         this.onDayChangedListener = onDayChangedListener;
-        if (cycleData != null) {
-        }
         invalidate();
     }
 
@@ -1106,6 +1100,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
         return Color.argb(alpha, red, green, blue);
     }
 
+    @Keep
     public void setMainCircleHoverRadius(final float radius) {
         mainCircleHoverRadius = radius;
         if (mainCircleHoverRadius > 0) {
@@ -1116,6 +1111,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
         invalidate();
     }
 
+    @Keep
     public void setMediumCircleHoverRadius(final float radius) {
         mediumCircleHoverRadius = radius;
         if (mediumCircleHoverRadius > 0) {
@@ -1145,7 +1141,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
                 }
                 tempAngle = calculateAngleForDay(getDayFromAngle(angle));
                 computeAngle(event.getX(), event.getY());
-                runAnim(tempAngle, animator);
+                runAnim(tempAngle);
                 invalidate();
                 return true;
             case MotionEvent.ACTION_UP:
@@ -1259,9 +1255,9 @@ public class CycleView extends View implements OnViewDataChangedListener {
         }
     }
 
-    private void runAnim(float tempAngle, ValueAnimator animator) {
+    private void runAnim(float tempAngle) {
         float targetAngle = calculateAngleForDay(getDayFromAngle(angle));
-        animator = ValueAnimator.ofFloat(tempAngle, targetAngle);
+        ValueAnimator animator = ValueAnimator.ofFloat(tempAngle, targetAngle);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(200);
         animator.setRepeatCount(0);

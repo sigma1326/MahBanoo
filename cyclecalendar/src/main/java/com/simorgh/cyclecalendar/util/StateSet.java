@@ -189,10 +189,9 @@ public class StateSet {
         if (stateSet == null) {
             return (stateSpec == null || isWildCard(stateSpec));
         }
-        int stateSpecSize = stateSpec.length;
         int stateSetSize = stateSet.length;
-        for (int i = 0; i < stateSpecSize; i++) {
-            int stateSpecState = stateSpec[i];
+        for (int aStateSpec : stateSpec) {
+            int stateSpecState = aStateSpec;
             if (stateSpecState == 0) {
                 // We've reached the end of the cases to match against.
                 return true;
@@ -206,8 +205,7 @@ public class StateSet {
                 stateSpecState = -stateSpecState;
             }
             boolean found = false;
-            for (int j = 0; j < stateSetSize; j++) {
-                final int state = stateSet[j];
+            for (final int state : stateSet) {
                 if (state == 0) {
                     // We've reached the end of states to match.
                     if (mustMatch) {
@@ -247,8 +245,7 @@ public class StateSet {
      */
     public static boolean stateSetMatches(int[] stateSpec, int state) {
         int stateSpecSize = stateSpec.length;
-        for (int i = 0; i < stateSpecSize; i++) {
-            int stateSpecState = stateSpec[i];
+        for (int stateSpecState : stateSpec) {
             if (stateSpecState == 0) {
                 // We've reached the end of the cases to match against.
                 return true;
@@ -282,9 +279,9 @@ public class StateSet {
         StringBuilder sb = new StringBuilder();
 
         int count = states.length;
-        for (int i = 0; i < count; i++) {
+        for (int state : states) {
 
-            switch (states[i]) {
+            switch (state) {
                 case android.R.attr.state_window_focused:
                     sb.append("W ");
                     break;

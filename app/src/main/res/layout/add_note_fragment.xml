@@ -76,7 +76,7 @@
                 android:layout_marginEnd="30dp"
                 android:layout_marginRight="30dp"
                 android:fontFamily="@font/iransans_medium"
-                android:text="وزن"
+                android:text="@string/weight"
                 android:textColor="#3f3f3f"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -104,7 +104,8 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btn_weight_apply"
-                app:layout_constraintTop_toBottomOf="@id/view" />
+                app:layout_constraintTop_toBottomOf="@id/view"
+                tools:ignore="Autofill,LabelFor" />
 
             <Button
                 android:id="@+id/btn_weight_apply"
@@ -116,7 +117,7 @@
                 android:fontFamily="@font/iransans_medium"
                 android:gravity="center"
                 android:paddingTop="4dp"
-                android:text="تائید"
+                android:text="@string/apply"
                 android:textColor="#ffffff"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/et_weight"
@@ -160,7 +161,7 @@
                 android:layout_marginEnd="30dp"
                 android:layout_marginRight="30dp"
                 android:fontFamily="@font/iransans_medium"
-                android:text="داروهای مصرفی"
+                android:text="@string/drugs"
                 android:textColor="#3f3f3f"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -190,7 +191,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/rv_drugs"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btn_drug_apply"
-                app:layout_constraintTop_toBottomOf="@id/view1" />
+                app:layout_constraintTop_toBottomOf="@id/view1"
+                tools:ignore="Autofill,LabelFor" />
 
             <Button
                 android:id="@+id/btn_drug_apply"
@@ -202,7 +204,7 @@
                 android:fontFamily="@font/iransans_medium"
                 android:gravity="center"
                 android:paddingTop="4dp"
-                android:text="اضافه به لیست"
+                android:text="@string/add_to_list"
                 android:textColor="#ffffff"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/et_drug"

@@ -24,6 +24,9 @@
 
 package com.simorgh.calendarutil.hijricalendar;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -56,6 +59,7 @@ class UmmalquraDateFormatSymbols {
      */
     String[] shortMonths = null;
 
+    @TargetApi(Build.VERSION_CODES.N)
     public UmmalquraDateFormatSymbols() {
         initializeData(Locale.getDefault(Locale.Category.FORMAT));
     }

@@ -1,5 +1,6 @@
 package com.simorgh.numberpicker;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -38,6 +39,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DimenRes;
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 
@@ -195,9 +197,7 @@ public class NumberPicker extends LinearLayout {
 
     private static final TwoDigitFormatter sTwoDigitFormatter = new TwoDigitFormatter();
 
-    public static final Formatter getTwoDigitFormatter() {
-        return sTwoDigitFormatter;
-    }
+    private String startText;
 
     /**
      * The text for showing the current value.
@@ -593,60 +593,149 @@ public class NumberPicker extends LinearLayout {
          */
         void onValueChange(NumberPicker picker, int oldVal, int newVal);
     }
+    private boolean alwaysShowText;
 
-    /**
-     * Interface to listen for the picker scroll state.
-     */
-    public interface OnScrollListener {
+    public static Formatter getTwoDigitFormatter() {
+        return sTwoDigitFormatter;
+    }
 
-        @IntDef({SCROLL_STATE_IDLE, SCROLL_STATE_TOUCH_SCROLL, SCROLL_STATE_FLING})
-        @Retention(RetentionPolicy.SOURCE)
-        public @interface ScrollState {
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        final int msrdWdth = getMeasuredWidth();
+        final int msrdHght = getMeasuredHeight();
+
+        // Input text centered horizontally.
+        final int inptTxtMsrdWdth = mSelectedText.getMeasuredWidth();
+        final int inptTxtMsrdHght = mSelectedText.getMeasuredHeight();
+        final int inptTxtLeft = (msrdWdth - inptTxtMsrdWdth) / 2;
+        final int inptTxtTop = (msrdHght - inptTxtMsrdHght) / 2;
+        final int inptTxtRight = inptTxtLeft + inptTxtMsrdWdth;
+        final int inptTxtBottom = inptTxtTop + inptTxtMsrdHght;
+        mSelectedText.layout(inptTxtLeft, inptTxtTop, inptTxtRight, inptTxtBottom);
+        mSelectedTextCenterX = mSelectedText.getX() + mSelectedText.getMeasuredWidth() / 2f;
+        mSelectedTextCenterY = mSelectedText.getY() + mSelectedText.getMeasuredHeight() / 2f;
+
+        if (changed) {
+            // need to do all this when we know our size
+            initializeSelectorWheel();
+            initializeFadingEdges();
+
+            final int dividerDistance = 2 * mDividerThickness + mDividerDistance;
+            if (isHorizontalMode()) {
+                mLeftDividerLeft = (getWidth() - mDividerDistance) / 2 - mDividerThickness;
+                mRightDividerRight = mLeftDividerLeft + dividerDistance;
+            } else {
+                mTopDividerTop = (getHeight() - mDividerDistance) / 2 - mDividerThickness;
+                mBottomDividerBottom = mTopDividerTop + dividerDistance;
+            }
         }
-
-        /**
-         * The view is not scrolling.
-         */
-        public static int SCROLL_STATE_IDLE = 0;
-
-        /**
-         * The user is scrolling using touch, and his finger is still on the screen.
-         */
-        public static int SCROLL_STATE_TOUCH_SCROLL = 1;
-
-        /**
-         * The user had previously been scrolling using touch and performed a fling.
-         */
-        public static int SCROLL_STATE_FLING = 2;
-
-        /**
-         * Callback invoked while the number picker scroll state has changed.
-         *
-         * @param view        The view whose scroll state is being reported.
-         * @param scrollState The current scroll state. One of
-         *                    {@link #SCROLL_STATE_IDLE},
-         *                    {@link #SCROLL_STATE_TOUCH_SCROLL} or
-         *                    {@link #SCROLL_STATE_IDLE}.
-         */
-        public void onScrollStateChange(NumberPicker view, @ScrollState int scrollState);
     }
 
-    /**
-     * Interface used to format current value into a string for presentation.
-     */
-    public interface Formatter {
-
-        /**
-         * Formats a string representation of the current value.
-         *
-         * @param value The currently selected value.
-         * @return A formatted string representation.
-         */
-        public String format(int value);
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!isEnabled()) {
+            return false;
+        }
+        if (!isScrollerEnabled()) {
+            return false;
+        }
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
+        }
+        mVelocityTracker.addMovement(event);
+        int action = event.getAction() & MotionEvent.ACTION_MASK;
+        switch (action) {
+            case MotionEvent.ACTION_MOVE: {
+                if (isHorizontalMode()) {
+                    float currentMoveX = event.getX();
+                    if (mScrollState != OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                        int deltaDownX = (int) Math.abs(currentMoveX - mLastDownEventX);
+                        if (deltaDownX > mTouchSlop) {
+                            removeAllCallbacks();
+                            onScrollStateChange(OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
+                        }
+                    } else {
+                        int deltaMoveX = (int) ((currentMoveX - mLastDownOrMoveEventX));
+                        scrollBy(deltaMoveX, 0);
+                        invalidate();
+                    }
+                    mLastDownOrMoveEventX = currentMoveX;
+                } else {
+                    float currentMoveY = event.getY();
+                    if (mScrollState != OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                        int deltaDownY = (int) Math.abs(currentMoveY - mLastDownEventY);
+                        if (deltaDownY > mTouchSlop) {
+                            removeAllCallbacks();
+                            onScrollStateChange(OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
+                        }
+                    } else {
+                        int deltaMoveY = (int) ((currentMoveY - mLastDownOrMoveEventY));
+                        scrollBy(0, deltaMoveY);
+                        invalidate();
+                    }
+                    mLastDownOrMoveEventY = currentMoveY;
+                }
+            }
+            break;
+            case MotionEvent.ACTION_UP: {
+                removeChangeCurrentByOneFromLongPress();
+                VelocityTracker velocityTracker = mVelocityTracker;
+                velocityTracker.computeCurrentVelocity(1000, mMaximumFlingVelocity);
+                if (isHorizontalMode()) {
+                    int initialVelocity = (int) velocityTracker.getXVelocity();
+                    if (Math.abs(initialVelocity) > mMinimumFlingVelocity) {
+                        fling(initialVelocity);
+                        onScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
+                    } else {
+                        int eventX = (int) event.getX();
+                        int deltaMoveX = (int) Math.abs(eventX - mLastDownEventX);
+                        if (deltaMoveX <= mTouchSlop) {
+                            int selectorIndexOffset = (eventX / mSelectorElementSize)
+                                    - mWheelMiddleItemIndex;
+                            if (selectorIndexOffset > 0) {
+                                changeValueByOne(true);
+                            } else if (selectorIndexOffset < 0) {
+                                changeValueByOne(false);
+                            } else {
+                                ensureScrollWheelAdjusted();
+                            }
+                        } else {
+                            ensureScrollWheelAdjusted();
+                        }
+                        onScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
+                    }
+                } else {
+                    int initialVelocity = (int) velocityTracker.getYVelocity();
+                    if (Math.abs(initialVelocity) > mMinimumFlingVelocity) {
+                        fling(initialVelocity);
+                        onScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
+                    } else {
+                        int eventY = (int) event.getY();
+                        int deltaMoveY = (int) Math.abs(eventY - mLastDownEventY);
+                        if (deltaMoveY <= mTouchSlop) {
+                            int selectorIndexOffset = (eventY / mSelectorElementSize)
+                                    - mWheelMiddleItemIndex;
+                            if (selectorIndexOffset > 0) {
+                                changeValueByOne(true);
+                            } else if (selectorIndexOffset < 0) {
+                                changeValueByOne(false);
+                            } else {
+                                ensureScrollWheelAdjusted();
+                            }
+                        } else {
+                            ensureScrollWheelAdjusted();
+                        }
+                        onScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
+                    }
+                }
+                mVelocityTracker.recycle();
+                mVelocityTracker = null;
+            }
+            break;
+        }
+        return true;
     }
-
-    private String startText = "";
-    private boolean alwaysShowText = false;
 
     /**
      * Create a new number picker.
@@ -799,35 +888,46 @@ public class NumberPicker extends LinearLayout {
         attributes.recycle();
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        final int msrdWdth = getMeasuredWidth();
-        final int msrdHght = getMeasuredHeight();
-
-        // Input text centered horizontally.
-        final int inptTxtMsrdWdth = mSelectedText.getMeasuredWidth();
-        final int inptTxtMsrdHght = mSelectedText.getMeasuredHeight();
-        final int inptTxtLeft = (msrdWdth - inptTxtMsrdWdth) / 2;
-        final int inptTxtTop = (msrdHght - inptTxtMsrdHght) / 2;
-        final int inptTxtRight = inptTxtLeft + inptTxtMsrdWdth;
-        final int inptTxtBottom = inptTxtTop + inptTxtMsrdHght;
-        mSelectedText.layout(inptTxtLeft, inptTxtTop, inptTxtRight, inptTxtBottom);
-        mSelectedTextCenterX = mSelectedText.getX() + mSelectedText.getMeasuredWidth() / 2;
-        mSelectedTextCenterY = mSelectedText.getY() + mSelectedText.getMeasuredHeight() / 2;
-
-        if (changed) {
-            // need to do all this when we know our size
-            initializeSelectorWheel();
-            initializeFadingEdges();
-
-            final int dividerDistance = 2 * mDividerThickness + mDividerDistance;
-            if (isHorizontalMode()) {
-                mLeftDividerLeft = (getWidth() - mDividerDistance) / 2 - mDividerThickness;
-                mRightDividerRight = mLeftDividerLeft + dividerDistance;
-            } else {
-                mTopDividerTop = (getHeight() - mDividerDistance) / 2 - mDividerThickness;
-                mBottomDividerBottom = mTopDividerTop + dividerDistance;
+    /**
+     * Computes the max width if no such specified as an attribute.
+     */
+    private void tryComputeMaxWidth() {
+        if (!mComputeMaxWidth) {
+            return;
+        }
+        mSelectorWheelPaint.setTextSize(getMaxTextSize());
+        int maxTextWidth = 0;
+        if (mDisplayedValues == null) {
+            float maxDigitWidth = 0;
+            for (int i = 0; i <= 9; i++) {
+                final float digitWidth = mSelectorWheelPaint.measureText(formatNumber(i));
+                if (digitWidth > maxDigitWidth) {
+                    maxDigitWidth = digitWidth;
+                }
             }
+            int numberOfDigits = 0;
+            int current = mMaxValue;
+            while (current > 0) {
+                numberOfDigits++;
+                current = current / 10;
+            }
+            maxTextWidth = (int) (numberOfDigits * maxDigitWidth);
+        } else {
+            for (String mDisplayedValue : mDisplayedValues) {
+                final float textWidth = mSelectorWheelPaint.measureText(mDisplayedValue);
+                if (textWidth > maxTextWidth) {
+                    maxTextWidth = (int) textWidth;
+                }
+            }
+        }
+        maxTextWidth += mSelectedText.getPaddingLeft() + mSelectedText.getPaddingRight();
+        if (mMaxWidth != maxTextWidth) {
+            if (maxTextWidth > mMinWidth) {
+                mMaxWidth = maxTextWidth;
+            } else {
+                mMaxWidth = mMinWidth;
+            }
+            invalidate();
         }
     }
 
@@ -950,108 +1050,113 @@ public class NumberPicker extends LinearLayout {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (!isEnabled()) {
-            return false;
-        }
-        if (!isScrollerEnabled()) {
-            return false;
-        }
-        if (mVelocityTracker == null) {
-            mVelocityTracker = VelocityTracker.obtain();
-        }
-        mVelocityTracker.addMovement(event);
-        int action = event.getAction() & MotionEvent.ACTION_MASK;
-        switch (action) {
-            case MotionEvent.ACTION_MOVE: {
-                if (isHorizontalMode()) {
-                    float currentMoveX = event.getX();
-                    if (mScrollState != OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                        int deltaDownX = (int) Math.abs(currentMoveX - mLastDownEventX);
-                        if (deltaDownX > mTouchSlop) {
-                            removeAllCallbacks();
-                            onScrollStateChange(OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
-                        }
-                    } else {
-                        int deltaMoveX = (int) ((currentMoveX - mLastDownOrMoveEventX));
-                        scrollBy(deltaMoveX, 0);
-                        invalidate();
-                    }
-                    mLastDownOrMoveEventX = currentMoveX;
-                } else {
-                    float currentMoveY = event.getY();
-                    if (mScrollState != OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                        int deltaDownY = (int) Math.abs(currentMoveY - mLastDownEventY);
-                        if (deltaDownY > mTouchSlop) {
-                            removeAllCallbacks();
-                            onScrollStateChange(OnScrollListener.SCROLL_STATE_TOUCH_SCROLL);
-                        }
-                    } else {
-                        int deltaMoveY = (int) ((currentMoveY - mLastDownOrMoveEventY));
-                        scrollBy(0, deltaMoveY);
-                        invalidate();
-                    }
-                    mLastDownOrMoveEventY = currentMoveY;
-                }
+    protected void onDraw(Canvas canvas) {
+        // save canvas
+        canvas.save();
+
+        final boolean showSelectorWheel = !mHideWheelUntilFocused || hasFocus();
+        float x, y;
+        if (isHorizontalMode()) {
+            x = mCurrentScrollOffset;
+            y = mSelectedText.getBaseline() + mSelectedText.getTop();
+            if (mRealWheelItemCount < DEFAULT_WHEEL_ITEM_COUNT) {
+                canvas.clipRect(mLeftDividerLeft, 0, mRightDividerRight, getBottom());
             }
-            break;
-            case MotionEvent.ACTION_UP: {
-                removeChangeCurrentByOneFromLongPress();
-                VelocityTracker velocityTracker = mVelocityTracker;
-                velocityTracker.computeCurrentVelocity(1000, mMaximumFlingVelocity);
-                if (isHorizontalMode()) {
-                    int initialVelocity = (int) velocityTracker.getXVelocity();
-                    if (Math.abs(initialVelocity) > mMinimumFlingVelocity) {
-                        fling(initialVelocity);
-                        onScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
+        } else {
+            x = (getRight() - getLeft()) / 2f;
+            y = mCurrentScrollOffset;
+            if (mRealWheelItemCount < DEFAULT_WHEEL_ITEM_COUNT) {
+                canvas.clipRect(0, mTopDividerTop, getRight(), mBottomDividerBottom);
+            }
+        }
+
+        // draw the selector wheel
+        int[] selectorIndices = getSelectorIndices();
+        for (int i = 0; i < selectorIndices.length; i++) {
+            if (i == mWheelMiddleItemIndex) {
+                mSelectorWheelPaint.setTextAlign(Paint.Align.values()[mSelectedTextAlign]);
+                mSelectorWheelPaint.setTextSize(mSelectedTextSize);
+                mSelectorWheelPaint.setColor(mSelectedTextColor);
+                mSelectorWheelPaint.setStrikeThruText(mSelectedTextStrikeThru);
+                mSelectorWheelPaint.setUnderlineText(mSelectedTextUnderline);
+            } else {
+                mSelectorWheelPaint.setTextAlign(Paint.Align.values()[mTextAlign]);
+                mSelectorWheelPaint.setTextSize(mTextSize);
+                mSelectorWheelPaint.setColor(mTextColor);
+                mSelectorWheelPaint.setStrikeThruText(mTextStrikeThru);
+                mSelectorWheelPaint.setUnderlineText(mTextUnderline);
+            }
+
+            int selectorIndex = selectorIndices[isAscendingOrder() ? i : selectorIndices.length - i - 1];
+            String scrollSelectorValue = mSelectorIndexToStringCache.get(selectorIndex);
+            // Do not draw the middle item if input is visible since the input
+            // is shown only if the wheel is static and it covers the middle
+            // item. Otherwise, if the user starts editing the text via the
+            // IME he may see a dimmed version of the old value intermixed
+            // with the new one.
+            if ((showSelectorWheel && i != mWheelMiddleItemIndex)
+                    || (i == mWheelMiddleItemIndex && mSelectedText.getVisibility() != VISIBLE)) {
+                float textY = y;
+                if (!isHorizontalMode()) {
+                    textY += getPaintCenterY(mSelectorWheelPaint.getFontMetrics());
+                }
+                if (!alwaysShowText) {
+                    if (selectorIndex == mValue && isFirstDraw) {
+                        float sp = mSelectorWheelPaint.getTextSize();
+                        int color = mSelectorWheelPaint.getColor();
+                        mSelectorWheelPaint.setColor(Color.parseColor("#4600819b"));
+                        canvas.drawRect(getLeft(), textY - 2 * mSelectorWheelPaint.getFontMetrics().bottom,
+                                getRight(), textY + mSelectorWheelPaint.getFontMetrics().bottom, mSelectorWheelPaint);
+                        mSelectorWheelPaint.setColor(color);
+                        mSelectorWheelPaint.setTextSize(spToPx(17));
+                        drawText(startText, x, textY, mSelectorWheelPaint, canvas);
+                        mSelectorWheelPaint.setTextSize(sp);
+                        isFirstDraw = false;
                     } else {
-                        int eventX = (int) event.getX();
-                        int deltaMoveX = (int) Math.abs(eventX - mLastDownEventX);
-                        if (deltaMoveX <= mTouchSlop) {
-                            int selectorIndexOffset = (eventX / mSelectorElementSize)
-                                    - mWheelMiddleItemIndex;
-                            if (selectorIndexOffset > 0) {
-                                changeValueByOne(true);
-                            } else if (selectorIndexOffset < 0) {
-                                changeValueByOne(false);
-                            } else {
-                                ensureScrollWheelAdjusted();
-                            }
-                        } else {
-                            ensureScrollWheelAdjusted();
-                        }
-                        onScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
+                        drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
                     }
                 } else {
-                    int initialVelocity = (int) velocityTracker.getYVelocity();
-                    if (Math.abs(initialVelocity) > mMinimumFlingVelocity) {
-                        fling(initialVelocity);
-                        onScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
-                    } else {
-                        int eventY = (int) event.getY();
-                        int deltaMoveY = (int) Math.abs(eventY - mLastDownEventY);
-                        if (deltaMoveY <= mTouchSlop) {
-                            int selectorIndexOffset = (eventY / mSelectorElementSize)
-                                    - mWheelMiddleItemIndex;
-                            if (selectorIndexOffset > 0) {
-                                changeValueByOne(true);
-                            } else if (selectorIndexOffset < 0) {
-                                changeValueByOne(false);
-                            } else {
-                                ensureScrollWheelAdjusted();
-                            }
-                        } else {
-                            ensureScrollWheelAdjusted();
+                    if (selectorIndex == mValue) {
+                        float sp = mSelectorWheelPaint.getTextSize();
+                        int color = mSelectorWheelPaint.getColor();
+                        mSelectorWheelPaint.setColor(Color.parseColor("#4600819b"));
+                        if (staticLeft == -1) {
+                            staticLeft = getLeft();
+                            staticRight = getRight();
+                            staticTop = textY - 2 * mSelectorWheelPaint.getFontMetrics().bottom;
+                            staticBottom = textY + mSelectorWheelPaint.getFontMetrics().bottom;
+                            staticTextY = textY;
                         }
-                        onScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
+                        canvas.drawRect(staticLeft, staticTop, staticRight, staticBottom, mSelectorWheelPaint);
+                        mSelectorWheelPaint.setColor(color);
+                        mSelectorWheelPaint.setTextSize(sp + 2);
+                        if (isFirstDraw) {
+                            isFirstDraw = false;
+                            mSelectorWheelPaint.setColor(color);
+                            mSelectorWheelPaint.setTextSize(spToPx(17));
+                            drawText(startText, x, textY, mSelectorWheelPaint, canvas);
+                            mSelectorWheelPaint.setTextSize(sp);
+                        } else {
+                            drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
+                        }
+//                        drawText(startText, x - 2 * mSelectorWheelPaint.getFontMetrics().descent, staticTextY, mSelectorWheelPaint, canvas);
+                        mSelectorWheelPaint.setTextSize(sp);
+                    } else {
+                        drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
                     }
+
                 }
-                mVelocityTracker.recycle();
-                mVelocityTracker = null;
             }
-            break;
+
+            if (isHorizontalMode()) {
+                x += mSelectorElementSize;
+            } else {
+                y += mSelectorElementSize;
+            }
         }
-        return true;
+
+        // restore canvas
+        canvas.restore();
     }
 
     @Override
@@ -1391,47 +1496,18 @@ public class NumberPicker extends LinearLayout {
     }
 
     /**
-     * Computes the max width if no such specified as an attribute.
+     * Increments the <code>selectorIndices</code> whose string representations
+     * will be displayed in the selector.
      */
-    private void tryComputeMaxWidth() {
-        if (!mComputeMaxWidth) {
-            return;
+    private void incrementSelectorIndices(int[] selectorIndices) {
+        if (selectorIndices.length - 1 >= 0)
+            System.arraycopy(selectorIndices, 1, selectorIndices, 0, selectorIndices.length - 1);
+        int nextScrollSelectorIndex = selectorIndices[selectorIndices.length - 2] + 1;
+        if (mWrapSelectorWheel && nextScrollSelectorIndex > mMaxValue) {
+            nextScrollSelectorIndex = mMinValue;
         }
-        mSelectorWheelPaint.setTextSize(getMaxTextSize());
-        int maxTextWidth = 0;
-        if (mDisplayedValues == null) {
-            float maxDigitWidth = 0;
-            for (int i = 0; i <= 9; i++) {
-                final float digitWidth = mSelectorWheelPaint.measureText(formatNumber(i));
-                if (digitWidth > maxDigitWidth) {
-                    maxDigitWidth = digitWidth;
-                }
-            }
-            int numberOfDigits = 0;
-            int current = mMaxValue;
-            while (current > 0) {
-                numberOfDigits++;
-                current = current / 10;
-            }
-            maxTextWidth = (int) (numberOfDigits * maxDigitWidth);
-        } else {
-            final int valueCount = mDisplayedValues.length;
-            for (int i = 0; i < valueCount; i++) {
-                final float textWidth = mSelectorWheelPaint.measureText(mDisplayedValues[i]);
-                if (textWidth > maxTextWidth) {
-                    maxTextWidth = (int) textWidth;
-                }
-            }
-        }
-        maxTextWidth += mSelectedText.getPaddingLeft() + mSelectedText.getPaddingRight();
-        if (mMaxWidth != maxTextWidth) {
-            if (maxTextWidth > mMinWidth) {
-                mMaxWidth = maxTextWidth;
-            } else {
-                mMaxWidth = mMinWidth;
-            }
-            invalidate();
-        }
+        selectorIndices[selectorIndices.length - 1] = nextScrollSelectorIndex;
+        ensureCachedScrollSelectorValue(nextScrollSelectorIndex);
     }
 
     /**
@@ -1643,114 +1719,19 @@ public class NumberPicker extends LinearLayout {
     private float staticBottom = -1;
     private float staticTextY = -1;
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        // save canvas
-        canvas.save();
-
-        final boolean showSelectorWheel = mHideWheelUntilFocused ? hasFocus() : true;
-        float x, y;
-        if (isHorizontalMode()) {
-            x = mCurrentScrollOffset;
-            y = mSelectedText.getBaseline() + mSelectedText.getTop();
-            if (mRealWheelItemCount < DEFAULT_WHEEL_ITEM_COUNT) {
-                canvas.clipRect(mLeftDividerLeft, 0, mRightDividerRight, getBottom());
-            }
-        } else {
-            x = (getRight() - getLeft()) / 2f;
-            y = mCurrentScrollOffset;
-            if (mRealWheelItemCount < DEFAULT_WHEEL_ITEM_COUNT) {
-                canvas.clipRect(0, mTopDividerTop, getRight(), mBottomDividerBottom);
-            }
+    /**
+     * Decrements the <code>selectorIndices</code> whose string representations
+     * will be displayed in the selector.
+     */
+    private void decrementSelectorIndices(int[] selectorIndices) {
+        if (selectorIndices.length - 1 >= 0)
+            System.arraycopy(selectorIndices, 0, selectorIndices, 1, selectorIndices.length - 1);
+        int nextScrollSelectorIndex = selectorIndices[1] - 1;
+        if (mWrapSelectorWheel && nextScrollSelectorIndex < mMinValue) {
+            nextScrollSelectorIndex = mMaxValue;
         }
-
-        // draw the selector wheel
-        int[] selectorIndices = getSelectorIndices();
-        for (int i = 0; i < selectorIndices.length; i++) {
-            if (i == mWheelMiddleItemIndex) {
-                mSelectorWheelPaint.setTextAlign(Paint.Align.values()[mSelectedTextAlign]);
-                mSelectorWheelPaint.setTextSize(mSelectedTextSize);
-                mSelectorWheelPaint.setColor(mSelectedTextColor);
-                mSelectorWheelPaint.setStrikeThruText(mSelectedTextStrikeThru);
-                mSelectorWheelPaint.setUnderlineText(mSelectedTextUnderline);
-            } else {
-                mSelectorWheelPaint.setTextAlign(Paint.Align.values()[mTextAlign]);
-                mSelectorWheelPaint.setTextSize(mTextSize);
-                mSelectorWheelPaint.setColor(mTextColor);
-                mSelectorWheelPaint.setStrikeThruText(mTextStrikeThru);
-                mSelectorWheelPaint.setUnderlineText(mTextUnderline);
-            }
-
-            int selectorIndex = selectorIndices[isAscendingOrder() ? i : selectorIndices.length - i - 1];
-            String scrollSelectorValue = mSelectorIndexToStringCache.get(selectorIndex);
-            // Do not draw the middle item if input is visible since the input
-            // is shown only if the wheel is static and it covers the middle
-            // item. Otherwise, if the user starts editing the text via the
-            // IME he may see a dimmed version of the old value intermixed
-            // with the new one.
-            if ((showSelectorWheel && i != mWheelMiddleItemIndex)
-                    || (i == mWheelMiddleItemIndex && mSelectedText.getVisibility() != VISIBLE)) {
-                float textY = y;
-                if (!isHorizontalMode()) {
-                    textY += getPaintCenterY(mSelectorWheelPaint.getFontMetrics());
-                }
-                if (!alwaysShowText) {
-                    if (selectorIndex == mValue && isFirstDraw) {
-                        float sp = mSelectorWheelPaint.getTextSize();
-                        int color = mSelectorWheelPaint.getColor();
-                        mSelectorWheelPaint.setColor(Color.parseColor("#4600819b"));
-                        canvas.drawRect(getLeft(), textY - 2 * mSelectorWheelPaint.getFontMetrics().bottom,
-                                getRight(), textY + mSelectorWheelPaint.getFontMetrics().bottom, mSelectorWheelPaint);
-                        mSelectorWheelPaint.setColor(color);
-                        mSelectorWheelPaint.setTextSize(spToPx(17));
-                        drawText(startText, x, textY, mSelectorWheelPaint, canvas);
-                        mSelectorWheelPaint.setTextSize(sp);
-                        isFirstDraw = false;
-                    } else {
-                        drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
-                    }
-                } else {
-                    if (selectorIndex == mValue) {
-                        float sp = mSelectorWheelPaint.getTextSize();
-                        int color = mSelectorWheelPaint.getColor();
-                        mSelectorWheelPaint.setColor(Color.parseColor("#4600819b"));
-                        if (staticLeft == -1) {
-                            staticLeft = getLeft();
-                            staticRight = getRight();
-                            staticTop = textY - 2 * mSelectorWheelPaint.getFontMetrics().bottom;
-                            staticBottom = textY + mSelectorWheelPaint.getFontMetrics().bottom;
-                            staticTextY = textY;
-                        }
-                        canvas.drawRect(staticLeft, staticTop, staticRight, staticBottom, mSelectorWheelPaint);
-                        mSelectorWheelPaint.setColor(color);
-                        mSelectorWheelPaint.setTextSize(sp + 2);
-                        if (isFirstDraw) {
-                            isFirstDraw = false;
-                            mSelectorWheelPaint.setColor(color);
-                            mSelectorWheelPaint.setTextSize(spToPx(17));
-                            drawText(startText, x, textY, mSelectorWheelPaint, canvas);
-                            mSelectorWheelPaint.setTextSize(sp);
-                        } else {
-                            drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
-                        }
-//                        drawText(startText, x - 2 * mSelectorWheelPaint.getFontMetrics().descent, staticTextY, mSelectorWheelPaint, canvas);
-                        mSelectorWheelPaint.setTextSize(sp);
-                    } else {
-                        drawText(scrollSelectorValue, x, textY, mSelectorWheelPaint, canvas);
-                    }
-
-                }
-            }
-
-            if (isHorizontalMode()) {
-                x += mSelectorElementSize;
-            } else {
-                y += mSelectorElementSize;
-            }
-        }
-
-        // restore canvas
-        canvas.restore();
+        selectorIndices[0] = nextScrollSelectorIndex;
+        ensureCachedScrollSelectorValue(nextScrollSelectorIndex);
     }
 
     private void drawText(String text, float x, float y, Paint paint, Canvas canvas) {
@@ -2053,35 +2034,52 @@ public class NumberPicker extends LinearLayout {
     }
 
     /**
-     * Increments the <code>selectorIndices</code> whose string representations
-     * will be displayed in the selector.
+     * Interface to listen for the picker scroll state.
      */
-    private void incrementSelectorIndices(int[] selectorIndices) {
-        for (int i = 0; i < selectorIndices.length - 1; i++) {
-            selectorIndices[i] = selectorIndices[i + 1];
+    public interface OnScrollListener {
+
+        /**
+         * The view is not scrolling.
+         */
+        int SCROLL_STATE_IDLE = 0;
+        /**
+         * The user is scrolling using touch, and his finger is still on the screen.
+         */
+        int SCROLL_STATE_TOUCH_SCROLL = 1;
+        /**
+         * The user had previously been scrolling using touch and performed a fling.
+         */
+        int SCROLL_STATE_FLING = 2;
+
+        /**
+         * Callback invoked while the number picker scroll state has changed.
+         *
+         * @param view        The view whose scroll state is being reported.
+         * @param scrollState The current scroll state. One of
+         *                    {@link #SCROLL_STATE_IDLE},
+         *                    {@link #SCROLL_STATE_TOUCH_SCROLL} or
+         *                    {@link #SCROLL_STATE_IDLE}.
+         */
+        void onScrollStateChange(NumberPicker view, @ScrollState int scrollState);
+
+        @IntDef({SCROLL_STATE_IDLE, SCROLL_STATE_TOUCH_SCROLL, SCROLL_STATE_FLING})
+        @Retention(RetentionPolicy.SOURCE)
+        @interface ScrollState {
         }
-        int nextScrollSelectorIndex = selectorIndices[selectorIndices.length - 2] + 1;
-        if (mWrapSelectorWheel && nextScrollSelectorIndex > mMaxValue) {
-            nextScrollSelectorIndex = mMinValue;
-        }
-        selectorIndices[selectorIndices.length - 1] = nextScrollSelectorIndex;
-        ensureCachedScrollSelectorValue(nextScrollSelectorIndex);
     }
 
     /**
-     * Decrements the <code>selectorIndices</code> whose string representations
-     * will be displayed in the selector.
+     * Interface used to format current value into a string for presentation.
      */
-    private void decrementSelectorIndices(int[] selectorIndices) {
-        for (int i = selectorIndices.length - 1; i > 0; i--) {
-            selectorIndices[i] = selectorIndices[i - 1];
-        }
-        int nextScrollSelectorIndex = selectorIndices[1] - 1;
-        if (mWrapSelectorWheel && nextScrollSelectorIndex < mMinValue) {
-            nextScrollSelectorIndex = mMaxValue;
-        }
-        selectorIndices[0] = nextScrollSelectorIndex;
-        ensureCachedScrollSelectorValue(nextScrollSelectorIndex);
+    public interface Formatter {
+
+        /**
+         * Formats a string representation of the current value.
+         *
+         * @param value The currently selected value.
+         * @return A formatted string representation.
+         */
+        String format(int value);
     }
 
     /**
@@ -2273,6 +2271,7 @@ public class NumberPicker extends LinearLayout {
             return InputType.TYPE_CLASS_TEXT;
         }
 
+        @NonNull
         @Override
         protected char[] getAcceptedChars() {
             return DIGIT_CHARACTERS;

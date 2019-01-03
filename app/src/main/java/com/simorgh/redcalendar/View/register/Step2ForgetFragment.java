@@ -1,7 +1,6 @@
 package com.simorgh.redcalendar.View.register;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ public class Step2ForgetFragment extends Fragment {
 
     private Step2ForgetViewModel mViewModel;
     private TextView tvForget;
-    private Typeface typeface;
     private Step2Fragment.OnRedDaysCountSelectedListener onRedDaysCountSelected;
 
 
@@ -32,8 +30,6 @@ public class Step2ForgetFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.step2forget_fragment, container, false);
         tvForget = v.findViewById(R.id.tv_forget);
-        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/iransans_medium.ttf");
-        tvForget.setTypeface(typeface);
         return v;
     }
 

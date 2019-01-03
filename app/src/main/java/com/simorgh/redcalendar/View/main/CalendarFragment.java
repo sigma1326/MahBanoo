@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cyclecalendar.view.BaseMonthView;
@@ -54,6 +53,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
     }
 
     RecyclerView recyclerView;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         calendarView = new CalendarView(getActivity()

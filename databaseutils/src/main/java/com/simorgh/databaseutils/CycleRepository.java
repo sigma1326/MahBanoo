@@ -2,7 +2,6 @@ package com.simorgh.databaseutils;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.service.autofill.UserData;
 
 import com.simorgh.databaseutils.dao.CycleDAO;
 import com.simorgh.databaseutils.dao.DayMoodDAO;

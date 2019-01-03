@@ -1,7 +1,6 @@
 package com.simorgh.redcalendar.View.main;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.MakeReportViewModel;
 import com.simorgh.reportutil.ReportUtils;
 
-import java.io.File;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -106,17 +104,6 @@ public class MakeReportFragment extends Fragment {
         return v;
     }
 
-
-    public static String getAppPath(Context context) {
-        File dir = new File(android.os.Environment.getExternalStorageDirectory()
-                + File.separator
-                + context.getResources().getString(R.string.app_name)
-                + File.separator);
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
-        return dir.getPath() + File.separator;
-    }
 
     @SuppressLint("DefaultLocale")
     @Override

@@ -42,4 +42,20 @@
     <string name="show_pregnancy_prob">نمایش احتمال باردار‌ شدن</string>
     <string name="set_date">انتخاب تاریخ</string>
     <string name="choose_day">انتخاب روز</string>
+    <string name="weight">وزن</string>
+    <string name="apply">تائید</string>
+    <string name="drugs">داروهای مصرفی</string>
+    <string name="add_to_list">اضافه به لیست</string>
+    <string name="time_range">بازه‌ی زمانی</string>
+    <string name="start_from">از تاریخ</string>
+    <string name="end_range">تا تاریخ</string>
+    <string name="report_options">موارد ارسالی</string>
+    <string name="bleeding_option">شدت خونریزی</string>
+    <string name="eating_deire_option">میل به خوردن</string>
+    <string name="emotion_option">احساسات</string>
+    <string name="hair_style_option">حالت موها</string>
+    <string name="pain_option">احساس درد</string>
+    <string name="weight_option">وزن</string>
+    <string name="drug_option">داروهای مصرفی</string>
+    <string name="make_report">ارسال گزارش</string>
 </resources>

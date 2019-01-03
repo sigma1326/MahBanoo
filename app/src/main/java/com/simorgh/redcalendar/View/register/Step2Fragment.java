@@ -1,15 +1,8 @@
 package com.simorgh.redcalendar.View.register;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +10,13 @@ import android.view.ViewGroup;
 import com.simorgh.numberpicker.NumberPicker;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.register.Step2ViewModel;
+
+import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 public class Step2Fragment extends Fragment {
 
@@ -31,7 +31,7 @@ public class Step2Fragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/iransans_medium.ttf");
+        typeface = Typeface.createFromAsset(Objects.requireNonNull(getActivity()).getAssets(), "fonts/iransans_medium.ttf");
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Step2Fragment extends Fragment {
     }
 
     public interface OnRedDaysCountSelectedListener {
-        public void onRedDaysCountSelected(int count);
+        void onRedDaysCountSelected(int count);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.simorgh.spinner;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -108,12 +109,7 @@ public class NiceSpinner extends AppCompatTextView {
             if (bundle.getBoolean(IS_POPUP_SHOWING)) {
                 if (popupWindow != null) {
                     // Post the show request into the looper to avoid bad token exception
-                    post(new Runnable() {
-                        @Override
-                        public void run() {
-                            showDropDown();
-                        }
-                    });
+                    post(this::showDropDown);
                 }
             }
 
@@ -332,6 +328,7 @@ public class NiceSpinner extends AppCompatTextView {
         setTextInternal(adapter.getItemInDataset(selectedIndex).toString());
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (isEnabled() && event.getAction() == MotionEvent.ACTION_UP) {

@@ -63,9 +63,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
         calendarView.setOnDayClickListener(this);
         calendarView.setOnScrollListener(this);
         btnApplyChanges = v.findViewById(R.id.btn_apply_changes);
-        btnApplyChanges.setOnClickListener(v1 -> {
-            navController.navigateUp();
-        });
+        btnApplyChanges.setOnClickListener(v1 -> navController.navigateUp());
 
 
         return v;

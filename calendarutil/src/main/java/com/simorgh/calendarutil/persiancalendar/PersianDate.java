@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import androidx.annotation.NonNull;
+
 /**
  * Created by Saman on 3/29/2017 AD.
  */
@@ -381,8 +383,7 @@ public class PersianDate
 				break;
 			}
 		}
-		int[] ret = {hshYear, hshMonth, hshDay};
-		return ret;
+		return new int[]{hshYear, hshMonth, hshDay};
 	}
 
 	/**
@@ -420,8 +421,7 @@ public class PersianDate
 			}
 		}
 
-		int[] ret = {grgYear, grgMonth, grgDay};
-		return ret;
+		return new int[]{grgYear, grgMonth, grgDay};
 	}
 
 	/**
@@ -619,7 +619,7 @@ public class PersianDate
 	 * @return
 	 */
 	public Boolean equals(PersianDate dateInput){
-		return (this.timeInMiliSecond == dateInput.getTime());
+		return (this.timeInMiliSecond.equals(dateInput.getTime()));
 	}
 	/**
 	 * compare 2 data
@@ -628,7 +628,7 @@ public class PersianDate
 	 * @return  0 = equal,1=data1 > anotherDate,-1=data1 > anotherDate
 	 */
 	public int compareTo(PersianDate anotherDate) {
-		return (this.timeInMiliSecond <anotherDate.getTime() ? -1 : (this.timeInMiliSecond ==anotherDate.getTime() ? 0 : 1));
+		return (this.timeInMiliSecond <anotherDate.getTime() ? -1 : (this.timeInMiliSecond.equals(anotherDate.getTime()) ? 0 : 1));
 	}
 	/**
 	 * Return Day in difreent date
@@ -680,6 +680,7 @@ public class PersianDate
 		return new long[]{elapsedDays,elapsedHours,elapsedMinutes,elapsedSeconds};
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return PersianDateFormat.format(this,null);

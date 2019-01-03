@@ -11,6 +11,8 @@ import com.simorgh.numberpicker.NumberPicker;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.register.Step5ViewModel;
 
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -30,7 +32,7 @@ public class Step5Fragment extends Fragment {
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/iransans_medium.ttf");
+        typeface = Typeface.createFromAsset(Objects.requireNonNull(getActivity()).getAssets(), "fonts/iransans_medium.ttf");
     }
 
     @Override
@@ -71,7 +73,7 @@ public class Step5Fragment extends Fragment {
     }
 
     public interface OnBirthDaySelectedListener {
-        public void onBirthDaySelected(int year);
+        void onBirthDaySelected(int year);
     }
 
 }

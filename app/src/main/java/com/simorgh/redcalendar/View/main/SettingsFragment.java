@@ -57,8 +57,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
@@ -111,9 +109,7 @@ public class SettingsFragment extends Fragment {
                     .show();
         });
 
-        tvMakeReport.setOnClickListener(v1 -> {
-            navController.navigate(R.id.action_settings_to_make_report);
-        });
+        tvMakeReport.setOnClickListener(v1 -> navController.navigate(R.id.action_settings_to_make_report));
 
         return v;
     }

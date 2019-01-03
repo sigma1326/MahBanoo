@@ -1,7 +1,5 @@
 package com.simorgh.databaseutils;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.simorgh.calendarutil.model.CalendarType;
@@ -30,7 +28,7 @@ public class TypeConverters {
             int day = Integer.parseInt(String.valueOf(value).substring(0, 4));
             calendar.clear();
             calendar.set(Calendar.DAY_OF_MONTH, year);
-            calendar.set(Calendar.MONTH, month-1);
+            calendar.set(Calendar.MONTH, month - 1);
             calendar.set(Calendar.YEAR, day);
             return calendar;
         }
@@ -38,9 +36,6 @@ public class TypeConverters {
 
     @TypeConverter
     public static long toTimeInMillis(@NonNull Calendar calendar) {
-        if (calendar == null) {
-            return 0;
-        }
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);

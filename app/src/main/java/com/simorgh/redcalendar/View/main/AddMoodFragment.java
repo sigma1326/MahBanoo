@@ -28,7 +28,6 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -83,7 +82,7 @@ public class AddMoodFragment extends Fragment {
         }
     }
 
-    public void hideKeyboard(@NonNull Activity activity) {
+    private void hideKeyboard(@NonNull Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View focusView = activity.getCurrentFocus();
         if (focusView != null) {

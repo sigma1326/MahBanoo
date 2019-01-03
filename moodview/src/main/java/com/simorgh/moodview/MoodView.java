@@ -15,12 +15,10 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -383,16 +381,16 @@ public class MoodView extends View {
                     if (Math.sqrt(Math.pow(Math.abs(event.getX() - x), 2) + Math.pow(Math.abs(event.getY() - y), 2)) < radius) {
                         if (isMultiSelect) {
                             if (selectedItems.contains(i)) {
-                                selectedItems.remove(new Integer(i));
+                                selectedItems.remove(Integer.valueOf(i));
                             } else {
-                                selectedItems.add(new Integer(i));
+                                selectedItems.add(i);
                             }
                         } else {
                             if (selectedItems.contains(i)) {
-                                selectedItems.remove(new Integer(i));
+                                selectedItems.remove(Integer.valueOf(i));
                             } else {
                                 selectedItems.clear();
-                                selectedItems.add(new Integer(i));
+                                selectedItems.add(i);
                             }
                         }
                         if (onItemSelectedListener != null) {
@@ -468,7 +466,7 @@ public class MoodView extends View {
     }
 
     public interface OnItemSelectedListener {
-        public void onItemSelected(List<Integer> selectedItems);
+        void onItemSelected(List<Integer> selectedItems);
     }
 
 }

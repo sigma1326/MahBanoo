@@ -40,12 +40,12 @@
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"
         android:fontFamily="@font/iransans_medium"
-        android:text="27 آذر - 20 دی"
         android:textColor="#5c5c5c"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_current_cycle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_current_cycle" />
+        app:layout_constraintTop_toTopOf="@+id/tv_current_cycle"
+        tools:text="27 آذر - 20 دی" />
 
     <TextView
         android:id="@+id/tv_red_count"

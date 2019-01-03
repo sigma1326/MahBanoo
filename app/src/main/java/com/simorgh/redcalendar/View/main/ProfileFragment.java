@@ -1,14 +1,7 @@
 package com.simorgh.redcalendar.View.main;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.graphics.Typeface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +12,9 @@ import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.cyclebar.CycleBar;
 import com.simorgh.cycleutils.CycleData;
-import com.simorgh.databaseutils.model.User;
-import com.simorgh.databaseutils.model.UserWithCycles;
-import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.databaseutils.model.Cycle;
+import com.simorgh.databaseutils.model.User;
+import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 import com.simorgh.spinner.NiceSpinner;
@@ -31,6 +23,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 public class ProfileFragment extends Fragment {
 

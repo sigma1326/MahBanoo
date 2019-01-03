@@ -1,5 +1,6 @@
 package com.simorgh.cyclebar;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -262,12 +263,13 @@ public class CycleBar extends View {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
+    @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
         if (isInEditMode()) {
             Calendar c = Calendar.getInstance();
             c.set(Calendar.DAY_OF_MONTH, 1);
-            cycleData = new CycleData(5, 25, 3, c,c);
+            cycleData = new CycleData(5, 25, 3, c, c);
         }
         if (cycleData == null) {
             return;

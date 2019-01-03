@@ -728,9 +728,6 @@ public class BaseMonthView extends View {
     }
 
     public static long toTimeInMillis(@NonNull Calendar calendar) {
-        if (calendar == null) {
-            return 0;
-        }
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);

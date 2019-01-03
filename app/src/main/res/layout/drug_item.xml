@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="32dp"
     android:layout_gravity="center"
@@ -14,15 +15,16 @@
         android:layout_gravity="end"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
-        android:fontFamily="@font/iransans_medium"
-        android:lines="1"
         android:ems="3"
-        android:maxLength="20"
+        android:fontFamily="@font/iransans_medium"
         android:gravity="end"
+        android:lines="1"
+        android:maxLength="20"
         android:paddingTop="4dp"
-        android:text="قرص منیزیم"
         android:textColor="#00819b"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:text="قرص منیزیم" />
+
     <ImageView
         android:id="@+id/img_remove"
         android:layout_width="wrap_content"

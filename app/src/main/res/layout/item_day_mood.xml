@@ -10,4 +10,5 @@
     android:background="?attr/selectableItemBackgroundBorderless"
     android:gravity="center"
     android:orientation="vertical"
+    tools:ignore="ContentDescription"
     tools:src="@drawable/item_hair_style2" />

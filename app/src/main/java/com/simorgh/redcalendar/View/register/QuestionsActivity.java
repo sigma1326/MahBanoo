@@ -3,6 +3,7 @@ package com.simorgh.redcalendar.View.register;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.User;
-import com.simorgh.databaseutils.model.UserWithCycles;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.View.main.MainActivity;
 import com.simorgh.redcalendar.ViewModel.register.CycleRegisterViewModel;
@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 public class QuestionsActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener
         , Step1Fragment.OnLastCycleDaySelectedListener
@@ -114,7 +115,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     cycle.setRedDaysCount(cycleRegisterViewModel.getRedDaysCount());
                     cycle.setGrayDaysCount(cycleRegisterViewModel.getGrayDaysCount());
                     Calendar calendar = cycleRegisterViewModel.getLastCycleEndDay();
-                    calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount()+1);
+                    calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount() + 1);
                     cycle.setStartDate(calendar);
                     cycle.setEndDate(null);
                     cycle.setUserId(1);
@@ -147,9 +148,7 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
             }
         });
 
-        prevButton.setOnClickListener(v -> {
-            navController.navigateUp();
-        });
+        prevButton.setOnClickListener(v -> navController.navigateUp());
     }
 
     private void runPrevButtonAnim(boolean visible) {
@@ -332,6 +331,11 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     @Override
     public void onBirthDaySelected(int year) {
         cycleRegisterViewModel.setBirthYear(year);
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
     }
 
     public class ProgressBarAnimation extends Animation {

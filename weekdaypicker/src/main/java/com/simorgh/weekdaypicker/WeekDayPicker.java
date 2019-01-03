@@ -12,7 +12,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -198,6 +197,7 @@ public class WeekDayPicker extends View {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
+    @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
         temp.setTimeInMillis(weekStartDate.getTimeInMillis());
@@ -334,7 +334,7 @@ public class WeekDayPicker extends View {
     }
 
     public interface onDaySelectedListener {
-        public void onDaySelected(Calendar day);
+        void onDaySelected(Calendar day);
     }
 
 }

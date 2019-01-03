@@ -244,7 +244,7 @@ class UmmalquraGregorianConverter {
         int mjdn = jdn - 2400000,
                 i = getNewMoonMJDNIndexByJDN(mjdn),
                 totalMonths = i + 16260,
-                cYears = (int) Math.floor((totalMonths - 1) / 12),
+                cYears = (int) Math.floor((totalMonths - 1) / 12f),
                 hy = cYears + 1,
                 hm = totalMonths - 12 * cYears,
                 hd = mjdn - ummalquraData(i - 1) + 1;

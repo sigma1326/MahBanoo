@@ -71,7 +71,7 @@
         android:elevation="10dp"
         android:fontFamily="@font/iransans_medium"
         android:gravity="center"
-        android:text="دوره فعلی"
+        tools:text="دوره فعلی"
         android:textColor="#00819b"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
