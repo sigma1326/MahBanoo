@@ -43,7 +43,7 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
             min.set(Calendar.MONTH, 0);
             max.add(Calendar.MONTH, 1);
             calendarView = new CalendarView(getContext(), BaseMonthView.MonthViewTypeSetStartDay
-                    , CalendarType.PERSIAN, new CycleData(0, 0, 0, today), min, max);
+                    , CalendarType.PERSIAN, new CycleData(0, 0, 0, today, today), min, max);
             calendarView.setOnDayClickListener(this);
             calendarView.setIsDayMarkedListener(this);
 

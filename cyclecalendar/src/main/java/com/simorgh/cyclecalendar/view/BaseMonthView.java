@@ -18,6 +18,7 @@ import android.view.View;
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
 import com.simorgh.calendarutil.model.CalendarType;
+import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
 import com.simorgh.cyclecalendar.R;
@@ -27,8 +28,11 @@ import com.simorgh.cycleutils.CycleData;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 
@@ -120,10 +124,13 @@ public class BaseMonthView extends View {
     protected OnDaySelectedListener onDaySelectedListener;
     protected IsDaySelectedListener isDaySelectedListener;
     protected IsDayInRangeSelectedListener isDayInRangeSelectedListener;
+    protected OnCycleDataListNeededListener onCycleDataListNeededListener;
+
 
     protected CycleData cycleData;
 
     protected boolean showInfo = true;
+    protected List<CycleData> cycleDataList = new LinkedList<>();
 
 
     public BaseMonthView(Context context) {
@@ -559,6 +566,14 @@ public class BaseMonthView extends View {
     }
 
 
+    public OnCycleDataListNeededListener getOnCycleDataListNeededListener() {
+        return onCycleDataListNeededListener;
+    }
+
+    public void setOnCycleDataListNeededListener(OnCycleDataListNeededListener onCycleDataListNeededListener) {
+        this.onCycleDataListNeededListener = onCycleDataListNeededListener;
+    }
+
     protected static int mathConstrain(int amount, int low, int high) {
         return amount < low ? low : (amount > high ? high : amount);
     }
@@ -652,21 +667,52 @@ public class BaseMonthView extends View {
         }
         long days;
         int day;
-        days = CalendarTool.getDaysFromDiff(date, cycleData.getStartDate());
+        CycleData tempCycle = null;
+        Calendar clearDate = Calendar.getInstance();
+        clearDate.clear();
+
+        if (onCycleDataListNeededListener != null) {
+            cycleDataList.clear();
+            cycleDataList.addAll(onCycleDataListNeededListener.onCycleDataNeeded());
+        }
+
+        if (cycleDataList == null || cycleDataList.isEmpty()) {
+            return TYPE_GRAY;
+        }
+
+        for (CycleData cycleData : cycleDataList) {
+            if (toTimeInMillis(cycleData.getEndDate()) == toTimeInMillis(clearDate)) {
+                if (toTimeInMillis(date) >= toTimeInMillis(cycleData.getStartDate())) {
+                    tempCycle = cycleData;
+                    break;
+                }
+            } else {
+                if (toTimeInMillis(date) >= toTimeInMillis(cycleData.getStartDate()) && toTimeInMillis(date) <= toTimeInMillis(cycleData.getEndDate())) {
+                    tempCycle = cycleData;
+                    break;
+                }
+            }
+        }
+
+        if (tempCycle == null) {
+            return TYPE_GRAY;
+        }
+
+        days = CalendarTool.getDaysFromDiff(date, tempCycle.getStartDate());
         if (days >= 0) {
-            day = (int) ((days) % cycleData.getTotalDays()) + 1;
+            day = (int) ((days) % tempCycle.getTotalDays()) + 1;
         } else {
             return TYPE_GRAY;
         }
-        if (day <= cycleData.getRedCount()) {
+        if (day <= tempCycle.getRedCount()) {
             return TYPE_RED;
-        } else if (day <= cycleData.getTotalDays()) {
-            if (day >= cycleData.getGreenStartIndex() && day <= cycleData.getGreenEndIndex()) {
-                if (day == cycleData.getGreen2Index()) {
+        } else if (day <= tempCycle.getTotalDays()) {
+            if (day >= tempCycle.getGreenStartIndex() && day <= tempCycle.getGreenEndIndex()) {
+                if (day == tempCycle.getGreen2Index()) {
                     return TYPE_GREEN2;
                 }
                 return TYPE_GREEN;
-            } else if (day >= cycleData.getYellowStartIndex() && day <= cycleData.getYellowEndIndex()) {
+            } else if (day >= tempCycle.getYellowStartIndex() && day <= tempCycle.getYellowEndIndex()) {
                 return TYPE_YELLOW;
             }
         }
@@ -679,6 +725,21 @@ public class BaseMonthView extends View {
 
     public void setShowInfo(boolean showInfo) {
         this.showInfo = showInfo;
+    }
+
+    public static long toTimeInMillis(@NonNull Calendar calendar) {
+        if (calendar == null) {
+            return 0;
+        }
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        YearMonthDay yearMonthDay = new YearMonthDay(year, month, day, CalendarType.GREGORIAN);
+        long ret;
+        ret = yearMonthDay.getYear();
+        ret = ret * 100 + (yearMonthDay.getMonth() + 1);
+        ret = ret * 100 + yearMonthDay.getDay();
+        return ret;
     }
 
     protected void updateMonthYearLabel() {
@@ -783,6 +844,15 @@ public class BaseMonthView extends View {
         this.isDayInRangeSelectedListener = isDayInRangeSelectedListener;
     }
 
+    public void setCycleDataList(List<CycleData> cycleDataList) {
+        this.cycleDataList.addAll(cycleDataList);
+        postInvalidate();
+    }
+
+    public List<CycleData> getCycleDataList() {
+        return cycleDataList;
+    }
+
     public interface OnDayClickListener {
         void onDayClick(BaseMonthView view, Calendar day);
     }
@@ -797,5 +867,9 @@ public class BaseMonthView extends View {
 
     public interface IsDayInRangeSelectedListener {
         boolean isDayInRangeSelected(Calendar day, CycleData cycleData);
+    }
+
+    public interface OnCycleDataListNeededListener {
+        List<CycleData> onCycleDataNeeded();
     }
 }

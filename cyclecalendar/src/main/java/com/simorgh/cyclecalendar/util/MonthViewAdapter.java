@@ -17,6 +17,7 @@
 package com.simorgh.cyclecalendar.util;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,16 +33,20 @@ import com.simorgh.cycleutils.CycleData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.simorgh.cyclecalendar.view.BaseMonthView.TAG;
 
 
 /**
  * An adapter for a list of {@link ShowInfoMonthView} items.
  */
 public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.MonthViewHolder> implements
-        BaseMonthView.OnDaySelectedListener, BaseMonthView.IsDaySelectedListener, BaseMonthView.IsDayInRangeSelectedListener {
+        BaseMonthView.OnDaySelectedListener, BaseMonthView.IsDaySelectedListener, BaseMonthView.IsDayInRangeSelectedListener, BaseMonthView.OnCycleDataListNeededListener {
     private static final int MONTHS_IN_YEAR = 12;
 
     private final Calendar mMinDate = Calendar.getInstance();
@@ -71,6 +76,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private int lastPosition = -1;
     private CycleData cycleData;
     private boolean showInfo;
+    private List<CycleData> cycleDataList = new LinkedList<>();
 
 
     public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
@@ -245,6 +251,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         holder.baseMonthView.setOnDaySelectedListener(this);
         holder.baseMonthView.setIsDaySelectedListener(this);
         holder.baseMonthView.setIsDayInRangeSelectedListener(this);
+        holder.baseMonthView.setOnCycleDataListNeededListener(this);
         mItems.add(holder);
         return holder;
     }
@@ -338,7 +345,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
             default:
         }
         holder.baseMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek
-                , enabledDayRangeStart, enabledDayRangeEnd, calendarType,showInfo);
+                , enabledDayRangeStart, enabledDayRangeEnd, calendarType, showInfo);
 
     }
 
@@ -380,10 +387,37 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     @Override
     public void onDaySelected(Calendar selectedDay) {
-        if (monthViewType == BaseMonthView.MonthViewTypeSetStartDay || monthViewType==BaseMonthView.MonthViewTypeChangeDays) {
+        Log.d(TAG, "selected: " + CalendarTool.GregorianToPersian(selectedDay).getPersianLongDate());
+        if (monthViewType == BaseMonthView.MonthViewTypeSetStartDay) {
             if (!selectedDay.after(Calendar.getInstance())) {
                 this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
                 notifyDataSetChanged();
+            }
+        } else if (monthViewType == BaseMonthView.MonthViewTypeChangeDays) {
+            if (selectedDay.before(Calendar.getInstance())) {
+                if (cycleDataList != null && !cycleDataList.isEmpty()) {
+                    int size = cycleDataList.size();
+//                    Log.d(TAG, "size: " + size);
+                    CycleData prevCycle = cycleDataList.size() > 1 ? cycleDataList.get(size - 1) : cycleDataList.get(0);
+                    for (int i = 0; i < cycleDataList.size(); i++) {
+                        Log.d(TAG, "onDaySelected: " + CalendarTool.GregorianToPersian(cycleDataList.get(i).getStartDate()).getPersianLongDate()
+                                + ":"+CalendarTool.GregorianToPersian(cycleDataList.get(i).getEndDate()).getPersianLongDate());
+                    }
+                    Calendar prevCycleRedEnd = Calendar.getInstance();
+                    prevCycleRedEnd.clear();
+                    prevCycleRedEnd.setTimeInMillis(prevCycle.getStartDate().getTimeInMillis());
+                    prevCycleRedEnd.add(Calendar.DAY_OF_MONTH, prevCycle.getRedCount());
+                    Log.d(TAG, "prev: " + CalendarTool.GregorianToPersian(prevCycleRedEnd).getPersianLongDate());
+                    if (prevCycleRedEnd.before(selectedDay)) {
+                        Log.d(TAG, "condition: " + 0);
+                        this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+                        notifyDataSetChanged();
+                    }
+                } else {
+                    Log.d(TAG, "condition: " + 1);
+                    this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+                    notifyDataSetChanged();
+                }
             }
         } else {
             this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
@@ -433,9 +467,30 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         return showInfo;
     }
 
+    public void setCycleDataList(List<CycleData> cycleDataList) {
+        if (this.cycleDataList == null) {
+            this.cycleDataList = new LinkedList<>();
+        }
+        if (cycleDataList != null) {
+            this.cycleDataList.addAll(cycleDataList);
+            for (int i = 0; i < mItems.size(); i++) {
+                mItems.get(i).baseMonthView.setCycleDataList(cycleDataList);
+                notifyItemChanged(i);
+            }
+        }
+    }
+
+    public List<CycleData> getCycleDataList() {
+        return cycleDataList;
+    }
+
+    @Override
+    public List<CycleData> onCycleDataNeeded() {
+        return cycleDataList;
+    }
+
     public class MonthViewHolder extends RecyclerView.ViewHolder {
         public int position;
-        public Calendar temp;
         public final View container;
         public final BaseMonthView baseMonthView;
 

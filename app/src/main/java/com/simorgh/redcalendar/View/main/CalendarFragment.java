@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cyclecalendar.view.CalendarView;
 import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.cycleutils.CycleUtils;
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
@@ -52,7 +54,6 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
     }
 
     RecyclerView recyclerView;
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         calendarView = new CalendarView(getActivity()
@@ -94,26 +95,27 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
 //          ((MonthListAdapter) Objects.requireNonNull(recyclerView.getAdapter())).submitList(monthItems);
 //
 //      }).run();
-
-    }
-
-    @Override
-
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getUserWithCyclesLiveData().observe(this,userWithCycles -> {
+        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
             if (calendarView != null && userWithCycles != null) {
                 Cycle cycle = userWithCycles.getCurrentCycle();
                 User user = userWithCycles.getUser();
                 calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
-                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
+                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate(), cycle.getEndDate()));
+
+                calendarView.setCycleDataList(CycleUtils.getCycleDataList(userWithCycles.getCycles()));
                 calendarView.scrollToCurrentDate(mViewModel.getSelectedDateCalendar());
                 Log.d(AppManager.TAG, cycle.toString());
                 mViewModel.setUser(user);
                 calendarView.setShowInfo(user.isShowCycleDays());
             }
         });
+    }
+
+    @Override
+
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override

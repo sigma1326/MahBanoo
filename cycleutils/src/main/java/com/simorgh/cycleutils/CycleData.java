@@ -24,9 +24,11 @@ public class CycleData {
     private int green2Index = DEFAULT_GREEN2_INDEX;
     private int totalDays = 0;
     private Calendar startDate;
+    private Calendar endDate;
 
-    public CycleData(int redCount, int grayCount, int yellowCount, Calendar startDate) {
+    public CycleData(int redCount, int grayCount, int yellowCount, Calendar startDate, Calendar endDate) {
         this.startDate = startDate;
+        this.endDate = endDate;
         this.redCount = redCount;
         this.grayCount = grayCount;
         this.yellowCount = yellowCount;
@@ -183,8 +185,24 @@ public class CycleData {
         return startDate;
     }
 
+    public Calendar getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Calendar endDate) {
+        if (this.endDate == null) {
+            this.endDate = Calendar.getInstance();
+            this.endDate.clear();
+        }
+        this.endDate.setTimeInMillis(endDate.getTimeInMillis());
+    }
+
     public void setStartDate(Calendar startDate) {
-        this.startDate = startDate;
+        if (this.startDate == null) {
+            this.startDate = Calendar.getInstance();
+            this.startDate.clear();
+        }
+        this.startDate.setTimeInMillis(startDate.getTimeInMillis());
     }
 
     private Calendar currentCycleStartDate = Calendar.getInstance();

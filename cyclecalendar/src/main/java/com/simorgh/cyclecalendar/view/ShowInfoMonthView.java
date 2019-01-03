@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cyclecalendar.R;
+import com.simorgh.cycleutils.CycleData;
 
 import java.util.Calendar;
 
@@ -195,22 +196,47 @@ public class ShowInfoMonthView extends BaseMonthView {
         }
         long days;
         int day;
-        days = CalendarTool.getDaysFromDiff(date, cycleData.getStartDate());
+        CycleData tempCycle = null;
+        Calendar clearDate = Calendar.getInstance();
+        clearDate.clear();
+        if (cycleDataList == null || cycleDataList.isEmpty()) {
+            return rectTypeGrayPaint;
+        }
+
+        for (CycleData cycleData : cycleDataList) {
+            if (toTimeInMillis(cycleData.getEndDate()) == toTimeInMillis(clearDate)) {
+                if (toTimeInMillis(date) >= toTimeInMillis(cycleData.getStartDate())) {
+                    tempCycle = cycleData;
+                    break;
+                }
+            } else {
+                if (toTimeInMillis(date) >= toTimeInMillis(cycleData.getStartDate()) && toTimeInMillis(date) <= toTimeInMillis(cycleData.getEndDate())) {
+                    tempCycle = cycleData;
+                    break;
+                }
+            }
+        }
+
+        if (tempCycle == null) {
+            return rectTypeGrayPaint;
+        }
+
+        days = CalendarTool.getDaysFromDiff(date, tempCycle.getStartDate());
 
         if (days >= 0) {
-            day = (int) ((days) % cycleData.getTotalDays()) + 1;
+            day = (int) ((days) % tempCycle.getTotalDays()) + 1;
         } else {
             return rectTypeGrayPaint;
         }
-        if (day <= cycleData.getRedCount()) {
+        if (day <= tempCycle.getRedCount()) {
             return rectTypeRedPaint;
-        } else if (day <= cycleData.getTotalDays()) {
-            if (day >= cycleData.getGreenStartIndex() && day <= cycleData.getGreenEndIndex()) {
-                if (day == cycleData.getGreen2Index()) {
+        } else if (day <= tempCycle.getTotalDays()) {
+            if (day >= tempCycle.getGreenStartIndex() && day <= tempCycle.getGreenEndIndex()) {
+                if (day == tempCycle.getGreen2Index()) {
                     return rectTypeGreenPaint;
                 }
                 return rectTypeGreenPaint;
-            } else if (day >= cycleData.getYellowStartIndex() && day <= cycleData.getYellowEndIndex()) {
+            } else if (day >= tempCycle.getYellowStartIndex() && day <= tempCycle.getYellowEndIndex()) {
                 return rectTypeYellowPaint;
             }
         }

@@ -80,7 +80,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
                 if (calendarView != null && calendar != null) {
                     calendarView.setSelectedDate(calendar);
                     calendarView.scrollToCurrentDate(AppManager.getCalendarInstance());
-                    calendarView.setCycleData(new CycleData(0, 0, 0, calendar));
+                    calendarView.setCycleData(new CycleData(0, 0, 0, calendar, calendar));
                 }
             });
         } else {
@@ -88,7 +88,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
                 if (calendarView != null && calendar != null) {
                     calendarView.setSelectedDate(calendar);
                     calendarView.scrollToCurrentDate(AppManager.getCalendarInstance());
-                    calendarView.setCycleData(new CycleData(0, 0, 0, calendar));
+                    calendarView.setCycleData(new CycleData(0, 0, 0, calendar, calendar));
                 }
             });
         }

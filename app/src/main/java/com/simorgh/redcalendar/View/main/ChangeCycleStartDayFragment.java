@@ -15,10 +15,11 @@ import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cyclecalendar.view.CalendarView;
 import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.cycleutils.CycleUtils;
+import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.User;
 import com.simorgh.databaseutils.model.UserWithCycles;
 import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
@@ -40,6 +41,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     private Button btnApplyChanges;
     private NavController navController;
     private Typeface typeface;
+    private boolean isFirst = true;
 
 
     public static ChangeCycleStartDayFragment newInstance() {
@@ -76,11 +78,24 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
         btnApplyChanges.setOnClickListener(v1 -> {
             UserWithCycles userWithCycles = mViewModel.getUserWithCyclesLiveData().getValue();
             if (userWithCycles != null) {
-                Cycle cycle = userWithCycles.getCurrentCycle();
-                cycle.setStartDate(mViewModel.getSelectedStartDate());
+                Cycle oldCycle = userWithCycles.getCurrentCycle();
+
+                Cycle newCycle = userWithCycles.getCurrentCycle().clone();
+                newCycle.setStartDate(mViewModel.getSelectedStartDate());
+                newCycle.setEndDate(null);
+
+                Calendar endDate = Calendar.getInstance();
+                endDate.clear();
+                endDate.setTimeInMillis(mViewModel.getSelectedStartDate().getTimeInMillis());
+                endDate.add(Calendar.DAY_OF_MONTH, -1);
+                oldCycle.setEndDate(endDate);
+
+
                 User user = userWithCycles.getUser();
-                user.setCurrentCycle(mViewModel.getSelectedStartDate());
-                mViewModel.updateCycle(cycle);
+                user.setCurrentCycle(newCycle.getStartDate());
+
+                mViewModel.updateCycle(oldCycle);
+                mViewModel.updateCycle(newCycle);
                 mViewModel.updateUser(user);
                 navController.navigateUp();
             }
@@ -101,13 +116,11 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
                 mViewModel.setUser(user);
                 mViewModel.setCycle(cycle);
                 calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
-                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
-                calendarView.scrollToCurrentDate(mViewModel.getSelectedDateCalendar());
-                calendarView.setSelectedDate(cycle.getStartDate());
+                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate(), cycle.getEndDate()));
+                calendarView.setCycleDataList(CycleUtils.getCycleDataList(userWithCycles.getCycles()));
+                calendarView.setSelectedDate(cycle.getCurrentCycleStart(AppManager.getCalendarInstance()));
+                calendarView.scrollToCurrentDate(cycle.getCurrentCycleStart(Calendar.getInstance()));
                 Log.d(AppManager.TAG, cycle.toString());
-                for (Cycle c : userWithCycles.getCycles()) {
-                    Log.d("debug13", "onCreateView: " + c);
-                }
                 calendarView.setShowInfo(user.isShowCycleDays());
             }
         });

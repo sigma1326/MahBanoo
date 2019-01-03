@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.itextpdf.text.BaseColor;
@@ -26,6 +27,7 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.cycleutils.CycleUtils;
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
@@ -43,13 +45,17 @@ import androidx.fragment.app.FragmentActivity;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+import static com.simorgh.cyclecalendar.view.BaseMonthView.toTimeInMillis;
+
 public final class ReportUtils {
     private static CycleRepository cycleRepository;
     private static CycleData cycleData;
+    private static Calendar clearDate = Calendar.getInstance();
+
 
     @SuppressLint("CheckResult")
     public static void createReport(@NonNull final Activity activity
-            , @NonNull final Cycle cycle
+            , @NonNull final List<Cycle> cycles
             , @NonNull final Calendar startRange
             , @NonNull final Calendar endRange
             , final boolean reportBleeding
@@ -85,7 +91,7 @@ public final class ReportUtils {
                                 if (pdfFile.exists()) {
                                     boolean isDeleted = pdfFile.delete();
                                     if (isDeleted) {
-                                        buildTable(document, path, startRange, endRange, cycle, activity
+                                        buildTable(document, path, startRange, endRange, cycles, activity
                                                 , reportBleeding
                                                 , reportEmotion
                                                 , reportPain
@@ -95,7 +101,7 @@ public final class ReportUtils {
                                                 , reportDrugs);
                                     }
                                 } else {
-                                    buildTable(document, path, startRange, endRange, cycle, activity
+                                    buildTable(document, path, startRange, endRange, cycles, activity
                                             , reportBleeding
                                             , reportEmotion
                                             , reportPain
@@ -127,7 +133,7 @@ public final class ReportUtils {
 
     }
 
-    private static void buildTable(Document document, String path, @NonNull Calendar startRange, @NonNull Calendar endRange, @NonNull Cycle cycle, @NonNull Activity activity, boolean reportBleeding, boolean reportEmotion, boolean reportPain, boolean reportEatingDesire, boolean reportHairStyle, boolean reportWeight, boolean reportDrugs) throws DocumentException, IOException {
+    private static void buildTable(Document document, String path, @NonNull Calendar startRange, @NonNull Calendar endRange, @NonNull List<Cycle> cycles, @NonNull Activity activity, boolean reportBleeding, boolean reportEmotion, boolean reportPain, boolean reportEatingDesire, boolean reportHairStyle, boolean reportWeight, boolean reportDrugs) throws DocumentException, IOException {
         // Location to save
         PdfWriter.getInstance(document, new FileOutputStream(path));
 
@@ -194,6 +200,7 @@ public final class ReportUtils {
         List<DayMood> dayMoodList = cycleRepository.getDayMoodRange(startRange, endRange);
         if (dayMoodList != null) {
             PdfPCell cell;
+            List<CycleData> cycleDataList = CycleUtils.getCycleDataList(cycles);
 
             for (int i = 0; i < dayMoodList.size(); i++) {
                 cell = new PdfPCell(new Phrase(CalendarTool.GregorianToPersian(dayMoodList.get(i).getId()).getPersianLongDate(), f));
@@ -202,9 +209,19 @@ public final class ReportUtils {
                 cell.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
                 table.addCell(cell);
 
-                if (cycleData == null) {
-                    cycleData = new CycleData(cycle.getRedDaysCount(), cycle.getGrayDaysCount(), cycle.getYellowDaysCount(),
-                            cycle.getStartDate());
+                clearDate.clear();
+                for (CycleData c : cycleDataList) {
+                    if (toTimeInMillis(c.getEndDate()) == toTimeInMillis(clearDate)) {
+                        if (toTimeInMillis(dayMoodList.get(i).getId()) >= toTimeInMillis(c.getStartDate())) {
+                            cycleData = c;
+                            break;
+                        }
+                    } else {
+                        if (toTimeInMillis(dayMoodList.get(i).getId()) >= toTimeInMillis(c.getStartDate()) && toTimeInMillis(dayMoodList.get(i).getId()) <= toTimeInMillis(c.getEndDate())) {
+                            cycleData = c;
+                            break;
+                        }
+                    }
                 }
                 int dayType = getDayType(cycleData, dayMoodList.get(i).getId());
                 String dayColor = "";
@@ -410,6 +427,8 @@ public final class ReportUtils {
         long days;
         int day;
         days = CalendarTool.getDaysFromDiff(date, cycleData.getStartDate());
+        Log.d("debug13", "start: " + CalendarTool.GregorianToPersian(cycleData.getStartDate()).getPersianLongDate());
+        Log.d("debug13", "date: " + CalendarTool.GregorianToPersian(date));
         if (days >= 0) {
             day = (int) ((days) % cycleData.getTotalDays()) + 1;
         } else {

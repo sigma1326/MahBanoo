@@ -529,7 +529,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
         if (cycleData != null) {
         }
 
-        cycleData = new CycleData(3, 26, 1, Calendar.getInstance());
+        cycleData = new CycleData(3, 26, 1, Calendar.getInstance(),Calendar.getInstance());
 
         //init the hover variables
         mediumCircleHoverPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -849,7 +849,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
                     selectedDay = getCurrentDay();
                     onDayChangedListener.onDayChanged(selectedDay, getDayType(), this);
                 } else {
-                    Log.d("debug13", "bad angle");
+//                    Log.d("debug13", "bad angle");
                 }
             }
         } else if (isFirstDraw) {

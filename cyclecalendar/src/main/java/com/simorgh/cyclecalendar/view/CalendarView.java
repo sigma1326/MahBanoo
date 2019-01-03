@@ -14,6 +14,8 @@ import com.simorgh.cyclecalendar.util.MonthViewAdapter;
 import com.simorgh.cycleutils.CycleData;
 
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +39,7 @@ public class CalendarView extends LinearLayout {
     private OnScrollListener onScrollListener;
     private Calendar selectedDate = Calendar.getInstance();
     private boolean showInfo = true;
+    private List<CycleData> cycleDataList = new LinkedList<>();
 
 
     public CalendarView(Context context) {
@@ -232,6 +235,20 @@ public class CalendarView extends LinearLayout {
     public void setIsDayMarkedListener(ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener) {
         this.isDayMarkedListener = isDayMarkedListener;
         adapter.setIsDayMarkedListener(isDayMarkedListener);
+    }
+
+    public void setCycleDataList(List<CycleData> cycleDataList) {
+        if (this.cycleDataList == null) {
+            this.cycleDataList = new LinkedList<>();
+        }
+        if (cycleDataList != null) {
+            this.cycleDataList.addAll(cycleDataList);
+            adapter.setCycleDataList(this.cycleDataList);
+        }
+    }
+
+    public List<CycleData> getCycleDataList() {
+        return cycleDataList;
     }
 
     public interface OnScrollListener {

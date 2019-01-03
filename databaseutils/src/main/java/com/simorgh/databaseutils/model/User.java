@@ -7,7 +7,6 @@ import java.util.Calendar;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")
@@ -25,6 +24,11 @@ public class User {
     @ColumnInfo(name = "show_pregnancy_prob")
     private boolean showPregnancyProb;
 
+
+    @ColumnInfo(name = "birth_year")
+    private int birthYear;
+
+
     public int getId() {
         return id;
     }
@@ -35,6 +39,14 @@ public class User {
 
     public Calendar getCurrentCycle() {
         return currentCycle;
+    }
+
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
     }
 
     public void setCurrentCycle(Calendar currentCycle) {
@@ -66,6 +78,7 @@ public class User {
         showPregnancyProb = true;
         showCycleDays = true;
     }
+
     @SuppressLint("DefaultLocale")
     @NonNull
     @Override

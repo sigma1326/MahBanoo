@@ -94,7 +94,7 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                 Cycle cycle = userWithCycles.getCurrentCycle();
                 mViewModel.setCycle(cycle);
                 cycleView.setCycleData(new CycleData(cycle.getRedDaysCount(),
-                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
+                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate(), cycle.getEndDate()));
                 if (isFirstDraw) {
                     isFirstDraw = false;
                     cycleView.showToday((CalendarTool.PersianToGregorian(new PersianDate())));
@@ -102,7 +102,9 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                     cycleView.showToday(mViewModel.getSelectedDate());
                 }
                 start.setTimeInMillis(cycle.getStartDate().getTimeInMillis());
-                Log.d(AppManager.TAG, cycle.toString());
+                for (Cycle c : userWithCycles.getCycles()) {
+                    Log.d(AppManager.TAG, c.toString());
+                }
             }
         });
     }

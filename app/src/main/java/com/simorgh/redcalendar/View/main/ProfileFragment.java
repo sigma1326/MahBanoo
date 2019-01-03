@@ -19,6 +19,7 @@ import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.cyclebar.CycleBar;
 import com.simorgh.cycleutils.CycleData;
+import com.simorgh.databaseutils.model.User;
 import com.simorgh.databaseutils.model.UserWithCycles;
 import com.simorgh.redcalendar.Model.AppManager;
 import com.simorgh.databaseutils.model.Cycle;
@@ -51,7 +52,7 @@ public class ProfileFragment extends Fragment {
     private PersianCalendar persianCalendarStartEnd = CalendarTool.GregorianToPersian(calendar);
     private List<Integer> datasetRed = new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
     private List<Integer> datasetGray = new LinkedList<>(Arrays.asList(21, 22, 23, 24, 25, 26, 27, 28));
-    private List<Integer> datasetYellow = new LinkedList<>(Arrays.asList(0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
+    private List<Integer> datasetYellow = new LinkedList<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14));
     private LinkedList<Integer> datasetBirthYear = new LinkedList<>();
     private Typeface typeface;
 
@@ -124,9 +125,9 @@ public class ProfileFragment extends Fragment {
 
         spinnerBirthYear.addOnItemClickListener((parent, view, position, id) -> {
             if (mViewModel.getUserWithCyclesLiveData().getValue() != null) {
-                Cycle cycle = mViewModel.getUserWithCyclesLiveData().getValue().getCurrentCycle();
-                cycle.setBirthYear(datasetBirthYear.get(position));
-                mViewModel.updateCycle(cycle);
+                User user = mViewModel.getUserWithCyclesLiveData().getValue().getUser();
+                user.setBirthYear(datasetBirthYear.get(position));
+                mViewModel.updateUser(user);
             }
         });
 
@@ -140,13 +141,14 @@ public class ProfileFragment extends Fragment {
         mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
             if (cycleBar != null && userWithCycles != null) {
                 Cycle cycle = userWithCycles.getCurrentCycle();
+                User user = userWithCycles.getUser();
                 cycleBar.setCycleData(new CycleData(cycle.getRedDaysCount(),
-                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate()));
+                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate(), cycle.getEndDate()));
 
                 spinnerRedDays.setSelectedIndex(cycle.getRedDaysCount() - 1);
                 spinnerGrayDays.setSelectedIndex(cycle.getGrayDaysCount() - 21);
                 spinnerYellowDays.setSelectedIndex(cycle.getYellowDaysCount());
-                spinnerBirthYear.setSelectedIndex(cycle.getBirthYear() - (persianCalendar.getPersianYear() - 50));
+                spinnerBirthYear.setSelectedIndex(user.getBirthYear() - (persianCalendar.getPersianYear() - 50));
 
                 persianCalendarStartEnd = CalendarTool.GregorianToPersian(cycle.getCurrentCycleStart(AppManager.getCalendarInstance()));
                 String start = persianCalendarStartEnd.getPersianDay() + " " + persianCalendarStartEnd.getPersianMonthName();

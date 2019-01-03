@@ -1,10 +1,7 @@
 package com.simorgh.databaseutils.model;
 
-import android.util.Log;
-
 import com.simorgh.databaseutils.TypeConverters;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,12 +44,9 @@ public class UserWithCycles {
         }
         for (Cycle cycle : cycles) {
             if (TypeConverters.toTimeInMillis(cycle.getStartDate()) == TypeConverters.toTimeInMillis(user.getCurrentCycle())) {
-                Log.d("debug13", "getCurrentCycle: " + TypeConverters.toTimeInMillis(cycle.getStartDate())
-                        + ":" + TypeConverters.toTimeInMillis(user.getCurrentCycle()));
                 return cycle;
             }
         }
-//        return cycles.get(0);
         return null;
     }
 }

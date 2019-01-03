@@ -87,9 +87,9 @@ public class MakeReportFragment extends Fragment {
 
         btnMakeReport.setOnClickListener(v1 -> {
             try {
-                ReportUtils.createReport(getActivity(), cycleRepository.getCycleData()
-                        , Objects.requireNonNull(mViewModel.getRangeStartLive().getValue()),
-                        Objects.requireNonNull(mViewModel.getRangeEndLive().getValue())
+                ReportUtils.createReport(getActivity(), cycleRepository.getUserWithCycles().getCycles()
+                        , Objects.requireNonNull(mViewModel.getRangeStartLive().getValue())
+                        , Objects.requireNonNull(mViewModel.getRangeEndLive().getValue())
                         , chbBleeding.isChecked()
                         , chbEmotion.isChecked()
                         , chbPain.isChecked()

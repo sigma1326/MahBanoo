@@ -113,14 +113,14 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     cycle.setYellowDaysCount(cycleRegisterViewModel.getYellowDaysCount());
                     cycle.setRedDaysCount(cycleRegisterViewModel.getRedDaysCount());
                     cycle.setGrayDaysCount(cycleRegisterViewModel.getGrayDaysCount());
-                    cycle.setBirthYear(cycleRegisterViewModel.getBirthYear());
                     Calendar calendar = cycleRegisterViewModel.getLastCycleEndDay();
                     calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount()+1);
                     cycle.setStartDate(calendar);
-                    cycle.setEndDate(calendar);
+                    cycle.setEndDate(null);
                     cycle.setUserId(1);
                     cycleRepository.insertCycle(cycle);
                     User user = new User();
+                    user.setBirthYear(cycleRegisterViewModel.getBirthYear());
                     user.setCurrentCycle(calendar);
                     cycleRepository.insertUser(user);
                     navController.navigate(R.id.action_step5_to_mainActivity);

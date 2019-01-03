@@ -267,7 +267,7 @@ public class CycleBar extends View {
         if (isInEditMode()) {
             Calendar c = Calendar.getInstance();
             c.set(Calendar.DAY_OF_MONTH, 1);
-            cycleData = new CycleData(5, 25, 3, c);
+            cycleData = new CycleData(5, 25, 3, c,c);
         }
         if (cycleData == null) {
             return;

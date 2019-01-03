@@ -203,7 +203,7 @@ public class WeekDayPicker extends View {
         temp.setTimeInMillis(weekStartDate.getTimeInMillis());
         if (isInEditMode()) {
             calculateWeekStart(selectedDate);
-            cycleData = new CycleData(5, 26, 3, Calendar.getInstance());
+            cycleData = new CycleData(5, 26, 3, Calendar.getInstance(), Calendar.getInstance());
         }
         if (cycleData == null) {
             return;

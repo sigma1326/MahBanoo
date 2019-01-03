@@ -30,8 +30,6 @@ public class Cycle {
     @ColumnInfo(name = "end_date")
     private Calendar endDate;
 
-    @ColumnInfo(name = "birth_year")
-    private int birthYear;
 
     public int getTotalDaysCount() {
         return redDaysCount + grayDaysCount;
@@ -81,31 +79,25 @@ public class Cycle {
         this.yellowDaysCount = yellowDaysCount;
     }
 
-    public int getBirthYear() {
-        return birthYear;
-    }
-
-    public void setBirthYear(int birthYear) {
-        this.birthYear = birthYear;
-    }
-
     @NonNull
     @Override
     public String toString() {
-        return "cycle: {" + redDaysCount + " : " + grayDaysCount + " : " + yellowDaysCount + " : "
-                + birthYear + " : " + startDate.getTime().toString() + "}";
+        return "cycle: {" + redDaysCount + " : " + grayDaysCount + " : " + yellowDaysCount + " : " + startDate.getTime().toString() + " : " + endDate.getTime().toString() + "}";
     }
 
     public Calendar getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(@NonNull Calendar endDate) {
-        if (this.endDate == null) {
+    public void setEndDate(Calendar endDate) {
+        if (endDate == null) {
             this.endDate = Calendar.getInstance();
             this.endDate.clear();
+        } else {
+            this.endDate = Calendar.getInstance();
+            this.endDate.clear();
+            this.endDate.setTimeInMillis(endDate.getTimeInMillis());
         }
-        this.endDate.setTimeInMillis(endDate.getTimeInMillis());
     }
 
     public Calendar getCurrentCycleStart(Calendar today) {
@@ -124,18 +116,13 @@ public class Cycle {
 
     @Override
     public Cycle clone() {
-        try {
-            super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
         Cycle cycle = new Cycle();
+        cycle.setUserId(getUserId());
         cycle.setStartDate(getStartDate());
         cycle.setEndDate(getEndDate());
         cycle.setGrayDaysCount(getGrayDaysCount());
         cycle.setRedDaysCount(getRedDaysCount());
         cycle.setYellowDaysCount(getYellowDaysCount());
-
         return cycle;
     }
 }
