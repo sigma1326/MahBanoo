@@ -7,6 +7,7 @@ import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
 import com.simorgh.redcalendar.R;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -25,6 +26,7 @@ public class AppManager extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        getUncaughtExceptions();
         mLocale = getResources().getConfiguration().locale;
 
         minDate = getCalendarInstance();
@@ -47,6 +49,18 @@ public class AppManager extends MultiDexApplication {
                                 .setFontAttrId(R.attr.fontPath)
                                 .build()))
                 .build());
+    }
+
+    private void getUncaughtExceptions() {
+        // Setup handler for uncaught exceptions.
+        try {
+            Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+                Log.e(TAG, "Uncaught Exception thread: " + t.getName() + "" + Arrays.toString(e.getStackTrace()));
+
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Could not set the Default Uncaught Exception Handler:" + Arrays.toString(e.getStackTrace()));
+        }
     }
 
     public static Calendar getCalendarInstance() {

@@ -153,12 +153,11 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
             showDayMoods();
 
             mViewModel.setSelectedDate(temp);
-//            mViewModel.setSelectedDateMood(temp);
             if (onDayTypeChangedListener != null) {
                 onDayTypeChangedListener.onDayChanged(temp);
             }
         } else {
-            throw new UnsupportedOperationException("invalid cycle date");
+            Log.d(AppManager.TAG, "invalid cycle date");
         }
 
         temp.setTimeInMillis(currentCycleStartDate.getTimeInMillis());
@@ -235,9 +234,9 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
     }
 
     public interface OnDayTypeChangedListener {
-        public void onDayTypeChanged(int dayType);
+        void onDayTypeChanged(int dayType);
 
-        public void onDayChanged(Calendar day);
+        void onDayChanged(Calendar day);
 
     }
 
