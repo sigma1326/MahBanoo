@@ -353,15 +353,6 @@ public class MoodView extends View {
         canvas.drawText(getTitleByType(getResources())
                 , dp2px(realWidth - 32), titleTextPaint.getFontMetrics().descent / 2f + dp2px(12), titleTextPaint);
 
-        for (int j = 0; j < selectedItems.size(); j++) {
-            if (moodType == TYPE_BLEEDING) {
-                Log.d("debug13", "bleed: " + selectedItems.get(j));
-            }
-            if (moodType == TYPE_EMOTION) {
-                Log.d("debug13", "emotion: " + selectedItems.get(j));
-            }
-        }
-
         float y = dp2px(realHeight / 2.08f);
         int i = 0;
         for (float x = dp2px(realWidth) - dp2px(realWidth) / 8f; x > 0 && i < itemSize; x -= dp2px(realWidth) / 4f, i++) {

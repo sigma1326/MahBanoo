@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.simorgh.redcalendar.Model.AppManager.TAG;
+
 public class AddMoodFragment extends Fragment {
 
     private CycleViewModel mViewModel;
@@ -49,7 +52,6 @@ public class AddMoodFragment extends Fragment {
     private EditText etDrugName;
 
     private RecyclerView rvDrugs;
-    private NestedScrollView nestedScrollView;
 
 
     public static AddMoodFragment newInstance() {
@@ -60,21 +62,25 @@ public class AddMoodFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
+        getArgs();
         mViewModel.getMoodsLiveData().observe(this, dayMoods -> {
             updateViews();
-            DayMood dayMood = mViewModel.getDayMood();
-            List<DrugItem> drugItemList = new LinkedList<>();
-            if (rvDrugs != null && dayMood != null) {
-                if (mViewModel.getDayMood().getDrugs() != null) {
-                    DrugItem drugItem;
-                    for (int i = 0; i < mViewModel.getDayMood().getDrugs().size(); i++) {
-                        drugItem = new DrugItem(mViewModel.getDayMood().getDrugs().get(i));
-                        drugItemList.add(drugItem);
-                    }
-                }
-                ((DrugListAdapter) Objects.requireNonNull(rvDrugs.getAdapter())).submitList(drugItemList);
-            }
         });
+
+    }
+
+    private void getArgs() {
+        if (getArguments() != null) {
+            YearMonthDay yearMonthDay = AddMoodFragmentArgs.fromBundle(getArguments()).getSelectedDay();
+            if (yearMonthDay != null) {
+                Calendar calendar = AppManager.getCalendarInstance();
+                calendar.set(Calendar.DAY_OF_MONTH, yearMonthDay.getDay());
+                calendar.set(Calendar.MONTH, yearMonthDay.getMonth());
+                calendar.set(Calendar.YEAR, yearMonthDay.getYear());
+                mViewModel.setSelectedDateMood(calendar);
+                Log.d(TAG, "getArgs: " + calendar.getTime());
+            }
+        }
     }
 
     public void hideKeyboard(@NonNull Activity activity) {
@@ -90,20 +96,28 @@ public class AddMoodFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.add_note_fragment, container, false);
-        mvBleeding = v.findViewById(R.id.moodViewBleeding);
-        mvEmotion = v.findViewById(R.id.moodViewEmotion);
-        mvPain = v.findViewById(R.id.moodViewPain);
-        mvEatingDesire = v.findViewById(R.id.moodViewEatingDesire);
-        mvHairStyle = v.findViewById(R.id.moodViewHairStyle);
+        View view = inflater.inflate(R.layout.add_note_fragment, container, false);
+
+        mvBleeding = view.findViewById(R.id.moodViewBleeding);
+        mvEmotion = view.findViewById(R.id.moodViewEmotion);
+        mvPain = view.findViewById(R.id.moodViewPain);
+        mvEatingDesire = view.findViewById(R.id.moodViewEatingDesire);
+        mvHairStyle = view.findViewById(R.id.moodViewHairStyle);
 
 
-        btnApplyWeight = v.findViewById(R.id.btn_weight_apply);
-        etWeight = v.findViewById(R.id.et_weight);
-        btnAddDrug = v.findViewById(R.id.btn_drug_apply);
-        etDrugName = v.findViewById(R.id.et_drug);
-        rvDrugs = v.findViewById(R.id.rv_drugs);
-        nestedScrollView = v.findViewById(R.id.nested_scroll_view);
+        btnApplyWeight = view.findViewById(R.id.btn_weight_apply);
+        etWeight = view.findViewById(R.id.et_weight);
+        btnAddDrug = view.findViewById(R.id.btn_drug_apply);
+        etDrugName = view.findViewById(R.id.et_drug);
+        rvDrugs = view.findViewById(R.id.rv_drugs);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getArgs();
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         rvDrugs.setLayoutManager(gridLayoutManager);
@@ -177,17 +191,6 @@ public class AddMoodFragment extends Fragment {
             }
         });
 
-        if (getArguments() != null) {
-            YearMonthDay yearMonthDay = AddMoodFragmentArgs.fromBundle(getArguments()).getSelectedDay();
-            if (yearMonthDay != null) {
-                Calendar calendar = AppManager.getCalendarInstance();
-                calendar.set(Calendar.DAY_OF_MONTH, yearMonthDay.getDay());
-                calendar.set(Calendar.MONTH, yearMonthDay.getMonth());
-                calendar.set(Calendar.YEAR, yearMonthDay.getYear());
-                mViewModel.setSelectedDateMood(calendar);
-            }
-        }
-
 
         mvBleeding.setOnItemSelectedListener(selectedItems -> {
             DayMood dayMood = mViewModel.getDayMood();
@@ -258,8 +261,6 @@ public class AddMoodFragment extends Fragment {
             }
             mViewModel.updateDayMood(dayMood);
         });
-
-        return v;
     }
 
     private void clearFocus() {
@@ -290,12 +291,31 @@ public class AddMoodFragment extends Fragment {
             mvHairStyle.setSelectedItems(dayMood.getTypeHairStyleSelectedIndices());
 
             etWeight.setHint(String.format("%3.3f", dayMood.getWeight()));
+            List<DrugItem> drugItemList = new LinkedList<>();
+            if (dayMood.getDrugs() != null) {
+                DrugItem drugItem;
+                for (int i = 0; i < mViewModel.getDayMood().getDrugs().size(); i++) {
+                    drugItem = new DrugItem(mViewModel.getDayMood().getDrugs().get(i));
+                    drugItem.setId(mViewModel.getSelectedDateMood());
+                    drugItemList.add(drugItem);
+                }
+            }
+
+            if (!drugItemList.isEmpty()) {
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+                rvDrugs.setLayoutManager(gridLayoutManager);
+                if (rvDrugs.getAdapter() == null) {
+                    rvDrugs.setAdapter(new DrugListAdapter(new DrugListAdapter.DrugDiffCallBack()));
+                }
+                ((DrugListAdapter) (Objects.requireNonNull(rvDrugs.getAdapter()))).submitList(drugItemList);
+            } else {
+                rvDrugs.setAdapter(null);
+            }
         }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 }

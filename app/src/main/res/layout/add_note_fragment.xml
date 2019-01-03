@@ -1,256 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nested_scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:scrollbars="none">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:id="@+id/nested_scroll_view"
-        android:fitsSystemWindows="true"
-        android:isScrollContainer="true"
-        android:overScrollMode="always"
-        android:scrollbars="none">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".View.main.AddMoodFragment">
 
-        <LinearLayout
+        <com.simorgh.moodview.MoodView
+            android:id="@+id/moodViewBleeding"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:context=".View.main.AddMoodFragment">
+            android:layout_height="150dp"
+            android:layout_marginTop="8dp"
+            app:itemType="type_bleeding"
+            tools:visibility="gone" />
 
-            <com.simorgh.moodview.MoodView
-                android:id="@+id/moodViewBleeding"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="8dp"
-                app:itemType="type_bleeding"
-                tools:visibility="gone" />
+        <com.simorgh.moodview.MoodView
+            android:id="@+id/moodViewEmotion"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:itemType="type_emotion"
+            tools:visibility="gone" />
 
-            <com.simorgh.moodview.MoodView
-                android:id="@+id/moodViewEmotion"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                app:itemType="type_emotion"
-                tools:visibility="gone" />
+        <com.simorgh.moodview.MoodView
+            android:id="@+id/moodViewPain"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:itemType="type_pain"
+            tools:visibility="gone" />
 
-            <com.simorgh.moodview.MoodView
-                android:id="@+id/moodViewPain"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                app:itemType="type_pain"
-                tools:visibility="gone" />
+        <com.simorgh.moodview.MoodView
+            android:id="@+id/moodViewEatingDesire"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:itemType="type_eating_desire"
+            tools:visibility="gone" />
 
-            <com.simorgh.moodview.MoodView
-                android:id="@+id/moodViewEatingDesire"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                app:itemType="type_eating_desire"
-                tools:visibility="gone" />
+        <com.simorgh.moodview.MoodView
+            android:id="@+id/moodViewHairStyle"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:itemType="type_hair_style"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/moodViewEatingDesire" />
 
-            <com.simorgh.moodview.MoodView
-                android:id="@+id/moodViewHairStyle"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                app:itemType="type_hair_style"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="12dp">
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="#a3a3a3"
+                app:layout_constraintBottom_toBottomOf="@id/tv_weight_title"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_weight_title" />
+
+            <TextView
+                android:id="@+id/tv_weight_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:fontFamily="@font/iransans_medium"
+                android:text="وزن"
+                android:textColor="#3f3f3f"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/view"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_weight"
+                android:layout_width="168dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/et_weight_ripple_background"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="numberDecimal|number|numberSigned"
+                android:lines="1"
+                android:maxLength="10"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textColor="#cc888888"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_weight_apply"
+                app:layout_constraintTop_toBottomOf="@id/view" />
+
+            <Button
+                android:id="@+id/btn_weight_apply"
+                android:layout_width="95dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/btn_weight_ripple_background"
+                android:fontFamily="@font/iransans_medium"
+                android:gravity="center"
+                android:paddingTop="4dp"
+                android:text="تائید"
+                android:textColor="#ffffff"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/et_weight"
+                app:layout_constraintEnd_toStartOf="@+id/et_weight"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_weight" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".69" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="33dp">
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="#a3a3a3"
+                app:layout_constraintBottom_toBottomOf="@id/tv_drug_title"
+                app:layout_constraintEnd_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_drug_title" />
+
+            <TextView
+                android:id="@+id/tv_drug_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginRight="30dp"
+                android:fontFamily="@font/iransans_medium"
+                android:text="داروهای مصرفی"
+                android:textColor="#3f3f3f"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/view1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_drug"
+                android:layout_width="168dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/et_weight_ripple_background"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLength="20"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textColor="#cc888888"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/rv_drugs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_drug_apply"
+                app:layout_constraintTop_toBottomOf="@id/view1" />
+
+            <Button
+                android:id="@+id/btn_drug_apply"
+                android:layout_width="95dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/btn_weight_ripple_background"
+                android:fontFamily="@font/iransans_medium"
+                android:gravity="center"
+                android:paddingTop="4dp"
+                android:text="اضافه به لیست"
+                android:textColor="#ffffff"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/et_drug"
+                app:layout_constraintEnd_toStartOf="@+id/et_drug"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_drug" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".69" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_drugs"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
+                android:minHeight="150dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/moodViewEatingDesire" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="12dp">
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#a3a3a3"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_weight_title"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_weight_title" />
-
-                <TextView
-                    android:id="@+id/tv_weight_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:fontFamily="@font/iransans_medium"
-                    android:text="وزن"
-                    android:textColor="#3f3f3f"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/view"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/et_weight"
-                    android:layout_width="168dp"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="60dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/et_weight_ripple_background"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:inputType="numberDecimal|number|numberSigned"
-                    android:lines="1"
-                    android:maxLength="10"
-                    android:padding="5dp"
-                    android:textAlignment="center"
-                    android:textColor="#cc888888"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btn_weight_apply"
-                    app:layout_constraintTop_toBottomOf="@id/view" />
-
-                <Button
-                    android:id="@+id/btn_weight_apply"
-                    android:layout_width="95dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/btn_weight_ripple_background"
-                    android:fontFamily="@font/iransans_medium"
-                    android:gravity="center"
-                    android:paddingTop="4dp"
-                    android:text="تائید"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_weight"
-                    app:layout_constraintEnd_toStartOf="@+id/et_weight"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_weight" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent=".69" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@+id/et_drug"
+                tools:layoutManager="GridLayoutManager"
+                tools:listitem="@layout/drug_item"
+                tools:spanCount="2" />
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="33dp">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
-                    android:id="@+id/view1"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#a3a3a3"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_drug_title"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_drug_title" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
 
-                <TextView
-                    android:id="@+id/tv_drug_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:fontFamily="@font/iransans_medium"
-                    android:text="داروهای مصرفی"
-                    android:textColor="#3f3f3f"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/view1"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <EditText
-                    android:id="@+id/et_drug"
-                    android:layout_width="168dp"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="34dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/et_weight_ripple_background"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:inputType="text"
-                    android:lines="1"
-                    android:maxLength="20"
-                    android:padding="5dp"
-                    android:textAlignment="center"
-                    android:textColor="#cc888888"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/rv_drugs"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btn_drug_apply"
-                    app:layout_constraintTop_toBottomOf="@id/view1" />
-
-                <Button
-                    android:id="@+id/btn_drug_apply"
-                    android:layout_width="95dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/btn_weight_ripple_background"
-                    android:fontFamily="@font/iransans_medium"
-                    android:gravity="center"
-                    android:paddingTop="4dp"
-                    android:text="اضافه به لیست"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/et_drug"
-                    app:layout_constraintEnd_toStartOf="@+id/et_drug"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/et_drug" />
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent=".69" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_drugs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@android:color/transparent"
-                    app:layoutManager="GridLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/et_drug"
-                    app:spanCount="2"
-                    tools:listitem="@layout/drug_item">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-</LinearLayout>

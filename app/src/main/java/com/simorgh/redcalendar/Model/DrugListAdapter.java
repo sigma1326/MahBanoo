@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.databaseutils.model.DayMood;
@@ -40,7 +39,7 @@ public class DrugListAdapter extends ListAdapter<DrugItem, DrugListAdapter.ViewH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.drugItem = getItem(position);
         ((TextView) holder.itemView.findViewById(R.id.tv_drug_name)).setText(holder.drugItem.getDrugName());
 
@@ -48,7 +47,6 @@ public class DrugListAdapter extends ListAdapter<DrugItem, DrugListAdapter.ViewH
             holder.drugItem.setDrugName(getItem(position).getDrugName());
             holder.drugItem.setId(getItem(position).getId());
             holder.imgRemove.setOnClickListener(v -> {
-                Toast.makeText(v.getContext(), "test1", Toast.LENGTH_SHORT).show();
 
 
                 DayMood dayMood = cycleRepository.getDayMood(holder.drugItem.getId());
@@ -57,39 +55,17 @@ public class DrugListAdapter extends ListAdapter<DrugItem, DrugListAdapter.ViewH
                     for (int i = 0; i < dayMood.getDrugs().size(); i++) {
                         if (i < dayMood.getDrugs().size() && dayMood.getDrugs().get(i).equals(holder.drugItem.getDrugName())) {
                             index = i;
-                            dayMood.getDrugs().remove(index);
+                            break;
                         }
                     }
                     if (index != -1) {
+                        dayMood.getDrugs().remove(index);
                         cycleRepository.insertDayMood(dayMood);
+                        notifyItemRemoved(index);
                     }
                 }
             });
         }
-//        else {
-//            holder.drugItem = getItem(position);
-////            holder.drugItem.setDrugName(getItem(position).getDrugName());
-////            holder.drugItem.setId(getItem(position).getId());
-//            ((TextView) holder.itemView.findViewById(R.id.tv_drug_name)).setText(holder.drugItem.getDrugName());
-//            holder.imgRemove.setOnClickListener(v -> {
-//                Toast.makeText(v.getContext(), "test", Toast.LENGTH_SHORT).show();
-//
-//                DayMood dayMood = cycleRepository.getDayMood(holder.drugItem.getId());
-//                if (dayMood != null) {
-//                    int index = -1;
-//                    for (int i = 0; i < dayMood.getDrugs().size(); i++) {
-//                        if (i < dayMood.getDrugs().size() && dayMood.getDrugs().get(i).equals(holder.drugItem.getDrugName())) {
-//                            index = i;
-//                            break;
-//                        }
-//                    }
-//                    if (index != -1) {
-//                        dayMood.getDrugs().remove(index);
-//                        cycleRepository.insertDayMood(dayMood);
-//                    }
-//                }
-//            });
-//        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

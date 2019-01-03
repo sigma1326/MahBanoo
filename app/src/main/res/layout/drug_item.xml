@@ -18,6 +18,7 @@
         android:lines="1"
         android:ems="3"
         android:maxLength="20"
+        android:gravity="end"
         android:paddingTop="4dp"
         android:text="قرص منیزیم"
         android:textColor="#00819b"
