@@ -171,26 +171,26 @@ public final class ReportUtils {
 
 
         PdfPCell title = new PdfPCell(new Paragraph("گزارش", titleFont));
-        title.setPadding(5);
+        title.setPadding(10);
         title.setHorizontalAlignment(Element.ALIGN_CENTER);
         title.setColspan(4);
         title.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
         table.addCell(title);
 
         PdfPCell dateCol = new PdfPCell(new Paragraph("تاریخ", f));
-        dateCol.setPadding(5);
+        dateCol.setPadding(10);
         dateCol.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
         dateCol.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(dateCol);
 
         PdfPCell colorCol = new PdfPCell(new Paragraph("وضعیت جسمانی", f));
-        colorCol.setPadding(5);
+        colorCol.setPadding(10);
         colorCol.setHorizontalAlignment(Element.ALIGN_CENTER);
         colorCol.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
         table.addCell(colorCol);
 
         PdfPCell statusCol = new PdfPCell(new Paragraph("حالات ثبت شده", f));
-        statusCol.setPadding(5);
+        statusCol.setPadding(10);
         statusCol.setColspan(2);
         statusCol.setHorizontalAlignment(Element.ALIGN_CENTER);
         statusCol.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
@@ -203,8 +203,11 @@ public final class ReportUtils {
             List<CycleData> cycleDataList = CycleUtils.getCycleDataList(cycles);
 
             for (int i = 0; i < dayMoodList.size(); i++) {
-                cell = new PdfPCell(new Phrase(CalendarTool.GregorianToPersian(dayMoodList.get(i).getId()).getPersianLongDate(), f));
-                cell.setPadding(5);
+                Phrase phrase = new Phrase(CalendarTool.GregorianToPersian(dayMoodList.get(i).getId()).getPersianLongDate(), f);
+                phrase.getChunks().get(0).setLineHeight(20);
+                phrase.setLeading(30, 0);
+                cell = new PdfPCell(phrase);
+                cell.setPadding(10);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cell.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
                 table.addCell(cell);
@@ -240,8 +243,10 @@ public final class ReportUtils {
                         dayColor = "pms";
                         break;
                 }
-                cell = new PdfPCell(new Phrase(dayColor, f));
-                cell.setPadding(5);
+                phrase = new Phrase(dayColor, f);
+                phrase.getChunks().get(0).setLineHeight(20);
+                cell = new PdfPCell(phrase);
+                cell.setPadding(10);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cell.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
                 table.addCell(cell);
@@ -265,7 +270,7 @@ public final class ReportUtils {
                     }
                 }
                 if (reportEmotion && dayMoodList.get(i).getTypeEmotionSelectedIndices() != null && !dayMoodList.get(i).getTypeEmotionSelectedIndices().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("احساسات: ");
                     boolean hasFirst = false;
                     for (int j = 0; j < dayMoodList.get(i).getTypeEmotionSelectedIndices().size(); j++) {
@@ -295,7 +300,7 @@ public final class ReportUtils {
                 }
 
                 if (reportPain && dayMoodList.get(i).getTypePainSelectedIndices() != null && !dayMoodList.get(i).getTypePainSelectedIndices().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("احساس درد: ");
                     boolean hasFirst = false;
                     for (int j = 0; j < dayMoodList.get(i).getTypePainSelectedIndices().size(); j++) {
@@ -325,7 +330,7 @@ public final class ReportUtils {
                 }
 
                 if (reportEatingDesire && dayMoodList.get(i).getTypeEatingDesireSelectedIndices() != null && !dayMoodList.get(i).getTypeEatingDesireSelectedIndices().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("میل به خوردن: ");
                     boolean hasFirst = false;
                     for (int j = 0; j < dayMoodList.get(i).getTypeEatingDesireSelectedIndices().size(); j++) {
@@ -355,7 +360,7 @@ public final class ReportUtils {
                 }
 
                 if (reportHairStyle && dayMoodList.get(i).getTypeHairStyleSelectedIndices() != null && !dayMoodList.get(i).getTypeHairStyleSelectedIndices().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("حالت موها: ");
                     boolean hasFirst = false;
                     for (int j = 0; j < dayMoodList.get(i).getTypeHairStyleSelectedIndices().size(); j++) {
@@ -385,13 +390,13 @@ public final class ReportUtils {
                 }
 
                 if (reportWeight && dayMoodList.get(i).getWeight() != 0) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("وزن: ");
                     loggedMoods.append(dayMoodList.get(i).getWeight());
                 }
 
                 if (reportDrugs && dayMoodList.get(i).getDrugs() != null && !dayMoodList.get(i).getDrugs().isEmpty()) {
-                    loggedMoods.append(loggedMoods.length() > 0 ? "\n\n" : "");
+                    loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("داروهای مصرفی: ");
                     for (int j = 0; j < dayMoodList.get(i).getDrugs().size(); j++) {
                         loggedMoods.append(dayMoodList.get(i).getDrugs().get(j));
@@ -401,9 +406,12 @@ public final class ReportUtils {
                     }
                 }
 
-                Paragraph paragraph = new Paragraph(loggedMoods.toString(), f);
-                cell = new PdfPCell(paragraph);
-                cell.setPadding(5);
+                phrase = new Phrase(loggedMoods.toString(), f);
+                for (Chunk ch : phrase.getChunks()) {
+                    ch.setLineHeight(20);
+                }
+                cell = new PdfPCell(phrase);
+                cell.setPadding(10);
                 cell.setColspan(2);
                 cell.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
                 table.addCell(cell);
