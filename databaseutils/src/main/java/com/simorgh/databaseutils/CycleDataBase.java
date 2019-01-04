@@ -10,10 +10,12 @@ import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
 import com.simorgh.databaseutils.model.User;
 
+import androidx.annotation.Keep;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+@Keep
 @Database(entities = {Cycle.class, DayMood.class, User.class}, version = 1, exportSchema = false)
 @androidx.room.TypeConverters({TypeConverters.class})
 public abstract class CycleDataBase extends RoomDatabase {
