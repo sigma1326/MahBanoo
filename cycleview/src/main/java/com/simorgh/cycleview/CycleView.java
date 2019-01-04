@@ -269,75 +269,48 @@ public class CycleView extends View implements OnViewDataChangedListener {
     private OnButtonClickListener onButtonClickListener;
 
 
-    public static final class Builder {
-        private CycleData cycleData;
-        private ViewData viewData;
-        private Context context;
-        private OnDayChangedListener onDayChangedListener;
-        private OnButtonClickListener onButtonClickListener;
+    private void drawMainCircle(Canvas canvas) {
+        //draw the main circle
+        canvas.drawCircle(midX, midY, mainCircleRadius, mainCirclePaint);
 
-        public Builder(Context context) {
-            this.context = context;
-            viewData = new ViewData(-1, -1, -1, -1);
-        }
-
-        public CycleData getCycleData() {
-            return cycleData;
-        }
-
-        public Builder setCycleData(CycleData cycleData) {
-            this.cycleData = cycleData;
-            return this;
-        }
-
-        public Context getContext() {
-            return context;
-        }
-
-        public Builder setContext(Context context) {
-            this.context = context;
-            return this;
-        }
-
-        public ViewData getViewData() {
-            return viewData;
-        }
-
-        public OnDayChangedListener getOnDayChangedListener() {
-            return onDayChangedListener;
-        }
-
-        public Builder setOnDayChangedListener(OnDayChangedListener onDayChangedListener) {
-            this.onDayChangedListener = onDayChangedListener;
-            return this;
-        }
-
-        public Builder setViewData(ViewData viewData) {
-            this.viewData = viewData;
-            return this;
-        }
-
-        public CycleView build() throws Exception {
-            if (cycleData == null) {
-                throw new Exception("null clue data !");
+        if (mainCircleHoverIsAnimating) {
+            //draw the medium circle hover and clip
+            canvas.save();
+            clipPath.reset();
+            clipPath.addCircle(midX, midY, mainCircleRadius, Path.Direction.CCW);
+            canvas.clipPath(clipPath, Region.Op.INTERSECT);
+            if (mainCircleHoverRadiusAnimator != null) {
+                canvas.drawCircle(mainCircleHoverX, mainCircleHoverY, mainCircleHoverRadius, getCurrentDayPaint());
             }
-            if (viewData == null) {
-                if (onDayChangedListener == null) {
-                    throw new Exception("OnDayChangedListener object can not be null !");
-                }
-                if (onButtonClickListener == null) {
-                    throw new Exception("OnButtonClickListener object can not be null !");
-                }
-                return new CycleView(this, cycleData, onDayChangedListener, onButtonClickListener);
-            }
-            if (onDayChangedListener == null) {
-                throw new Exception("OnDayChangedListener object can not be null !");
-            }
-            if (onButtonClickListener == null) {
-                throw new Exception("OnButtonClickListener object can not be null !");
-            }
-            return new CycleView(this, cycleData, viewData, onDayChangedListener, onButtonClickListener);
+            canvas.restore();
         }
+
+        btnChangeTextColor = getCurrentDayPaint().getColor();
+        btnChangeTextPaint.setColor(btnChangeTextColor);
+        //draw the main circle texts
+        if (pressedBtnChange) {
+//            btnChangeBkgPaint.setShadowLayer(dp2px(20), dp2px(10), dp2px(10), btnChangeBkgShadowColor);
+//            btnChangeTextPaint.setShadowLayer(dp2px(20), dp2px(10), dp2px(10), btnChangeBkgShadowColor);
+            btnChangeBkgRectF.set(btnChangeBkgRectLeft - 3, btnChangeBkgRectTop - 3, btnChangeBkgRectRight + 3, btnChangeBkgRectBottom + 3);
+            canvas.drawRoundRect(btnChangeBkgRectF, btnChangeBkgRectRoundnessRadius, btnChangeBkgRectRoundnessRadius, btnChangeBkgPaint);
+            btnChangeTextPaint.setTextSize(btnChangeTextPaint.getTextSize() + 1);
+            canvas.drawText(btnChangeText, btnChangeTextX, btnChangeTextY, btnChangeTextPaint);
+            btnChangeTextPaint.setTextSize(btnChangeTextPaint.getTextSize() - 1);
+            if (onButtonClickListener != null) {
+                onButtonClickListener.onButtonChangeClick();
+            }
+        } else {
+//            btnChangeBkgPaint.setShadowLayer(dp2px(0), dp2px(10), dp2px(10), Color.BLACK);
+//            btnChangeTextPaint.setShadowLayer(dp2px(20), dp2px(10), dp2px(10), btnChangeBkgShadowColor);
+            btnChangeBkgRectF.set(btnChangeBkgRectLeft, btnChangeBkgRectTop, btnChangeBkgRectRight, btnChangeBkgRectBottom);
+            canvas.drawRoundRect(btnChangeBkgRectF, btnChangeBkgRectRoundnessRadius, btnChangeBkgRectRoundnessRadius, btnChangeBkgPaint);
+            canvas.drawText(btnChangeText, btnChangeTextX, btnChangeTextY, btnChangeTextPaint);
+        }
+
+
+        canvas.drawText(tvWeekDayNameText, tvWeekDayNameX, tvWeekDayNameY, tvWeekDayNamePaint);
+        canvas.drawText(tvMainDayNumberText, tvMainDayNumberX, tvMainDayNumberY, tvMainDayNumberPaint);
+        canvas.drawText(tvOptionalText, tvOptionalX, tvOptionalY, tvOptionalPaint);
     }
 
     public interface OnDayChangedListener {
@@ -656,48 +629,73 @@ public class CycleView extends View implements OnViewDataChangedListener {
         }
     }
 
-    private void drawMainCircle(Canvas canvas) {
-        //draw the main circle
-        canvas.drawCircle(midX, midY, mainCircleRadius, mainCirclePaint);
+    private void initVariablesForDraw() {
+        if (isFirstDraw) {
+//            isFirstDraw = false;
 
-        if (mainCircleHoverIsAnimating) {
-            //draw the medium circle hover and clip
-            canvas.save();
-            clipPath.reset();
-            clipPath.addCircle(midX, midY, mainCircleRadius, Path.Direction.CCW);
-            canvas.clipPath(clipPath, Region.Op.INTERSECT);
-            if (mainCircleHoverRadiusAnimator != null) {
-                canvas.drawCircle(mainCircleHoverX, mainCircleHoverY, mainCircleHoverRadius, getCurrentDayPaint());
+            if (offsetAngle == -1) {
+                offsetAngle = DEFAULT_START_OFFSET_ANGLE;
             }
-            canvas.restore();
-        }
+            if (mainCircleRadius == -1) {
+                mainCircleRadius = (int) (getMinHeightWidth() / MAIN_CIRCLE_RATIO);
+            }
+            if (mediumCircleRadius == -1) {
+                mediumCircleRadius = (int) (mainCircleRadius / MEDIUM_CIRCLE_RATIO);
+            }
+            if (smallCircleRadius == -1) {
+                smallCircleRadius = (int) (getMinHeightWidth() / SMALL_CIRCLE_RATIO);
+            }
+            if (outerRadius == -1) {
+                outerRadius = (int) (mainCircleRadius + getMinHeightWidth() / OUTER_RADIUS_RATIO);
+            }
 
-        btnChangeTextColor = getCurrentDayPaint().getColor();
-        btnChangeTextPaint.setColor(btnChangeTextColor);
-        //draw the main circle texts
-        if (pressedBtnChange) {
-            btnChangeBkgPaint.setShadowLayer(dp2px(20), dp2px(10), dp2px(10), btnChangeBkgShadowColor);
-            btnChangeTextPaint.setShadowLayer(dp2px(20), dp2px(10), dp2px(10), btnChangeBkgShadowColor);
-            btnChangeBkgRectF.set(btnChangeBkgRectLeft - 3, btnChangeBkgRectTop - 3, btnChangeBkgRectRight + 3, btnChangeBkgRectBottom + 3);
-            canvas.drawRoundRect(btnChangeBkgRectF, btnChangeBkgRectRoundnessRadius, btnChangeBkgRectRoundnessRadius, btnChangeBkgPaint);
-            btnChangeTextPaint.setTextSize(btnChangeTextPaint.getTextSize() + 1);
-            canvas.drawText(btnChangeText, btnChangeTextX, btnChangeTextY, btnChangeTextPaint);
-            btnChangeTextPaint.setTextSize(btnChangeTextPaint.getTextSize() - 1);
-            if (onButtonClickListener != null) {
-                onButtonClickListener.onButtonChangeClick();
-            }
-        } else {
-            btnChangeBkgPaint.setShadowLayer(dp2px(0), dp2px(10), dp2px(10), Color.BLACK);
-            btnChangeTextPaint.setShadowLayer(dp2px(20), dp2px(10), dp2px(10), btnChangeBkgShadowColor);
+
+            //button change background
+            btnChangeBkgRectLeft = (int) (midX - (mainCircleRadius >> 1) - dp2px(BTN_CHANGE_LEFT_OFFSET));
+            btnChangeBkgRectRight = (int) (midX + (mainCircleRadius >> 1) + dp2px(BTN_CHANGE_RIGHT_OFFSET));
+            btnChangeBkgRectTop = (int) (midY + mainCircleRadius / BTN_CHANGE_TOP_OFFSET);
+            btnChangeBkgRectBottom = (int) (midY + mainCircleRadius / BTN_CHANGE_BOTTOM_OFFSET);
+            btnChangeBkgRectRoundnessRadius = dp2px((mainCircleRadius / BTN_CHANGE_ROUNDNESS_RATIO));
             btnChangeBkgRectF.set(btnChangeBkgRectLeft, btnChangeBkgRectTop, btnChangeBkgRectRight, btnChangeBkgRectBottom);
-            canvas.drawRoundRect(btnChangeBkgRectF, btnChangeBkgRectRoundnessRadius, btnChangeBkgRectRoundnessRadius, btnChangeBkgPaint);
-            canvas.drawText(btnChangeText, btnChangeTextX, btnChangeTextY, btnChangeTextPaint);
+//            btnChangeBkgPaint.setShadowLayer(dp2px(BTN_CHANGE_SHADOW_RADIUS), dp2px(BTN_CHANGE_SHADOW_X_OFFSET), dp2px(BTN_CHANGE_SHADOW_Y_OFFSET), btnChangeBkgShadowColor);
+
+            //button change textView
+            btnChangeTextY = BTN_CHANGE_TEXT_Y_OFFSET + ((btnChangeBkgRectTop + btnChangeBkgRectBottom) >> 1);
+            btnChangeTextX = (btnChangeBkgRectRight + btnChangeBkgRectLeft) >> 1;
+            btnChangeTextSize = sp2px(px2dp(mainCircleRadius) / BTN_CHANGE_TEXT_SIZE_RATIO);
+            btnChangeTextPaint.setTextSize(btnChangeTextSize);
+
+
+            //main day number textView
+            tvMainDayNumberY = midY - dp2px((px2dp(mainCircleRadius) / MAIN_DAY_NUMBER_TV_Y_RATIO)) + tvMainDayNumberPaint.getFontMetrics().descent;
+            tvMainDayNumberX = midX;
+            tvMainDayNumberTextSize = sp2px(px2dp(mainCircleRadius) / MAIN_DAY_NUMBER_TV_TEXT_SIZE_RATIO);
+            tvMainDayNumberPaint.setTextSize(tvMainDayNumberTextSize);
+
+
+            //week day name textView
+            tvWeekDayNameY = midY - dp2px((px2dp(mainCircleRadius) / WEEK_DAY_NAME_TV_Y_RATIO)) + tvWeekDayNamePaint.getFontMetrics().descent;
+            tvWeekDayNameX = midX;
+            tvWeekDayNameTextSize = sp2px((px2dp(mainCircleRadius) / WEEK_DAY_NAME_TV_TEXT_SIZE_RATIO));
+            tvWeekDayNamePaint.setTextSize(tvWeekDayNameTextSize);
+
+
+            //optional textView
+            tvOptionalY = midY + dp2px((px2dp(mainCircleRadius) / OPTIONAL_TV_Y_RATIO)) + tvOptionalPaint.getFontMetrics().descent;
+            tvOptionalX = midX;
+            tvOptionalTextSize = sp2px((px2dp(mainCircleRadius) / OPTIONAL_TV_TEXT_SIZE_RATIO));
+            tvOptionalPaint.setTextSize(tvOptionalTextSize);
+
+
+            //month name textView
+            tvMonthNameTextSize = sp2px((px2dp(mediumCircleRadius) / MONTH_NAME_TV_TEXT_SIZE_RATIO));
+            tvMonthNamePaint.setTextSize(tvMonthNameTextSize);
+            tvMonthDayNumberTextSize = sp2px((px2dp(mediumCircleRadius) / DAY_OF_MONTH_TV_TEXT_SIZE_RATIO));
+            tvMonthDayNumberPaint.setTextSize(tvMonthDayNumberTextSize);
+
         }
 
-
-        canvas.drawText(tvWeekDayNameText, tvWeekDayNameX, tvWeekDayNameY, tvWeekDayNamePaint);
-        canvas.drawText(tvMainDayNumberText, tvMainDayNumberX, tvMainDayNumberY, tvMainDayNumberPaint);
-        canvas.drawText(tvOptionalText, tvOptionalX, tvOptionalY, tvOptionalPaint);
+        calculateMediumCircleParamsXY();
     }
 
     private Paint getCurrentDayPaint() {
@@ -853,73 +851,75 @@ public class CycleView extends View implements OnViewDataChangedListener {
         }
     }
 
-    private void initVariablesForDraw() {
-        if (isFirstDraw) {
-//            isFirstDraw = false;
+    public static final class Builder {
+        private CycleData cycleData;
+        private ViewData viewData;
+        private Context context;
+        private OnDayChangedListener onDayChangedListener;
+        private OnButtonClickListener onButtonClickListener;
 
-            if (offsetAngle == -1) {
-                offsetAngle = DEFAULT_START_OFFSET_ANGLE;
-            }
-            if (mainCircleRadius == -1) {
-                mainCircleRadius = (int) (getMinHeightWidth() / MAIN_CIRCLE_RATIO);
-            }
-            if (mediumCircleRadius == -1) {
-                mediumCircleRadius = (int) (mainCircleRadius / MEDIUM_CIRCLE_RATIO);
-            }
-            if (smallCircleRadius == -1) {
-                smallCircleRadius = (int) (getMinHeightWidth() / SMALL_CIRCLE_RATIO);
-            }
-            if (outerRadius == -1) {
-                outerRadius = (int) (mainCircleRadius + getMinHeightWidth() / OUTER_RADIUS_RATIO);
-            }
-
-
-            //button change background
-            btnChangeBkgRectLeft = (int) (midX - (mainCircleRadius >> 1) - dp2px(BTN_CHANGE_LEFT_OFFSET));
-            btnChangeBkgRectRight = (int) (midX + (mainCircleRadius >> 1) + dp2px(BTN_CHANGE_RIGHT_OFFSET));
-            btnChangeBkgRectTop = (int) (midY + mainCircleRadius / BTN_CHANGE_TOP_OFFSET);
-            btnChangeBkgRectBottom = (int) (midY + mainCircleRadius / BTN_CHANGE_BOTTOM_OFFSET);
-            btnChangeBkgRectRoundnessRadius = dp2px((mainCircleRadius / BTN_CHANGE_ROUNDNESS_RATIO));
-            btnChangeBkgRectF.set(btnChangeBkgRectLeft, btnChangeBkgRectTop, btnChangeBkgRectRight, btnChangeBkgRectBottom);
-            btnChangeBkgPaint.setShadowLayer(dp2px(BTN_CHANGE_SHADOW_RADIUS), dp2px(BTN_CHANGE_SHADOW_X_OFFSET), dp2px(BTN_CHANGE_SHADOW_Y_OFFSET), btnChangeBkgShadowColor);
-
-            //button change textView
-            btnChangeTextY = BTN_CHANGE_TEXT_Y_OFFSET + ((btnChangeBkgRectTop + btnChangeBkgRectBottom) >> 1);
-            btnChangeTextX = (btnChangeBkgRectRight + btnChangeBkgRectLeft) >> 1;
-            btnChangeTextSize = sp2px(px2dp(mainCircleRadius) / BTN_CHANGE_TEXT_SIZE_RATIO);
-            btnChangeTextPaint.setTextSize(btnChangeTextSize);
-
-
-            //main day number textView
-            tvMainDayNumberY = midY - dp2px((px2dp(mainCircleRadius) / MAIN_DAY_NUMBER_TV_Y_RATIO)) + tvMainDayNumberPaint.getFontMetrics().descent;
-            tvMainDayNumberX = midX;
-            tvMainDayNumberTextSize = sp2px(px2dp(mainCircleRadius) / MAIN_DAY_NUMBER_TV_TEXT_SIZE_RATIO);
-            tvMainDayNumberPaint.setTextSize(tvMainDayNumberTextSize);
-
-
-            //week day name textView
-            tvWeekDayNameY = midY - dp2px((px2dp(mainCircleRadius) / WEEK_DAY_NAME_TV_Y_RATIO)) + tvWeekDayNamePaint.getFontMetrics().descent;
-            tvWeekDayNameX = midX;
-            tvWeekDayNameTextSize = sp2px((px2dp(mainCircleRadius) / WEEK_DAY_NAME_TV_TEXT_SIZE_RATIO));
-            tvWeekDayNamePaint.setTextSize(tvWeekDayNameTextSize);
-
-
-            //optional textView
-            tvOptionalY = midY + dp2px((px2dp(mainCircleRadius) / OPTIONAL_TV_Y_RATIO)) + tvOptionalPaint.getFontMetrics().descent;
-            tvOptionalX = midX;
-            tvOptionalTextSize = sp2px((px2dp(mainCircleRadius) / OPTIONAL_TV_TEXT_SIZE_RATIO));
-            tvOptionalPaint.setTextSize(tvOptionalTextSize);
-
-
-            //month name textView
-            tvMonthNameTextSize = sp2px((px2dp(mediumCircleRadius) / MONTH_NAME_TV_TEXT_SIZE_RATIO));
-            tvMonthNamePaint.setTextSize(tvMonthNameTextSize);
-            tvMonthDayNumberTextSize = sp2px((px2dp(mediumCircleRadius) / DAY_OF_MONTH_TV_TEXT_SIZE_RATIO));
-            tvMonthDayNumberPaint.setTextSize(tvMonthDayNumberTextSize);
-
+        public Builder(Context context) {
+            this.context = context;
+            viewData = new ViewData(-1, -1, -1, -1);
         }
 
-        calculateMediumCircleParamsXY();
+        public CycleData getCycleData() {
+            return cycleData;
+        }
+
+        public Builder setCycleData(CycleData cycleData) {
+            this.cycleData = cycleData;
+            return this;
+        }
+
+        public Context getContext() {
+            return context;
+        }
+
+        public Builder setContext(Context context) {
+            this.context = context;
+            return this;
+        }
+
+        public ViewData getViewData() {
+            return viewData;
+        }
+
+        public OnDayChangedListener getOnDayChangedListener() {
+            return onDayChangedListener;
+        }
+
+        public Builder setOnDayChangedListener(OnDayChangedListener onDayChangedListener) {
+            this.onDayChangedListener = onDayChangedListener;
+            return this;
+        }
+
+        public Builder setViewData(ViewData viewData) {
+            this.viewData = viewData;
+            return this;
+        }
+
+        public CycleView build() {
+            if (cycleData == null) {
+                Log.d("debug13","null clue data !");
+            }
+            if (viewData == null) {
+                if (onDayChangedListener == null) {
+                    Log.d("debug13","OnDayChangedListener object can not be null !");
+                }
+                if (onButtonClickListener == null) {
+                    Log.d("debug13","OnButtonClickListener object can not be null !");
+                }
+                return new CycleView(this, cycleData, onDayChangedListener, onButtonClickListener);
+            }
+            if (onDayChangedListener == null) {
+                Log.d("debug13","OnDayChangedListener object can not be null !");
+            }
+            if (onButtonClickListener == null) {
+                Log.d("debug13","OnButtonClickListener object can not be null !");
+            }
+            return new CycleView(this, cycleData, viewData, onDayChangedListener, onButtonClickListener);
+        }
     }
 
     private void calculateMediumCircleParamsXY() {

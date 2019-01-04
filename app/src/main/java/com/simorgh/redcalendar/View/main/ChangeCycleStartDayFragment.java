@@ -57,6 +57,14 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     }
 
     @Override
+    public void onDestroyView() {
+        calendarView = null;
+        btnApplyChanges = null;
+        navController = null;
+        super.onDestroyView();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.change_cycle_start_day_fragment, container, false);
         calendarView = v.findViewById(R.id.calendar_view);

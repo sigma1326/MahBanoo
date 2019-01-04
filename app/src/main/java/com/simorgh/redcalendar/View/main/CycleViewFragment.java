@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
@@ -48,7 +47,6 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
     private OnButtonChangeClickListener onButtonChangeClickListener;
     private OnDayTypeChangedListener onDayTypeChangedListener;
 
-    private LinkedList<ImageView> items = new LinkedList<>();
     private RecyclerView rvDayMoods;
 
     public static CycleViewFragment newInstance() {
@@ -73,11 +71,9 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
         return v;
     }
 
-    LinearLayoutManager linearLayoutManager;
-
     private void initMoodRecyclerView() {
         rvDayMoods.setNestedScrollingEnabled(false);
-        linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
         rvDayMoods.setLayoutManager(linearLayoutManager);
         rvDayMoods.setNestedScrollingEnabled(false);
         rvDayMoods.setAdapter(new MoodListAdapter(new MoodListAdapter.ItemDiffCallBack()));
@@ -125,6 +121,13 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
         super.onAttach(context);
         onButtonChangeClickListener = (OnButtonChangeClickListener) context;
         onDayTypeChangedListener = (OnDayTypeChangedListener) context;
+    }
+
+    @Override
+    public void onDestroyView() {
+        cycleView = null;
+        rvDayMoods = null;
+        super.onDestroyView();
     }
 
     @Override
@@ -224,13 +227,12 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                 }
             }
         }
-        assert rvDayMoods != null;
         if (rvDayMoods != null) {
             ViewGroup.LayoutParams params = rvDayMoods.getLayoutParams();
             params.width = (int) (moodItems.size() * SizeConverter.dpToPx(Objects.requireNonNull(getContext()), 81));
             rvDayMoods.setLayoutParams(params);
         }
-        ((MoodListAdapter) Objects.requireNonNull(rvDayMoods.getAdapter())).submitList(moodItems);
+        ((MoodListAdapter) Objects.requireNonNull(Objects.requireNonNull(rvDayMoods).getAdapter())).submitList(moodItems);
     }
 
     public interface OnDayTypeChangedListener {

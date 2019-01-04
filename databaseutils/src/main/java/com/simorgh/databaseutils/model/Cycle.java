@@ -1,5 +1,7 @@
 package com.simorgh.databaseutils.model;
 
+import android.util.Log;
+
 import com.simorgh.calendarutil.CalendarTool;
 
 import java.util.Calendar;
@@ -111,7 +113,7 @@ public class Cycle {
             day2 = (int) ((diffDays) % getTotalDaysCount()) + 1;
             calendar.add(Calendar.DAY_OF_MONTH, -1 * day2 + 1);
         } else {
-            throw new UnsupportedOperationException("invalid cycle date");
+            Log.d("debug13","invalid cycle date");
         }
         return calendar;
     }

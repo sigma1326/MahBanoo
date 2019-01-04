@@ -38,8 +38,6 @@
 -keep interface androidx.** { *; }
 
 
--kepp class com.simorgh.databaseutils.model.**{*;}
-
 ### RxJava, RxAndroid (https://gist.github.com/kosiara/487868792fbd3214f9c9)
 -keep class rx.schedulers.Schedulers {
     public static <methods>;

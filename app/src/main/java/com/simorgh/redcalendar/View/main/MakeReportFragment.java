@@ -105,6 +105,25 @@ public class MakeReportFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroyView() {
+        chbBleeding = null;
+        chbEatingDesire = null;
+        chbEmotion = null;
+        chbHairStyle = null;
+        chbPain = null;
+        chbWeight = null;
+        chbDrugs = null;
+
+        btnRangeStart = null;
+        btnRangeEnd = null;
+        btnMakeReport = null;
+
+        navController = null;
+
+        super.onDestroyView();
+    }
+
     @SuppressLint("DefaultLocale")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

@@ -217,7 +217,7 @@ public class CycleData {
             currentCycleStartDate.setTimeInMillis(today.getTimeInMillis());
             currentCycleStartDate.add(Calendar.DAY_OF_MONTH, -1 * day2 + 1);
         } else {
-            throw new UnsupportedOperationException("invalid cycle date");
+            Log.d("debug13", "invalid cycle date");
         }
         return currentCycleStartDate;
     }

@@ -337,10 +337,10 @@ public class CalendarTool {
                     case Calendar.FEBRUARY:
                         return (year % 4 == 0) ? 29 : 28;
                     default:
-                        throw new IllegalArgumentException("Invalid Month");
+                        return 30;
                 }
         }
-        throw new IllegalArgumentException("Invalid monthView type :" + calendarType);
+        return 30;
     }
 
     public static String getMonthName(int month, int calendarType) {

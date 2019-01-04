@@ -18,7 +18,6 @@ import android.view.View;
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
 import com.simorgh.calendarutil.model.CalendarType;
-import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
 import com.simorgh.cyclecalendar.R;
@@ -49,10 +48,10 @@ public class BaseMonthView extends View {
     private int weeksInMonth = MAX_WEEKS_IN_MONTH;
 
 
-    protected TextPaint mMonthPaint;
-    protected TextPaint dayTextPaint;
+    protected static TextPaint mMonthPaint;
+    protected static TextPaint dayTextPaint;
 
-    protected NumberFormat mDayFormatter;
+    protected static NumberFormat mDayFormatter;
 
     public static final int MonthViewTypeShowCalendar = 0;
     public static final int MonthViewTypeChangeDays = 1;
@@ -66,12 +65,12 @@ public class BaseMonthView extends View {
     public static final int TYPE_NOTE = 5;
 
     //rectangle colors
-    protected Paint rectTypeGrayPaint;
-    protected int rectTypeGrayColor;
-    protected int tvMonthDayNumberTextColorWhite;
-    protected int tvMonthDayNumberTextColorBlack;
+    protected static Paint rectTypeGrayPaint;
+    protected static int rectTypeGrayColor;
+    protected static int tvMonthDayNumberTextColorWhite;
+    protected static int tvMonthDayNumberTextColorBlack;
 
-    protected int monthViewBkgColor;
+    protected static int monthViewBkgColor;
 
     // Desired dimensions.
     protected int mDesiredMonthHeight;
@@ -109,15 +108,15 @@ public class BaseMonthView extends View {
     protected int mMonthHijri;
 
 
-    protected Calendar mCalendar = Calendar.getInstance();
-    protected PersianCalendar persianCalendar = new PersianCalendar();
-    protected UmmalquraCalendar hijriCalendar = new UmmalquraCalendar();
-    protected PersianDate persianDate = new PersianDate();
-    protected Locale mLocale;
-    protected Calendar date = Calendar.getInstance();
+    protected static Calendar mCalendar = Calendar.getInstance();
+    protected static PersianCalendar persianCalendar = new PersianCalendar();
+    protected static UmmalquraCalendar hijriCalendar = new UmmalquraCalendar();
+    protected static PersianDate persianDate = new PersianDate();
+    protected static Locale mLocale;
+    protected static Calendar date = Calendar.getInstance();
 
-    protected PersianCalendar p = new PersianCalendar();
-    protected UmmalquraCalendar hijri = new UmmalquraCalendar();
+    protected static PersianCalendar p = new PersianCalendar();
+    protected static UmmalquraCalendar hijri = new UmmalquraCalendar();
 
 
     protected OnDayClickListener mOnDayClickListener;
@@ -127,10 +126,10 @@ public class BaseMonthView extends View {
     protected OnCycleDataListNeededListener onCycleDataListNeededListener;
 
 
-    protected CycleData cycleData;
+    protected static CycleData cycleData;
 
-    protected boolean showInfo = true;
-    protected List<CycleData> cycleDataList = new LinkedList<>();
+    protected static boolean showInfo = true;
+    protected static List<CycleData> cycleDataList = new LinkedList<>();
 
 
     public BaseMonthView(Context context) {
@@ -275,19 +274,15 @@ public class BaseMonthView extends View {
         mCellWidth = cellWidth;
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        final int paddingLeft = getPaddingLeft();
-        final int paddingTop = getPaddingTop();
-        canvas.translate(paddingLeft, paddingTop);
-
-        drawMonth(canvas);
-        drawDays(canvas);
-
-        canvas.translate(-paddingLeft, -paddingTop);
-
-        setBackgroundColor(monthViewBkgColor);
-
+    public static long toTimeInMillis(@NonNull Calendar calendar) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        long ret;
+        ret = year;
+        ret = ret * 100 + (month + 1);
+        ret = ret * 100 + day;
+        return ret;
     }
 
     protected void drawMonth(Canvas canvas) {
@@ -350,91 +345,17 @@ public class BaseMonthView extends View {
         return rectTypeGrayPaint;
     }
 
-    public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType, boolean showInfo) {
-        mActivatedDay = selectedDay;
-        this.calendarType = calendarType;
-        switch (calendarType) {
-            case CalendarType.PERSIAN:
-                mMonthPersian = month;
-                mYearPersian = year;
-                persianCalendar.setPersianDate(mYearPersian, mMonthPersian + 1, 1);
-                PersianDate persianDate = new PersianDate();
-                persianDate.setShDate(mYearPersian, mMonthPersian + 1, 1);
-                mDayOfWeekStart = persianDate.dayOfWeek();
-                break;
-            case CalendarType.ARABIC:
-                mYearHijri = year;
-                mMonthHijri = month;
-                hijriCalendar.set(UmmalquraCalendar.MONTH, mMonthHijri);
-                hijriCalendar.set(UmmalquraCalendar.YEAR, mYearHijri);
-                hijriCalendar.set(UmmalquraCalendar.DAY_OF_MONTH, 1);
-                mDayOfWeekStart = hijriCalendar.get(Calendar.DAY_OF_WEEK);
-                break;
-            case CalendarType.GREGORIAN:
-                if (isValidMonth(month)) {
-                    mMonth = month;
-                }
-                mYear = year;
-                mCalendar.set(Calendar.MONTH, mMonth);
-                mCalendar.set(Calendar.YEAR, mYear);
-                mCalendar.set(Calendar.DAY_OF_MONTH, 1);
-                mDayOfWeekStart = mCalendar.get(Calendar.DAY_OF_WEEK);
-                break;
-        }
-        if (isValidDayOfWeek(weekStart)) {
-            mWeekStart = weekStart;
-        } else {
-            mWeekStart = Calendar.SATURDAY;
-        }
+    @Override
+    protected void onDraw(Canvas canvas) {
+        final int paddingLeft = getPaddingLeft();
+        final int paddingTop = getPaddingTop();
+        canvas.translate(paddingLeft, paddingTop);
+        canvas.drawColor(monthViewBkgColor);
 
-        // Figure out what day today is.
-        final Calendar today = Calendar.getInstance();
-        mToday = -1;
-        mDaysInMonth = CalendarTool.getDaysInMonth(month, year, calendarType);
-        for (int i = 0; i < mDaysInMonth; i++) {
-            final int day = i + 1;
-            if (sameDay(day, today)) {
-                mToday = day;
-            }
-        }
+        drawMonth(canvas);
+        drawDays(canvas);
 
-        initPaints();
-
-        mEnabledDayStart = mathConstrain(enabledDayStart, 1, mDaysInMonth);
-        mEnabledDayEnd = mathConstrain(enabledDayEnd, mEnabledDayStart, mDaysInMonth);
-
-        updateMonthYearLabel();
-        if (CalendarTool.getDaysInMonth(month, year, calendarType) <= 30) {
-            switch (mDayOfWeekStart) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                    weeksInMonth = 5;
-                    break;
-                case 6:
-                    weeksInMonth = 6;
-                    break;
-            }
-        } else if (CalendarTool.getDaysInMonth(month, year, calendarType) == 31) {
-            switch (mDayOfWeekStart) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                    weeksInMonth = 5;
-                    break;
-                case 5:
-                case 6:
-                    weeksInMonth = 6;
-                    break;
-            }
-        }
-        this.showInfo = showInfo;
-        postInvalidate();
+        canvas.translate(-paddingLeft, -paddingTop);
     }
 
 
@@ -562,7 +483,6 @@ public class BaseMonthView extends View {
             onDaySelectedListener.onDaySelected(date);
             selectedDay = day;
         }
-//        Toast.makeText(getContext(), "clicked " + day, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -723,20 +643,95 @@ public class BaseMonthView extends View {
         return showInfo;
     }
 
-    public void setShowInfo(boolean showInfo) {
-        this.showInfo = showInfo;
+    public void setMonthParams(int selectedDay, int month, int year, int weekStart, int enabledDayStart, int enabledDayEnd, int calendarType, boolean showInfo) {
+        mActivatedDay = selectedDay;
+        this.calendarType = calendarType;
+        switch (calendarType) {
+            case CalendarType.PERSIAN:
+                mMonthPersian = month;
+                mYearPersian = year;
+                persianCalendar.setPersianDate(mYearPersian, mMonthPersian + 1, 1);
+                PersianDate persianDate = new PersianDate();
+                persianDate.setShDate(mYearPersian, mMonthPersian + 1, 1);
+                mDayOfWeekStart = persianDate.dayOfWeek();
+                break;
+            case CalendarType.ARABIC:
+                mYearHijri = year;
+                mMonthHijri = month;
+                hijriCalendar.set(UmmalquraCalendar.MONTH, mMonthHijri);
+                hijriCalendar.set(UmmalquraCalendar.YEAR, mYearHijri);
+                hijriCalendar.set(UmmalquraCalendar.DAY_OF_MONTH, 1);
+                mDayOfWeekStart = hijriCalendar.get(Calendar.DAY_OF_WEEK);
+                break;
+            case CalendarType.GREGORIAN:
+                if (isValidMonth(month)) {
+                    mMonth = month;
+                }
+                mYear = year;
+                mCalendar.set(Calendar.MONTH, mMonth);
+                mCalendar.set(Calendar.YEAR, mYear);
+                mCalendar.set(Calendar.DAY_OF_MONTH, 1);
+                mDayOfWeekStart = mCalendar.get(Calendar.DAY_OF_WEEK);
+                break;
+        }
+        if (isValidDayOfWeek(weekStart)) {
+            mWeekStart = weekStart;
+        } else {
+            mWeekStart = Calendar.SATURDAY;
+        }
+
+        // Figure out what day today is.
+        final Calendar today = Calendar.getInstance();
+        mToday = -1;
+        mDaysInMonth = CalendarTool.getDaysInMonth(month, year, calendarType);
+        for (int i = 0; i < mDaysInMonth; i++) {
+            final int day = i + 1;
+            if (sameDay(day, today)) {
+                mToday = day;
+            }
+        }
+
+        initPaints();
+
+        mEnabledDayStart = mathConstrain(enabledDayStart, 1, mDaysInMonth);
+        mEnabledDayEnd = mathConstrain(enabledDayEnd, mEnabledDayStart, mDaysInMonth);
+
+        updateMonthYearLabel();
+        if (CalendarTool.getDaysInMonth(month, year, calendarType) <= 30) {
+            switch (mDayOfWeekStart) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    weeksInMonth = 5;
+                    break;
+                case 6:
+                    weeksInMonth = 6;
+                    break;
+            }
+        } else if (CalendarTool.getDaysInMonth(month, year, calendarType) == 31) {
+            switch (mDayOfWeekStart) {
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    weeksInMonth = 5;
+                    break;
+                case 5:
+                case 6:
+                    weeksInMonth = 6;
+                    break;
+            }
+        }
+        BaseMonthView.showInfo = showInfo;
+        postInvalidate();
     }
 
-    public static long toTimeInMillis(@NonNull Calendar calendar) {
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        YearMonthDay yearMonthDay = new YearMonthDay(year, month, day, CalendarType.GREGORIAN);
-        long ret;
-        ret = yearMonthDay.getYear();
-        ret = ret * 100 + (yearMonthDay.getMonth() + 1);
-        ret = ret * 100 + yearMonthDay.getDay();
-        return ret;
+    public void setShowInfo(boolean showInfo) {
+        BaseMonthView.showInfo = showInfo;
     }
 
     protected void updateMonthYearLabel() {
@@ -807,7 +802,7 @@ public class BaseMonthView extends View {
     }
 
     public void setCycleData(CycleData cycleData) {
-        this.cycleData = cycleData;
+        BaseMonthView.cycleData = cycleData;
         postInvalidate();
     }
 
@@ -842,7 +837,7 @@ public class BaseMonthView extends View {
     }
 
     public void setCycleDataList(List<CycleData> cycleDataList) {
-        this.cycleDataList.addAll(cycleDataList);
+        BaseMonthView.cycleDataList.addAll(cycleDataList);
         postInvalidate();
     }
 

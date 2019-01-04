@@ -68,6 +68,24 @@ public class AddMoodFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDestroyView() {
+        mvBleeding = null;
+        mvEmotion= null;
+        mvPain= null;
+        mvEatingDesire= null;
+        mvHairStyle = null;
+
+        btnApplyWeight = null;
+        btnAddDrug = null;
+        etWeight = null;
+        etDrugName = null;
+
+        rvDrugs = null;
+
+        super.onDestroyView();
+    }
+
     private void getArgs() {
         if (getArguments() != null) {
             YearMonthDay yearMonthDay = AddMoodFragmentArgs.fromBundle(getArguments()).getSelectedDay();
@@ -282,7 +300,7 @@ public class AddMoodFragment extends Fragment {
         mvHairStyle.setSelectedItems(null);
 
         DayMood dayMood = mViewModel.getDayMood();
-        if (dayMood != null) {
+        if (dayMood != null && rvDrugs != null) {
             mvBleeding.setSelectedItem(dayMood.getTypeBleedingSelectedIndex());
             mvEmotion.setSelectedItems(dayMood.getTypeEmotionSelectedIndices());
             mvPain.setSelectedItems(dayMood.getTypePainSelectedIndices());

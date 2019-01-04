@@ -130,6 +130,12 @@ public class CycleInfoFragment extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        tvInfo = null;
+        super.onDestroyView();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }

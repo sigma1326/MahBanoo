@@ -70,6 +70,14 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
     }
 
     @Override
+    public void onDestroyView() {
+        calendarView = null;
+        btnApplyChanges = null;
+        navController = null;
+        super.onDestroyView();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MakeReportViewModel.class);
@@ -77,7 +85,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
             mViewModel.getRangeStartLive().observe(this, calendar -> {
                 if (calendarView != null && calendar != null) {
                     calendarView.setSelectedDate(calendar);
-                    calendarView.scrollToCurrentDate(AppManager.getCalendarInstance());
+                    calendarView.scrollToCurrentDate(mViewModel.getRangeStartLive().getValue());
                     calendarView.setCycleData(new CycleData(0, 0, 0, calendar, calendar));
                 }
             });
@@ -85,7 +93,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
             mViewModel.getRangeEndLive().observe(this, calendar -> {
                 if (calendarView != null && calendar != null) {
                     calendarView.setSelectedDate(calendar);
-                    calendarView.scrollToCurrentDate(AppManager.getCalendarInstance());
+                    calendarView.scrollToCurrentDate(mViewModel.getRangeEndLive().getValue());
                     calendarView.setCycleData(new CycleData(0, 0, 0, calendar, calendar));
                 }
             });

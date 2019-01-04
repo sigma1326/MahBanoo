@@ -157,4 +157,19 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        cycleBar = null;
+        spinnerRedDays= null;
+        spinnerGrayDays= null;
+        spinnerYellowDays = null;
+        spinnerBirthYear= null;
+        tvThisCycleStartEnd= null;
+        tvCurrentCycle= null;
+        tvRedDays= null;
+        tvGrayDays= null;
+        tvYellowDays= null;
+        tvBirthYear = null;
+        super.onDestroyView();
+    }
 }

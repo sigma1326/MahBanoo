@@ -25,14 +25,14 @@ public class ShowInfoMonthView extends BaseMonthView {
     public static final String TAG = "monthView";
 
     //rectangle colors
-    private Paint rectTypeRedPaint;
-    private Paint rectTypeGreenPaint;
-    private Paint rectTypeYellowPaint;
-    private Paint rectTypeMarkedPaint;
-    private int rectTypeRedColor;
-    private int rectTypeGreenColor;
-    private int rectTypeYellowColor;
-    private int rectTypeMarkedColor;
+    private static Paint rectTypeRedPaint;
+    private static Paint rectTypeGreenPaint;
+    private static Paint rectTypeYellowPaint;
+    private static Paint rectTypeMarkedPaint;
+    private static int rectTypeRedColor;
+    private static int rectTypeGreenColor;
+    private static int rectTypeYellowColor;
+    private static int rectTypeMarkedColor;
 
     //Marked Triangle
     private Path markedPath;
@@ -189,6 +189,7 @@ public class ShowInfoMonthView extends BaseMonthView {
         return amount < low ? low : (amount > high ? high : amount);
     }
 
+    private static Calendar clearDate = Calendar.getInstance();
     @Override
     protected Paint getDayPaint(Calendar date) {
         if (cycleData == null || !showInfo) {
@@ -197,7 +198,6 @@ public class ShowInfoMonthView extends BaseMonthView {
         long days;
         int day;
         CycleData tempCycle = null;
-        Calendar clearDate = Calendar.getInstance();
         clearDate.clear();
         if (cycleDataList == null || cycleDataList.isEmpty()) {
             return rectTypeGrayPaint;

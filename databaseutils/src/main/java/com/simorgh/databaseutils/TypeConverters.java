@@ -2,8 +2,6 @@ package com.simorgh.databaseutils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.simorgh.calendarutil.model.CalendarType;
-import com.simorgh.calendarutil.model.YearMonthDay;
 
 import java.lang.reflect.Type;
 import java.util.Calendar;
@@ -14,12 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.room.TypeConverter;
 
 public class TypeConverters {
+    private static Calendar calendar = Calendar.getInstance();
+
     @TypeConverter
     public static Calendar toCalendar(Long value) {
         if (value == null) {
             return null;
         } else {
-            Calendar calendar = Calendar.getInstance();
             if (String.valueOf(value).length() < 8) {
                 return Calendar.getInstance();
             }
@@ -39,11 +38,10 @@ public class TypeConverters {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        YearMonthDay yearMonthDay = new YearMonthDay(year, month, day, CalendarType.GREGORIAN);
         long ret;
-        ret = yearMonthDay.getYear();
-        ret = ret * 100 + (yearMonthDay.getMonth() + 1);
-        ret = ret * 100 + yearMonthDay.getDay();
+        ret = year;
+        ret = ret * 100 + (month + 1);
+        ret = ret * 100 + day;
         return ret;
     }
 

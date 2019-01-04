@@ -18,7 +18,6 @@ package com.simorgh.cyclecalendar.util;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.simorgh.calendarutil.CalendarTool;
@@ -62,18 +61,13 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private Calendar selectedDay = Calendar.getInstance();
 
     private PersianCalendar minP;
-    private PersianCalendar p1;
-    private PersianCalendar p2;
 
     private UmmalquraCalendar minH;
-    private UmmalquraCalendar h1;
-    private UmmalquraCalendar h2;
 
 
     private int mCount;
     private int mFirstDayOfWeek;
     private ShowInfoMonthView.IsDayMarkedListener isDayMarkedListener;
-    private int lastPosition = -1;
     private CycleData cycleData;
     private boolean showInfo;
     private List<CycleData> cycleDataList = new LinkedList<>();
@@ -97,14 +91,14 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
             case CalendarType.GREGORIAN:
                 break;
             case CalendarType.PERSIAN:
-                p1 = CalendarTool.GregorianToPersian(mMinDate);
-                p2 = CalendarTool.GregorianToPersian(mMaxDate);
+                PersianCalendar p1 = CalendarTool.GregorianToPersian(mMinDate);
+                PersianCalendar p2 = CalendarTool.GregorianToPersian(mMaxDate);
                 diffYear = p2.getPersianYear() - p1.getPersianYear();
                 diffMonth = p2.getPersianMonth() - p1.getPersianMonth();
                 break;
             case CalendarType.ARABIC:
-                h1 = CalendarTool.GregorianToHijri(mMinDate);
-                h2 = CalendarTool.GregorianToHijri(mMaxDate);
+                UmmalquraCalendar h1 = CalendarTool.GregorianToHijri(mMinDate);
+                UmmalquraCalendar h2 = CalendarTool.GregorianToHijri(mMaxDate);
                 diffYear = h2.get(UmmalquraCalendar.YEAR) - h1.get(UmmalquraCalendar.YEAR);
                 diffMonth = h2.get(UmmalquraCalendar.MONTH) - h1.get(UmmalquraCalendar.MONTH);
                 break;
@@ -145,7 +139,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         // Update displayed views.
         final int count = mItems.size();
         for (int i = 0; i < count; i++) {
-            final ShowInfoMonthView showInfoMonthView = (ShowInfoMonthView) mItems.get(i).baseMonthView;
+            final ShowInfoMonthView showInfoMonthView = (ShowInfoMonthView) mItems.get(i).itemView;
             showInfoMonthView.setFirstDayOfWeek(weekStart);
         }
     }
@@ -245,13 +239,13 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         }
         v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
         v.setPadding(4, 4, 4, 4);
-        MonthViewHolder holder = new MonthViewHolder(0, parent, v);
-        holder.baseMonthView.setCycleData(cycleData);
-        holder.baseMonthView.setOnDayClickListener(onDayClickListener);
-        holder.baseMonthView.setOnDaySelectedListener(this);
-        holder.baseMonthView.setIsDaySelectedListener(this);
-        holder.baseMonthView.setIsDayInRangeSelectedListener(this);
-        holder.baseMonthView.setOnCycleDataListNeededListener(this);
+        MonthViewHolder holder = new MonthViewHolder(0, v);
+        ((BaseMonthView) holder.itemView).setCycleData(cycleData);
+        ((BaseMonthView) holder.itemView).setOnDayClickListener(onDayClickListener);
+        ((BaseMonthView) holder.itemView).setOnDaySelectedListener(this);
+        ((BaseMonthView) holder.itemView).setIsDaySelectedListener(this);
+        ((BaseMonthView) holder.itemView).setIsDayInRangeSelectedListener(this);
+        ((BaseMonthView) holder.itemView).setOnCycleDataListNeededListener(this);
         mItems.add(holder);
         return holder;
     }
@@ -260,7 +254,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     public void onBindViewHolder(@NonNull MonthViewHolder holder, int position) {
         holder.position = position;
 //        Log.d(TAG, "onBindViewHolder: " + position);
-        holder.baseMonthView.setOnDayClickListener(onDayClickListener);
+        ((BaseMonthView) holder.itemView).setOnDayClickListener(onDayClickListener);
 
         final int month = getMonthForPosition(position);
         final int year = getYearForPosition(position);
@@ -338,13 +332,13 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
             case BaseMonthView.MonthViewTypeChangeDays:
                 break;
             case BaseMonthView.MonthViewTypeShowCalendar:
-                ((ShowInfoMonthView) holder.baseMonthView).setIsDayMarkedListener(isDayMarkedListener);
+                ((ShowInfoMonthView) holder.itemView).setIsDayMarkedListener(isDayMarkedListener);
                 break;
             case BaseMonthView.MonthViewTypeSetStartDay:
                 break;
             default:
         }
-        holder.baseMonthView.setMonthParams(selectedDay, month, year, mFirstDayOfWeek
+        ((BaseMonthView) holder.itemView).setMonthParams(selectedDay, month, year, mFirstDayOfWeek
                 , enabledDayRangeStart, enabledDayRangeEnd, calendarType, showInfo);
 
     }
@@ -374,10 +368,10 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     @Override
     public void onViewDetachedFromWindow(@NonNull MonthViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
         if (holder.position < mItems.size()) {
             mItems.remove(holder.position);
         }
+        super.onViewDetachedFromWindow(holder);
     }
 
     @Override
@@ -397,24 +391,23 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
             if (selectedDay.before(Calendar.getInstance())) {
                 if (cycleDataList != null && !cycleDataList.isEmpty()) {
                     int size = cycleDataList.size();
-//                    Log.d(TAG, "size: " + size);
                     CycleData prevCycle = cycleDataList.size() > 1 ? cycleDataList.get(size - 1) : cycleDataList.get(0);
-                    for (int i = 0; i < cycleDataList.size(); i++) {
-                        Log.d(TAG, "onDaySelected: " + CalendarTool.GregorianToPersian(cycleDataList.get(i).getStartDate()).getPersianLongDate()
-                                + ":"+CalendarTool.GregorianToPersian(cycleDataList.get(i).getEndDate()).getPersianLongDate());
-                    }
+//                    for (int i = 0; i < cycleDataList.size(); i++) {
+//                        Log.d(TAG, "onDaySelected: " + CalendarTool.GregorianToPersian(cycleDataList.get(i).getStartDate()).getPersianLongDate()
+//                                + ":" + CalendarTool.GregorianToPersian(cycleDataList.get(i).getEndDate()).getPersianLongDate());
+//                    }
                     Calendar prevCycleRedEnd = Calendar.getInstance();
                     prevCycleRedEnd.clear();
                     prevCycleRedEnd.setTimeInMillis(prevCycle.getStartDate().getTimeInMillis());
                     prevCycleRedEnd.add(Calendar.DAY_OF_MONTH, prevCycle.getRedCount());
-                    Log.d(TAG, "prev: " + CalendarTool.GregorianToPersian(prevCycleRedEnd).getPersianLongDate());
+//                    Log.d(TAG, "prev: " + CalendarTool.GregorianToPersian(prevCycleRedEnd).getPersianLongDate());
                     if (prevCycleRedEnd.before(selectedDay)) {
-                        Log.d(TAG, "condition: " + 0);
+//                        Log.d(TAG, "condition: " + 0);
                         this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
                         notifyDataSetChanged();
                     }
                 } else {
-                    Log.d(TAG, "condition: " + 1);
+//                    Log.d(TAG, "condition: " + 1);
                     this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
                     notifyDataSetChanged();
                 }
@@ -449,7 +442,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     public void setCycleData(CycleData cycleData) {
         this.cycleData = cycleData;
         for (int i = 0; i < mItems.size(); i++) {
-            mItems.get(i).baseMonthView.setCycleData(cycleData);
+            ((BaseMonthView) mItems.get(i).itemView).setCycleData(cycleData);
             notifyItemChanged(i);
         }
     }
@@ -474,7 +467,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         if (cycleDataList != null) {
             this.cycleDataList.addAll(cycleDataList);
             for (int i = 0; i < mItems.size(); i++) {
-                mItems.get(i).baseMonthView.setCycleDataList(cycleDataList);
+                ((BaseMonthView) mItems.get(i).itemView).setCycleDataList(cycleDataList);
                 notifyItemChanged(i);
             }
         }
@@ -491,14 +484,10 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     public class MonthViewHolder extends RecyclerView.ViewHolder {
         public int position;
-        public final View container;
-        public final BaseMonthView baseMonthView;
 
-        public MonthViewHolder(int position, View container, BaseMonthView baseMonthView) {
+        public MonthViewHolder(int position, BaseMonthView baseMonthView) {
             super(baseMonthView);
             this.position = position;
-            this.container = container;
-            this.baseMonthView = baseMonthView;
         }
     }
 }

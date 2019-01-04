@@ -127,6 +127,17 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        showPregnancyProb = null;
+        showCycleDays= null;
+        tvClearData= null;
+        tvShareApp= null;
+        tvMakeReport= null;
+        tvAboutUs= null;
+        navController = null;
+        super.onDestroyView();
+    }
 
     @Override
     public void onDetach() {

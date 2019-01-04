@@ -593,6 +593,7 @@ public class NumberPicker extends LinearLayout {
          */
         void onValueChange(NumberPicker picker, int oldVal, int newVal);
     }
+
     private boolean alwaysShowText;
 
     public static Formatter getTwoDigitFormatter() {
