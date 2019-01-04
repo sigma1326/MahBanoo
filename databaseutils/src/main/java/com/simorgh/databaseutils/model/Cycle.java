@@ -4,11 +4,13 @@ import com.simorgh.calendarutil.CalendarTool;
 
 import java.util.Calendar;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+@Keep
 @Entity(tableName = "cycles")
 public class Cycle {
     @ColumnInfo(name = "user_id")

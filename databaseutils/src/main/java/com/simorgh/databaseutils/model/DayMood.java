@@ -4,11 +4,13 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+@Keep
 @Entity(tableName = "day_mood")
 public class DayMood {
     @PrimaryKey(autoGenerate = false)
