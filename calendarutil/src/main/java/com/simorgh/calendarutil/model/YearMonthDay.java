@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 
+import androidx.annotation.Keep;
+
+@Keep
 public class YearMonthDay implements Parcelable {
     private int year;
     private int month;
@@ -92,7 +95,7 @@ public class YearMonthDay implements Parcelable {
     @SuppressLint("DefaultLocale")
     @NotNull
     public String toString() {
-        return getYear() + "/" + String.format("%02d",(getMonth() + 1)) + "/" + String.format("%02d",(getDay()));
+        return getYear() + "/" + String.format("%02d", (getMonth() + 1)) + "/" + String.format("%02d", (getDay()));
     }
 
     /**
