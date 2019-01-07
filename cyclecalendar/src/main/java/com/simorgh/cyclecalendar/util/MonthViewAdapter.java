@@ -340,7 +340,6 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         }
         ((BaseMonthView) holder.itemView).setMonthParams(selectedDay, month, year, mFirstDayOfWeek
                 , enabledDayRangeStart, enabledDayRangeEnd, calendarType, showInfo);
-
     }
 
     @Override

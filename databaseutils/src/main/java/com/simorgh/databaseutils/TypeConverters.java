@@ -22,13 +22,13 @@ public class TypeConverters {
             if (String.valueOf(value).length() < 8) {
                 return Calendar.getInstance();
             }
-            int year = Integer.parseInt(String.valueOf(value).substring(6));
+            int day = Integer.parseInt(String.valueOf(value).substring(6));
             int month = Integer.parseInt(String.valueOf(value).substring(4, 6));
-            int day = Integer.parseInt(String.valueOf(value).substring(0, 4));
+            int year = Integer.parseInt(String.valueOf(value).substring(0, 4));
             calendar.clear();
-            calendar.set(Calendar.DAY_OF_MONTH, year);
+            calendar.set(Calendar.DAY_OF_MONTH, day);
             calendar.set(Calendar.MONTH, month - 1);
-            calendar.set(Calendar.YEAR, day);
+            calendar.set(Calendar.YEAR, year);
             return calendar;
         }
     }
