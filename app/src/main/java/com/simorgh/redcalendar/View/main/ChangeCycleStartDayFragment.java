@@ -153,6 +153,9 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     private Queue<Boolean> booleanQueue = new LinkedList<>();
 
     private void runButtonChangeAnim(boolean visible) {
+        if (btnApplyChanges == null) {
+            return;
+        }
         int h1;
         if (isAnimRunning) {
             if (visible) {
