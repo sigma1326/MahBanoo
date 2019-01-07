@@ -382,9 +382,9 @@ public class CalendarTool {
     public static long getDaysFromDiff(Calendar input, Calendar startDate) {
         double diffDays;
         in.clear();
-        in.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH));
+        in.set(input.get(Calendar.YEAR), input.get(Calendar.MONTH), input.get(Calendar.DAY_OF_MONTH),0,0,0);
         start.clear();
-        start.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH));
+        start.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH),0,0,0);
         if (in.compareTo(start) == 0) {
             return 0L;
         }

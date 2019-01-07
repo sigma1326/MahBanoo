@@ -17,8 +17,8 @@
 package com.simorgh.cyclecalendar.util;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
@@ -38,8 +38,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.simorgh.cyclecalendar.view.BaseMonthView.TAG;
-
 
 /**
  * An adapter for a list of {@link ShowInfoMonthView} items.
@@ -50,6 +48,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
 
     private final Calendar mMinDate = Calendar.getInstance();
     private final Calendar mMaxDate = Calendar.getInstance();
+    private static Calendar prevCycleRedEnd = Calendar.getInstance();
 
     private ArrayList<MonthViewHolder> mItems = new ArrayList<>();
 
@@ -71,18 +70,7 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
     private CycleData cycleData;
     private boolean showInfo;
     private List<CycleData> cycleDataList = new LinkedList<>();
-
-
-    public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
-        this.calendarType = calendarType;
-        this.monthViewType = monthViewType;
-
-
-        mMinDate.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
-        mMaxDate.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
-
-        init();
-    }
+    private Context context;
 
     private void init() {
         int diffYear = mMaxDate.get(Calendar.YEAR) - mMinDate.get(Calendar.YEAR);
@@ -106,12 +94,15 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         mCount = diffMonth + MONTHS_IN_YEAR * diffYear + 1;
     }
 
-    public MonthViewAdapter(Context context, CycleData cycleData, int calendarType, int monthViewType, Calendar min, Calendar max) {
+    public MonthViewAdapter(@NonNull Context context, int calendarType, int monthViewType) {
+        this.context = context;
         this.calendarType = calendarType;
         this.monthViewType = monthViewType;
-        this.cycleData = cycleData;
-        mMinDate.setTimeInMillis(min.getTimeInMillis());
-        mMaxDate.setTimeInMillis(max.getTimeInMillis());
+
+
+        mMinDate.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
+        mMaxDate.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
+
         init();
     }
 
@@ -378,42 +369,53 @@ public class MonthViewAdapter extends RecyclerView.Adapter<MonthViewAdapter.Mont
         return mCount;
     }
 
+    public MonthViewAdapter(Context context, CycleData cycleData, int calendarType, int monthViewType, Calendar min, Calendar max) {
+        this.context = context;
+        this.calendarType = calendarType;
+        this.monthViewType = monthViewType;
+        this.cycleData = cycleData;
+        mMinDate.setTimeInMillis(min.getTimeInMillis());
+        mMaxDate.setTimeInMillis(max.getTimeInMillis());
+        init();
+    }
+
     @Override
     public void onDaySelected(Calendar selectedDay) {
-        Log.d(TAG, "selected: " + CalendarTool.GregorianToPersian(selectedDay).getPersianLongDate());
+        boolean changed = false;
         if (monthViewType == BaseMonthView.MonthViewTypeSetStartDay) {
             if (!selectedDay.after(Calendar.getInstance())) {
                 this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+                changed = true;
                 notifyDataSetChanged();
             }
         } else if (monthViewType == BaseMonthView.MonthViewTypeChangeDays) {
-            if (selectedDay.before(Calendar.getInstance())) {
+            if (CalendarTool.getDaysFromDiff(selectedDay, today) <= 0) {
                 if (cycleDataList != null && !cycleDataList.isEmpty()) {
                     int size = cycleDataList.size();
                     CycleData prevCycle = cycleDataList.size() > 1 ? cycleDataList.get(size - 1) : cycleDataList.get(0);
-//                    for (int i = 0; i < cycleDataList.size(); i++) {
-//                        Log.d(TAG, "onDaySelected: " + CalendarTool.GregorianToPersian(cycleDataList.get(i).getStartDate()).getPersianLongDate()
-//                                + ":" + CalendarTool.GregorianToPersian(cycleDataList.get(i).getEndDate()).getPersianLongDate());
-//                    }
-                    Calendar prevCycleRedEnd = Calendar.getInstance();
                     prevCycleRedEnd.clear();
                     prevCycleRedEnd.setTimeInMillis(prevCycle.getStartDate().getTimeInMillis());
                     prevCycleRedEnd.add(Calendar.DAY_OF_MONTH, prevCycle.getRedCount());
-//                    Log.d(TAG, "prev: " + CalendarTool.GregorianToPersian(prevCycleRedEnd).getPersianLongDate());
-                    if (prevCycleRedEnd.before(selectedDay)) {
-//                        Log.d(TAG, "condition: " + 0);
+                    if (CalendarTool.getDaysFromDiff(prevCycleRedEnd, selectedDay) <= 0) {
                         this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+                        changed = true;
                         notifyDataSetChanged();
                     }
                 } else {
-//                    Log.d(TAG, "condition: " + 1);
                     this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+                    changed = true;
                     notifyDataSetChanged();
                 }
             }
         } else {
-            this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
-            notifyDataSetChanged();
+            if (CalendarTool.getDaysFromDiff(selectedDay, today) <= 0) {
+                this.selectedDay.setTimeInMillis(selectedDay.getTimeInMillis());
+                changed = true;
+                notifyDataSetChanged();
+            }
+        }
+        if (!changed && context != null) {
+            Toast.makeText(context, "قابل انتخاب نیست", Toast.LENGTH_SHORT).show();
         }
     }
 
