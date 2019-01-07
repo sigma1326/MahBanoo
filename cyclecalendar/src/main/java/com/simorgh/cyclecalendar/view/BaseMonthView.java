@@ -37,8 +37,8 @@ import androidx.core.view.ViewCompat;
 
 public class BaseMonthView extends View {
     public static final String TAG = "baseMonthView";
-    protected int calendarType;
-    protected int monthViewType;
+    // Desired dimensions.
+    protected static int mDesiredMonthHeight;
     protected static final int DAYS_IN_WEEK = 7;
     protected static final int MAX_WEEKS_IN_MONTH = 6;
 
@@ -62,7 +62,6 @@ public class BaseMonthView extends View {
     public static final int TYPE_GREEN2 = 2;
     public static final int TYPE_GRAY = 3;
     public static final int TYPE_YELLOW = 4;
-    public static final int TYPE_NOTE = 5;
 
     //rectangle colors
     protected static Paint rectTypeGrayPaint;
@@ -71,11 +70,9 @@ public class BaseMonthView extends View {
     protected static int tvMonthDayNumberTextColorBlack;
 
     protected static int monthViewBkgColor;
-
-    // Desired dimensions.
-    protected int mDesiredMonthHeight;
-    protected int mDesiredDayHeight;
-    protected int mDesiredCellWidth;
+    protected static int mDesiredDayHeight;
+    protected static int mDesiredCellWidth;
+    protected static Calendar mCalendar;
 
     // Dimensions as laid out.
     protected int mMonthHeight;
@@ -106,9 +103,7 @@ public class BaseMonthView extends View {
 
     protected int mYearHijri;
     protected int mMonthHijri;
-
-
-    protected static Calendar mCalendar = Calendar.getInstance();
+    private static boolean isInitialized = false;
     protected static PersianCalendar persianCalendar = new PersianCalendar();
     protected static UmmalquraCalendar hijriCalendar = new UmmalquraCalendar();
     protected static PersianDate persianDate = new PersianDate();
@@ -130,6 +125,7 @@ public class BaseMonthView extends View {
 
     protected static boolean showInfo = true;
     protected static List<CycleData> cycleDataList = new LinkedList<>();
+    protected int calendarType = CalendarType.PERSIAN;
 
 
     public BaseMonthView(Context context) {
@@ -156,72 +152,42 @@ public class BaseMonthView extends View {
         initAttrs(context, attrs);
         init();
     }
+    protected boolean shouldBeRTL;
 
     protected void initAttrs(Context context, AttributeSet attrs) {
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseMonthView);
-        Resources resources = getResources();
+        if (!isInitialized) {
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseMonthView);
+            Resources resources = getResources();
 
-        //circle colors
-        rectTypeGrayColor = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type3, resources.getColor(R.color.my_type_gray));
-        monthViewBkgColor = resources.getColor(R.color.white);
+            //circle colors
+            rectTypeGrayColor = typedArray.getColor(R.styleable.BaseMonthView_rect_color_type3, resources.getColor(R.color.my_type_gray));
+            monthViewBkgColor = resources.getColor(R.color.white);
 
-        mDesiredMonthHeight = resources.getDimensionPixelSize(R.dimen.month_view_month_height);
-        mDesiredDayHeight = resources.getDimensionPixelSize(R.dimen.month_view_day_height);
-        mDesiredCellWidth = resources.getDimensionPixelSize(R.dimen.month_view_day_width);
-        mLocale = resources.getConfiguration().locale;
+            //main day number textView
+            tvMonthDayNumberTextColorWhite = resources.getColor(R.color.white);
+            tvMonthDayNumberTextColorBlack = resources.getColor(R.color.black);
 
 
-        //main day number textView
-        tvMonthDayNumberTextColorWhite = resources.getColor(R.color.white);
-        tvMonthDayNumberTextColorBlack = resources.getColor(R.color.black);
+            mLocale = resources.getConfiguration().locale;
 
-        typedArray.recycle();
+            mDesiredMonthHeight = resources.getDimensionPixelSize(R.dimen.month_view_month_height);
+            mDesiredDayHeight = resources.getDimensionPixelSize(R.dimen.month_view_day_height);
+            mDesiredCellWidth = resources.getDimensionPixelSize(R.dimen.month_view_day_width);
+            typedArray.recycle();
+        }
     }
 
     protected void init() {
-        mCalendar = Calendar.getInstance(mLocale);
-        persianCalendar = new PersianCalendar(mCalendar.getTimeInMillis());
-        hijriCalendar = new UmmalquraCalendar();
-
-        mDayFormatter = NumberFormat.getIntegerInstance(mLocale);
-
+        if (!isInitialized) {
+            mCalendar = Calendar.getInstance(mLocale);
+            persianCalendar = new PersianCalendar(mCalendar.getTimeInMillis());
+            hijriCalendar = new UmmalquraCalendar();
+            mDayFormatter = NumberFormat.getIntegerInstance(mLocale);
+        }
         updateMonthYearLabel();
 
         initPaints();
-    }
-
-    protected void initPaints() {
-        final Resources res = getResources();
-
-        final Typeface monthTypeface = Utils.getTypeFace(getContext(), calendarType);
-        final Typeface dayTypeface = Utils.getTypeFace(getContext(), calendarType);
-
-        final int monthTextSize = res.getDimensionPixelSize(R.dimen.month_view_month_text_size);
-        final int dayTextSize = res.getDimensionPixelSize(R.dimen.month_view_day_text_size);
-
-        mMonthPaint = new TextPaint();
-        mMonthPaint.setAntiAlias(true);
-        mMonthPaint.setTextSize(monthTextSize);
-        mMonthPaint.setTypeface(monthTypeface);
-        mMonthPaint.setTextAlign(Paint.Align.CENTER);
-        mMonthPaint.setFakeBoldText(true);
-        mMonthPaint.setStyle(Paint.Style.FILL);
-        mMonthPaint.setColor(tvMonthDayNumberTextColorBlack);
-
-
-        dayTextPaint = new TextPaint();
-        dayTextPaint.setAntiAlias(true);
-        dayTextPaint.setTextSize(dayTextSize);
-        dayTextPaint.setFakeBoldText(true);
-        dayTextPaint.setTypeface(dayTypeface);
-        dayTextPaint.setTextAlign(Paint.Align.CENTER);
-        dayTextPaint.setStyle(Paint.Style.FILL);
-        dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
-
-        rectTypeGrayPaint = new Paint();
-        rectTypeGrayPaint.setAntiAlias(true);
-        rectTypeGrayPaint.setStyle(Paint.Style.FILL);
-        rectTypeGrayPaint.setColor(rectTypeGrayColor);
+        isInitialized = true;
     }
 
     @Override
@@ -295,6 +261,51 @@ public class BaseMonthView extends View {
         canvas.drawText(mMonthYearLabel, x, y, mMonthPaint);
     }
 
+    protected void initPaints() {
+        if (isInitialized) {
+            return;
+        }
+        final Resources res = getResources();
+
+        final Typeface monthTypeface = Utils.getTypeFace(getContext(), CalendarType.PERSIAN);
+        final Typeface dayTypeface = Utils.getTypeFace(getContext(), CalendarType.PERSIAN);
+
+        final int monthTextSize = res.getDimensionPixelSize(R.dimen.month_view_month_text_size);
+        final int dayTextSize = res.getDimensionPixelSize(R.dimen.month_view_day_text_size);
+
+        mMonthPaint = new TextPaint();
+        mMonthPaint.setAntiAlias(true);
+        mMonthPaint.setTextSize(monthTextSize);
+        mMonthPaint.setTypeface(monthTypeface);
+        mMonthPaint.setTextAlign(Paint.Align.CENTER);
+        mMonthPaint.setFakeBoldText(true);
+        mMonthPaint.setStyle(Paint.Style.FILL);
+        mMonthPaint.setColor(tvMonthDayNumberTextColorBlack);
+
+
+        dayTextPaint = new TextPaint();
+        dayTextPaint.setAntiAlias(true);
+        dayTextPaint.setTextSize(dayTextSize);
+        dayTextPaint.setFakeBoldText(true);
+        dayTextPaint.setTypeface(dayTypeface);
+        dayTextPaint.setTextAlign(Paint.Align.CENTER);
+        dayTextPaint.setStyle(Paint.Style.FILL);
+        dayTextPaint.setColor(tvMonthDayNumberTextColorWhite);
+
+        rectTypeGrayPaint = new Paint();
+        rectTypeGrayPaint.setAntiAlias(true);
+        rectTypeGrayPaint.setStyle(Paint.Style.FILL);
+        rectTypeGrayPaint.setColor(rectTypeGrayColor);
+    }
+
+    protected Paint getDayPaint(int day) {
+        return rectTypeGrayPaint;
+    }
+
+    protected Paint getDayPaint(Calendar date) {
+        return rectTypeGrayPaint;
+    }
+
     protected void drawDays(Canvas canvas) {
         final TextPaint p = dayTextPaint;
         final int headerHeight = mMonthHeight;
@@ -306,11 +317,10 @@ public class BaseMonthView extends View {
         int right;
         int top;
         int bottom;
-
         for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
             final int colCenter = colWidth * col + colWidth / 2;
             final int colCenterRtl;
-            if (shouldBeRTL()) {
+            if (shouldBeRTL) {
                 colCenterRtl = mPaddedWidth - colCenter;
             } else {
                 colCenterRtl = colCenter;
@@ -337,14 +347,6 @@ public class BaseMonthView extends View {
         }
     }
 
-    protected Paint getDayPaint(int day) {
-        return rectTypeGrayPaint;
-    }
-
-    protected Paint getDayPaint(Calendar date) {
-        return rectTypeGrayPaint;
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         final int paddingLeft = getPaddingLeft();
@@ -352,47 +354,14 @@ public class BaseMonthView extends View {
         canvas.translate(paddingLeft, paddingTop);
         canvas.drawColor(monthViewBkgColor);
 
+        shouldBeRTL = shouldBeRTL();
+
+
         drawMonth(canvas);
         drawDays(canvas);
 
         canvas.translate(-paddingLeft, -paddingTop);
     }
-
-
-    protected boolean sameDay(int day, Calendar today) {
-        int todayDay = 0;
-        int todayYear = 0;
-        int todayMonth = 0;
-        int compYear = 0;
-        int compMonth = 0;
-        switch (calendarType) {
-            case CalendarType.PERSIAN:
-                p = CalendarTool.GregorianToPersian(today);
-                todayDay = p.getPersianDay();
-                todayMonth = p.getPersianMonth();
-                todayYear = p.getPersianYear();
-                compYear = mYearPersian;
-                compMonth = mMonthPersian;
-                break;
-            case CalendarType.ARABIC:
-                hijri = CalendarTool.GregorianToHijri(today);
-                compYear = mYearHijri;
-                compMonth = mMonthHijri;
-                todayDay = hijri.get(UmmalquraCalendar.DAY_OF_MONTH);
-                todayMonth = hijri.get(UmmalquraCalendar.MONTH);
-                todayYear = hijri.get(UmmalquraCalendar.YEAR);
-                break;
-            case CalendarType.GREGORIAN:
-                compYear = mYear;
-                compMonth = mMonth;
-                todayDay = today.get(Calendar.DAY_OF_MONTH);
-                todayMonth = today.get(Calendar.MONTH);
-                todayYear = today.get(Calendar.YEAR);
-                break;
-        }
-        return compYear == todayYear && compMonth == todayMonth && day == todayDay;
-    }
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -651,7 +620,6 @@ public class BaseMonthView extends View {
                 mMonthPersian = month;
                 mYearPersian = year;
                 persianCalendar.setPersianDate(mYearPersian, mMonthPersian + 1, 1);
-                PersianDate persianDate = new PersianDate();
                 persianDate.setShDate(mYearPersian, mMonthPersian + 1, 1);
                 mDayOfWeekStart = persianDate.dayOfWeek();
                 break;
@@ -680,24 +648,13 @@ public class BaseMonthView extends View {
             mWeekStart = Calendar.SATURDAY;
         }
 
-        // Figure out what day today is.
-        final Calendar today = Calendar.getInstance();
-        mToday = -1;
         mDaysInMonth = CalendarTool.getDaysInMonth(month, year, calendarType);
-        for (int i = 0; i < mDaysInMonth; i++) {
-            final int day = i + 1;
-            if (sameDay(day, today)) {
-                mToday = day;
-            }
-        }
-
-        initPaints();
 
         mEnabledDayStart = mathConstrain(enabledDayStart, 1, mDaysInMonth);
         mEnabledDayEnd = mathConstrain(enabledDayEnd, mEnabledDayStart, mDaysInMonth);
 
         updateMonthYearLabel();
-        if (CalendarTool.getDaysInMonth(month, year, calendarType) <= 30) {
+        if (mDaysInMonth <= 30) {
             switch (mDayOfWeekStart) {
                 case 0:
                 case 1:

@@ -35,10 +35,13 @@ public class ShowInfoMonthView extends BaseMonthView {
     private static int rectTypeMarkedColor;
 
     //Marked Triangle
-    private Path markedPath;
+    private static Path markedPath;
 
     private static Bitmap icon;
     private IsDayMarkedListener isDayMarkedListener;
+
+    private static boolean isInitialized = false;
+
 
     public ShowInfoMonthView(Context context) {
         super(context);
@@ -66,28 +69,27 @@ public class ShowInfoMonthView extends BaseMonthView {
     }
 
     @Override
-    protected void init() {
-        super.init();
-    }
-
-    @Override
     protected void initAttrs(Context context, AttributeSet attrs) {
-        super.initAttrs(context, attrs);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseMonthView);
-        Resources resources = getResources();
+        if (!isInitialized) {
+            super.initAttrs(context, attrs);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseMonthView);
+            Resources resources = getResources();
 
-        //circle colors
-        rectTypeRedColor = resources.getColor(R.color.type_red);
-        rectTypeGreenColor = resources.getColor(R.color.type_green);
-        rectTypeYellowColor = resources.getColor(R.color.type_yellow);
-        rectTypeMarkedColor = resources.getColor(R.color.type_marked);
+            //circle colors
+            rectTypeRedColor = resources.getColor(R.color.type_red);
+            rectTypeGreenColor = resources.getColor(R.color.type_green);
+            rectTypeYellowColor = resources.getColor(R.color.type_yellow);
+            rectTypeMarkedColor = resources.getColor(R.color.type_marked);
 
-
-        typedArray.recycle();
+            typedArray.recycle();
+        }
     }
 
     @Override
     protected void initPaints() {
+        if (isInitialized) {
+            return;
+        }
         super.initPaints();
 
         markedPath = new Path();
@@ -118,6 +120,8 @@ public class ShowInfoMonthView extends BaseMonthView {
         rectTypeMarkedPaint.setColor(rectTypeMarkedColor);
 
         icon = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+
+        isInitialized = true;
     }
 
     @Override
@@ -132,11 +136,10 @@ public class ShowInfoMonthView extends BaseMonthView {
         int right;
         int top;
         int bottom;
-
         for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
             final int colCenter = colWidth * col + colWidth / 2;
             final int colCenterRtl;
-            if (shouldBeRTL()) {
+            if (shouldBeRTL) {
                 colCenterRtl = mPaddedWidth - colCenter;
             } else {
                 colCenterRtl = colCenter;
@@ -190,6 +193,7 @@ public class ShowInfoMonthView extends BaseMonthView {
     }
 
     private static Calendar clearDate = Calendar.getInstance();
+
     @Override
     protected Paint getDayPaint(Calendar date) {
         if (cycleData == null || !showInfo) {

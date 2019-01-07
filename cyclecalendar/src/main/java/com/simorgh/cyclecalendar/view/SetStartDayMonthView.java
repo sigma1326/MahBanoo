@@ -19,17 +19,11 @@ import androidx.annotation.Nullable;
 public class SetStartDayMonthView extends BaseMonthView {
 
     //rectangle colors
-    private Paint rectTypeRedPaint;
-    private Paint rectTypeGreenPaint;
-    private Paint rectTypeYellowPaint;
-    private Paint rectTypeMarkedPaint;
-    private int rectTypeRedColor;
-    private int rectTypeGreenColor;
-    private int rectTypeGreen2Color;
-    private int rectTypeYellowColor;
-    private int rectTypeMarkedColor;
+    private static Paint rectTypeRedPaint;
+    private static int rectTypeRedColor;
 
     private static Bitmap icon_check;
+    private static boolean isInitialized = false;
 
 
     public SetStartDayMonthView(Context context) {
@@ -48,60 +42,40 @@ public class SetStartDayMonthView extends BaseMonthView {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-
-    @Override
-    protected void init() {
-        super.init();
-    }
-
     @Override
     protected void initAttrs(Context context, AttributeSet attrs) {
-        super.initAttrs(context, attrs);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseMonthView);
-        Resources resources = getResources();
+        if (!isInitialized) {
+            super.initAttrs(context, attrs);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseMonthView);
+            Resources resources = getResources();
 
-        //circle colors
-        rectTypeRedColor = resources.getColor(R.color.type_red);
-        rectTypeGreenColor = resources.getColor(R.color.type_green);
-        rectTypeGreen2Color = resources.getColor(R.color.type_green);
-        rectTypeYellowColor = resources.getColor(R.color.type_yellow);
-        rectTypeMarkedColor = resources.getColor(R.color.type_marked);
+            //circle colors
+            rectTypeRedColor = resources.getColor(R.color.type_red);
 
 
-        typedArray.recycle();
+            typedArray.recycle();
+        }
     }
 
     @Override
     protected void initPaints() {
-        super.initPaints();
+        if (!isInitialized) {
+            super.initPaints();
 
-        rectTypeRedPaint = new Paint();
-        rectTypeRedPaint.setAntiAlias(true);
-        rectTypeRedPaint.setStyle(Paint.Style.FILL);
-        rectTypeRedPaint.setColor(rectTypeRedColor);
+            rectTypeRedPaint = new Paint();
+            rectTypeRedPaint.setAntiAlias(true);
+            rectTypeRedPaint.setStyle(Paint.Style.FILL);
+            rectTypeRedPaint.setColor(rectTypeRedColor);
 
-        rectTypeGrayPaint = new Paint();
-        rectTypeGrayPaint.setAntiAlias(true);
-        rectTypeGrayPaint.setStyle(Paint.Style.FILL);
-        rectTypeGrayPaint.setColor(rectTypeGrayColor);
+            rectTypeGrayPaint = new Paint();
+            rectTypeGrayPaint.setAntiAlias(true);
+            rectTypeGrayPaint.setStyle(Paint.Style.FILL);
+            rectTypeGrayPaint.setColor(rectTypeGrayColor);
 
-        rectTypeGreenPaint = new Paint();
-        rectTypeGreenPaint.setAntiAlias(true);
-        rectTypeGreenPaint.setStyle(Paint.Style.FILL);
-        rectTypeGreenPaint.setColor(rectTypeGreenColor);
+            icon_check = BitmapFactory.decodeResource(getResources(), R.drawable.icon_check);
 
-        rectTypeYellowPaint = new Paint();
-        rectTypeYellowPaint.setAntiAlias(true);
-        rectTypeYellowPaint.setStyle(Paint.Style.FILL);
-        rectTypeYellowPaint.setColor(rectTypeYellowColor);
-
-        rectTypeMarkedPaint = new Paint();
-        rectTypeMarkedPaint.setAntiAlias(true);
-        rectTypeMarkedPaint.setStyle(Paint.Style.FILL);
-        rectTypeMarkedPaint.setColor(rectTypeMarkedColor);
-
-        icon_check = BitmapFactory.decodeResource(getResources(), R.drawable.icon_check);
-
+            isInitialized = true;
+        }
     }
 
     @Override
@@ -120,7 +94,7 @@ public class SetStartDayMonthView extends BaseMonthView {
         for (int day = 1, col = findDayOffset(); day <= mDaysInMonth; day++) {
             final int colCenter = colWidth * col + colWidth / 2;
             final int colCenterRtl;
-            if (shouldBeRTL()) {
+            if (shouldBeRTL) {
                 colCenterRtl = mPaddedWidth - colCenter;
             } else {
                 colCenterRtl = colCenter;
@@ -152,10 +126,6 @@ public class SetStartDayMonthView extends BaseMonthView {
                 rowCenter += rowHeight;
             }
         }
-    }
-
-    public static int mathConstrain(int amount, int low, int high) {
-        return amount < low ? low : (amount > high ? high : amount);
     }
 
     @Override
