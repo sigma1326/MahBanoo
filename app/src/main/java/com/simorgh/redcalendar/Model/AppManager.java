@@ -2,9 +2,7 @@ package com.simorgh.redcalendar.Model;
 
 import android.util.Log;
 
-import com.simorgh.calendarutil.CalendarTool;
-import com.simorgh.calendarutil.persiancalendar.PersianCalendar;
-import com.simorgh.calendarutil.persiancalendar.PersianDate;
+import com.simorgh.redcalendar.BuildConfig;
 import com.simorgh.redcalendar.R;
 
 import java.util.Arrays;
@@ -26,7 +24,35 @@ public class AppManager extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        getUncaughtExceptions();
+
+        if (BuildConfig.BUILD_TYPE.equals("debug")) {
+//            if (LeakCanary.isInAnalyzerProcess(this)) {
+//                // This process is dedicated to LeakCanary for heap analysis.
+//                // You should not init your app in this process.
+//                return;
+//            }
+//            LeakCanary.install(this);
+//            // Normal app init code...
+//
+//            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                    .detectDiskReads()
+//                    .detectDiskWrites()
+//                    .detectAll()
+//                    .penaltyLog()
+//                    .build());
+//            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+//                    .detectLeakedSqlLiteObjects()
+//                    .detectLeakedClosableObjects()
+//                    .penaltyLog()
+//                    .penaltyDeath()
+//                    .build());
+//
+//            Stetho.initializeWithDefaults(this);
+        } else {
+            getUncaughtExceptions();
+        }
+
+
         mLocale = getResources().getConfiguration().locale;
 
         minDate = getCalendarInstance();
@@ -34,13 +60,6 @@ public class AppManager extends MultiDexApplication {
 
         maxDate = getCalendarInstance();
         maxDate.set(Calendar.YEAR, 2020);
-
-        PersianCalendar persianCalendar = CalendarTool.GregorianToPersian(getCalendarInstance());
-        PersianDate persianDate = new PersianDate();
-        persianDate.setGrgDay(25);
-        Log.d(TAG, persianCalendar.getPersianLongDate());
-        Log.d(TAG, persianDate.toDate().toString());
-        Log.d(TAG, persianDate.getShDay() + ":" + persianDate.getShMonth() + ":" + persianDate.getShYear());
 
         ViewPump.init(ViewPump.builder()
                 .addInterceptor(new CalligraphyInterceptor(

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,20 +12,20 @@
     android:overScrollMode="always"
     tools:context=".View.main.CycleInfoFragment">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <org.sufficientlysecure.htmltextview.HtmlTextView
         android:id="@+id/tv_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:ellipsize="start"
+        android:scrollbars="none"
         android:fontFamily="@font/iransans_medium"
-        android:gravity="start"
         android:lineSpacingMultiplier="1.03"
-        android:maxEms="12"
-        android:maxLines="200"
         android:text=""
-        android:textAlignment="gravity"
         android:textColor="#3f3f3f"
-        android:textSize="16sp" />
-</androidx.core.widget.NestedScrollView>
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</LinearLayout>
 
