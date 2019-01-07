@@ -2,6 +2,7 @@ package com.simorgh.redcalendar.View.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,9 +72,9 @@ public class AddMoodFragment extends Fragment {
     @Override
     public void onDestroyView() {
         mvBleeding = null;
-        mvEmotion= null;
-        mvPain= null;
-        mvEatingDesire= null;
+        mvEmotion = null;
+        mvPain = null;
+        mvEatingDesire = null;
         mvHairStyle = null;
 
         btnApplyWeight = null;
@@ -111,6 +112,11 @@ public class AddMoodFragment extends Fragment {
         }
     }
 
+    private void showKeyboard(@NonNull Activity activity, View v1) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(v1, InputMethodManager.SHOW_IMPLICIT);
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_note_fragment, container, false);
@@ -146,13 +152,18 @@ public class AddMoodFragment extends Fragment {
         }
 
         etWeight.setOnClickListener(v1 -> {
-            etWeight.setFocusable(true);
-            etWeight.setFocusableInTouchMode(true);
+            v1.setFocusable(true);
+            v1.setFocusableInTouchMode(true);
+            v1.requestFocus();
+            showKeyboard(Objects.requireNonNull(getActivity()), v1);
+
         });
 
         etDrugName.setOnClickListener(v1 -> {
-            etDrugName.setFocusable(true);
-            etDrugName.setFocusableInTouchMode(true);
+            v1.setFocusable(true);
+            v1.setFocusableInTouchMode(true);
+            v1.requestFocus();
+            showKeyboard(Objects.requireNonNull(getActivity()), v1);
         });
 
 
