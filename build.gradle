@@ -8,7 +8,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-rc03'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath 'android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha09'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -21,6 +21,9 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
