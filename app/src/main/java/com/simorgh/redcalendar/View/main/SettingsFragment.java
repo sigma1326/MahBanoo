@@ -1,7 +1,6 @@
 package com.simorgh.redcalendar.View.main;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,12 +15,12 @@ import com.simorgh.databaseutils.model.User;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.View.register.QuestionsActivity;
 import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
+import com.simorgh.sweetalertdialog.SweetAlertDialog;
 
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -89,23 +88,18 @@ public class SettingsFragment extends Fragment {
         });
 
         tvClearData.setOnClickListener(v1 -> {
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(v1.getContext(), android.R.style.Theme_Material_Dialog_Alert);
-            } else {
-                builder = new AlertDialog.Builder(v1.getContext());
-            }
-            builder.setTitle("پاک کردن اطلاعات برنامه")
-                    .setMessage("آیا اطمینان دارید؟")
-                    .setPositiveButton("بله", (dialog, which) -> {
+
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("پاک کردن اطلاعات برنامه")
+                    .setContentText("آیا اطمینان دارید؟")
+                    .setConfirmText("باشه")
+                    .setCancelText("بی‌خیال")
+                    .setConfirmClickListener(sweetAlertDialog -> {
                         mViewModel.clearData();
                         new Handler(Looper.getMainLooper()).post(() -> {
                             v1.getContext().startActivity(new Intent(SettingsFragment.this.getActivity(), QuestionsActivity.class));
                         });
                     })
-                    .setNegativeButton("خیر", (dialog, which) -> {
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         });
 
@@ -130,11 +124,11 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         showPregnancyProb = null;
-        showCycleDays= null;
-        tvClearData= null;
-        tvShareApp= null;
-        tvMakeReport= null;
-        tvAboutUs= null;
+        showCycleDays = null;
+        tvClearData = null;
+        tvShareApp = null;
+        tvMakeReport = null;
+        tvAboutUs = null;
         navController = null;
         super.onDestroyView();
     }

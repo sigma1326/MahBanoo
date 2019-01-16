@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cycleutils.CycleData;
@@ -851,74 +852,48 @@ public class CycleView extends View implements OnViewDataChangedListener {
         }
     }
 
-    public static final class Builder {
-        private CycleData cycleData;
-        private ViewData viewData;
-        private Context context;
-        private OnDayChangedListener onDayChangedListener;
-        private OnButtonClickListener onButtonClickListener;
-
-        public Builder(Context context) {
-            this.context = context;
-            viewData = new ViewData(-1, -1, -1, -1);
-        }
-
-        public CycleData getCycleData() {
-            return cycleData;
-        }
-
-        public Builder setCycleData(CycleData cycleData) {
-            this.cycleData = cycleData;
-            return this;
-        }
-
-        public Context getContext() {
-            return context;
-        }
-
-        public Builder setContext(Context context) {
-            this.context = context;
-            return this;
-        }
-
-        public ViewData getViewData() {
-            return viewData;
-        }
-
-        public OnDayChangedListener getOnDayChangedListener() {
-            return onDayChangedListener;
-        }
-
-        public Builder setOnDayChangedListener(OnDayChangedListener onDayChangedListener) {
-            this.onDayChangedListener = onDayChangedListener;
-            return this;
-        }
-
-        public Builder setViewData(ViewData viewData) {
-            this.viewData = viewData;
-            return this;
-        }
-
-        public CycleView build() {
-            if (cycleData == null) {
-                Log.d("debug13","null clue data !");
-            }
-            if (viewData == null) {
-                if (onDayChangedListener == null) {
-                    Log.d("debug13","OnDayChangedListener object can not be null !");
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float tempAngle = angle;
+        ValueAnimator animator = ValueAnimator.ofFloat(tempAngle, calculateAngleForDay(getDayFromAngle(angle)));
+        animator.setInterpolator(new OvershootInterpolator());
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (pressedChangeButton(event)) {
+                    pressedBtnChange = true;
                 }
-                if (onButtonClickListener == null) {
-                    Log.d("debug13","OnButtonClickListener object can not be null !");
+                if (pressedMediumCircle(event)) {
+                    pressedMediumCircle = true;
+                    isFromUser = true;
+                    mediumCircleHoverActionDown(event);
                 }
-                return new CycleView(this, cycleData, onDayChangedListener, onButtonClickListener);
-            }
-            if (onDayChangedListener == null) {
-                Log.d("debug13","OnDayChangedListener object can not be null !");
-            }
-            if (onButtonClickListener == null) {
-                Log.d("debug13","OnButtonClickListener object can not be null !");
-            }
-            return new CycleView(this, cycleData, viewData, onDayChangedListener, onButtonClickListener);
+                tempAngle = calculateAngleForDay(getDayFromAngle(angle));
+                computeAngle(event.getX(), event.getY());
+                runAnim(tempAngle);
+                invalidate();
+                return true;
+            case MotionEvent.ACTION_UP:
+                pressedBtnChange = false;
+                pressedMediumCircle = false;
+                if (!isAnimRunning) {
+                    isFromUser = false;
+                }
+                mediumCircleHoverActionUp(event);
+                invalidate();
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                if (animator != null) {
+                    animator.cancel();
+                }
+                if (pressedMediumCircle) {
+                    computeAngle(event.getX(), event.getY());
+                    mediumCircleHoverActionMove(event);
+                }
+                invalidate();
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -1122,49 +1097,74 @@ public class CycleView extends View implements OnViewDataChangedListener {
         invalidate();
     }
 
+    public static final class Builder {
+        private CycleData cycleData;
+        private ViewData viewData;
+        private Context context;
+        private OnDayChangedListener onDayChangedListener;
+        private OnButtonClickListener onButtonClickListener;
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float tempAngle = angle;
-        ValueAnimator animator = ValueAnimator.ofFloat(tempAngle, calculateAngleForDay(getDayFromAngle(angle)));
+        public Builder(Context context) {
+            this.context = context;
+            viewData = new ViewData(-1, -1, -1, -1);
+        }
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                if (pressedChangeButton(event)) {
-                    pressedBtnChange = true;
+        public CycleData getCycleData() {
+            return cycleData;
+        }
+
+        public Builder setCycleData(CycleData cycleData) {
+            this.cycleData = cycleData;
+            return this;
+        }
+
+        public Context getContext() {
+            return context;
+        }
+
+        public Builder setContext(Context context) {
+            this.context = context;
+            return this;
+        }
+
+        public ViewData getViewData() {
+            return viewData;
+        }
+
+        public Builder setViewData(ViewData viewData) {
+            this.viewData = viewData;
+            return this;
+        }
+
+        public OnDayChangedListener getOnDayChangedListener() {
+            return onDayChangedListener;
+        }
+
+        public Builder setOnDayChangedListener(OnDayChangedListener onDayChangedListener) {
+            this.onDayChangedListener = onDayChangedListener;
+            return this;
+        }
+
+        public CycleView build() {
+            if (cycleData == null) {
+                Log.d("debug13", "null clue data !");
+            }
+            if (viewData == null) {
+                if (onDayChangedListener == null) {
+                    Log.d("debug13", "OnDayChangedListener object can not be null !");
                 }
-                if (pressedMediumCircle(event)) {
-                    pressedMediumCircle = true;
-                    isFromUser = true;
-                    mediumCircleHoverActionDown(event);
+                if (onButtonClickListener == null) {
+                    Log.d("debug13", "OnButtonClickListener object can not be null !");
                 }
-                tempAngle = calculateAngleForDay(getDayFromAngle(angle));
-                computeAngle(event.getX(), event.getY());
-                runAnim(tempAngle);
-                invalidate();
-                return true;
-            case MotionEvent.ACTION_UP:
-                pressedBtnChange = false;
-                pressedMediumCircle = false;
-                if (!isAnimRunning) {
-                    isFromUser = false;
-                }
-                mediumCircleHoverActionUp(event);
-                invalidate();
-                return true;
-            case MotionEvent.ACTION_MOVE:
-                if (animator != null) {
-                    animator.cancel();
-                }
-                if (pressedMediumCircle) {
-                    computeAngle(event.getX(), event.getY());
-                    mediumCircleHoverActionMove(event);
-                }
-                invalidate();
-                return true;
-            default:
-                return false;
+                return new CycleView(this, cycleData, onDayChangedListener, onButtonClickListener);
+            }
+            if (onDayChangedListener == null) {
+                Log.d("debug13", "OnDayChangedListener object can not be null !");
+            }
+            if (onButtonClickListener == null) {
+                Log.d("debug13", "OnButtonClickListener object can not be null !");
+            }
+            return new CycleView(this, cycleData, viewData, onDayChangedListener, onButtonClickListener);
         }
     }
 

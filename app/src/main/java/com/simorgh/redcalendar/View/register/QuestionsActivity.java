@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -18,9 +19,13 @@ import android.widget.TextView;
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.User;
+import com.simorgh.forceupdate.ForceUpdateApp;
+import com.simorgh.forceupdate.OnUpdateStatusReceiveListener;
+import com.simorgh.forceupdate.repo.model.CheckUpdateStatusResponse;
 import com.simorgh.redcalendar.R;
 import com.simorgh.redcalendar.View.main.MainActivity;
 import com.simorgh.redcalendar.ViewModel.register.CycleRegisterViewModel;
+import com.simorgh.sweetalertdialog.SweetAlertDialog;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -56,99 +61,201 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cycleRepository = new CycleRepository((Application) getApplicationContext());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        ForceUpdateApp.getInstace(getString(R.string.force_update_api_key)).checkUpdateStatus(this, new OnUpdateStatusReceiveListener() {
+            @Override
+            public void onForceUpdateStatus(CheckUpdateStatusResponse checkUpdateStatusResponse) {
+                String download = "";
+                switch (checkUpdateStatusResponse.getType()) {
+                    case 0:
+                        download = "دانلود از کافه بازار";
+                        break;
+                    case 1:
+                        download = "دانلود از google play";
+                        break;
+                    case 2:
+                        download = "دانلود مستقیم";
+                        break;
+                    case 3:
+                        download = "دانلود از تمامی مارکت‌ها";
+                        break;
+                    case 4:
+                        download = "تلگرام";
+                        break;
+                    default:
+                }
+
+                new SweetAlertDialog(QuestionsActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText(checkUpdateStatusResponse.getMessage())
+                        .setContentText(download)
+                        .setConfirmText("باشه")
+                        .setCancelText("بستن برنامه")
+                        .setConfirmClickListener(sweetAlertDialog -> {
+                            init();
+                        })
+                        .setCancelClickListener(sweetAlertDialog -> {
+                            sweetAlertDialog.dismiss();
+                            finish();
+                        })
+                        .show();
+
+            }
+
+            @Override
+            public void onOptionalUpdateStatus(CheckUpdateStatusResponse checkUpdateStatusResponse) {
+                Log.d("debug", "onOptionalUpdateStatus: " + checkUpdateStatusResponse.getLink());
+                Log.d("debug", "onOptionalUpdateStatus: " + checkUpdateStatusResponse.getUserMessage());
+                Log.d("debug", "onOptionalUpdateStatus: " + checkUpdateStatusResponse.getMessage());
+                Log.d("debug", "onOptionalUpdateStatus: " + checkUpdateStatusResponse.getMoreInfo());
+                Log.d("debug", "onOptionalUpdateStatus: " + checkUpdateStatusResponse.getStatus());
+                Log.d("debug", "onOptionalUpdateStatus: " + checkUpdateStatusResponse.getType());
+
+                String download = "";
+                switch (checkUpdateStatusResponse.getType()) {
+                    case 0:
+                        download = "دانلود از کافه بازار";
+                        break;
+                    case 1:
+                        download = "دانلود از google play";
+                        break;
+                    case 2:
+                        download = "دانلود مستقیم";
+                        break;
+                    case 3:
+                        download = "دانلود از تمامی مارکت‌ها";
+                        break;
+                    case 4:
+                        download = "تلگرام";
+                        break;
+                    default:
+                }
+
+                new SweetAlertDialog(QuestionsActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText(checkUpdateStatusResponse.getMessage())
+                        .setContentText(download)
+                        .setConfirmText("باشه")
+                        .setCancelText("بی‌خیال")
+                        .setConfirmClickListener(sweetAlertDialog -> {
+                            init();
+                        })
+                        .setCancelClickListener(sweetAlertDialog -> {
+                            sweetAlertDialog.dismiss();
+                            finish();
+                        })
+                        .show();
+            }
+
+            @Override
+            public void onNoUpdateStatus(Boolean canCheck) {
+                Log.d("debug", "onNoUpdateStatus: " + canCheck);
+                init();
+            }
+        });
+
+    }
+
+
+    private void init() {
         if (cycleRepository.getCycleData() != null) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
+        } else {
+            setContentView(R.layout.activity_questions);
+
+            cycleRegisterViewModel = ViewModelProviders.of(this).get(CycleRegisterViewModel.class);
+            cycleRepository = new CycleRepository((Application) getApplicationContext());
+
+            Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/iransans_medium.ttf");
+
+            nextButton = findViewById(R.id.ms_btn_next);
+            forgetButton = findViewById(R.id.ms_btnForget);
+            prevButton = findViewById(R.id.ms_prevButton);
+            stepTitle = findViewById(R.id.ms_tvStepTitle);
+            stepFractionTitle = findViewById(R.id.ms_tvStepFraction);
+            progressBar = findViewById(R.id.ms_progressBar);
+            divider = findViewById(R.id.view_divider);
+
+            nextButton.setTypeface(typeface);
+            forgetButton.setTypeface(typeface);
+
+            navController = Navigation.findNavController(QuestionsActivity.this, R.id.stepper_nav_host_fragment);
+            Navigation.findNavController(QuestionsActivity.this, R.id.stepper_nav_host_fragment).addOnDestinationChangedListener(this);
+            nextButton.setOnClickListener(v -> {
+                switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
+                    case R.id.step1:
+                        navController.navigate(R.id.action_step1_to_step2);
+                        runForgetButtonAnim(true);
+                        runPrevButtonAnim(true);
+                        break;
+                    case R.id.step2:
+                        navController.navigate(R.id.action_step2_to_step3);
+                        break;
+                    case R.id.step2forget:
+                        navController.navigate(R.id.action_step2forget_to_step3);
+                        runForgetButtonAnim(true);
+                        break;
+                    case R.id.step3:
+                        navController.navigate(R.id.action_step3_to_step4);
+                        break;
+                    case R.id.step3forget:
+                        navController.navigate(R.id.action_step3forget_to_step4);
+                        runForgetButtonAnim(true);
+                        break;
+                    case R.id.step4:
+                        navController.navigate(R.id.action_step4_to_step5);
+                        runForgetButtonAnim(false);
+                        break;
+                    case R.id.step4forget:
+                        navController.navigate(R.id.action_step4forget_to_step5);
+                        runForgetButtonAnim(false);
+                        break;
+                    case R.id.step5:
+                        Cycle cycle = new Cycle();
+                        cycle.setYellowDaysCount(cycleRegisterViewModel.getYellowDaysCount());
+                        cycle.setRedDaysCount(cycleRegisterViewModel.getRedDaysCount());
+                        cycle.setGrayDaysCount(cycleRegisterViewModel.getGrayDaysCount());
+                        Calendar calendar = cycleRegisterViewModel.getLastCycleEndDay();
+                        calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount() + 1);
+                        cycle.setStartDate(calendar);
+                        cycle.setEndDate(null);
+                        cycle.setUserId(1);
+                        cycleRepository.insertCycle(cycle);
+                        User user = new User();
+                        user.setBirthYear(cycleRegisterViewModel.getBirthYear());
+                        user.setCurrentCycle(calendar);
+                        cycleRepository.insertUser(user);
+                        navController.navigate(R.id.action_step5_to_mainActivity);
+                        finish();
+                        break;
+                    default:
+                }
+            });
+
+            forgetButton.setOnClickListener(v -> {
+                switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
+                    case R.id.step2:
+                        navController.navigate(R.id.action_step2_to_step2forget);
+                        runForgetButtonAnim(false);
+                        break;
+                    case R.id.step3:
+                        navController.navigate(R.id.action_step3_to_step3forget);
+                        runForgetButtonAnim(false);
+                        break;
+                    case R.id.step4:
+                        navController.navigate(R.id.action_step4_to_step4forget);
+                        runForgetButtonAnim(false);
+                        break;
+                }
+            });
+
+            prevButton.setOnClickListener(v -> navController.navigateUp());
         }
-        setContentView(R.layout.activity_questions);
-
-        cycleRegisterViewModel = ViewModelProviders.of(this).get(CycleRegisterViewModel.class);
-        cycleRepository = new CycleRepository((Application) getApplicationContext());
-
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/iransans_medium.ttf");
-
-        nextButton = findViewById(R.id.ms_btn_next);
-        forgetButton = findViewById(R.id.ms_btnForget);
-        prevButton = findViewById(R.id.ms_prevButton);
-        stepTitle = findViewById(R.id.ms_tvStepTitle);
-        stepFractionTitle = findViewById(R.id.ms_tvStepFraction);
-        progressBar = findViewById(R.id.ms_progressBar);
-        divider = findViewById(R.id.view_divider);
-
-        nextButton.setTypeface(typeface);
-        forgetButton.setTypeface(typeface);
-
-        navController = Navigation.findNavController(QuestionsActivity.this, R.id.stepper_nav_host_fragment);
-        Navigation.findNavController(QuestionsActivity.this, R.id.stepper_nav_host_fragment).addOnDestinationChangedListener(this);
-        nextButton.setOnClickListener(v -> {
-            switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
-                case R.id.step1:
-                    navController.navigate(R.id.action_step1_to_step2);
-                    runForgetButtonAnim(true);
-                    runPrevButtonAnim(true);
-                    break;
-                case R.id.step2:
-                    navController.navigate(R.id.action_step2_to_step3);
-                    break;
-                case R.id.step2forget:
-                    navController.navigate(R.id.action_step2forget_to_step3);
-                    runForgetButtonAnim(true);
-                    break;
-                case R.id.step3:
-                    navController.navigate(R.id.action_step3_to_step4);
-                    break;
-                case R.id.step3forget:
-                    navController.navigate(R.id.action_step3forget_to_step4);
-                    runForgetButtonAnim(true);
-                    break;
-                case R.id.step4:
-                    navController.navigate(R.id.action_step4_to_step5);
-                    runForgetButtonAnim(false);
-                    break;
-                case R.id.step4forget:
-                    navController.navigate(R.id.action_step4forget_to_step5);
-                    runForgetButtonAnim(false);
-                    break;
-                case R.id.step5:
-                    Cycle cycle = new Cycle();
-                    cycle.setYellowDaysCount(cycleRegisterViewModel.getYellowDaysCount());
-                    cycle.setRedDaysCount(cycleRegisterViewModel.getRedDaysCount());
-                    cycle.setGrayDaysCount(cycleRegisterViewModel.getGrayDaysCount());
-                    Calendar calendar = cycleRegisterViewModel.getLastCycleEndDay();
-                    calendar.add(Calendar.DAY_OF_MONTH, -1 * cycleRegisterViewModel.getRedDaysCount() + 1);
-                    cycle.setStartDate(calendar);
-                    cycle.setEndDate(null);
-                    cycle.setUserId(1);
-                    cycleRepository.insertCycle(cycle);
-                    User user = new User();
-                    user.setBirthYear(cycleRegisterViewModel.getBirthYear());
-                    user.setCurrentCycle(calendar);
-                    cycleRepository.insertUser(user);
-                    navController.navigate(R.id.action_step5_to_mainActivity);
-                    finish();
-                    break;
-                default:
-            }
-        });
-
-        forgetButton.setOnClickListener(v -> {
-            switch (Objects.requireNonNull(navController.getCurrentDestination()).getId()) {
-                case R.id.step2:
-                    navController.navigate(R.id.action_step2_to_step2forget);
-                    runForgetButtonAnim(false);
-                    break;
-                case R.id.step3:
-                    navController.navigate(R.id.action_step3_to_step3forget);
-                    runForgetButtonAnim(false);
-                    break;
-                case R.id.step4:
-                    navController.navigate(R.id.action_step4_to_step4forget);
-                    runForgetButtonAnim(false);
-                    break;
-            }
-        });
-
-        prevButton.setOnClickListener(v -> navController.navigateUp());
     }
 
     private void runPrevButtonAnim(boolean visible) {

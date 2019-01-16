@@ -2,6 +2,7 @@ package com.simorgh.redcalendar.Model;
 
 import android.util.Log;
 
+import com.facebook.stetho.Stetho;
 import com.simorgh.redcalendar.BuildConfig;
 import com.simorgh.redcalendar.R;
 
@@ -47,7 +48,7 @@ public class AppManager extends MultiDexApplication {
 //                    .penaltyDeath()
 //                    .build());
 //
-//            Stetho.initializeWithDefaults(this);
+            Stetho.initializeWithDefaults(this);
         } else {
             getUncaughtExceptions();
         }

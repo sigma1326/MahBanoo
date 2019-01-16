@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -58,6 +59,7 @@ public class MakeReportFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.make_report_fragment, container, false);
 
+//        ViewCompat.setLayoutDirection(v, ViewCompat.LAYOUT_DIRECTION_RTL);
         chbBleeding = v.findViewById(R.id.chb_bleeding);
         chbEatingDesire = v.findViewById(R.id.chb_eating_desire);
         chbEmotion = v.findViewById(R.id.chb_emotion);
@@ -65,6 +67,14 @@ public class MakeReportFragment extends Fragment {
         chbPain = v.findViewById(R.id.chb_pain);
         chbWeight = v.findViewById(R.id.chb_weight);
         chbDrugs = v.findViewById(R.id.chb_drugs);
+
+//        setRTL(chbBleeding);
+//        setRTL(chbEatingDesire);
+//        setRTL(chbEmotion);
+//        setRTL(chbHairStyle);
+//        setRTL(chbPain);
+//        setRTL(chbWeight);
+//        setRTL(chbDrugs);
 
         btnRangeStart = v.findViewById(R.id.btn_start_range);
         btnRangeEnd = v.findViewById(R.id.btn_end_range);
@@ -102,6 +112,10 @@ public class MakeReportFragment extends Fragment {
 
 
         return v;
+    }
+
+    private void setRTL(final View view) {
+        ViewCompat.setLayoutDirection(view, ViewCompat.LAYOUT_DIRECTION_RTL);
     }
 
 

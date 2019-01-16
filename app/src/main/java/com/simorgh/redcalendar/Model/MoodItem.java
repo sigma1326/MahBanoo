@@ -12,7 +12,7 @@ public class MoodItem {
     }
 
     public MoodItem(Calendar id, int moodType, int moodSelectedIndex) {
-        this.id = id;
+        this.id.setTimeInMillis(id.getTimeInMillis());
         this.moodType = moodType;
         this.moodSelectedIndex = moodSelectedIndex;
     }

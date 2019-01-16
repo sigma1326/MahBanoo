@@ -39,16 +39,16 @@ public class MoodListAdapter extends ListAdapter<MoodItem, MoodListAdapter.ViewH
                 case MoodView.TYPE_BLEEDING:
                     switch (holder.moodItem.getMoodSelectedIndex()) {
                         case 0:
-                            imageView.setImageResource(R.drawable.item_eating_desire1);
+                            imageView.setImageResource(R.drawable.item_bleeding1);
                             break;
                         case 1:
-                            imageView.setImageResource(R.drawable.item_eating_desire2);
+                            imageView.setImageResource(R.drawable.item_bleeding2);
                             break;
                         case 2:
-                            imageView.setImageResource(R.drawable.item_eating_desire3);
+                            imageView.setImageResource(R.drawable.item_bleeding3);
                             break;
                         case 3:
-                            imageView.setImageResource(R.drawable.item_eating_desire4);
+                            imageView.setImageResource(R.drawable.item_bleeding4);
                             break;
                     }
                     break;
@@ -138,8 +138,8 @@ public class MoodListAdapter extends ListAdapter<MoodItem, MoodListAdapter.ViewH
 
         @Override
         public boolean areContentsTheSame(@NonNull MoodItem oldItem, @NonNull MoodItem newItem) {
-            //todo add check id if u want to add action to item
-            return oldItem.getMoodType() == newItem.getMoodType() && oldItem.getMoodSelectedIndex() == newItem.getMoodSelectedIndex();
+            return oldItem.getMoodType() == newItem.getMoodType() && oldItem.getMoodSelectedIndex() == newItem.getMoodSelectedIndex()
+                    && oldItem.getId().getTimeInMillis() == newItem.getId().getTimeInMillis();
         }
     }
 }
