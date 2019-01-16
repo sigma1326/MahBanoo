@@ -97,10 +97,11 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                         .setConfirmText("باشه")
                         .setCancelText("بستن برنامه")
                         .setConfirmClickListener(sweetAlertDialog -> {
+                            sweetAlertDialog.dismissWithAnimation();
                             init();
                         })
                         .setCancelClickListener(sweetAlertDialog -> {
-                            sweetAlertDialog.dismiss();
+                            sweetAlertDialog.dismissWithAnimation();
                             finish();
                         })
                         .show();
@@ -142,10 +143,11 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                         .setConfirmText("باشه")
                         .setCancelText("بی‌خیال")
                         .setConfirmClickListener(sweetAlertDialog -> {
+                            sweetAlertDialog.dismissWithAnimation();
                             init();
                         })
                         .setCancelClickListener(sweetAlertDialog -> {
-                            sweetAlertDialog.dismiss();
+                            sweetAlertDialog.dismissWithAnimation();
                             finish();
                         })
                         .show();

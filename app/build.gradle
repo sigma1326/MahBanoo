@@ -6,9 +6,9 @@ android {
         applicationId "com.simorgh.redcalendar"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 3
+        versionCode 2
         multiDexEnabled true
-        versionName "1.2"
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
