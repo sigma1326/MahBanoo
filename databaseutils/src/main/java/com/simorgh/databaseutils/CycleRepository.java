@@ -85,8 +85,8 @@ public class CycleRepository {
         this.moodsLiveData = moodsLiveData;
     }
 
-    public List<DayMood> getDayMoodRange(@NonNull Calendar start, @NonNull Calendar calendar) {
-        return dayMoodDAO.getLiveDayMoodRange(start, calendar);
+    public List<DayMood> getDayMoodRange(@NonNull Calendar start, @NonNull Calendar end) {
+        return dayMoodDAO.getDayMoodRange(start, end);
     }
 
     public void clearData() {

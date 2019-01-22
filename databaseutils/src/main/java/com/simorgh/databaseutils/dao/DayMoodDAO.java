@@ -26,7 +26,7 @@ public interface DayMoodDAO {
     LiveData<DayMood> getLiveDayMood(Calendar calendar);
 
     @Query("select * from day_mood where mood_id>=:start and mood_id<=:end")
-    List<DayMood> getLiveDayMoodRange(Calendar start, Calendar end);
+    List<DayMood> getDayMoodRange(Calendar start, Calendar end);
 
     @Query("select * from day_mood")
     LiveData<List<DayMood>> getLiveDayMoods();

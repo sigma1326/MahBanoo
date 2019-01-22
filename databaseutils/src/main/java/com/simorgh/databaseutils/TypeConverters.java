@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.room.TypeConverter;
 
 public class TypeConverters {
-    private static Calendar calendar = Calendar.getInstance();
 
     @TypeConverter
     public static Calendar toCalendar(Long value) {
@@ -22,6 +21,7 @@ public class TypeConverters {
             if (String.valueOf(value).length() < 8) {
                 return Calendar.getInstance();
             }
+            Calendar calendar = Calendar.getInstance();
             int day = Integer.parseInt(String.valueOf(value).substring(6));
             int month = Integer.parseInt(String.valueOf(value).substring(4, 6));
             int year = Integer.parseInt(String.valueOf(value).substring(0, 4));

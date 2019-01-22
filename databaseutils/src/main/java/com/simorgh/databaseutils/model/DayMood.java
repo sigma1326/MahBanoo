@@ -15,7 +15,6 @@ import androidx.room.PrimaryKey;
 public class DayMood {
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "mood_id")
-    @NonNull
     private Calendar id;
 
     @ColumnInfo(name = "type_bleeding")
