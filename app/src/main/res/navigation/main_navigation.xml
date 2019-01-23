@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.simorgh.redcalendar.View.main.CycleViewFragment"
+        android:name="com.simorgh.mahbanoo.View.main.CycleViewFragment"
         android:label="home"
         tools:layout="@layout/cycle_view_fragment">
         <action
@@ -62,7 +62,7 @@
 
     <fragment
         android:id="@+id/calendar"
-        android:name="com.simorgh.redcalendar.View.main.CalendarFragment"
+        android:name="com.simorgh.mahbanoo.View.main.CalendarFragment"
         android:label="calendar"
         tools:layout="@layout/calendar_fragment">
         <action
@@ -101,7 +101,7 @@
 
     <fragment
         android:id="@+id/profile"
-        android:name="com.simorgh.redcalendar.View.main.ProfileFragment"
+        android:name="com.simorgh.mahbanoo.View.main.ProfileFragment"
         android:label="profile"
         tools:layout="@layout/profile_fragment">
         <action
@@ -141,7 +141,7 @@
 
     <fragment
         android:id="@+id/settings"
-        android:name="com.simorgh.redcalendar.View.main.SettingsFragment"
+        android:name="com.simorgh.mahbanoo.View.main.SettingsFragment"
         android:label="settings"
         tools:layout="@layout/settings_fragment">
         <action
@@ -188,7 +188,7 @@
 
     <fragment
         android:id="@+id/addNote"
-        android:name="com.simorgh.redcalendar.View.main.AddMoodFragment"
+        android:name="com.simorgh.mahbanoo.View.main.AddMoodFragment"
         android:label="addNote"
         tools:layout="@layout/add_note_fragment">
         <argument
@@ -199,12 +199,12 @@
     </fragment>
     <fragment
         android:id="@+id/change_cycle"
-        android:name="com.simorgh.redcalendar.View.main.ChangeCycleStartDayFragment"
+        android:name="com.simorgh.mahbanoo.View.main.ChangeCycleStartDayFragment"
         android:label="change_cycle"
         tools:layout="@layout/change_cycle_start_day_fragment" />
     <fragment
         android:id="@+id/cycleInfo"
-        android:name="com.simorgh.redcalendar.View.main.CycleInfoFragment"
+        android:name="com.simorgh.mahbanoo.View.main.CycleInfoFragment"
         android:label="cycleInfo"
         tools:layout="@layout/cycle_info_fragment">
         <argument
@@ -214,7 +214,7 @@
     </fragment>
     <fragment
         android:id="@+id/make_report"
-        android:name="com.simorgh.redcalendar.View.main.MakeReportFragment"
+        android:name="com.simorgh.mahbanoo.View.main.MakeReportFragment"
         android:label="make_report"
         tools:layout="@layout/make_report_fragment" >
         <action
@@ -228,7 +228,7 @@
     </fragment>
     <fragment
         android:id="@+id/report_date"
-        android:name="com.simorgh.redcalendar.View.main.ReportDateFragment"
+        android:name="com.simorgh.mahbanoo.View.main.ReportDateFragment"
         android:label="report_date"
         tools:layout="@layout/report_date_fragment" />
 </navigation>

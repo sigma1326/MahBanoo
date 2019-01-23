@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RedCalendar</string>
+    <string name="app_name">ماه بانو</string>
 
     <string name="step1_title">آخرین روز پریود قبلی چه تاریخی بوده؟</string>
     <string name="step2_title">طول دوره پریود شما به طور معمول چند روز است؟</string>
