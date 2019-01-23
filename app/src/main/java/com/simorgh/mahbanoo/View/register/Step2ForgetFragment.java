@@ -1,14 +1,13 @@
-package com.simorgh.redcalendar.View.register;
+package com.simorgh.mahbanoo.View.register;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.register.Step2ForgetViewModel;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.register.Step2ForgetViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +17,6 @@ import androidx.lifecycle.ViewModelProviders;
 public class Step2ForgetFragment extends Fragment {
 
     private Step2ForgetViewModel mViewModel;
-    private TextView tvForget;
     private Step2Fragment.OnRedDaysCountSelectedListener onRedDaysCountSelected;
 
 
@@ -28,9 +26,7 @@ public class Step2ForgetFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.step2forget_fragment, container, false);
-        tvForget = v.findViewById(R.id.tv_forget);
-        return v;
+        return inflater.inflate(R.layout.step2forget_fragment, container, false);
     }
 
     @Override

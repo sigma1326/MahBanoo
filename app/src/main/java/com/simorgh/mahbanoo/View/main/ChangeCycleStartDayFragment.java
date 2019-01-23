@@ -1,8 +1,10 @@
-package com.simorgh.redcalendar.View.main;
+package com.simorgh.mahbanoo.View.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +15,16 @@ import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cyclecalendar.view.CalendarView;
 import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.CycleData;
-import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.main.MakeReportViewModel;
+import com.simorgh.cycleutils.CycleUtils;
+import com.simorgh.databaseutils.model.Cycle;
+import com.simorgh.databaseutils.model.User;
+import com.simorgh.databaseutils.model.UserWithCycles;
+import com.simorgh.mahbanoo.Model.AppManager;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.Queue;
 
 import androidx.annotation.NonNull;
@@ -29,48 +34,33 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-public class ReportDateFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener, CalendarView.OnScrollListener {
+public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener, CalendarView.OnScrollListener {
 
-    private MakeReportViewModel mViewModel;
+    private CycleViewModel mViewModel;
     private CalendarView calendarView;
     private Button btnApplyChanges;
     private NavController navController;
+    private Typeface typeface;
+    private boolean isFirst = true;
 
 
-    public static ReportDateFragment newInstance() {
-        return new ReportDateFragment();
+    public static ChangeCycleStartDayFragment newInstance() {
+        return new ChangeCycleStartDayFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.report_date_fragment, container, false);
-
-        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment);
-
-
-        calendarView = v.findViewById(R.id.calendar_view);
-        calendarView.setRange(AppManager.minDate, AppManager.maxDate);
-        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeSetStartDay);
-        calendarView.setCalendarType(CalendarType.PERSIAN);
-
-        calendarView.setIsDayMarkedListener(this);
-        calendarView.setOnDayClickListener(this);
-        calendarView.setOnScrollListener(this);
-        btnApplyChanges = v.findViewById(R.id.btn_apply_changes);
-        btnApplyChanges.setOnClickListener(v1 -> navController.navigateUp());
-
-
-        return v;
+        if (getActivity() != null) {
+            typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/iransans_medium.ttf");
+        }
     }
 
     @Override
     public void onDestroyView() {
+        if (isAnimRunning) {
+            btnApplyChanges.getAnimation().cancel();
+        }
         calendarView = null;
         btnApplyChanges = null;
         navController = null;
@@ -78,26 +68,73 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
     }
 
     @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.change_cycle_start_day_fragment, container, false);
+        calendarView = v.findViewById(R.id.calendar_view);
+
+        calendarView.setRange(AppManager.minDate, AppManager.maxDate);
+        calendarView.setMonthViewType(BaseMonthView.MonthViewTypeChangeDays);
+        calendarView.setCalendarType(CalendarType.PERSIAN);
+
+        calendarView.setIsDayMarkedListener(this);
+        calendarView.setOnDayClickListener(this);
+        calendarView.setOnScrollListener(this);
+        calendarView.scrollToCurrentDate(AppManager.getCalendarInstance());
+        if (getActivity() != null) {
+            navController = Navigation.findNavController(getActivity(), R.id.main_nav_host_fragment);
+        }
+
+        btnApplyChanges = v.findViewById(R.id.btn_apply_changes);
+        btnApplyChanges.setTypeface(typeface);
+        btnApplyChanges.setOnClickListener(v1 -> {
+            UserWithCycles userWithCycles = mViewModel.getUserWithCyclesLiveData().getValue();
+            if (userWithCycles != null) {
+                Cycle oldCycle = userWithCycles.getCurrentCycle();
+
+                Cycle newCycle = userWithCycles.getCurrentCycle().clone();
+                newCycle.setStartDate(mViewModel.getSelectedStartDate());
+                newCycle.setEndDate(null);
+
+                Calendar endDate = Calendar.getInstance();
+                endDate.clear();
+                endDate.setTimeInMillis(mViewModel.getSelectedStartDate().getTimeInMillis());
+                endDate.add(Calendar.DAY_OF_MONTH, -1);
+                oldCycle.setEndDate(endDate);
+
+
+                User user = userWithCycles.getUser();
+                user.setCurrentCycle(newCycle.getStartDate());
+
+                mViewModel.updateCycle(oldCycle);
+                mViewModel.updateCycle(newCycle);
+                mViewModel.updateUser(user);
+                navController.navigateUp();
+            }
+        });
+
+
+        return v;
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MakeReportViewModel.class);
-        if (mViewModel.isRangeStart()) {
-            mViewModel.getRangeStartLive().observe(this, calendar -> {
-                if (calendarView != null && calendar != null) {
-                    calendarView.setSelectedDate(calendar);
-                    calendarView.scrollToCurrentDate(mViewModel.getRangeStartLive().getValue());
-                    calendarView.setCycleData(new CycleData(0, 0, 0, calendar, calendar));
-                }
-            });
-        } else {
-            mViewModel.getRangeEndLive().observe(this, calendar -> {
-                if (calendarView != null && calendar != null) {
-                    calendarView.setSelectedDate(calendar);
-                    calendarView.scrollToCurrentDate(mViewModel.getRangeEndLive().getValue());
-                    calendarView.setCycleData(new CycleData(0, 0, 0, calendar, calendar));
-                }
-            });
-        }
+        mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
+        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
+            if (calendarView != null && userWithCycles != null) {
+                Cycle cycle = userWithCycles.getCurrentCycle();
+                User user = userWithCycles.getUser();
+                mViewModel.setUser(user);
+                mViewModel.setCycle(cycle);
+                calendarView.setCycleData(new CycleData(cycle.getRedDaysCount(),
+                        cycle.getGrayDaysCount(), cycle.getYellowDaysCount(), cycle.getStartDate(), cycle.getEndDate()));
+                calendarView.setCycleDataList(CycleUtils.getCycleDataList(userWithCycles.getCycles()));
+                calendarView.setSelectedDate(cycle.getCurrentCycleStart(AppManager.getCalendarInstance()));
+                calendarView.scrollToCurrentDate(cycle.getCurrentCycleStart(Calendar.getInstance()));
+                Log.d(AppManager.TAG, cycle.toString());
+                calendarView.setShowInfo(user.isShowCycleDays());
+            }
+        });
     }
 
     @Override
@@ -107,15 +144,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
 
     @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
-        if (mViewModel.isRangeStart()) {
-            if (day.before(mViewModel.getRangeEndLive().getValue())) {
-                mViewModel.setRangeStart(day);
-            }
-        } else {
-            if (day.before(AppManager.getCalendarInstance())) {
-                mViewModel.setRangeEnd(day);
-            }
-        }
+        mViewModel.setSelectedStartDate(day);
     }
 
     @Override
@@ -127,6 +156,9 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
     private Queue<Boolean> booleanQueue = new LinkedList<>();
 
     private void runButtonChangeAnim(boolean visible) {
+        if (btnApplyChanges == null) {
+            return;
+        }
         int h1;
         if (isAnimRunning) {
             if (visible) {

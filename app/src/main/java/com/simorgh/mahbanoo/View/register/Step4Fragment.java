@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.register;
+package com.simorgh.mahbanoo.View.register;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.register.Step4ViewModel;
 import com.simorgh.numberpicker.NumberPicker;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.register.Step2ViewModel;
 
 import java.util.Objects;
 
@@ -18,14 +18,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-public class Step2Fragment extends Fragment {
+public class Step4Fragment extends Fragment {
 
-    private Step2ViewModel mViewModel;
+    private Step4ViewModel mViewModel;
     private Typeface typeface;
-    private OnRedDaysCountSelectedListener onRedDaysCountSelected;
+    private OnYellowDaysCountSelectedListener onYellowDaysCountSelected;
 
-    public static Step2Fragment newInstance() {
-        return new Step2Fragment();
+
+    public static Step4Fragment newInstance() {
+        return new Step4Fragment();
     }
 
     @Override
@@ -33,29 +34,25 @@ public class Step2Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         typeface = Typeface.createFromAsset(Objects.requireNonNull(getActivity()).getAssets(), "fonts/iransans_medium.ttf");
     }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.step2_fragment, container, false);
-        NumberPicker numberPicker = v.findViewById(R.id.np_period_days);
+        View v = inflater.inflate(R.layout.step4_fragment, container, false);
+        NumberPicker numberPicker = v.findViewById(R.id.np_pms);
+        numberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> mViewModel.setYellowDayCount(newVal));
         numberPicker.setTypeface(typeface);
-        numberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
-            mViewModel.setRedDayCount(newVal);
-        });
         return v;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(Step2ViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(Step4ViewModel.class);
     }
-
 
     @Override
     public void onDestroyView() {
-        if (onRedDaysCountSelected != null) {
-            onRedDaysCountSelected.onRedDaysCountSelected(mViewModel.getRedDayCount());
+        if (onYellowDaysCountSelected != null) {
+            onYellowDaysCountSelected.onYellowDaysCountSelected(mViewModel.getYellowDayCount());
         }
         super.onDestroyView();
     }
@@ -63,17 +60,17 @@ public class Step2Fragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        onRedDaysCountSelected = (OnRedDaysCountSelectedListener) context;
+        onYellowDaysCountSelected = (OnYellowDaysCountSelectedListener) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        onRedDaysCountSelected = null;
+        onYellowDaysCountSelected = null;
     }
 
-    public interface OnRedDaysCountSelectedListener {
-        void onRedDaysCountSelected(int count);
+    public interface OnYellowDaysCountSelectedListener {
+        void onYellowDaysCountSelected(int count);
     }
 
 }

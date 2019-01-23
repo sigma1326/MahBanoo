@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.main;
+package com.simorgh.mahbanoo.View.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,12 +15,12 @@ import android.widget.EditText;
 
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.mahbanoo.Model.AppManager;
+import com.simorgh.mahbanoo.Model.DrugItem;
+import com.simorgh.mahbanoo.Model.DrugListAdapter;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 import com.simorgh.moodview.MoodView;
-import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.Model.DrugItem;
-import com.simorgh.redcalendar.Model.DrugListAdapter;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -34,7 +34,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.simorgh.redcalendar.Model.AppManager.TAG;
+import static com.simorgh.mahbanoo.Model.AppManager.TAG;
 
 public class AddMoodFragment extends Fragment {
 

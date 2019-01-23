@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.main;
+package com.simorgh.mahbanoo.View.main;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import android.widget.CheckBox;
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
 import com.simorgh.databaseutils.CycleRepository;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.main.MakeReportViewModel;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.main.MakeReportViewModel;
 import com.simorgh.reportutil.ReportUtils;
 
 import java.util.Objects;
@@ -59,7 +59,6 @@ public class MakeReportFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.make_report_fragment, container, false);
 
-//        ViewCompat.setLayoutDirection(v, ViewCompat.LAYOUT_DIRECTION_RTL);
         chbBleeding = v.findViewById(R.id.chb_bleeding);
         chbEatingDesire = v.findViewById(R.id.chb_eating_desire);
         chbEmotion = v.findViewById(R.id.chb_emotion);
@@ -68,13 +67,6 @@ public class MakeReportFragment extends Fragment {
         chbWeight = v.findViewById(R.id.chb_weight);
         chbDrugs = v.findViewById(R.id.chb_drugs);
 
-//        setRTL(chbBleeding);
-//        setRTL(chbEatingDesire);
-//        setRTL(chbEmotion);
-//        setRTL(chbHairStyle);
-//        setRTL(chbPain);
-//        setRTL(chbWeight);
-//        setRTL(chbDrugs);
 
         btnRangeStart = v.findViewById(R.id.btn_start_range);
         btnRangeEnd = v.findViewById(R.id.btn_end_range);

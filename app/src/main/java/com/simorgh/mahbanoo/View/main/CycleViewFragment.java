@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.main;
+package com.simorgh.mahbanoo.View.main;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,12 +16,12 @@ import com.simorgh.cycleview.OnViewDataChangedListener;
 import com.simorgh.cycleview.SizeConverter;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.mahbanoo.Model.AppManager;
+import com.simorgh.mahbanoo.Model.MoodItem;
+import com.simorgh.mahbanoo.Model.MoodListAdapter;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 import com.simorgh.moodview.MoodView;
-import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.Model.MoodItem;
-import com.simorgh.redcalendar.Model.MoodListAdapter;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.register;
+package com.simorgh.mahbanoo.View.register;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.register.Step3ViewModel;
 import com.simorgh.numberpicker.NumberPicker;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.register.Step3ViewModel;
 
 import java.util.Objects;
 

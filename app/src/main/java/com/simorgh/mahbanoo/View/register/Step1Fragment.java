@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.register;
+package com.simorgh.mahbanoo.View.register;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,9 +11,9 @@ import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cyclecalendar.view.CalendarView;
 import com.simorgh.cyclecalendar.view.ShowInfoMonthView;
 import com.simorgh.cycleutils.CycleData;
-import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.register.Step1ViewModel;
+import com.simorgh.mahbanoo.Model.AppManager;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.register.Step1ViewModel;
 
 import java.util.Calendar;
 
@@ -85,6 +85,12 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
     }
 
     @Override
+    public void onDestroy() {
+        calendarView = null;
+        super.onDestroy();
+    }
+
+    @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
         mViewModel.setDay(day);
     }
@@ -96,6 +102,6 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
 
 
     public interface OnLastCycleDaySelectedListener {
-        public void onLastCycleDaySelected(Calendar calendar);
+        void onLastCycleDaySelected(Calendar calendar);
     }
 }

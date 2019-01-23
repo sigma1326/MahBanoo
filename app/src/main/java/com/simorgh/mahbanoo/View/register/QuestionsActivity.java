@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.register;
+package com.simorgh.mahbanoo.View.register;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -22,9 +22,9 @@ import com.simorgh.databaseutils.model.User;
 import com.simorgh.forceupdate.ForceUpdateApp;
 import com.simorgh.forceupdate.OnUpdateStatusReceiveListener;
 import com.simorgh.forceupdate.repo.model.CheckUpdateStatusResponse;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.View.main.MainActivity;
-import com.simorgh.redcalendar.ViewModel.register.CycleRegisterViewModel;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.View.main.MainActivity;
+import com.simorgh.mahbanoo.ViewModel.register.CycleRegisterViewModel;
 import com.simorgh.sweetalertdialog.SweetAlertDialog;
 
 import java.util.Calendar;
@@ -163,7 +163,20 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     }
 
 
+    @Override
+    protected void onDestroy() {
+        stepTitle = null;
+        stepFractionTitle = null;
+        prevButton = null;
+        nextButton = null;
+        forgetButton = null;
+        divider = null;
+        navController = null;
+        super.onDestroy();
+    }
+
     private void init() {
+
         if (cycleRepository.getCycleData() != null) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -261,6 +274,9 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     }
 
     private void runPrevButtonAnim(boolean visible) {
+        if (prevButton == null) {
+            return;
+        }
         if (visible) {
             prevButton.setVisibility(View.VISIBLE);
             prevButton.animate().alpha(1f).setDuration(500).setListener(new AnimatorListenerAdapter() {
@@ -280,6 +296,9 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     }
 
     private void runForgetButtonAnim(boolean visible) {
+        if (forgetButton == null || divider == null) {
+            return;
+        }
         int h2;
         int h1;
         if (visible) {
@@ -407,6 +426,9 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
     }
 
     private void runProgressBarAnim(int i) {
+        if (progressBar == null) {
+            return;
+        }
         ProgressBarAnimation anim = new ProgressBarAnimation(progressBar, progressBar.getProgress(), i);
         anim.setDuration(200);
         progressBar.startAnimation(anim);

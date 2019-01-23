@@ -1,14 +1,13 @@
-package com.simorgh.redcalendar.View.register;
+package com.simorgh.mahbanoo.View.register;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.register.Step3ForgetViewModel;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.register.Step3ForgetViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +17,6 @@ import androidx.lifecycle.ViewModelProviders;
 public class Step3ForgetFragment extends Fragment {
 
     private Step3ForgetViewModel mViewModel;
-    private TextView tvForget;
     private Step3Fragment.OnGrayDaysCountSelectedListener onGrayDaysCountSelected;
 
 

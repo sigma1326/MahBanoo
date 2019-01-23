@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.main;
+package com.simorgh.mahbanoo.View.main;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.simorgh.cycleview.CycleView;
-import com.simorgh.redcalendar.R;
+import com.simorgh.mahbanoo.R;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 

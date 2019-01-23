@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.main;
+package com.simorgh.mahbanoo.View.main;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,9 +14,9 @@ import com.simorgh.cyclebar.CycleBar;
 import com.simorgh.cycleutils.CycleData;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.User;
-import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
+import com.simorgh.mahbanoo.Model.AppManager;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 import com.simorgh.spinner.NiceSpinner;
 
 import java.util.Arrays;

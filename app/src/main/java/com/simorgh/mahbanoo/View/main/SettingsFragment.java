@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.main;
+package com.simorgh.mahbanoo.View.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.simorgh.databaseutils.model.User;
-import com.simorgh.redcalendar.R;
-import com.simorgh.redcalendar.View.register.QuestionsActivity;
-import com.simorgh.redcalendar.ViewModel.main.CycleViewModel;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.View.register.QuestionsActivity;
+import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 import com.simorgh.sweetalertdialog.SweetAlertDialog;
 
 import java.util.Objects;
@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import static com.simorgh.redcalendar.Model.AppManager.TAG;
+import static com.simorgh.mahbanoo.Model.AppManager.TAG;
 
 public class SettingsFragment extends Fragment {
 

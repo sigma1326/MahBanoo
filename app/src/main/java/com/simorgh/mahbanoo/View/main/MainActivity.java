@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.View.main;
+package com.simorgh.mahbanoo.View.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.simorgh.bottombar.BottomBar;
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cycleview.CycleView;
-import com.simorgh.redcalendar.Model.AppManager;
-import com.simorgh.redcalendar.R;
+import com.simorgh.mahbanoo.Model.AppManager;
+import com.simorgh.mahbanoo.R;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -92,6 +92,16 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
                 navController.navigate(action);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        titleText = null;
+        navController = null;
+        bottomBar = null;
+        imgBack = null;
+        imgInfo = null;
+        super.onDestroy();
     }
 
     @Override
@@ -211,6 +221,9 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 
 
     private void runBackButtonAnim(boolean visible) {
+        if (imgBack == null) {
+            return;
+        }
         if (visible) {
             imgBack.setVisibility(View.VISIBLE);
             imgBack.animate().alpha(1f).setDuration(500).setListener(new AnimatorListenerAdapter() {
@@ -275,6 +288,9 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
 //    }
 
     private void runBottomBarAnim(boolean visible) {
+        if (bottomBar == null) {
+            return;
+        }
         int h1;
         if (visible) {
             if (bottomBar.getVisibility() == View.VISIBLE) {
