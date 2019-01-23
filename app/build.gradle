@@ -6,9 +6,9 @@ android {
         applicationId "com.simorgh.redcalendar"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 2
+        versionCode 3
         multiDexEnabled true
-        versionName "1.1"
+        versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -20,9 +20,9 @@ android {
         }
         debug {
             debuggable true
-            minifyEnabled false
-            shrinkResources false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -104,5 +104,5 @@ dependencies {
 
     implementation 'org.sufficientlysecure:html-textview:3.6'
 
-    implementation 'com.github.sigma1326:SweetAlertDialogPersian:v1.0'
+    implementation 'com.github.sigma1326:SweetAlertDialogPersian:1.1'
 }
