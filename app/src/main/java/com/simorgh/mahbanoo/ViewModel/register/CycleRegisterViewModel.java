@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.ViewModel.register;
+package com.simorgh.mahbanoo.ViewModel.register;
 
 import java.util.Calendar;
 
