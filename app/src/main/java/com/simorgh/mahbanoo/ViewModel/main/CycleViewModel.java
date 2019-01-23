@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.ViewModel.main;
+package com.simorgh.mahbanoo.ViewModel.main;
 
 
 import android.app.Application;
@@ -8,7 +8,7 @@ import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
 import com.simorgh.databaseutils.model.User;
 import com.simorgh.databaseutils.model.UserWithCycles;
-import com.simorgh.redcalendar.Model.AppManager;
+import com.simorgh.mahbanoo.Model.AppManager;
 
 import java.util.Calendar;
 import java.util.List;

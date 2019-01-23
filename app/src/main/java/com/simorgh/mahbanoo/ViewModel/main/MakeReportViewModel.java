@@ -1,6 +1,6 @@
-package com.simorgh.redcalendar.ViewModel.main;
+package com.simorgh.mahbanoo.ViewModel.main;
 
-import com.simorgh.redcalendar.Model.AppManager;
+import com.simorgh.mahbanoo.Model.AppManager;
 
 import java.util.Calendar;
 import java.util.Objects;

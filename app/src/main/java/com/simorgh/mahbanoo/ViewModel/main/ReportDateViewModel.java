@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.ViewModel.main;
+package com.simorgh.mahbanoo.ViewModel.main;
 
 import androidx.lifecycle.ViewModel;
 
