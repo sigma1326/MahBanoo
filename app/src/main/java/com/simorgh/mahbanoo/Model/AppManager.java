@@ -1,10 +1,10 @@
-package com.simorgh.redcalendar.Model;
+package com.simorgh.mahbanoo.Model;
 
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
-import com.simorgh.redcalendar.BuildConfig;
-import com.simorgh.redcalendar.R;
+import com.simorgh.mahbanoo.BuildConfig;
+import com.simorgh.mahbanoo.R;
 
 import java.util.Arrays;
 import java.util.Calendar;

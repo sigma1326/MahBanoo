@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.Model;
+package com.simorgh.mahbanoo.Model;
 
 import android.app.Application;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.simorgh.databaseutils.CycleRepository;
 import com.simorgh.databaseutils.model.DayMood;
-import com.simorgh.redcalendar.R;
+import com.simorgh.mahbanoo.R;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.AsyncDifferConfig;

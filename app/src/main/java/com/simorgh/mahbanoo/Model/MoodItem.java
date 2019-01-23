@@ -1,4 +1,4 @@
-package com.simorgh.redcalendar.Model;
+package com.simorgh.mahbanoo.Model;
 
 import java.util.Calendar;
 
