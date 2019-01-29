@@ -57,10 +57,10 @@ public class AppManager extends MultiDexApplication {
         mLocale = getResources().getConfiguration().locale;
 
         minDate = getCalendarInstance();
-        minDate.set(Calendar.YEAR, 2018);
+        minDate.add(Calendar.YEAR, -1);
 
         maxDate = getCalendarInstance();
-        maxDate.set(Calendar.YEAR, 2020);
+        maxDate.add(Calendar.YEAR, 1);
 
         ViewPump.init(ViewPump.builder()
                 .addInterceptor(new CalligraphyInterceptor(
