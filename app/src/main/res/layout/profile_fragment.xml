@@ -15,9 +15,14 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
+        app:borderColor="#00819b"
+        app:greenTypeColor="#669933"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_CurrentCycleStartEnd" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_CurrentCycleStartEnd"
+        app:redTypeColor="#f84d60"
+        app:todayColor="#00819b"
+        app:totalDaysTextColor="#5c5c5c" />
 
     <TextView
         android:id="@+id/tv_current_cycle"
@@ -26,12 +31,12 @@
         android:layout_marginTop="46dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/current_cycle"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_CurrentCycleStartEnd"
@@ -39,12 +44,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:textColor="#5c5c5c"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_current_cycle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_current_cycle"
+        tools:fontFamily="@font/iransans_medium"
         tools:text="27 آذر - 20 دی" />
 
     <TextView
@@ -54,12 +59,12 @@
         android:layout_marginTop="45dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/red_days"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cycleBar" />
+        app:layout_constraintTop_toBottomOf="@+id/cycleBar"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_gray_count"
@@ -68,12 +73,12 @@
         android:layout_marginTop="42dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/gray_days"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_red_count" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_red_count"
+        tools:fontFamily="@font/iransans_medium" />
 
 
     <TextView
@@ -83,12 +88,12 @@
         android:layout_marginTop="42dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/pms_days"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_gray_count" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_gray_count"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_birth_year"
@@ -97,12 +102,12 @@
         android:layout_marginTop="42dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/birth_year"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_yellow_count" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_yellow_count"
+        tools:fontFamily="@font/iransans_medium" />
 
     <com.simorgh.spinner.NiceSpinner
         android:id="@+id/spinnerRedCount"
