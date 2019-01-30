@@ -124,7 +124,8 @@
         app:extraText="روز"
         app:layout_constraintBottom_toBottomOf="@+id/tv_red_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_red_count" />
+        app:layout_constraintTop_toTopOf="@+id/tv_red_count"
+        app:textTint="#5c5c5c" />
 
     <com.simorgh.spinner.NiceSpinner
         android:id="@+id/spinnerGrayCount"
@@ -140,7 +141,8 @@
         app:extraText="روز"
         app:layout_constraintBottom_toBottomOf="@+id/tv_gray_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_gray_count" />
+        app:layout_constraintTop_toTopOf="@+id/tv_gray_count"
+        app:textTint="#5c5c5c" />
 
     <com.simorgh.spinner.NiceSpinner
         android:id="@+id/spinnerYellowCount"
@@ -156,7 +158,8 @@
         app:extraText="روز"
         app:layout_constraintBottom_toBottomOf="@+id/tv_yellow_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_yellow_count" />
+        app:layout_constraintTop_toTopOf="@+id/tv_yellow_count"
+        app:textTint="#5c5c5c" />
 
     <com.simorgh.spinner.NiceSpinner
         android:id="@+id/spinnerBirthYear"
@@ -172,5 +175,6 @@
         app:extraText="سال"
         app:layout_constraintBottom_toBottomOf="@+id/tv_birth_year"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_birth_year" />
+        app:layout_constraintTop_toTopOf="@+id/tv_birth_year"
+        app:textTint="#5c5c5c" />
 </androidx.constraintlayout.widget.ConstraintLayout>

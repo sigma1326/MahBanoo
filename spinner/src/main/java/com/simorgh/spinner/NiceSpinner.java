@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -228,6 +230,8 @@ public class NiceSpinner extends AppCompatTextView {
     private Drawable initArrowDrawable(int drawableTint) {
         Drawable drawable = ContextCompat.getDrawable(getContext(), arrowDrawableResId);
         if (drawable != null) {
+            ColorFilter colorFilter = new LightingColorFilter(Color.TRANSPARENT, Color.parseColor("#5c5c5c"));
+            drawable.setColorFilter(colorFilter);
             drawable = DrawableCompat.wrap(drawable);
             if (drawableTint != Integer.MAX_VALUE && drawableTint != 0) {
                 DrawableCompat.setTint(drawable, drawableTint);
