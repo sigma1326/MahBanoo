@@ -305,10 +305,10 @@ public class CycleBar extends View {
         canvas.drawBitmap(icon_greenType2, null, cycleBarGreen2RectF, greenTypePaint);
 
         redDaysText = cycleData.getRedCount() + " " + dayText;
-        canvas.drawText(redDaysText, cycleBarRedDaysRectF.centerX() + 0.5f * redDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - 1.5f * redDaysTextPaint.getFontMetrics().bottom, redDaysTextPaint);
+        canvas.drawText(redDaysText, cycleBarRedDaysRectF.centerX() + 0.5f * redDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - 1.7f * redDaysTextPaint.getFontMetrics().bottom, redDaysTextPaint);
 
         totalDaysText = cycleData.getTotalDays() + " " + dayText;
-        canvas.drawText(totalDaysText, dp2px(5) + 2 * totalDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - totalDaysTextPaint.getFontMetrics().bottom, totalDaysTextPaint);
+        canvas.drawText(totalDaysText, dp2px(5) + 2 * totalDaysTextPaint.getFontMetrics().descent, dp2px(realHeight) - 1.3f*totalDaysTextPaint.getFontMetrics().bottom, totalDaysTextPaint);
     }
 
     private void drawToday(Canvas canvas) {
