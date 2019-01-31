@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,11 @@ import android.widget.EditText;
 
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.mahbanoo.Model.AndroidUtils;
 import com.simorgh.mahbanoo.Model.AppManager;
 import com.simorgh.mahbanoo.Model.DrugItem;
 import com.simorgh.mahbanoo.Model.DrugListAdapter;
+import com.simorgh.mahbanoo.Model.Logger;
 import com.simorgh.mahbanoo.R;
 import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 import com.simorgh.moodview.MoodView;
@@ -33,8 +34,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static com.simorgh.mahbanoo.Model.AppManager.TAG;
 
 public class AddMoodFragment extends Fragment {
 
@@ -96,7 +95,7 @@ public class AddMoodFragment extends Fragment {
                 calendar.set(Calendar.MONTH, yearMonthDay.getMonth());
                 calendar.set(Calendar.YEAR, yearMonthDay.getYear());
                 mViewModel.setSelectedDateMood(calendar);
-                Log.d(TAG, "getArgs: " + calendar.getTime());
+                Logger.d("getArgs: " + calendar.getTime());
             }
         }
     }
@@ -169,137 +168,153 @@ public class AddMoodFragment extends Fragment {
 
         btnAddDrug.setOnClickListener(v1 -> {
             if (etDrugName != null && etDrugName.getText().length() > 0) {
-                if (mViewModel.getDayMood() != null) {
-                    DayMood dayMood = mViewModel.getDayMood();
-                    if (mViewModel.getDayMood().getDrugs() != null) {
-                        dayMood.getDrugs().add(etDrugName.getText().toString());
-                        clearFocus();
-                        mViewModel.updateDayMood(dayMood);
+                AppManager.getExecutor().execute(() -> {
+                    if (mViewModel.getDayMood() != null) {
+                        DayMood dayMood = mViewModel.getDayMood();
+                        if (mViewModel.getDayMood().getDrugs() != null) {
+                            dayMood.getDrugs().add(etDrugName.getText().toString());
+                            clearFocus();
+                            mViewModel.updateDayMood(dayMood);
+                        } else {
+                            List<String> drugs = new LinkedList<>();
+                            drugs.add(etDrugName.getText().toString());
+                            dayMood.setDrugs(drugs);
+                            clearFocus();
+                            mViewModel.updateDayMood(dayMood);
+                        }
                     } else {
+                        DayMood dayMood = new DayMood();
+                        dayMood.setId(mViewModel.getSelectedDateMood());
                         List<String> drugs = new LinkedList<>();
                         drugs.add(etDrugName.getText().toString());
-                        dayMood.setDrugs(drugs);
                         clearFocus();
+                        dayMood.setDrugs(drugs);
                         mViewModel.updateDayMood(dayMood);
                     }
-                } else {
-                    DayMood dayMood = new DayMood();
-                    dayMood.setId(mViewModel.getSelectedDateMood());
-                    List<String> drugs = new LinkedList<>();
-                    drugs.add(etDrugName.getText().toString());
-                    clearFocus();
-                    dayMood.setDrugs(drugs);
-                    mViewModel.updateDayMood(dayMood);
-                }
+                });
             }
         });
 
         btnApplyWeight.setOnClickListener(v1 -> {
             if (etDrugName != null && etWeight.getText().length() > 0) {
-                if (mViewModel.getDayMood() != null) {
-                    DayMood dayMood = mViewModel.getDayMood();
-                    try {
-                        dayMood.setWeight(Float.parseFloat(etWeight.getText().toString()));
-                        clearFocus();
-                        mViewModel.updateDayMood(dayMood);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                AppManager.getExecutor().execute(() -> {
+                    if (mViewModel.getDayMood() != null) {
+                        DayMood dayMood = mViewModel.getDayMood();
+                        try {
+                            dayMood.setWeight(Float.parseFloat(etWeight.getText().toString()));
+                            clearFocus();
+                            mViewModel.updateDayMood(dayMood);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        DayMood dayMood = new DayMood();
+                        dayMood.setId(mViewModel.getSelectedDateMood());
+                        try {
+                            dayMood.setWeight(Float.parseFloat(etWeight.getText().toString()));
+                            clearFocus();
+                            mViewModel.updateDayMood(dayMood);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                } else {
-                    DayMood dayMood = new DayMood();
-                    dayMood.setId(mViewModel.getSelectedDateMood());
-                    try {
-                        dayMood.setWeight(Float.parseFloat(etWeight.getText().toString()));
-                        clearFocus();
-                        mViewModel.updateDayMood(dayMood);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                });
             }
         });
 
 
         mvBleeding.setOnItemSelectedListener(selectedItems -> {
-            DayMood dayMood = mViewModel.getDayMood();
-            if (dayMood == null) {
-                dayMood = new DayMood();
-                dayMood.setId(mViewModel.getSelectedDateMood());
-            }
-            if (selectedItems.isEmpty()) {
-                dayMood.setTypeBleedingSelectedIndex(-1);
-            } else {
-                dayMood.setTypeBleedingSelectedIndex(selectedItems.get(0));
-            }
-            mViewModel.updateDayMood(dayMood);
+            AppManager.getExecutor().execute(() -> {
+                DayMood dayMood = mViewModel.getDayMood();
+                if (dayMood == null) {
+                    dayMood = new DayMood();
+                    dayMood.setId(mViewModel.getSelectedDateMood());
+                }
+                if (selectedItems.isEmpty()) {
+                    dayMood.setTypeBleedingSelectedIndex(-1);
+                } else {
+                    dayMood.setTypeBleedingSelectedIndex(selectedItems.get(0));
+                }
+                mViewModel.updateDayMood(dayMood);
+            });
         });
 
         mvEmotion.setOnItemSelectedListener(selectedItems -> {
-            DayMood dayMood = mViewModel.getDayMood();
-            if (dayMood == null) {
-                dayMood = new DayMood();
-                dayMood.setId(mViewModel.getSelectedDateMood());
-            }
-            if (selectedItems.isEmpty()) {
-                dayMood.setTypeEmotionSelectedIndices(null);
-            } else {
-                dayMood.setTypeEmotionSelectedIndices(selectedItems);
-            }
-            mViewModel.updateDayMood(dayMood);
+            AppManager.getExecutor().execute(() -> {
+                DayMood dayMood = mViewModel.getDayMood();
+                if (dayMood == null) {
+                    dayMood = new DayMood();
+                    dayMood.setId(mViewModel.getSelectedDateMood());
+                }
+                if (selectedItems.isEmpty()) {
+                    dayMood.setTypeEmotionSelectedIndices(null);
+                } else {
+                    dayMood.setTypeEmotionSelectedIndices(selectedItems);
+                }
+                mViewModel.updateDayMood(dayMood);
+            });
         });
 
         mvPain.setOnItemSelectedListener(selectedItems -> {
-            DayMood dayMood = mViewModel.getDayMood();
-            if (dayMood == null) {
-                dayMood = new DayMood();
-                dayMood.setId(mViewModel.getSelectedDateMood());
-            }
-            if (selectedItems.isEmpty()) {
-                dayMood.setTypePainSelectedIndices(null);
-            } else {
-                dayMood.setTypePainSelectedIndices(selectedItems);
-            }
-            mViewModel.updateDayMood(dayMood);
+            AppManager.getExecutor().execute(() -> {
+                DayMood dayMood = mViewModel.getDayMood();
+                if (dayMood == null) {
+                    dayMood = new DayMood();
+                    dayMood.setId(mViewModel.getSelectedDateMood());
+                }
+                if (selectedItems.isEmpty()) {
+                    dayMood.setTypePainSelectedIndices(null);
+                } else {
+                    dayMood.setTypePainSelectedIndices(selectedItems);
+                }
+                mViewModel.updateDayMood(dayMood);
+            });
         });
 
         mvEatingDesire.setOnItemSelectedListener(selectedItems -> {
-            DayMood dayMood = mViewModel.getDayMood();
-            if (dayMood == null) {
-                dayMood = new DayMood();
-                dayMood.setId(mViewModel.getSelectedDateMood());
-            }
-            if (selectedItems.isEmpty()) {
-                dayMood.setTypeEatingDesireSelectedIndices(null);
-            } else {
-                dayMood.setTypeEatingDesireSelectedIndices(selectedItems);
-            }
-            mViewModel.updateDayMood(dayMood);
+            AppManager.getExecutor().execute(() -> {
+                DayMood dayMood = mViewModel.getDayMood();
+                if (dayMood == null) {
+                    dayMood = new DayMood();
+                    dayMood.setId(mViewModel.getSelectedDateMood());
+                }
+                if (selectedItems.isEmpty()) {
+                    dayMood.setTypeEatingDesireSelectedIndices(null);
+                } else {
+                    dayMood.setTypeEatingDesireSelectedIndices(selectedItems);
+                }
+                mViewModel.updateDayMood(dayMood);
+            });
         });
 
         mvHairStyle.setOnItemSelectedListener(selectedItems -> {
-            DayMood dayMood = mViewModel.getDayMood();
-            if (dayMood == null) {
-                dayMood = new DayMood();
-                dayMood.setId(mViewModel.getSelectedDateMood());
-            }
-            if (selectedItems.isEmpty()) {
-                dayMood.setTypeHairStyleSelectedIndices(null);
-            } else {
-                dayMood.setTypeHairStyleSelectedIndices(selectedItems);
-            }
-            mViewModel.updateDayMood(dayMood);
+            AppManager.getExecutor().execute(() -> {
+                DayMood dayMood = mViewModel.getDayMood();
+                if (dayMood == null) {
+                    dayMood = new DayMood();
+                    dayMood.setId(mViewModel.getSelectedDateMood());
+                }
+                if (selectedItems.isEmpty()) {
+                    dayMood.setTypeHairStyleSelectedIndices(null);
+                } else {
+                    dayMood.setTypeHairStyleSelectedIndices(selectedItems);
+                }
+                mViewModel.updateDayMood(dayMood);
+            });
         });
     }
 
     private void clearFocus() {
-        hideKeyboard(Objects.requireNonNull(getActivity()));
-        etDrugName.setText("");
-        etDrugName.setFocusableInTouchMode(false);
-        etDrugName.setFocusable(false);
+        AndroidUtils.runOnUIThread(() -> {
+            hideKeyboard(Objects.requireNonNull(getActivity()));
+            etDrugName.setText("");
+            etDrugName.setFocusableInTouchMode(false);
+            etDrugName.setFocusable(false);
 
-        etWeight.setText("");
-        etWeight.setFocusableInTouchMode(false);
-        etWeight.setFocusable(false);
+            etWeight.setText("");
+            etWeight.setFocusableInTouchMode(false);
+            etWeight.setFocusable(false);
+        });
     }
 
     @SuppressLint("DefaultLocale")
@@ -310,36 +325,43 @@ public class AddMoodFragment extends Fragment {
         mvEatingDesire.setSelectedItems(null);
         mvHairStyle.setSelectedItems(null);
 
-        DayMood dayMood = mViewModel.getDayMood();
-        if (dayMood != null && rvDrugs != null) {
-            mvBleeding.setSelectedItem(dayMood.getTypeBleedingSelectedIndex());
-            mvEmotion.setSelectedItems(dayMood.getTypeEmotionSelectedIndices());
-            mvPain.setSelectedItems(dayMood.getTypePainSelectedIndices());
-            mvEatingDesire.setSelectedItems(dayMood.getTypeEatingDesireSelectedIndices());
-            mvHairStyle.setSelectedItems(dayMood.getTypeHairStyleSelectedIndices());
+        AppManager.getExecutor().execute(() -> {
+            DayMood dayMood = mViewModel.getDayMood();
+            if (dayMood != null && rvDrugs != null) {
+                AndroidUtils.runOnUIThread(() -> {
+                    mvBleeding.setSelectedItem(dayMood.getTypeBleedingSelectedIndex());
+                    mvEmotion.setSelectedItems(dayMood.getTypeEmotionSelectedIndices());
+                    mvPain.setSelectedItems(dayMood.getTypePainSelectedIndices());
+                    mvEatingDesire.setSelectedItems(dayMood.getTypeEatingDesireSelectedIndices());
+                    mvHairStyle.setSelectedItems(dayMood.getTypeHairStyleSelectedIndices());
 
-            etWeight.setHint(String.format("%3.3f", dayMood.getWeight()));
-            List<DrugItem> drugItemList = new LinkedList<>();
-            if (dayMood.getDrugs() != null) {
-                DrugItem drugItem;
-                for (int i = 0; i < mViewModel.getDayMood().getDrugs().size(); i++) {
-                    drugItem = new DrugItem(mViewModel.getDayMood().getDrugs().get(i));
-                    drugItem.setId(mViewModel.getSelectedDateMood());
-                    drugItemList.add(drugItem);
-                }
-            }
+                    etWeight.setHint(String.format("%3.3f", dayMood.getWeight()));
+                });
 
-            if (!drugItemList.isEmpty()) {
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-                rvDrugs.setLayoutManager(gridLayoutManager);
-                if (rvDrugs.getAdapter() == null) {
-                    rvDrugs.setAdapter(new DrugListAdapter(new DrugListAdapter.DrugDiffCallBack()));
+                List<DrugItem> drugItemList = new LinkedList<>();
+                if (dayMood.getDrugs() != null) {
+                    DrugItem drugItem;
+                    for (int i = 0; i < dayMood.getDrugs().size(); i++) {
+                        drugItem = new DrugItem(dayMood.getDrugs().get(i));
+                        drugItem.setId(mViewModel.getSelectedDateMood());
+                        drugItemList.add(drugItem);
+                    }
                 }
-                ((DrugListAdapter) (Objects.requireNonNull(rvDrugs.getAdapter()))).submitList(drugItemList);
-            } else {
-                rvDrugs.setAdapter(null);
+
+                AndroidUtils.runOnUIThread(() -> {
+                    if (!drugItemList.isEmpty()) {
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+                        rvDrugs.setLayoutManager(gridLayoutManager);
+                        if (rvDrugs.getAdapter() == null) {
+                            rvDrugs.setAdapter(new DrugListAdapter(new DrugListAdapter.DrugDiffCallBack()));
+                        }
+                        ((DrugListAdapter) (Objects.requireNonNull(rvDrugs.getAdapter()))).submitList(drugItemList);
+                    } else {
+                        rvDrugs.setAdapter(null);
+                    }
+                });
             }
-        }
+        });
     }
 
     @Override

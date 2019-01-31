@@ -38,24 +38,26 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentActivity;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 import static com.simorgh.cyclecalendar.view.BaseMonthView.toTimeInMillis;
 
 public final class ReportUtils {
-    private static CycleRepository cycleRepository;
     private static CycleData cycleData;
     private static Calendar clearDate = Calendar.getInstance();
 
 
     @SuppressLint("CheckResult")
     public static void createReport(@NonNull final Activity activity
-            , @NonNull final List<Cycle> cycles
+            , @NonNull final ThreadPoolExecutor executor
+            , @NonNull final CycleRepository cycleRepository
             , @NonNull final Calendar startRange
             , @NonNull final Calendar endRange
             , final boolean reportBleeding
@@ -69,6 +71,8 @@ public final class ReportUtils {
         final RxPermissions rxPermissions = new RxPermissions((FragmentActivity) activity);
         rxPermissions
                 .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new Observer<Boolean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -78,20 +82,26 @@ public final class ReportUtils {
                     @Override
                     public void onNext(Boolean granted) {
                         if (granted) {
-                            try {
-                                if (cycleRepository == null) {
-                                    cycleRepository = new CycleRepository(activity.getApplication());
-                                }
-                                Document document = new Document();
+                            executor.execute(() -> {
+                                try {
+                                    Document document = new Document();
 
-                                String path = Environment.getExternalStorageDirectory() + "/" + "report" + ".pdf";
-//            String path = Environment.getExternalStorageDirectory() + "/" + "report" + ".pdf";
-
-                                File pdfFile = new File(path);
-                                if (pdfFile.exists()) {
-                                    boolean isDeleted = pdfFile.delete();
-                                    if (isDeleted) {
-                                        buildTable(document, path, startRange, endRange, cycles, activity
+                                    String path = Environment.getExternalStorageDirectory() + "/" + "report" + ".pdf";
+                                    File pdfFile = new File(path);
+                                    if (pdfFile.exists()) {
+                                        boolean isDeleted = pdfFile.delete();
+                                        if (isDeleted) {
+                                            buildTable(document, path, startRange, endRange, cycleRepository, cycleRepository.getUserWithCycles().getCycles(), activity
+                                                    , reportBleeding
+                                                    , reportEmotion
+                                                    , reportPain
+                                                    , reportEatingDesire
+                                                    , reportHairStyle
+                                                    , reportWeight
+                                                    , reportDrugs);
+                                        }
+                                    } else {
+                                        buildTable(document, path, startRange, endRange, cycleRepository, cycleRepository.getUserWithCycles().getCycles(), activity
                                                 , reportBleeding
                                                 , reportEmotion
                                                 , reportPain
@@ -100,21 +110,12 @@ public final class ReportUtils {
                                                 , reportWeight
                                                 , reportDrugs);
                                     }
-                                } else {
-                                    buildTable(document, path, startRange, endRange, cycles, activity
-                                            , reportBleeding
-                                            , reportEmotion
-                                            , reportPain
-                                            , reportEatingDesire
-                                            , reportHairStyle
-                                            , reportWeight
-                                            , reportDrugs);
+
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            });
                         } else {
                             Toast.makeText(activity, "برای ایجاد گزارش نیاز به دسترسی برای ایجاد فایل است", Toast.LENGTH_SHORT).show();
                         }
@@ -133,7 +134,7 @@ public final class ReportUtils {
 
     }
 
-    private static void buildTable(Document document, String path, @NonNull Calendar startRange, @NonNull Calendar endRange, @NonNull List<Cycle> cycles, @NonNull Activity activity, boolean reportBleeding, boolean reportEmotion, boolean reportPain, boolean reportEatingDesire, boolean reportHairStyle, boolean reportWeight, boolean reportDrugs) throws DocumentException, IOException {
+    private static void buildTable(Document document, String path, @NonNull Calendar startRange, @NonNull Calendar endRange, @NonNull final CycleRepository cycleRepository, @NonNull List<Cycle> cycles, @NonNull Activity activity, boolean reportBleeding, boolean reportEmotion, boolean reportPain, boolean reportEatingDesire, boolean reportHairStyle, boolean reportWeight, boolean reportDrugs) throws DocumentException, IOException {
         // Location to save
         PdfWriter.getInstance(document, new FileOutputStream(path));
 

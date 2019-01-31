@@ -10,7 +10,7 @@ import android.widget.CheckBox;
 
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.persiancalendar.PersianDate;
-import com.simorgh.databaseutils.CycleRepository;
+import com.simorgh.mahbanoo.Model.AppManager;
 import com.simorgh.mahbanoo.R;
 import com.simorgh.mahbanoo.ViewModel.main.MakeReportViewModel;
 import com.simorgh.reportutil.ReportUtils;
@@ -41,7 +41,6 @@ public class MakeReportFragment extends Fragment {
     private Button btnMakeReport;
 
     private NavController navController;
-    private CycleRepository cycleRepository;
     private boolean isFirst = true;
 
 
@@ -52,7 +51,6 @@ public class MakeReportFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cycleRepository = new CycleRepository(Objects.requireNonNull(getActivity()).getApplication());
     }
 
     @Override
@@ -87,16 +85,23 @@ public class MakeReportFragment extends Fragment {
 
         btnMakeReport.setOnClickListener(v1 -> {
             try {
-                ReportUtils.createReport(getActivity(), cycleRepository.getUserWithCycles().getCycles()
+                boolean bleeding = chbBleeding.isChecked();
+                boolean motion = chbEmotion.isChecked();
+                boolean pain = chbPain.isChecked();
+                boolean eatingDesire = chbEatingDesire.isChecked();
+                boolean hairStyle = chbHairStyle.isChecked();
+                boolean weight = chbWeight.isChecked();
+                boolean drugs = chbDrugs.isChecked();
+                ReportUtils.createReport(getActivity(), AppManager.getExecutor(), AppManager.getCycleRepository()
                         , Objects.requireNonNull(mViewModel.getRangeStartLive().getValue())
                         , Objects.requireNonNull(mViewModel.getRangeEndLive().getValue())
-                        , chbBleeding.isChecked()
-                        , chbEmotion.isChecked()
-                        , chbPain.isChecked()
-                        , chbEatingDesire.isChecked()
-                        , chbHairStyle.isChecked()
-                        , chbWeight.isChecked()
-                        , chbDrugs.isChecked());
+                        , bleeding
+                        , motion
+                        , pain
+                        , eatingDesire
+                        , hairStyle
+                        , weight
+                        , drugs);
             } catch (Exception e) {
                 e.printStackTrace();
             }

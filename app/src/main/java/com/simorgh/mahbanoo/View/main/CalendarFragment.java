@@ -1,5 +1,7 @@
 package com.simorgh.mahbanoo.View.main;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +26,7 @@ import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -107,25 +110,38 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
         super.onActivityCreated(savedInstanceState);
     }
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     public boolean isDayMarked(Calendar day) {
-        DayMood dayMood = cycleRepository.getDayMood(day);
-        if (dayMood == null) {
+        try {
+            return new AsyncTask<Void, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Void... voids) {
+                    DayMood dayMood = cycleRepository.getDayMood(day);
+                    if (dayMood == null) {
+                        return false;
+                    }
+                    if (dayMood.getTypeBleedingSelectedIndex() != -1) {
+                        return true;
+                    } else if (dayMood.getTypeEmotionSelectedIndices() != null) {
+                        return dayMood.getTypeEmotionSelectedIndices().size() > 0;
+                    } else if (dayMood.getTypePainSelectedIndices() != null) {
+                        return dayMood.getTypePainSelectedIndices().size() > 0;
+                    } else if (dayMood.getTypeEatingDesireSelectedIndices() != null) {
+                        return dayMood.getTypeEatingDesireSelectedIndices().size() > 0;
+                    } else if (dayMood.getTypeHairStyleSelectedIndices() != null) {
+                        return dayMood.getTypeHairStyleSelectedIndices().size() > 0;
+                    }
+                    return false;
+                }
+            }.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
             return false;
         }
-        if (dayMood.getTypeBleedingSelectedIndex() != -1) {
-            return true;
-        } else if (dayMood.getTypeEmotionSelectedIndices() != null) {
-            return dayMood.getTypeEmotionSelectedIndices().size() > 0;
-        } else if (dayMood.getTypePainSelectedIndices() != null) {
-            return dayMood.getTypePainSelectedIndices().size() > 0;
-        } else if (dayMood.getTypeEatingDesireSelectedIndices() != null) {
-            return dayMood.getTypeEatingDesireSelectedIndices().size() > 0;
-        } else if (dayMood.getTypeHairStyleSelectedIndices() != null) {
-            return dayMood.getTypeHairStyleSelectedIndices().size() > 0;
-        }
-
-        return false;
     }
 
     @Override

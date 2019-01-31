@@ -2,7 +2,6 @@ package com.simorgh.mahbanoo.View.main;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,9 @@ import com.simorgh.cycleview.OnViewDataChangedListener;
 import com.simorgh.cycleview.SizeConverter;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.DayMood;
+import com.simorgh.mahbanoo.Model.AndroidUtils;
 import com.simorgh.mahbanoo.Model.AppManager;
+import com.simorgh.mahbanoo.Model.Logger;
 import com.simorgh.mahbanoo.Model.MoodItem;
 import com.simorgh.mahbanoo.Model.MoodListAdapter;
 import com.simorgh.mahbanoo.R;
@@ -99,7 +100,7 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                 }
                 start.setTimeInMillis(cycle.getStartDate().getTimeInMillis());
                 for (Cycle c : userWithCycles.getCycles()) {
-                    Log.d(AppManager.TAG, c.toString());
+                    Logger.d(c.toString());
                 }
             }
         });
@@ -160,7 +161,7 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
                 onDayTypeChangedListener.onDayChanged(temp);
             }
         } else {
-            Log.d(AppManager.TAG, "invalid cycle date");
+            Logger.d("invalid cycle date");
         }
 
         temp.setTimeInMillis(currentCycleStartDate.getTimeInMillis());
@@ -200,39 +201,43 @@ public class CycleViewFragment extends Fragment implements CycleView.OnButtonCli
     private List<MoodItem> moodItems = new LinkedList<>();
 
     private void showDayMoods() {
-        DayMood dayMood = mViewModel.getDayMood(temp);
-        moodItems = new LinkedList<>();
-        if (dayMood != null && rvDayMoods != null) {
-            if (dayMood.getTypeBleedingSelectedIndex() != -1) {
-                moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_BLEEDING, dayMood.getTypeBleedingSelectedIndex()));
-            }
-            if (dayMood.getTypeEmotionSelectedIndices() != null) {
-                for (int i = 0; i < dayMood.getTypeEmotionSelectedIndices().size(); i++) {
-                    moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_EMOTION, dayMood.getTypeEmotionSelectedIndices().get(i)));
+        AppManager.getExecutor().execute(() -> {
+            DayMood dayMood = mViewModel.getDayMood(temp);
+            moodItems = new LinkedList<>();
+            if (dayMood != null && rvDayMoods != null) {
+                if (dayMood.getTypeBleedingSelectedIndex() != -1) {
+                    moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_BLEEDING, dayMood.getTypeBleedingSelectedIndex()));
+                }
+                if (dayMood.getTypeEmotionSelectedIndices() != null) {
+                    for (int i = 0; i < dayMood.getTypeEmotionSelectedIndices().size(); i++) {
+                        moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_EMOTION, dayMood.getTypeEmotionSelectedIndices().get(i)));
+                    }
+                }
+                if (dayMood.getTypePainSelectedIndices() != null) {
+                    for (int i = 0; i < dayMood.getTypePainSelectedIndices().size(); i++) {
+                        moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_PAIN, dayMood.getTypePainSelectedIndices().get(i)));
+                    }
+                }
+                if (dayMood.getTypeEatingDesireSelectedIndices() != null) {
+                    for (int i = 0; i < dayMood.getTypeEatingDesireSelectedIndices().size(); i++) {
+                        moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_EATING_DESIRE, dayMood.getTypeEatingDesireSelectedIndices().get(i)));
+                    }
+                }
+                if (dayMood.getTypeHairStyleSelectedIndices() != null) {
+                    for (int i = 0; i < dayMood.getTypeHairStyleSelectedIndices().size(); i++) {
+                        moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_HAIR_STYLE, dayMood.getTypeHairStyleSelectedIndices().get(i)));
+                    }
                 }
             }
-            if (dayMood.getTypePainSelectedIndices() != null) {
-                for (int i = 0; i < dayMood.getTypePainSelectedIndices().size(); i++) {
-                    moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_PAIN, dayMood.getTypePainSelectedIndices().get(i)));
+            AndroidUtils.runOnUIThread(() -> {
+                if (rvDayMoods != null) {
+                    ViewGroup.LayoutParams params = rvDayMoods.getLayoutParams();
+                    params.width = (int) (moodItems.size() * SizeConverter.dpToPx(Objects.requireNonNull(getContext()), 81));
+                    rvDayMoods.setLayoutParams(params);
                 }
-            }
-            if (dayMood.getTypeEatingDesireSelectedIndices() != null) {
-                for (int i = 0; i < dayMood.getTypeEatingDesireSelectedIndices().size(); i++) {
-                    moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_EATING_DESIRE, dayMood.getTypeEatingDesireSelectedIndices().get(i)));
-                }
-            }
-            if (dayMood.getTypeHairStyleSelectedIndices() != null) {
-                for (int i = 0; i < dayMood.getTypeHairStyleSelectedIndices().size(); i++) {
-                    moodItems.add(new MoodItem(dayMood.getId(), MoodView.TYPE_HAIR_STYLE, dayMood.getTypeHairStyleSelectedIndices().get(i)));
-                }
-            }
-        }
-        if (rvDayMoods != null) {
-            ViewGroup.LayoutParams params = rvDayMoods.getLayoutParams();
-            params.width = (int) (moodItems.size() * SizeConverter.dpToPx(Objects.requireNonNull(getContext()), 81));
-            rvDayMoods.setLayoutParams(params);
-        }
-        ((MoodListAdapter) Objects.requireNonNull(Objects.requireNonNull(rvDayMoods).getAdapter())).submitList(moodItems);
+                ((MoodListAdapter) Objects.requireNonNull(Objects.requireNonNull(rvDayMoods).getAdapter())).submitList(moodItems);
+            });
+        });
     }
 
     public interface OnDayTypeChangedListener {

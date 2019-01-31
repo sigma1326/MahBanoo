@@ -32,7 +32,7 @@ public class CycleViewModel extends AndroidViewModel {
 
     public CycleViewModel(@NonNull Application application) {
         super(application);
-        cycleRepository = new CycleRepository(application);
+        cycleRepository = AppManager.getCycleRepository();
         userWithCyclesLiveData = cycleRepository.getUserWithCyclesLiveData();
         moodsLiveData = cycleRepository.getMoodsLiveData();
     }

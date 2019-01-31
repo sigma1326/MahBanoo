@@ -19,6 +19,7 @@ import com.simorgh.cycleutils.CycleUtils;
 import com.simorgh.databaseutils.model.Cycle;
 import com.simorgh.databaseutils.model.User;
 import com.simorgh.databaseutils.model.UserWithCycles;
+import com.simorgh.mahbanoo.Model.AndroidUtils;
 import com.simorgh.mahbanoo.Model.AppManager;
 import com.simorgh.mahbanoo.R;
 import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
@@ -41,7 +42,6 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     private Button btnApplyChanges;
     private NavController navController;
     private Typeface typeface;
-    private boolean isFirst = true;
 
 
     public static ChangeCycleStartDayFragment newInstance() {
@@ -58,8 +58,12 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
 
     @Override
     public void onDestroyView() {
-        if (isAnimRunning) {
-            btnApplyChanges.getAnimation().cancel();
+        try {
+            if (isAnimRunning) {
+                btnApplyChanges.getAnimation().cancel();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         calendarView = null;
         btnApplyChanges = null;
@@ -87,29 +91,34 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
         btnApplyChanges = v.findViewById(R.id.btn_apply_changes);
         btnApplyChanges.setTypeface(typeface);
         btnApplyChanges.setOnClickListener(v1 -> {
-            UserWithCycles userWithCycles = mViewModel.getUserWithCyclesLiveData().getValue();
-            if (userWithCycles != null) {
-                Cycle oldCycle = userWithCycles.getCurrentCycle();
+            AppManager.getExecutor().execute(() -> {
+                UserWithCycles userWithCycles = mViewModel.getUserWithCyclesLiveData().getValue();
+                if (userWithCycles != null) {
+                    Cycle oldCycle = userWithCycles.getCurrentCycle();
 
-                Cycle newCycle = userWithCycles.getCurrentCycle().clone();
-                newCycle.setStartDate(mViewModel.getSelectedStartDate());
-                newCycle.setEndDate(null);
+                    Cycle newCycle = userWithCycles.getCurrentCycle().clone();
+                    newCycle.setStartDate(mViewModel.getSelectedStartDate());
+                    newCycle.setEndDate(null);
 
-                Calendar endDate = Calendar.getInstance();
-                endDate.clear();
-                endDate.setTimeInMillis(mViewModel.getSelectedStartDate().getTimeInMillis());
-                endDate.add(Calendar.DAY_OF_MONTH, -1);
-                oldCycle.setEndDate(endDate);
+                    Calendar endDate = Calendar.getInstance();
+                    endDate.clear();
+                    endDate.setTimeInMillis(mViewModel.getSelectedStartDate().getTimeInMillis());
+                    endDate.add(Calendar.DAY_OF_MONTH, -1);
+                    oldCycle.setEndDate(endDate);
 
 
-                User user = userWithCycles.getUser();
-                user.setCurrentCycle(newCycle.getStartDate());
+                    User user = userWithCycles.getUser();
+                    user.setCurrentCycle(newCycle.getStartDate());
 
-                mViewModel.updateCycle(oldCycle);
-                mViewModel.updateCycle(newCycle);
-                mViewModel.updateUser(user);
-                navController.navigateUp();
-            }
+                    mViewModel.updateCycle(oldCycle);
+                    mViewModel.updateCycle(newCycle);
+                    mViewModel.updateUser(user);
+
+                    AndroidUtils.runOnUIThread(() -> {
+                        navController.navigateUp();
+                    });
+                }
+            });
         });
 
 

@@ -37,7 +37,7 @@ public abstract class CycleDataBase extends RoomDatabase {
             synchronized (CycleDataBase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            CycleDataBase.class, DB_NAME).allowMainThreadQueries().build();
+                            CycleDataBase.class, DB_NAME).build();
                 }
             }
         }
