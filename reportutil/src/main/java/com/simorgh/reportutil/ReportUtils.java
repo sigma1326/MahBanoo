@@ -201,17 +201,17 @@ public final class ReportUtils {
         List<DayMood> dayMoodList = cycleRepository.getDayMoodRange(startRange, endRange);
         if (dayMoodList != null) {
             PdfPCell cell;
+            PdfPCell date;
             List<CycleData> cycleDataList = CycleUtils.getCycleDataList(cycles);
 
             for (int i = 0; i < dayMoodList.size(); i++) {
                 Phrase phrase = new Phrase(CalendarTool.GregorianToPersian(dayMoodList.get(i).getId()).getPersianLongDate(), f);
                 phrase.getChunks().get(0).setLineHeight(20);
                 phrase.setLeading(30, 0);
-                cell = new PdfPCell(phrase);
-                cell.setPadding(10);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
-                table.addCell(cell);
+                date = new PdfPCell(phrase);
+                date.setPadding(10);
+                date.setHorizontalAlignment(Element.ALIGN_CENTER);
+                date.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
 
                 clearDate.clear();
                 for (CycleData c : cycleDataList) {
@@ -415,6 +415,7 @@ public final class ReportUtils {
                 }
 
                 if (addCell) {
+                    table.addCell(date);
                     table.addCell(cell);
 
                     phrase = new Phrase(loggedMoods.toString(), f);
