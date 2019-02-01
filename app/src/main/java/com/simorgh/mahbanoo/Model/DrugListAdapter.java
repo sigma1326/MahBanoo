@@ -1,6 +1,5 @@
 package com.simorgh.mahbanoo.Model;
 
-import android.app.Application;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ public class DrugListAdapter extends ListAdapter<DrugItem, DrugListAdapter.ViewH
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (cycleRepository == null) {
-            cycleRepository = new CycleRepository((Application) parent.getContext().getApplicationContext());
+            cycleRepository = AppManager.getCycleRepository();
         }
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drug_item, parent, false);
         return new ViewHolder(v, null);
@@ -49,21 +48,27 @@ public class DrugListAdapter extends ListAdapter<DrugItem, DrugListAdapter.ViewH
             holder.imgRemove.setOnClickListener(v -> {
 
 
-                DayMood dayMood = cycleRepository.getDayMood(holder.drugItem.getId());
-                if (dayMood != null) {
-                    int index = -1;
-                    for (int i = 0; i < dayMood.getDrugs().size(); i++) {
-                        if (i < dayMood.getDrugs().size() && dayMood.getDrugs().get(i).equals(holder.drugItem.getDrugName())) {
-                            index = i;
-                            break;
+                AppManager.getExecutor().execute(() -> {
+                    DayMood dayMood = cycleRepository.getDayMood(holder.drugItem.getId());
+                    if (dayMood != null) {
+                        int index = -1;
+                        for (int i = 0; i < dayMood.getDrugs().size(); i++) {
+                            if (i < dayMood.getDrugs().size() && dayMood.getDrugs().get(i).equals(holder.drugItem.getDrugName())) {
+                                index = i;
+                                break;
+                            }
+                        }
+                        if (index != -1) {
+                            dayMood.getDrugs().remove(index);
+                            cycleRepository.insertDayMood(dayMood);
+                            int finalIndex = index;
+                            AndroidUtils.runOnUIThread(() -> {
+                                notifyItemRemoved(finalIndex);
+                            });
                         }
                     }
-                    if (index != -1) {
-                        dayMood.getDrugs().remove(index);
-                        cycleRepository.insertDayMood(dayMood);
-                        notifyItemRemoved(index);
-                    }
-                }
+                });
+
             });
         }
     }

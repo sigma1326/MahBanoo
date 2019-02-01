@@ -319,12 +319,6 @@ public class AddMoodFragment extends Fragment {
 
     @SuppressLint("DefaultLocale")
     private void updateViews() {
-        mvBleeding.setSelectedItem(null);
-        mvEmotion.setSelectedItems(null);
-        mvPain.setSelectedItems(null);
-        mvEatingDesire.setSelectedItems(null);
-        mvHairStyle.setSelectedItems(null);
-
         AppManager.getExecutor().execute(() -> {
             DayMood dayMood = mViewModel.getDayMood();
             if (dayMood != null && rvDrugs != null) {

@@ -19,6 +19,9 @@ public interface DayMoodDAO {
     @Query("select * from day_mood where mood_id=:calendar")
     DayMood getDayMood(Calendar calendar);
 
+    @Query("select * from day_mood where mood_id>=:start and mood_id<=:end order by mood_id ASC")
+    List<DayMood> getMarkedDays(Calendar start, Calendar end);
+
     @Query("select * from day_mood order by mood_id ASC")
     DayMood getDayMoods();
 

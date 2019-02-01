@@ -3,6 +3,8 @@ package com.simorgh.databaseutils;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.databaseutils.dao.CycleDAO;
 import com.simorgh.databaseutils.dao.DayMoodDAO;
 import com.simorgh.databaseutils.dao.UserDAO;
@@ -55,6 +57,16 @@ public class CycleRepository {
 //            }
 //        }
 //        return null;
+    }
+
+    private Calendar start = Calendar.getInstance();
+    private Calendar end = Calendar.getInstance();
+
+    public List<DayMood> getMonthMarkedDays(Calendar calendar) {
+        start.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1, 0, 0, 0);
+        int days = CalendarTool.getDaysInMonth(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), CalendarType.GREGORIAN);
+        end.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), days, 0, 0, 0);
+        return dayMoodDAO.getMarkedDays(start, end);
     }
 
     public DayMood getDayMood(Calendar calendar) {

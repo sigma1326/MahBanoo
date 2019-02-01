@@ -85,3 +85,39 @@
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
+
+
+# Remove the debug and verbose level Logging statements.
+# That means the code to generate the arguments to these methods will also not be called.
+# ONLY WORKS IF -dontoptimize IS _NOT_ USED in any ProGuard configs
+-assumenosideeffects class android.util.Log {
+public static *** d(...);
+public static *** v(...);
+}
+
+
+# default & basic optimization configurations
+-optimizationpasses 5
+-dontpreverify
+-repackageclasses ''
+-allowaccessmodification
+-optimizations !code/simplification/arithmetic
+-keepattributes *Annotation*
+
+-verbose
+-android
+
+#-dump obfuscation/class_files.txt
+-printseeds obfuscation/seeds.txt
+#unused classes that are stripped out in the process
+-printusage obfuscation/unused.txt
+#mapping file that shows the obfuscated names of the classes after proguad is applied
+-printmapping obfuscation/mapping.txt
+
+# For easier debugging you can print out the assembled ProGuard config
+-printconfiguration proguard-merge-config.txt
+
+#the developer can specify keywords for the obfuscation
+-obfuscationdictionary obfuscation/keywords.txt
+-classobfuscationdictionary obfuscation/keywords.txt
+-packageobfuscationdictionary obfuscation/keywords.txt

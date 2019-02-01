@@ -17,8 +17,10 @@ import com.simorgh.mahbanoo.Model.AppManager;
 import com.simorgh.mahbanoo.R;
 import com.simorgh.mahbanoo.ViewModel.main.MakeReportViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 
@@ -100,10 +102,6 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
         }
     }
 
-    @Override
-    public boolean isDayMarked(Calendar day) {
-        return false;
-    }
 
     @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
@@ -188,5 +186,10 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
                         }
                     }).start();
         }
+    }
+
+    @Override
+    public List<Integer> getMarkedDays(Calendar day) {
+        return new ArrayList<>();
     }
 }

@@ -177,8 +177,10 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
 
         AppManager.getExecutor().execute(() -> {
             if (AppManager.getCycleRepository().getCycleData() != null) {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                AndroidUtils.runOnUIThread(() -> {
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                });
             } else {
                 AndroidUtils.runOnUIThread(() -> {
                     setContentView(R.layout.activity_questions);

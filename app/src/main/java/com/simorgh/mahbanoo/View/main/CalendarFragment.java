@@ -1,7 +1,6 @@
 package com.simorgh.mahbanoo.View.main;
 
 import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,9 +23,12 @@ import com.simorgh.mahbanoo.Model.AppManager;
 import com.simorgh.mahbanoo.R;
 import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -112,35 +114,43 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
 
     @SuppressLint("StaticFieldLeak")
     @Override
-    public boolean isDayMarked(Calendar day) {
+    public List<Integer> getMarkedDays(Calendar day) {
         try {
-            return new AsyncTask<Void, Void, Boolean>() {
-                @Override
-                protected Boolean doInBackground(Void... voids) {
-                    DayMood dayMood = cycleRepository.getDayMood(day);
-                    if (dayMood == null) {
-                        return false;
+            return Executors.newCachedThreadPool().submit(() -> {
+                List<DayMood> dayMoods = cycleRepository.getMonthMarkedDays(day);
+                List<Integer> days = new ArrayList<>();
+                for (DayMood dayMood : dayMoods) {
+                    boolean add = false;
+                    if (dayMood != null) {
+                        if (dayMood.getTypeBleedingSelectedIndex() != -1) {
+                            add = true;
+                        } else if (dayMood.getTypeEmotionSelectedIndices() != null) {
+                            add = dayMood.getTypeEmotionSelectedIndices().size() > 0;
+                        } else if (dayMood.getTypePainSelectedIndices() != null) {
+                            add = dayMood.getTypePainSelectedIndices().size() > 0;
+                        } else if (dayMood.getTypeEatingDesireSelectedIndices() != null) {
+                            add = dayMood.getTypeEatingDesireSelectedIndices().size() > 0;
+                        } else if (dayMood.getTypeHairStyleSelectedIndices() != null) {
+                            add = dayMood.getTypeHairStyleSelectedIndices().size() > 0;
+                        } else if (dayMood.getDrugs() != null) {
+                            add = dayMood.getDrugs().size() > 0;
+                        } else if (dayMood.getWeight() != 0) {
+                            add = dayMood.getWeight() > 0;
+                        }
+                        if (add) {
+                            days.add(dayMood.getId().get(Calendar.DAY_OF_MONTH));
+                        }
                     }
-                    if (dayMood.getTypeBleedingSelectedIndex() != -1) {
-                        return true;
-                    } else if (dayMood.getTypeEmotionSelectedIndices() != null) {
-                        return dayMood.getTypeEmotionSelectedIndices().size() > 0;
-                    } else if (dayMood.getTypePainSelectedIndices() != null) {
-                        return dayMood.getTypePainSelectedIndices().size() > 0;
-                    } else if (dayMood.getTypeEatingDesireSelectedIndices() != null) {
-                        return dayMood.getTypeEatingDesireSelectedIndices().size() > 0;
-                    } else if (dayMood.getTypeHairStyleSelectedIndices() != null) {
-                        return dayMood.getTypeHairStyleSelectedIndices().size() > 0;
-                    }
-                    return false;
+
                 }
-            }.execute().get();
+                return days;
+            }).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
-            return false;
+            return new ArrayList<>();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            return false;
+            return new ArrayList<>();
         }
     }
 

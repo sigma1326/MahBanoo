@@ -24,8 +24,10 @@ import com.simorgh.mahbanoo.Model.AppManager;
 import com.simorgh.mahbanoo.R;
 import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import androidx.annotation.NonNull;
@@ -146,10 +148,6 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
         });
     }
 
-    @Override
-    public boolean isDayMarked(Calendar day) {
-        return false;
-    }
 
     @Override
     public void onDayClick(BaseMonthView view, Calendar day) {
@@ -226,5 +224,10 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
                         }
                     }).start();
         }
+    }
+
+    @Override
+    public List<Integer> getMarkedDays(Calendar day) {
+        return new ArrayList<>();
     }
 }

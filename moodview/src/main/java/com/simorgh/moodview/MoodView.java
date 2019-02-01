@@ -450,7 +450,7 @@ public class MoodView extends View {
             this.selectedItems.clear();
             this.selectedItems.add(selectedItem);
         }
-        invalidate();
+        postInvalidate();
     }
 
     private float dp2px(float dp) {

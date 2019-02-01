@@ -17,7 +17,10 @@ import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cyclecalendar.R;
 import com.simorgh.cycleutils.CycleData;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 
@@ -33,6 +36,7 @@ public class ShowInfoMonthView extends BaseMonthView {
     private static int rectTypeGreenColor;
     private static int rectTypeYellowColor;
     private static int rectTypeMarkedColor;
+    private boolean dirty = true;
 
     //Marked Triangle
     private static Path markedPath;
@@ -145,6 +149,14 @@ public class ShowInfoMonthView extends BaseMonthView {
                 colCenterRtl = colCenter;
             }
             date = getCalendarForDay(day);
+            if (dirty) {
+                if (isDayMarkedListener != null) {
+                    markedDays.clear();
+                    markedDays.addAll(isDayMarkedListener.getMarkedDays(date));
+                    Collections.sort(markedDays);
+                    dirty = false;
+                }
+            }
 
             top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
             bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
@@ -161,6 +173,7 @@ public class ShowInfoMonthView extends BaseMonthView {
                     bottom - p.getFontMetrics().bottom, p);
 
             if (isDayMarked(date)) {
+                markedPath = new Path();
                 markedPath.moveTo(left, top);
                 markedPath.lineTo(left + dp2px(14), top);
                 markedPath.lineTo(left, top + dp2px(14));
@@ -180,17 +193,19 @@ public class ShowInfoMonthView extends BaseMonthView {
         }
     }
 
+    private List<Integer> markedDays = new ArrayList<>();
+
     private boolean isDayMarked(Calendar date) {
-        if (isDayMarkedListener != null) {
-            return isDayMarkedListener.isDayMarked(date);
+        if (markedDays != null && !markedDays.isEmpty()) {
+            for (Integer day : markedDays) {
+                if (date.get(Calendar.DAY_OF_MONTH) == day) {
+                    return true;
+                }
+            }
         }
         return false;
     }
 
-
-    public static int mathConstrain(int amount, int low, int high) {
-        return amount < low ? low : (amount > high ? high : amount);
-    }
 
     private static Calendar clearDate = Calendar.getInstance();
 
@@ -256,6 +271,6 @@ public class ShowInfoMonthView extends BaseMonthView {
     }
 
     public interface IsDayMarkedListener {
-        boolean isDayMarked(Calendar day);
+        List<Integer> getMarkedDays(Calendar day);
     }
 }

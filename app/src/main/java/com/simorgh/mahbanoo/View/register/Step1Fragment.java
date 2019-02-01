@@ -15,7 +15,9 @@ import com.simorgh.mahbanoo.Model.AppManager;
 import com.simorgh.mahbanoo.R;
 import com.simorgh.mahbanoo.ViewModel.register.Step1ViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -96,8 +98,8 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
     }
 
     @Override
-    public boolean isDayMarked(Calendar day) {
-        return false;
+    public List<Integer> getMarkedDays(Calendar day) {
+        return new ArrayList<>();
     }
 
 
