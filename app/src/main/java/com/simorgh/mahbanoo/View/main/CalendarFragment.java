@@ -112,12 +112,20 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
+    public void onDayClick(BaseMonthView view, Calendar day) {
+        if (!day.after(AppManager.getCalendarInstance())) {
+            mViewModel.setSelectedDateCalendar(day);
+            navController.navigate(CalendarFragmentDirections.actionCalendarToAddNote().setSelectedDay(new YearMonthDay(day)));
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     @Override
-    public List<Integer> getMarkedDays(Calendar day) {
+    public List<Integer> getMarkedDays(final Calendar start, final Calendar end) {
         try {
             return Executors.newCachedThreadPool().submit(() -> {
-                List<DayMood> dayMoods = cycleRepository.getMonthMarkedDays(day);
+                List<DayMood> dayMoods = cycleRepository.getMonthMarkedDays(start, end);
                 List<Integer> days = new ArrayList<>();
                 for (DayMood dayMood : dayMoods) {
                     boolean add = false;
@@ -151,14 +159,6 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
         } catch (InterruptedException e) {
             e.printStackTrace();
             return new ArrayList<>();
-        }
-    }
-
-    @Override
-    public void onDayClick(BaseMonthView view, Calendar day) {
-        if (!day.after(AppManager.getCalendarInstance())) {
-            mViewModel.setSelectedDateCalendar(day);
-            navController.navigate(CalendarFragmentDirections.actionCalendarToAddNote().setSelectedDay(new YearMonthDay(day)));
         }
     }
 }

@@ -98,7 +98,7 @@ public class Step1Fragment extends Fragment implements BaseMonthView.OnDayClickL
     }
 
     @Override
-    public List<Integer> getMarkedDays(Calendar day) {
+    public List<Integer> getMarkedDays(Calendar start, Calendar end) {
         return new ArrayList<>();
     }
 

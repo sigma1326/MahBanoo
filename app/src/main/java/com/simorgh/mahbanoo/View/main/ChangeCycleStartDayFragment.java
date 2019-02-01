@@ -227,7 +227,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     }
 
     @Override
-    public List<Integer> getMarkedDays(Calendar day) {
+    public List<Integer> getMarkedDays(Calendar start, Calendar end) {
         return new ArrayList<>();
     }
 }

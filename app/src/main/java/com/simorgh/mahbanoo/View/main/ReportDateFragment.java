@@ -189,7 +189,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
     }
 
     @Override
-    public List<Integer> getMarkedDays(Calendar day) {
+    public List<Integer> getMarkedDays(Calendar start, Calendar end) {
         return new ArrayList<>();
     }
 }

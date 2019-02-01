@@ -19,7 +19,6 @@ import com.simorgh.cycleutils.CycleData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -128,12 +127,22 @@ public class ShowInfoMonthView extends BaseMonthView {
         isInitialized = true;
     }
 
+    private static Calendar start = Calendar.getInstance();
+    private static Calendar end = Calendar.getInstance();
+
     @Override
     protected void drawDays(Canvas canvas) {
         final TextPaint p = dayTextPaint;
         final int headerHeight = mMonthHeight;
         final int rowHeight = mDayHeight;
         final int colWidth = mCellWidth;
+
+        if (isDayMarkedListener != null) {
+            markedDays.clear();
+            start.setTimeInMillis(getCalendarForDay(1).getTimeInMillis());
+            end.setTimeInMillis(getCalendarForDay(mDaysInMonth).getTimeInMillis());
+            markedDays.addAll(isDayMarkedListener.getMarkedDays(start, end));
+        }
 
         int rowCenter = (int) (headerHeight + dp2px(8) + rowHeight / 2f);
         int left;
@@ -149,14 +158,6 @@ public class ShowInfoMonthView extends BaseMonthView {
                 colCenterRtl = colCenter;
             }
             date = getCalendarForDay(day);
-            if (dirty) {
-                if (isDayMarkedListener != null) {
-                    markedDays.clear();
-                    markedDays.addAll(isDayMarkedListener.getMarkedDays(date));
-                    Collections.sort(markedDays);
-                    dirty = false;
-                }
-            }
 
             top = (int) (rowCenter - rowHeight / 2 + dp2px(3));
             bottom = (int) (rowCenter + rowHeight / 2 - dp2px(3));
@@ -271,6 +272,6 @@ public class ShowInfoMonthView extends BaseMonthView {
     }
 
     public interface IsDayMarkedListener {
-        List<Integer> getMarkedDays(Calendar day);
+        List<Integer> getMarkedDays(Calendar start, Calendar end);
     }
 }
