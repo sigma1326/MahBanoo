@@ -250,10 +250,11 @@ public final class ReportUtils {
                 cell.setPadding(10);
                 cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cell.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
-                table.addCell(cell);
 
+                boolean addCell = false;
                 StringBuilder loggedMoods = new StringBuilder();
                 if (reportBleeding && dayMoodList.get(i).getTypeBleedingSelectedIndex() != -1) {
+                    addCell = true;
                     loggedMoods.append("میزان خونریزی: ");
                     switch (dayMoodList.get(i).getTypeBleedingSelectedIndex()) {
                         case 0:
@@ -274,6 +275,7 @@ public final class ReportUtils {
                     loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("احساسات: ");
                     boolean hasFirst = false;
+                    addCell = true;
                     for (int j = 0; j < dayMoodList.get(i).getTypeEmotionSelectedIndices().size(); j++) {
                         switch (dayMoodList.get(i).getTypeEmotionSelectedIndices().get(j)) {
                             case 0:
@@ -304,6 +306,7 @@ public final class ReportUtils {
                     loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("احساس درد: ");
                     boolean hasFirst = false;
+                    addCell = true;
                     for (int j = 0; j < dayMoodList.get(i).getTypePainSelectedIndices().size(); j++) {
                         switch (dayMoodList.get(i).getTypePainSelectedIndices().get(j)) {
                             case 0:
@@ -334,6 +337,7 @@ public final class ReportUtils {
                     loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("میل به خوردن: ");
                     boolean hasFirst = false;
+                    addCell = true;
                     for (int j = 0; j < dayMoodList.get(i).getTypeEatingDesireSelectedIndices().size(); j++) {
                         switch (dayMoodList.get(i).getTypeEatingDesireSelectedIndices().get(j)) {
                             case 0:
@@ -364,6 +368,7 @@ public final class ReportUtils {
                     loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("حالت موها: ");
                     boolean hasFirst = false;
+                    addCell = true;
                     for (int j = 0; j < dayMoodList.get(i).getTypeHairStyleSelectedIndices().size(); j++) {
                         switch (dayMoodList.get(i).getTypeHairStyleSelectedIndices().get(j)) {
                             case 0:
@@ -394,11 +399,13 @@ public final class ReportUtils {
                     loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("وزن: ");
                     loggedMoods.append(dayMoodList.get(i).getWeight());
+                    addCell = true;
                 }
 
                 if (reportDrugs && dayMoodList.get(i).getDrugs() != null && !dayMoodList.get(i).getDrugs().isEmpty()) {
                     loggedMoods.append(loggedMoods.length() > 0 ? "\n" : "");
                     loggedMoods.append("داروهای مصرفی: ");
+                    addCell = true;
                     for (int j = 0; j < dayMoodList.get(i).getDrugs().size(); j++) {
                         loggedMoods.append(dayMoodList.get(i).getDrugs().get(j));
                         if (j < dayMoodList.get(i).getDrugs().size() - 1) {
@@ -407,15 +414,19 @@ public final class ReportUtils {
                     }
                 }
 
-                phrase = new Phrase(loggedMoods.toString(), f);
-                for (Chunk ch : phrase.getChunks()) {
-                    ch.setLineHeight(20);
+                if (addCell) {
+                    table.addCell(cell);
+
+                    phrase = new Phrase(loggedMoods.toString(), f);
+                    for (Chunk ch : phrase.getChunks()) {
+                        ch.setLineHeight(20);
+                    }
+                    cell = new PdfPCell(phrase);
+                    cell.setPadding(10);
+                    cell.setColspan(2);
+                    cell.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
+                    table.addCell(cell);
                 }
-                cell = new PdfPCell(phrase);
-                cell.setPadding(10);
-                cell.setColspan(2);
-                cell.setRunDirection(PdfWriter.RUN_DIRECTION_RTL);
-                table.addCell(cell);
             }
             document.add(table);
 
