@@ -1,47 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:color="@color/ms_black_38_opacity"
-    tools:targetApi="lollipop">
-    <item>
-        <selector xmlns:android="http://schemas.android.com/apk/res/android">
-            <item android:state_checked="false">
-                <shape android:shape="rectangle">
-
-                    <corners
-                        android:bottomRightRadius="10dp"
-                        android:topRightRadius="10dp" />
-                    <stroke
-                        android:width="2dp"
-                        android:color="#b5b5b5"
-                        android:dashWidth="2dp" />
-                </shape>
-            </item>
-            <item android:state_checked="true">
-                <shape android:shape="rectangle">
-
-                    <corners
-                        android:bottomRightRadius="10dp"
-                        android:topRightRadius="10dp" />
-                    <stroke
-                        android:width="2dp"
-                        android:color="#b5b5b5"
-                        android:dashWidth="2dp" />
-                </shape>
-            </item>
-            <item>
-                <shape android:shape="rectangle">
-
-                    <corners
-                        android:bottomRightRadius="10dp"
-                        android:topRightRadius="10dp" />
-                    <stroke
-                        android:width="2dp"
-                        android:color="#b5b5b5"
-                        android:dashWidth="2dp" />
-                </shape>
-            </item>
-
-        </selector>
-    </item>
-</ripple>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners
+        android:bottomRightRadius="10dp"
+        android:topRightRadius="10dp" />
+    <stroke
+        android:width="2dp"
+        android:color="#b5b5b5"
+        android:dashWidth="2dp" />
+</shape>

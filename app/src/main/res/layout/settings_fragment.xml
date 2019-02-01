@@ -13,12 +13,12 @@
         android:layout_marginTop="42dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/show_pregnancy_prob"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:fontFamily="@font/iransans_medium" />
 
 
     <TextView
@@ -28,12 +28,12 @@
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/show_cycle_days_on_calendar"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvShowPregnancyProb" />
+        app:layout_constraintTop_toBottomOf="@id/tvShowPregnancyProb"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_share_app"
@@ -42,12 +42,12 @@
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/share_app"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvShowCycleDays" />
+        app:layout_constraintTop_toBottomOf="@id/tvShowCycleDays"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_make_report"
@@ -56,12 +56,12 @@
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/make_report_for_doctor"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_share_app" />
+        app:layout_constraintTop_toBottomOf="@id/tv_share_app"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_clear_data"
@@ -70,12 +70,12 @@
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/clear_data"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_make_report" />
+        app:layout_constraintTop_toBottomOf="@id/tv_make_report"
+        tools:fontFamily="@font/iransans_medium" />
 
     <TextView
         android:id="@+id/tv_about_us"
@@ -84,12 +84,12 @@
         android:layout_marginTop="34dp"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/iransans_medium"
         android:text="@string/about_us"
         android:textColor="#00819b"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_clear_data" />
+        app:layout_constraintTop_toBottomOf="@id/tv_clear_data"
+        tools:fontFamily="@font/iransans_medium" />
 
     <Switch
         android:id="@+id/switch_showPregnancyProb"

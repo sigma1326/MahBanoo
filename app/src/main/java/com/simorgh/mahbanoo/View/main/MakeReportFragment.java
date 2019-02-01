@@ -1,6 +1,7 @@
 package com.simorgh.mahbanoo.View.main;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -81,6 +83,14 @@ public class MakeReportFragment extends Fragment {
             mViewModel.setRangeStart(false);
             navController.navigate(R.id.action_make_report_to_report_date);
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            btnMakeReport.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+                    , R.drawable.btn_make_report_ripple_background));
+        } else {
+            btnMakeReport.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+                    , R.drawable.btn_make_report_ripple_background_api19));
+        }
 
 
         btnMakeReport.setOnClickListener(v1 -> {

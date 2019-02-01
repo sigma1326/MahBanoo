@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -33,6 +34,7 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -190,6 +192,11 @@ public class QuestionsActivity extends AppCompatActivity implements NavControlle
                     Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/iransans_medium.ttf");
 
                     nextButton = findViewById(R.id.ms_btn_next);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        nextButton.setBackgroundDrawable(getDrawable(R.drawable.btn_next_step_ripple_background));
+                    } else {
+                        nextButton.setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.btn_next_step_ripple_background_api19));
+                    }
                     forgetButton = findViewById(R.id.ms_btnForget);
                     prevButton = findViewById(R.id.ms_prevButton);
                     stepTitle = findViewById(R.id.ms_tvStepTitle);

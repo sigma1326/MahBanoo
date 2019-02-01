@@ -113,8 +113,6 @@
                 android:layout_height="44dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:background="@drawable/btn_weight_ripple_background"
-                android:fontFamily="@font/iransans_medium"
                 android:gravity="center"
                 android:paddingTop="4dp"
                 android:text="@string/apply"
@@ -124,7 +122,9 @@
                 app:layout_constraintEnd_toStartOf="@+id/et_weight"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/et_weight" />
+                app:layout_constraintTop_toTopOf="@+id/et_weight"
+                tools:background="@drawable/btn_weight_ripple_background"
+                tools:fontFamily="@font/iransans_medium" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
@@ -200,8 +200,6 @@
                 android:layout_height="44dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:background="@drawable/btn_weight_ripple_background"
-                android:fontFamily="@font/iransans_medium"
                 android:gravity="center"
                 android:paddingTop="4dp"
                 android:text="@string/add_to_list"
@@ -211,7 +209,9 @@
                 app:layout_constraintEnd_toStartOf="@+id/et_drug"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/et_drug" />
+                app:layout_constraintTop_toTopOf="@+id/et_drug"
+                tools:background="@drawable/btn_weight_ripple_background"
+                tools:fontFamily="@font/iransans_medium" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline1"

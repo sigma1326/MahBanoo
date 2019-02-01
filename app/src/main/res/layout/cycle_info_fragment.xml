@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     android:layout_marginStart="40dp"
-    android:layout_marginEnd="40dp"
     android:layout_marginTop="50dp"
+    android:layout_marginEnd="40dp"
     android:layout_marginBottom="50dp"
+    android:fillViewport="true"
     android:overScrollMode="always"
     tools:context=".View.main.CycleInfoFragment">
 
@@ -17,15 +17,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:scrollbars="none"
-        android:fontFamily="@font/iransans_medium"
         android:lineSpacingMultiplier="1.03"
+        android:scrollbars="none"
         android:text=""
         android:textColor="#3f3f3f"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:fontFamily="@font/iransans_medium" />
 </LinearLayout>
 

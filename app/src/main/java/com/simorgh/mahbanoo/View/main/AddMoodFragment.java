@@ -30,6 +30,7 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -164,6 +165,19 @@ public class AddMoodFragment extends Fragment {
             v1.requestFocus();
             showKeyboard(Objects.requireNonNull(getActivity()), v1);
         });
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            btnAddDrug.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+                    , R.drawable.btn_weight_ripple_background));
+            btnApplyWeight.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+                    , R.drawable.btn_weight_ripple_background));
+        } else {
+            btnAddDrug.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+                    , R.drawable.btn_weight_ripple_background_api19));
+            btnApplyWeight.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+                    , R.drawable.btn_weight_ripple_background_api19));
+        }
 
 
         btnAddDrug.setOnClickListener(v1 -> {

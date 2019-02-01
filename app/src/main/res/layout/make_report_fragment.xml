@@ -68,11 +68,11 @@
         android:layout_height="38dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/btn_range_ripple_background"
-        android:text="1397/02/02"
         android:textColor="#797979"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_range_end" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_range_end"
+        tools:text="1397/02/02" />
 
     <TextView
         android:id="@+id/tv_report_options"
@@ -202,11 +202,11 @@
         android:layout_width="244dp"
         android:layout_height="38dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/btn_make_report_ripple_background"
         android:text="@string/make_report"
         android:textColor="#ffffff"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chb_drugs" />
+        app:layout_constraintTop_toBottomOf="@+id/chb_drugs"
+        tools:background="@drawable/btn_make_report_ripple_background" />
 </androidx.constraintlayout.widget.ConstraintLayout>

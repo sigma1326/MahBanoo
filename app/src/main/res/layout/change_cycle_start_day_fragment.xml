@@ -13,17 +13,17 @@
         android:layout_height="48dp"
         android:layout_gravity="center|bottom"
         android:layout_marginBottom="18dp"
-        android:background="@drawable/btn_apply_change_round_bkg"
-        android:fontFamily="@font/iransans_medium"
+        android:elevation="10dp"
         android:gravity="center"
         android:text="@string/apply_changes"
-        android:elevation="10dp"
         android:textAlignment="center"
         android:textSize="15sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:background="@drawable/btn_apply_change_round_bkg"
+        tools:fontFamily="@font/iransans_medium" />
 
     <com.simorgh.cyclecalendar.view.CalendarView
         android:id="@+id/calendar_view"

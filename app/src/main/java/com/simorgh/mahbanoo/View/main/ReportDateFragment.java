@@ -2,6 +2,7 @@ package com.simorgh.mahbanoo.View.main;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import java.util.Queue;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -67,6 +69,13 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
         btnApplyChanges = v.findViewById(R.id.btn_apply_changes);
         btnApplyChanges.setOnClickListener(v1 -> navController.navigateUp());
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+                    , R.drawable.btn_apply_change_round_bkg));
+        } else {
+            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+                    , R.drawable.btn_apply_change_round_bkg_api19));
+        }
 
         return v;
     }
