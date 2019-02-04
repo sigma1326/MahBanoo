@@ -1,6 +1,7 @@
 package com.simorgh.mahbanoo.View.main;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,6 +69,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 calendarView.setElevation(10);
             }
+            calendarView.setBackgroundColor(Color.WHITE);
         }
         return calendarView;
     }

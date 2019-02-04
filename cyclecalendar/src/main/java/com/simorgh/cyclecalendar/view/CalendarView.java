@@ -11,6 +11,7 @@ import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.calendarutil.hijricalendar.UmmalquraCalendar;
 import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.cyclecalendar.util.MonthViewAdapter;
+import com.simorgh.cyclecalendar.util.MyItemDecoration;
 import com.simorgh.cycleutils.CycleData;
 
 import java.util.Calendar;
@@ -97,6 +98,7 @@ public class CalendarView extends LinearLayout {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new MonthViewAdapter(getContext(), cycleData, calendarType, monthViewType, min, max);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new MyItemDecoration());
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(10);
@@ -252,6 +254,6 @@ public class CalendarView extends LinearLayout {
     }
 
     public interface OnScrollListener {
-        public void onScrolled(boolean isScrolling);
+        void onScrolled(boolean isScrolling);
     }
 }
