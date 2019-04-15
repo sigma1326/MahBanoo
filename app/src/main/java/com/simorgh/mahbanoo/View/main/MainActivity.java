@@ -3,7 +3,6 @@ package com.simorgh.mahbanoo.View.main;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         setContentView(R.layout.activity_main);
 
         // Lock orientation into landscape.
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         navController = Navigation.findNavController(MainActivity.this, R.id.main_nav_host_fragment);
         Navigation.findNavController(MainActivity.this, R.id.main_nav_host_fragment).addOnDestinationChangedListener(this);
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     }
 
     @Override
-    public void onClick(boolean fromUser) {
+    public void onClick(boolean fromUser) {hdi
         if (fromUser) {
             bottomBarClicked(true, null);
             titleText.setText(getString(R.string.addInformation));

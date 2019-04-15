@@ -144,8 +144,8 @@ public final class ReportUtils {
         // Document Settings
         document.setPageSize(PageSize.A4);
         document.addCreationDate();
-        document.addAuthor("Red Calendar");
-        document.addCreator("Red Calendar");
+        document.addAuthor("Mah banoo");
+        document.addCreator("Mah Banoo");
 
         BaseColor mColorAccent = new BaseColor(0, 0, 0, 255);
         float mHeadingFontSize = 12.0f;

@@ -1,5 +1,7 @@
 package com.simorgh.bottombar;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -12,19 +14,56 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
+import android.graphics.Region;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
 public class BottomBar extends View {
+    private boolean isPressedCircle = false;
+    private boolean circleHovered = true;
+    private RadialGradient circleHoverRadialGradient;
+    private Paint circleHoverPaint;
+    private ObjectAnimator circleHoverRadiusAnimator;
+    private float circleHoverRadius;
+    private Path clipPath = new Path();
+    private float circleHoverAlphaFactor;
+    private float circleHoverMaxRadius;
+    private int circleHoverRippleColor;
+    private boolean circleHoverIsAnimating = false;
+
+    @Keep
+    public void setCircleHoverRadius(final float radius) {
+        circleHoverRadius = radius;
+        if (circleHoverRadius > 0) {
+            circleHoverRadialGradient = new RadialGradient(dp2px(circleX), dp2px(circleX), dp2px(circleHoverRadius), adjustHoverAlpha(circleHoverRippleColor, circleHoverAlphaFactor), circleHoverRippleColor,
+                    Shader.TileMode.CLAMP);
+            circleHoverPaint.setShader(circleHoverRadialGradient);
+        }
+        invalidate();
+    }
+
+    public int adjustHoverAlpha(int color, float factor) {
+        int alpha = Math.round(Color.alpha(color) * factor);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
+    }
+
 
     private ArrayList<BottomItem> items = new ArrayList<>();
 
@@ -235,6 +274,54 @@ public class BottomBar extends View {
 
         bottomItem = new BottomItem(4, "دوره فعلی", icon_cycle);
         items.add(bottomItem);
+
+
+        //init the hover variables
+        circleHoverPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        circleHoverPaint.setStyle(Paint.Style.FILL);
+        circleHoverPaint.setAlpha(100);
+        setMediumCircleHoverRippleColor(Color.WHITE, 0.2f);
+    }
+
+    public void setMediumCircleHoverRippleColor(int rippleColor, float alphaFactor) {
+        circleHoverRippleColor = rippleColor;
+        circleHoverAlphaFactor = alphaFactor;
+    }
+
+    private void circleHoverActionDown() {
+        if (circleHovered) {
+            circleHoverRadiusAnimator = ObjectAnimator.ofFloat(this, "circleHoverRadius", 0, circleRadius)
+                    .setDuration(100);
+            circleHoverRadiusAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+            circleHoverRadiusAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+                    circleHoverIsAnimating = true;
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+//                    setCircleHoverRadius(0);
+                    circleHoverIsAnimating = false;
+                    if (cancelHover) {
+                        cancelHover = false;
+                        circleHoverActionUp(true);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            });
+            circleHoverRadiusAnimator.start();
+
+        }
     }
 
     @Override
@@ -304,12 +391,19 @@ public class BottomBar extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        circleHoverMaxRadius = (float) Math.sqrt(w * w + h * h);
     }
 
 
+    private static final Rect r = new Rect();
+
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.save();
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.DST);
+        r.set(0, 0, getWidth(), (int) dp2px(backgroundLeftY - 1));
+        canvas.clipRect(r);
+        canvas.restore();
 
         drawBackground(canvas);
 
@@ -321,14 +415,29 @@ public class BottomBar extends View {
 
     private void drawBackground(Canvas canvas) {
         canvas.drawRect(0, 0, dp2px(realWidth), dp2px(realHeight / 3f), mainBackgroundPaint);
-        canvas.drawLine(0, dp2px(backgroundLeftY-1), dp2px(realWidth),dp2px(backgroundLeftY-1), shadowPaint);
+        canvas.drawLine(0, dp2px(backgroundLeftY - 1), dp2px(realWidth), dp2px(backgroundLeftY - 1), shadowPaint);
         canvas.drawRect(0, dp2px(backgroundLeftY), dp2px(realWidth), dp2px(realHeight), backgroundPaint);
     }
 
     private void drawMainCircle(Canvas canvas) {
-        circleIconRect.set((int) dp2px(circleX - 17), (int) dp2px(circleY - 17), (int) dp2px(circleX + 17), (int) dp2px(circleY + 17));
-        canvas.drawCircle(dp2px(circleX), dp2px(circleY), dp2px(circleRadius), circlePaint);
-        canvas.drawBitmap(circleIcon, null, circleIconRect, circlePaint);
+        if (isPressedCircle) {
+            circleIconRect.set((int) dp2px(circleX - 17), (int) dp2px(circleY - 17), (int) dp2px(circleX + 17), (int) dp2px(circleY + 17));
+            canvas.drawCircle(dp2px(circleX), dp2px(circleY), dp2px(circleRadius + 3), circlePaint);
+            canvas.drawBitmap(circleIcon, null, circleIconRect, circlePaint);
+
+            //draw the medium circle hover and clip
+            canvas.save();
+            clipPath.reset();
+            clipPath.addCircle(dp2px(circleX), dp2px(circleY), dp2px(circleHoverRadius + 3), Path.Direction.CCW);
+            canvas.clipPath(clipPath, Region.Op.INTERSECT);
+            canvas.drawCircle(dp2px(circleX), dp2px(circleY), dp2px(circleHoverRadius + 3), circleHoverPaint);
+            canvas.restore();
+
+        } else {
+            circleIconRect.set((int) dp2px(circleX - 17), (int) dp2px(circleY - 17), (int) dp2px(circleX + 17), (int) dp2px(circleY + 17));
+            canvas.drawCircle(dp2px(circleX), dp2px(circleY), dp2px(circleRadius), circlePaint);
+            canvas.drawBitmap(circleIcon, null, circleIconRect, circlePaint);
+        }
     }
 
     private void drawItems(Canvas canvas) {
@@ -360,7 +469,8 @@ public class BottomBar extends View {
                 if (Math.sqrt(Math.pow(Math.abs(event.getX() - dp2px(circleX)), 2) + Math.pow(Math.abs(event.getY() - dp2px(circleY)), 2))
                         < (getIconRect(2).centerX() - getIconRect(1).centerX() - 50)) {
                     if (circleItemClickListener != null) {
-                        circleItemClickListener.onClick(true);
+                        isPressedCircle = true;
+                        circleHoverActionDown();
                     }
                 } else {
                     for (int i = 0; i < items.size(); i++) {
@@ -378,10 +488,63 @@ public class BottomBar extends View {
                 invalidate();
                 return true;
             case MotionEvent.ACTION_UP:
-                invalidate();
+                if (Math.sqrt(Math.pow(Math.abs(event.getX() - dp2px(circleX)), 2) + Math.pow(Math.abs(event.getY() - dp2px(circleY)), 2))
+                        < (getIconRect(2).centerX() - getIconRect(1).centerX() - 50)) {
+                    circleHoverActionUp(true);
+                } else {
+                    if (isPressedCircle) {
+                        circleHoverActionUp(false);
+                    }
+                }
+                postInvalidate();
                 return true;
             default:
                 return false;
+        }
+    }
+
+
+    private boolean cancelHover = false;
+    private void circleHoverActionUp(boolean performAction) {
+        if (circleHovered) {
+            if (circleHoverIsAnimating) {
+                cancelHover = true;
+                return;
+            }
+            circleHoverRadiusAnimator = ObjectAnimator
+                    .ofFloat(this, "circleHoverRadius", circleHoverRadius + dp2px(2), 0);
+            circleHoverRadiusAnimator.setDuration(100);
+            circleHoverRadiusAnimator.setStartDelay(100);
+            circleHoverRadiusAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+            circleHoverRadiusAnimator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+                    circleHoverIsAnimating = true;
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    setCircleHoverRadius(0);
+                    circleHoverIsAnimating = false;
+                    isPressedCircle = false;
+                    if (performAction) {
+                        if (circleItemClickListener != null) {
+                            circleItemClickListener.onClick(true);
+                        }
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            });
+            circleHoverRadiusAnimator.start();
         }
     }
 

@@ -63,8 +63,7 @@
     <fragment
         android:id="@+id/calendar"
         android:name="com.simorgh.mahbanoo.View.main.CalendarFragment"
-        android:label="calendar"
-        tools:layout="@layout/calendar_fragment">
+        android:label="calendar">
         <action
             android:id="@+id/action_calendar_to_profile"
             app:destination="@id/profile"

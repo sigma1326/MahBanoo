@@ -27,7 +27,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
@@ -35,7 +35,7 @@ dependencies {
 
     // Room
     // RxJava support for Room
-    implementation 'androidx.room:room-rxjava2:2.1.0-alpha03'
+    implementation 'androidx.room:room-rxjava2:2.1.0-alpha04'
     // ReactiveStreams support for LiveData
     implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0'
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
@@ -49,6 +49,6 @@ dependencies {
     implementation project(path: ':calendarutil')
 
     // Gson
-    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
 }

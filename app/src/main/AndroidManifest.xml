@@ -4,6 +4,8 @@
     package="com.simorgh.mahbanoo">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- VERY IMPORTANT! Don't forget this permission, or in-app billing won't work. -->
+    <uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />
 
     <application
         android:name="com.simorgh.mahbanoo.Model.AppManager"
@@ -18,20 +20,16 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name="com.simorgh.mahbanoo.View.register.QuestionsActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="unspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity-alias
-            android:name="isLoggedIn"
-            android:enabled="false"
-            android:targetActivity="com.simorgh.mahbanoo.View.main.MainActivity" />
         <activity
             android:name="com.simorgh.mahbanoo.View.main.MainActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <!-- File Provider -->
