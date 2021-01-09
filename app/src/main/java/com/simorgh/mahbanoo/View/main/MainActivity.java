@@ -12,6 +12,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
+
 import com.simorgh.bottombar.BottomBar;
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cycleview.CycleView;
@@ -21,13 +29,6 @@ import com.simorgh.mahbanoo.R;
 import java.util.Calendar;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.Navigation;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements BottomBar.OnItemClickListener
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     private ImageView imgInfo;
     private ImageButton imgBack;
     private int dayType = CycleView.TYPE_GRAY;
-    private Calendar selectedDay = AppManager.getCalendarInstance();
+    private final Calendar selectedDay = AppManager.getCalendarInstance();
 
 
     @Override
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
     }
 
     @Override
-    public void onClick(boolean fromUser) {hdi
+    public void onClick(boolean fromUser) {
         if (fromUser) {
             bottomBarClicked(true, null);
             titleText.setText(getString(R.string.addInformation));
@@ -241,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements BottomBar.OnItemC
         }
     }
 
-    private boolean isImgInfoAnimRunning = false;
+    private final boolean isImgInfoAnimRunning = false;
 
 //    private void runImageInfoAnim(boolean visible) {
 //        Log.d("debug13", visible + ":" + isImgInfoAnimRunning);

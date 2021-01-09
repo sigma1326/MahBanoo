@@ -27,13 +27,13 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
+import androidx.annotation.Keep;
+import androidx.annotation.Nullable;
+
 import com.simorgh.calendarutil.CalendarTool;
 import com.simorgh.cycleutils.CycleData;
 
 import java.util.Calendar;
-
-import androidx.annotation.Keep;
-import androidx.annotation.Nullable;
 
 public class CycleView extends View implements OnViewDataChangedListener {
     public static final String TAG = "clueView";
@@ -44,7 +44,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
     public static final int TYPE_YELLOW = 4;
     //circle paints
     private Paint mainCirclePaint;
-    private Paint mediumCirclePaint;
+    private Paint mediumCireclePaint;
     private Paint smallCircleTypeRedPaint;
     private Paint smallCircleTypeGrayPaint;
     private Paint smallCircleTypeGreenPaint;
@@ -64,7 +64,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
     private float mediumCircleX = -1;
     private float mediumCircleY = -1;
     private int smallCircleRadius = -1;
-    private int smallCircleOuterRadius = -1;
+    private final int smallCircleOuterRadius = -1;
     private int outerRadius = -1;
 
     //button change attrs
@@ -179,7 +179,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
     private int offsetAngle = -1;
     private static final int DEFAULT_START_OFFSET_ANGLE = 10;
 
-    private Path clipPath = new Path();
+    private final Path clipPath = new Path();
     private float mediumCircleHoverX;
     private float mediumCircleHoverY;
     private float mediumCircleHoverAlphaFactor;
@@ -187,7 +187,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
     private float mediumCircleHoverMaxRadius;
     private int mediumCircleHoverRippleColor;
     private boolean mediumCircleHoverIsAnimating = false;
-    private boolean mediumCircleHover = true;
+    private final boolean mediumCircleHover = true;
     private RadialGradient mediumCircleHoverRadialGradient;
     private Paint mediumCircleHoverPaint;
     private ObjectAnimator mediumCircleHoverRadiusAnimator;
@@ -593,7 +593,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
     }
 
 
-    private Calendar temp = Calendar.getInstance();
+    private final Calendar temp = Calendar.getInstance();
 
     public void showToday(Calendar today) {
         if (cycleData == null) {
