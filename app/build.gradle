@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.simorgh.redcalendar"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 3
         multiDexEnabled true
         versionName "1.2"
@@ -40,58 +40,63 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0'
-    implementation 'androidx.core:core:1.0.1'
-    // Room
-    // RxJava support for Room
-    implementation 'androidx.room:room-rxjava2:2.1.0-alpha06'
-    // ReactiveStreams support for LiveData
-    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0'
-    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
-    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
-    // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
-    //RX
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    // Gson
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation project(':cycleview')
-    implementation project(':cyclecalendar')
-    implementation project(':numberpicker')
-    implementation project(':bottombar')
-    implementation project(':cyclebar')
-    implementation project(':weekdaypicker')
-    implementation project(':moodview')
-    implementation project(':weightview')
-    implementation project(':drugview')
-    implementation project(':cycleutils')
+    implementation project(path: ':cycleview')
+    implementation project(path: ':cyclecalendar')
+    implementation project(path: ':numberpicker')
+    implementation project(path: ':bottombar')
+    implementation project(path: ':cyclebar')
+    implementation project(path: ':weekdaypicker')
+    implementation project(path: ':moodview')
+    implementation project(path: ':weightview')
+    implementation project(path: ':drugview')
+    implementation project(path: ':cycleutils')
     implementation project(path: ':calendarutil')
     implementation project(path: ':spinner')
     implementation project(path: ':reportutil')
     implementation project(path: ':databaseutils')
     implementation(name: 'forceupdate', ext: 'aar')
+
+
+    implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0'
+    implementation 'androidx.core:core:1.3.2'
+
+    // Room
+    // RxJava support for Room
+    implementation 'androidx.room:room-rxjava2:2.2.6'
+    // ReactiveStreams support for LiveData
+    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.2.0'
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
+//    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$rootProject.archLifecycleVersion"
+    //RX
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
     //Calligraphy
-    implementation 'io.github.inflationx:calligraphy3:3.0.0'
-    implementation 'io.github.inflationx:viewpump:1.0.0'
+    implementation 'io.github.inflationx:calligraphy3:3.1.1'
+    implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'androidx.multidex:multidex:2.0.1'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
     // Optional, if you use support library fragments:
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
-    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'org.sufficientlysecure:html-textview:3.6'
     implementation 'com.github.sigma1326:SweetAlertDialogPersian:1.2.1'
 }

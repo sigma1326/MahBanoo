@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
 
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -27,17 +27,17 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
 
     // Room
     // RxJava support for Room
-    implementation 'androidx.room:room-rxjava2:2.1.0-alpha04'
+    implementation 'androidx.room:room-rxjava2:2.2.6'
     // ReactiveStreams support for LiveData
-    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.2.0'
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
@@ -49,6 +49,6 @@ dependencies {
     implementation project(path: ':calendarutil')
 
     // Gson
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
 }
