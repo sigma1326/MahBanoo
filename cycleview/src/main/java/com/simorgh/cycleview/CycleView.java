@@ -44,7 +44,7 @@ public class CycleView extends View implements OnViewDataChangedListener {
     public static final int TYPE_YELLOW = 4;
     //circle paints
     private Paint mainCirclePaint;
-    private Paint mediumCireclePaint;
+    private Paint mediumCirclePaint;
     private Paint smallCircleTypeRedPaint;
     private Paint smallCircleTypeGrayPaint;
     private Paint smallCircleTypeGreenPaint;
