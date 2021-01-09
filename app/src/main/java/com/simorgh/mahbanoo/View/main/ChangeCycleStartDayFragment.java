@@ -11,6 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cyclecalendar.view.CalendarView;
@@ -29,16 +37,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Queue;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener, CalendarView.OnScrollListener {
 
@@ -96,10 +95,10 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
         btnApplyChanges = v.findViewById(R.id.btn_apply_changes);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_apply_change_round_bkg));
         } else {
-            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_apply_change_round_bkg_api19));
         }
 
@@ -143,7 +142,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
+        mViewModel.getUserWithCyclesLiveData().observe(getViewLifecycleOwner(), userWithCycles -> {
             if (calendarView != null && userWithCycles != null) {
                 Cycle cycle = userWithCycles.getCurrentCycle();
                 User user = userWithCycles.getUser();
@@ -172,7 +171,7 @@ public class ChangeCycleStartDayFragment extends Fragment implements ShowInfoMon
     }
 
     private boolean isAnimRunning = false;
-    private Queue<Boolean> booleanQueue = new LinkedList<>();
+    private final Queue<Boolean> booleanQueue = new LinkedList<>();
 
     private void runButtonChangeAnim(boolean visible) {
         if (btnApplyChanges == null) {

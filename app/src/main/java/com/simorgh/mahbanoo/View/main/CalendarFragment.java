@@ -9,6 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.cyclecalendar.view.BaseMonthView;
@@ -27,16 +34,8 @@ import com.simorgh.mahbanoo.ViewModel.main.CycleViewModel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener {
 
@@ -54,7 +53,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cycleRepository = new CycleRepository(Objects.requireNonNull(getActivity()).getApplication());
+        cycleRepository = new CycleRepository(requireActivity().getApplication());
     }
 
     @Override
@@ -84,7 +83,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment);
+        navController = Navigation.findNavController(requireActivity(), R.id.main_nav_host_fragment);
 
 
         calendarView.setIsDayMarkedListener(this);
@@ -92,7 +91,7 @@ public class CalendarFragment extends Fragment implements ShowInfoMonthView.IsDa
         calendarView.scrollToCurrentDate(AppManager.getCalendarInstance());
 
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
+        mViewModel.getUserWithCyclesLiveData().observe(getViewLifecycleOwner(), userWithCycles -> {
             if (calendarView != null && userWithCycles != null) {
                 Cycle cycle = userWithCycles.getCurrentCycle();
                 User user = userWithCycles.getUser();

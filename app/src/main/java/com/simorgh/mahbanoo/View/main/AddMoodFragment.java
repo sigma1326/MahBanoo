@@ -12,6 +12,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.simorgh.calendarutil.model.YearMonthDay;
 import com.simorgh.databaseutils.model.DayMood;
 import com.simorgh.mahbanoo.Model.AndroidUtils;
@@ -27,14 +35,6 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class AddMoodFragment extends Fragment {
 
@@ -155,7 +155,7 @@ public class AddMoodFragment extends Fragment {
             v1.setFocusable(true);
             v1.setFocusableInTouchMode(true);
             v1.requestFocus();
-            showKeyboard(Objects.requireNonNull(getActivity()), v1);
+            showKeyboard(requireActivity(), v1);
 
         });
 
@@ -163,19 +163,19 @@ public class AddMoodFragment extends Fragment {
             v1.setFocusable(true);
             v1.setFocusableInTouchMode(true);
             v1.requestFocus();
-            showKeyboard(Objects.requireNonNull(getActivity()), v1);
+            showKeyboard(requireActivity(), v1);
         });
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            btnAddDrug.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnAddDrug.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_weight_ripple_background));
-            btnApplyWeight.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnApplyWeight.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_weight_ripple_background));
         } else {
-            btnAddDrug.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnAddDrug.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_weight_ripple_background_api19));
-            btnApplyWeight.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnApplyWeight.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_weight_ripple_background_api19));
         }
 
@@ -320,7 +320,7 @@ public class AddMoodFragment extends Fragment {
 
     private void clearFocus() {
         AndroidUtils.runOnUIThread(() -> {
-            hideKeyboard(Objects.requireNonNull(getActivity()));
+            hideKeyboard(requireActivity());
             etDrugName.setText("");
             etDrugName.setFocusableInTouchMode(false);
             etDrugName.setFocusable(false);

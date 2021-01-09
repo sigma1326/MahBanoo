@@ -9,6 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.simorgh.calendarutil.model.CalendarType;
 import com.simorgh.cyclecalendar.view.BaseMonthView;
 import com.simorgh.cyclecalendar.view.CalendarView;
@@ -22,16 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Queue;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 public class ReportDateFragment extends Fragment implements ShowInfoMonthView.IsDayMarkedListener, BaseMonthView.OnDayClickListener, CalendarView.OnScrollListener {
 
@@ -55,7 +54,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.report_date_fragment, container, false);
 
-        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment);
+        navController = Navigation.findNavController(requireActivity(), R.id.main_nav_host_fragment);
 
 
         calendarView = v.findViewById(R.id.calendar_view);
@@ -70,10 +69,10 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
         btnApplyChanges.setOnClickListener(v1 -> navController.navigateUp());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_apply_change_round_bkg));
         } else {
-            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnApplyChanges.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_apply_change_round_bkg_api19));
         }
 
@@ -91,9 +90,9 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MakeReportViewModel.class);
+        mViewModel = ViewModelProviders.of(requireActivity()).get(MakeReportViewModel.class);
         if (mViewModel.isRangeStart()) {
-            mViewModel.getRangeStartLive().observe(this, calendar -> {
+            mViewModel.getRangeStartLive().observe(getViewLifecycleOwner(), calendar -> {
                 if (calendarView != null && calendar != null) {
                     calendarView.setSelectedDate(calendar);
                     calendarView.scrollToCurrentDate(mViewModel.getRangeStartLive().getValue());
@@ -101,7 +100,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
                 }
             });
         } else {
-            mViewModel.getRangeEndLive().observe(this, calendar -> {
+            mViewModel.getRangeEndLive().observe(getViewLifecycleOwner(), calendar -> {
                 if (calendarView != null && calendar != null) {
                     calendarView.setSelectedDate(calendar);
                     calendarView.scrollToCurrentDate(mViewModel.getRangeEndLive().getValue());
@@ -131,7 +130,7 @@ public class ReportDateFragment extends Fragment implements ShowInfoMonthView.Is
     }
 
     private boolean isAnimRunning = false;
-    private Queue<Boolean> booleanQueue = new LinkedList<>();
+    private final Queue<Boolean> booleanQueue = new LinkedList<>();
 
     private void runButtonChangeAnim(boolean visible) {
         if (btnApplyChanges == null) {

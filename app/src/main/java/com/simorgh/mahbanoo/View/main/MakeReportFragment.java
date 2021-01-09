@@ -9,15 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 
-import com.simorgh.calendarutil.CalendarTool;
-import com.simorgh.calendarutil.persiancalendar.PersianDate;
-import com.simorgh.mahbanoo.Model.AppManager;
-import com.simorgh.mahbanoo.R;
-import com.simorgh.mahbanoo.ViewModel.main.MakeReportViewModel;
-import com.simorgh.reportutil.ReportUtils;
-
-import java.util.Objects;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -26,6 +17,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+
+import com.simorgh.calendarutil.CalendarTool;
+import com.simorgh.calendarutil.persiancalendar.PersianDate;
+import com.simorgh.mahbanoo.Model.AppManager;
+import com.simorgh.mahbanoo.R;
+import com.simorgh.mahbanoo.ViewModel.main.MakeReportViewModel;
+import com.simorgh.reportutil.ReportUtils;
+
+import java.util.Objects;
 
 public class MakeReportFragment extends Fragment {
 
@@ -72,7 +72,7 @@ public class MakeReportFragment extends Fragment {
         btnRangeEnd = v.findViewById(R.id.btn_end_range);
         btnMakeReport = v.findViewById(R.id.btn_make_report);
 
-        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment);
+        navController = Navigation.findNavController(requireActivity(), R.id.main_nav_host_fragment);
 
         btnRangeStart.setOnClickListener(v1 -> {
             mViewModel.setRangeStart(true);
@@ -85,10 +85,10 @@ public class MakeReportFragment extends Fragment {
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            btnMakeReport.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnMakeReport.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_make_report_ripple_background));
         } else {
-            btnMakeReport.setBackgroundDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity())
+            btnMakeReport.setBackgroundDrawable(ContextCompat.getDrawable(requireActivity()
                     , R.drawable.btn_make_report_ripple_background_api19));
         }
 
@@ -149,8 +149,8 @@ public class MakeReportFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MakeReportViewModel.class);
-        mViewModel.getRangeStartLive().observe(this, calendar -> {
+        mViewModel = ViewModelProviders.of(requireActivity()).get(MakeReportViewModel.class);
+        mViewModel.getRangeStartLive().observe(getViewLifecycleOwner(), calendar -> {
             if (calendar != null && btnRangeStart != null) {
                 PersianDate persianDate = CalendarTool.GregorianToPersianDate(calendar);
                 if (isFirst) {
@@ -158,15 +158,15 @@ public class MakeReportFragment extends Fragment {
                     mViewModel.setRangeStart(CalendarTool.PersianToGregorian(persianDate));
                     isFirst = false;
                 }
-                btnRangeStart.setText(String.format("%s/%d/%d", String.valueOf(persianDate.getShYear())
+                btnRangeStart.setText(String.format("%s/%d/%d", persianDate.getShYear()
                         , persianDate.getShMonth(), persianDate.getShDay()));
             }
         });
 
-        mViewModel.getRangeEndLive().observe(this, calendar -> {
+        mViewModel.getRangeEndLive().observe(getViewLifecycleOwner(), calendar -> {
             if (calendar != null && btnRangeEnd != null) {
                 PersianDate persianDate = CalendarTool.GregorianToPersianDate(calendar);
-                btnRangeEnd.setText(String.format("%s/%d/%d", String.valueOf(persianDate.getShYear())
+                btnRangeEnd.setText(String.format("%s/%d/%d", persianDate.getShYear()
                         , persianDate.getShMonth(), persianDate.getShDay()));
 
             }

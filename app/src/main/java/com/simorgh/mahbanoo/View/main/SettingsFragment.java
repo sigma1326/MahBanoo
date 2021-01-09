@@ -8,8 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.simorgh.databaseutils.model.User;
 import com.simorgh.mahbanoo.R;
@@ -19,19 +26,12 @@ import com.simorgh.sweetalertdialog.SweetAlertDialog;
 
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import static com.simorgh.mahbanoo.Model.AppManager.TAG;
 
 public class SettingsFragment extends Fragment {
 
-    private Switch showPregnancyProb;
-    private Switch showCycleDays;
+    private SwitchCompat showPregnancyProb;
+    private SwitchCompat showCycleDays;
 
     private TextView tvClearData;
     private TextView tvShareApp;
@@ -67,7 +67,7 @@ public class SettingsFragment extends Fragment {
         tvClearData = v.findViewById(R.id.tv_clear_data);
         tvShareApp = v.findViewById(R.id.tv_share_app);
         tvMakeReport = v.findViewById(R.id.tv_make_report);
-        navController = Navigation.findNavController(Objects.requireNonNull(getActivity()), R.id.main_nav_host_fragment);
+        navController = Navigation.findNavController(requireActivity(), R.id.main_nav_host_fragment);
 
 
         showPregnancyProb.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -89,7 +89,7 @@ public class SettingsFragment extends Fragment {
 
         tvClearData.setOnClickListener(v1 -> {
 
-            new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE)
+            new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("پاک کردن اطلاعات برنامه")
                     .setContentText("آیا اطمینان دارید؟")
                     .setConfirmText("باشه")
@@ -112,7 +112,7 @@ public class SettingsFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(CycleViewModel.class);
-        mViewModel.getUserWithCyclesLiveData().observe(this, userWithCycles -> {
+        mViewModel.getUserWithCyclesLiveData().observe(getViewLifecycleOwner(), userWithCycles -> {
             if (showCycleDays != null && userWithCycles != null) {
                 showCycleDays.setChecked(userWithCycles.getUser().isShowCycleDays());
                 showPregnancyProb.setChecked(userWithCycles.getUser().isShowPregnancyProb());
